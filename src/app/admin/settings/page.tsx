@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
 import { Settings, Save } from 'lucide-react';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface SiteSettings {
   id: string;
@@ -132,29 +133,13 @@ export default function SettingsPage() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="logo">Logo URL</Label>
-              <Input
-                id="logo"
-                name="logo"
-                value={formData.logo || ''}
-                onChange={handleInputChange}
-                placeholder="https://your-logo-url.com/logo.png"
-              />
-              <p className="text-sm text-gray-500">
-                Upload your logo to Vercel Blob Storage or use an external URL
-              </p>
-              {formData.logo && (
-                <div className="mt-2">
-                  <p className="text-sm text-gray-600 mb-2">Preview:</p>
-                  <img
-                    src={formData.logo}
-                    alt="Logo preview"
-                    className="max-w-xs h-16 object-contain border rounded p-2"
-                  />
-                </div>
-              )}
-            </div>
+            <ImageUpload
+              label="Site Logo"
+              helperText="Upload your logo (max 5MB, PNG or SVG recommended)"
+              currentImage={formData.logo || undefined}
+              onUploadComplete={(url) => setFormData(prev => ({ ...prev, logo: url }))}
+              onRemove={() => setFormData(prev => ({ ...prev, logo: null }))}
+            />
 
             <div className="space-y-2">
               <Label htmlFor="tagline">Tagline</Label>

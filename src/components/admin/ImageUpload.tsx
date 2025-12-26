@@ -1,0 +1,177 @@
+'use client';
+
+import { useState, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+
+interface ImageUploadProps {
+  onUploadComplete: (url: string) => void;
+  currentImage?: string;
+  onRemove?: () => void;
+  label?: string;
+  helperText?: string;
+}
+
+export function ImageUpload({
+  onUploadComplete,
+  currentImage,
+  onRemove,
+  label = 'Upload Image',
+  helperText = 'Drag and drop an image or click to browse (max 5MB)',
+}: ImageUploadProps) {
+  const [uploading, setUploading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const [error, setError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      await uploadFile(e.dataTransfer.files[0]);
+    }
+  };
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.target.files && e.target.files[0]) {
+      await uploadFile(e.target.files[0]);
+    }
+  };
+
+  const uploadFile = async (file: File) => {
+    setUploading(true);
+    setError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        onUploadComplete(data.url);
+      } else {
+        setError(data.error || 'Upload failed');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  return (
+    <div className="space-y-2">
+      <label className="text-sm font-medium">{label}</label>
+
+      {currentImage ? (
+        <div className="relative">
+          <img
+            src={currentImage}
+            alt="Preview"
+            className="w-full h-48 object-cover rounded-lg border"
+          />
+          <div className="absolute top-2 right-2 flex gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleButtonClick}
+              disabled={uploading}
+              className="bg-white"
+            >
+              {uploading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Uploading...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Replace
+                </>
+              )}
+            </Button>
+            {onRemove && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onRemove}
+                className="bg-white text-red-600 hover:text-red-700"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div
+          className={`
+            relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
+            ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+            ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
+          `}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+          onClick={handleButtonClick}
+        >
+          {uploading ? (
+            <div className="space-y-2">
+              <Loader2 className="h-12 w-12 mx-auto animate-spin text-blue-600" />
+              <p className="text-sm text-gray-600">Uploading...</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <ImageIcon className="h-12 w-12 mx-auto text-gray-400" />
+              <div>
+                <p className="text-sm font-medium text-gray-700">
+                  Drag and drop your image here
+                </p>
+                <p className="text-xs text-gray-500 mt-1">or click to browse</p>
+              </div>
+              <p className="text-xs text-gray-400">{helperText}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        className="hidden"
+        accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+        onChange={handleChange}
+        disabled={uploading}
+      />
+
+      {error && (
+        <p className="text-sm text-red-600">{error}</p>
+      )}
+    </div>
+  );
+}

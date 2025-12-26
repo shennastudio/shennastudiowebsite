@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft, Plus, X } from 'lucide-react';
+import { MultiImageUpload } from '@/components/admin/MultiImageUpload';
 
 interface ProductVariant {
   name: string;
@@ -70,7 +71,7 @@ export default function NewProductPage() {
     },
   ]);
 
-  const [images, setImages] = useState<string[]>(['']);
+  const [images, setImages] = useState<string[]>([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -110,20 +111,6 @@ export default function NewProductPage() {
     const updated = [...variants];
     updated[index] = { ...updated[index], [field]: value };
     setVariants(updated);
-  };
-
-  const addImage = () => {
-    setImages([...images, '']);
-  };
-
-  const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
-  };
-
-  const updateImage = (index: number, value: string) => {
-    const updated = [...images];
-    updated[index] = value;
-    setImages(updated);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -423,38 +410,14 @@ export default function NewProductPage() {
         {/* Product Images */}
         <Card>
           <CardHeader>
-            <div className="flex justify-between items-center">
-              <CardTitle>Product Images</CardTitle>
-              <Button type="button" onClick={addImage} variant="outline" size="sm">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Image
-              </Button>
-            </div>
+            <CardTitle>Product Images</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {images.map((image, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  value={image}
-                  onChange={(e) => updateImage(index, e.target.value)}
-                  placeholder="https://images.unsplash.com/photo-..."
-                  className="flex-1"
-                />
-                {images.length > 1 && (
-                  <Button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    variant="outline"
-                    size="sm"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            ))}
-            <p className="text-sm text-gray-500">
-              Enter image URLs (Unsplash or Vercel Blob Storage)
-            </p>
+          <CardContent>
+            <MultiImageUpload
+              images={images}
+              onImagesChange={setImages}
+              maxImages={10}
+            />
           </CardContent>
         </Card>
 
