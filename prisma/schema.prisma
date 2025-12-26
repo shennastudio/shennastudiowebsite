@@ -1,0 +1,220 @@
+// ShennaStudio E-Commerce Platform - Prisma Schema
+// Self-hosted admin panel with full type safety
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+  CUSTOMER
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum TransactionType {
+  SALE
+  RESTOCK
+  ADJUSTMENT
+  RESERVATION
+}
+
+enum DonationStatus {
+  PLEDGED
+  DONATED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String?
+  role          UserRole  @default(CUSTOMER)
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  orders        Order[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                     String    @id @default(cuid())
+  name                   String
+  slug                   String    @unique
+  description            String?
+  sku                    String    @unique
+  basePrice              Float
+  featured               Boolean   @default(false)
+
+  // Conservation info
+  conservationPercentage Float     @default(10)
+  conservationFocus      String?
+
+  categoryId             String?
+  category               Category? @relation(fields: [categoryId], references: [id])
+
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  variants               ProductVariant[]
+  images                 ProductImage[]
+
+  @@map("products")
+}
+
+model ProductVariant {
+  id           String   @id @default(cuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  name         String
+  sku          String   @unique
+  price        Float
+  stock        Int      @default(0)
+
+  // Variant attributes
+  size         String?
+  color        String?
+  material     String?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orderItems   OrderItem[]
+  transactions InventoryTransaction[]
+  images       ProductImage[]
+
+  @@map("product_variants")
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  position  Int      @default(0)
+
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@map("product_images")
+}
+
+model Order {
+  id                String      @id @default(cuid())
+  orderNumber       String      @unique @default(cuid())
+
+  userId            String?
+  user              User?       @relation(fields: [userId], references: [id])
+
+  // Customer info (for guest checkout)
+  customerEmail     String
+  customerName      String
+
+  // Shipping info
+  shippingAddress   String
+  shippingCity      String
+  shippingState     String
+  shippingZip       String
+  shippingCountry   String      @default("US")
+
+  // Order totals
+  subtotal          Float
+  shipping          Float
+  tax               Float
+  total             Float
+
+  status            OrderStatus @default(PENDING)
+
+  // Payment
+  stripePaymentId   String?
+
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  items             OrderItem[]
+  conservationDonation ConservationDonation?
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id             String         @id @default(cuid())
+  orderId        String
+  order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  variantId      String
+  variant        ProductVariant @relation(fields: [variantId], references: [id])
+
+  quantity       Int
+  price          Float
+
+  createdAt      DateTime       @default(now())
+
+  @@map("order_items")
+}
+
+model InventoryTransaction {
+  id          String          @id @default(cuid())
+  variantId   String
+  variant     ProductVariant  @relation(fields: [variantId], references: [id])
+
+  type        TransactionType
+  quantity    Int
+  notes       String?
+
+  createdAt   DateTime        @default(now())
+
+  @@map("inventory_transactions")
+}
+
+model ConservationDonation {
+  id                String          @id @default(cuid())
+  orderId           String          @unique
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  amount            Float
+  percentage        Float
+  organization      String?
+  region            String?         // Rio Grande Valley, South Padre Island
+  status            DonationStatus  @default(PLEDGED)
+  receiptUrl        String?
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@map("conservation_donations")
+}
