@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
 
 export async function GET(
   request: NextRequest,
@@ -87,6 +88,11 @@ export async function PATCH(
       },
     });
 
+    // Revalidate pages that display products
+    revalidatePath('/');
+    revalidatePath('/products');
+    revalidatePath(`/products/${product.slug}`);
+
     return NextResponse.json(product);
   } catch (error: any) {
     console.error('Error updating product:', error);
@@ -110,9 +116,22 @@ export async function DELETE(
 
     const { id } = await params;
 
+    // Get the product slug before deleting for revalidation
+    const product = await prisma.product.findUnique({
+      where: { id },
+      select: { slug: true },
+    });
+
     await prisma.product.delete({
       where: { id },
     });
+
+    // Revalidate pages that display products
+    revalidatePath('/');
+    revalidatePath('/products');
+    if (product?.slug) {
+      revalidatePath(`/products/${product.slug}`);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

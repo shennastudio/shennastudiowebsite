@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,6 +37,11 @@ export async function POST(request: NextRequest) {
         images: true,
       },
     });
+
+    // Revalidate pages that display products
+    revalidatePath('/');
+    revalidatePath('/products');
+    revalidatePath(`/products/${product.slug}`);
 
     return NextResponse.json(product, { status: 201 });
   } catch (error: any) {
