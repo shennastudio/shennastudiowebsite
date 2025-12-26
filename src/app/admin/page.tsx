@@ -13,12 +13,19 @@ interface DashboardStats {
 }
 
 async function getAdminStats(): Promise<DashboardStats> {
-  // For now return default values - can be connected to Prisma later
+  const { prisma } = await import('@/lib/db');
+
+  const products = await prisma.product.count();
+  const orders = await prisma.order.findMany();
+  const totalOrders = orders.length;
+  const totalRevenue = orders.reduce((sum, order) => sum + order.total, 0);
+  const pendingOrders = orders.filter(order => order.status === 'PENDING').length;
+
   return {
-    totalProducts: 0,
-    totalOrders: 0,
-    totalRevenue: 0,
-    pendingOrders: 0,
+    totalProducts: products,
+    totalOrders,
+    totalRevenue,
+    pendingOrders,
   };
 }
 
