@@ -44,6 +44,14 @@ export async function POST(request: NextRequest) {
 
     const data = await request.json();
 
+    // Validate required fields
+    if (!data.siteName || !data.primaryColor) {
+      return NextResponse.json(
+        { error: 'Site name and primary color are required' },
+        { status: 400 }
+      );
+    }
+
     // Check if settings exist
     const existing = await prisma.siteSettings.findFirst();
 
@@ -83,11 +91,21 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json(settings);
+    return NextResponse.json({ success: true, settings });
   } catch (error: any) {
     console.error('Error saving settings:', error);
+    console.error('Error details:', {
+      name: error.name,
+      message: error.message,
+      code: error.code,
+      meta: error.meta,
+    });
+
     return NextResponse.json(
-      { error: error.message || 'Failed to save settings' },
+      {
+        error: error.message || 'Failed to save settings',
+        details: process.env.NODE_ENV === 'development' ? error.toString() : undefined
+      },
       { status: 500 }
     );
   }

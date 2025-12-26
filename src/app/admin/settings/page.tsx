@@ -78,14 +78,23 @@ export default function SettingsPage() {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        setMessage('Settings saved successfully!');
+        setMessage('✓ Settings saved successfully!');
         await fetchSettings();
+
+        // Clear success message after 3 seconds
+        setTimeout(() => setMessage(''), 3000);
       } else {
-        setMessage('Failed to save settings');
+        const errorMsg = data.error || 'Failed to save settings';
+        const details = data.details ? `\n${data.details}` : '';
+        setMessage(`✗ ${errorMsg}${details}`);
+        console.error('Settings save error:', data);
       }
-    } catch (error) {
-      setMessage('Failed to save settings');
+    } catch (error: any) {
+      setMessage(`✗ Network error: ${error.message || 'Failed to save settings'}`);
+      console.error('Settings save error:', error);
     } finally {
       setSaving(false);
     }
