@@ -9,7 +9,7 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import type { Product, Order, User } from '@/../../payload-types'
+import type { Product, Order, User } from '@payload-types'
 
 interface PayloadCartItem {
   id: string;
@@ -115,14 +115,14 @@ async function payloadFetch<T>(
   const { token, ...fetchOptions } = options
   const url = `${getApiUrl()}${endpoint}`
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...fetchOptions.headers,
+    ...(fetchOptions.headers as Record<string, string>),
   }
 
   // Add auth token if provided
   if (token) {
-    headers.Authorization = `JWT ${token}`
+    headers['Authorization'] = `JWT ${token}`
   }
 
   try {

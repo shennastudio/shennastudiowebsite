@@ -298,19 +298,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   // Sync cart with Payload API (for logged-in users)
+  // TODO: Implement backend cart sync endpoint at /api/cart/sync
+  // For now, this is a no-op function to prevent runtime errors
   const syncWithPayload = async (userId?: number) => {
     if (!userId) {
       console.warn('Cannot sync cart: No user ID provided');
       return;
     }
 
-    try {
-      // TODO: Implement API call to sync cart with Payload backend
-      // This would involve:
-      // 1. Fetching the user's cart from Payload API
-      // 2. Merging with local cart state
-      // 3. Updating both local and remote cart
+    // Currently disabled - cart is client-side only
+    // To enable:
+    // 1. Create /src/app/api/cart/sync/route.ts endpoint
+    // 2. Implement Payload CMS cart collection
+    // 3. Add authentication middleware
+    // 4. Uncomment the code below
 
+    console.log('Cart sync not implemented - cart is client-side only');
+    return;
+
+    /* Commented out until backend endpoint is created
+    try {
       const response = await fetch('/api/cart/sync', {
         method: 'POST',
         headers: {
@@ -328,7 +335,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       const data = await response.json();
 
-      // Update local cart with server response
       if (data.cart) {
         dispatch({ type: 'LOAD_CART', payload: data.cart });
       }
@@ -336,8 +342,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       console.log('Cart synced successfully with Payload');
     } catch (error) {
       console.error('Failed to sync cart with Payload:', error);
-      // Don't throw - allow offline/guest cart functionality
     }
+    */
   };
 
   const value = {

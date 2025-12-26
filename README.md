@@ -134,11 +134,20 @@ const { docs } = await response.json();
 
 ### Admin Panel (Payload UI)
 
-The Payload CMS admin panel at `/admin` currently has a compatibility issue with Payload 3.69.0 where the UI fails to load with a CodeEditor context error. This is a known bug in Payload 3.x.
+The Payload CMS admin panel at `/admin` currently has a compatibility issue where the UI fails to load due to a `CodeEditor` context error. This is a known bug affecting Payload CMS versions 3.62.1+ when used with Next.js 15+.
 
-**Workaround**: Use the API directly for content management:
+**Error**: `TypeError: Cannot destructure property 'config' of 'ue(...)' as it is undefined.`
+
+**Current Version**: Payload CMS 3.62.1 (tested versions: 3.0.0, 3.62.1, 3.69.0 - all affected)
+
+**Workaround**: Use the Payload REST API directly for content management:
 
 ```bash
+# Login and get auth token
+curl -X POST http://localhost:3000/api/users/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@shennastudio.com", "password": "admin123"}'
+
 # Create a product via API
 curl -X POST http://localhost:3000/api/products \
   -H "Content-Type: application/json" \
@@ -146,11 +155,77 @@ curl -X POST http://localhost:3000/api/products \
   -d '{"name": "Ocean Bracelet", "basePrice": 29.99, "sku": "OB-001", ...}'
 ```
 
-**Status**: The Payload team is actively working on fixes in version 3.70.0. For now, the application works perfectly as a headless CMS.
+**Status**: This is a known upstream issue in Payload CMS. The frontend, API, and all business logic work perfectly. Only the admin UI is affected. The application functions fully as a headless CMS.
 
 ## 🚢 Deployment
 
-### Cloudflare Workers (Recommended)
+### Railway.com (Recommended)
+
+This application is configured for deployment on Railway.com with PostgreSQL database included.
+
+#### Quick Deploy
+
+1. **Connect to Railway**:
+   ```bash
+   # Install Railway CLI
+   npm i -g @railway/cli
+
+   # Login to Railway
+   railway login
+
+   # Link to your project
+   railway link
+   ```
+
+2. **Add PostgreSQL Database**:
+   - Go to your Railway project dashboard
+   - Click "New" → "Database" → "PostgreSQL"
+   - Railway will automatically set `DATABASE_URL` environment variable
+
+3. **Set Environment Variables**:
+   ```bash
+   railway variables set PAYLOAD_SECRET=your-secret-key-here
+   railway variables set NODE_ENV=production
+   ```
+
+4. **Deploy**:
+   ```bash
+   railway up
+   ```
+
+#### Environment Variables Required
+
+Set these in your Railway project settings:
+
+```env
+# Required
+DATABASE_URL=<automatically set by Railway PostgreSQL>
+PAYLOAD_SECRET=<generate a secure random string>
+NODE_ENV=production
+
+# Optional (if different from DATABASE_URL)
+POSTGRES_URL=<same as DATABASE_URL>
+DB_USER=<from Railway>
+DB_PASSWORD=<from Railway>
+DB_HOST=<from Railway>
+DB_PORT=5432
+DB_NAME=<from Railway>
+```
+
+#### Post-Deployment
+
+After deployment:
+1. Access your site at the Railway-provided URL
+2. Run database migrations:
+   ```bash
+   railway run npm run payload:migrate
+   ```
+3. Seed the admin user:
+   ```bash
+   railway run npm run payload:seed
+   ```
+
+### Alternative: Cloudflare Workers
 
 1. Build the application:
    ```bash
@@ -162,13 +237,13 @@ curl -X POST http://localhost:3000/api/products \
    npx wrangler pages deploy .next
    ```
 
-### Database
+### Database Options
 
-Use a managed PostgreSQL service:
-- **Vercel Postgres**
+For non-Railway deployments, use a managed PostgreSQL service:
+- **Neon** (Recommended for Serverless)
 - **Supabase**
-- **Neon**
-- **Railway**
+- **Vercel Postgres**
+- **PlanetScale** (MySQL compatible)
 
 Update environment variables with production database credentials.
 

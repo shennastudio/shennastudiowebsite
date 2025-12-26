@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Product } from '@payload-types'
+import { Product, Media } from '@payload-types'
 import { useCart } from '@/context/CartContext'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -60,7 +60,19 @@ export default function ProductDetails({ product: initialProduct }: ProductDetai
 
   const getImages = (): string[] => {
     if (selectedVariant?.images && Array.isArray(selectedVariant.images) && selectedVariant.images.length > 0) {
-      return selectedVariant.images as string[];
+      // Extract URLs from variant images
+      const variantImages = selectedVariant.images
+        .map(img => {
+          if (img.image && typeof img.image === 'object' && 'url' in img.image) {
+            return (img.image as Media).url || '';
+          }
+          return '';
+        })
+        .filter((url): url is string => url !== '');
+
+      if (variantImages.length > 0) {
+        return variantImages;
+      }
     }
     return initialProduct.displayImages || [];
   };

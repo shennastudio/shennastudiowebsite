@@ -12,7 +12,10 @@ import type {
   Order,
   Media,
   User
-} from '@/../../payload-types'
+} from '@payload-types'
+
+// Extract variant type from Product
+type ProductVariant = NonNullable<Product['variants']>[number]
 
 // API Response Types
 export interface PayloadResponse<T> {
@@ -539,7 +542,7 @@ export function hasVariants(product: Product): boolean {
 export function getVariantBySku(
   product: Product,
   sku: string
-): Product['variants'][0] | null {
+): ProductVariant | null {
   if (!product.variants) return null
   return product.variants.find(v => v.sku === sku) || null
 }
@@ -547,7 +550,7 @@ export function getVariantBySku(
 /**
  * Check if variant is in stock
  */
-export function isVariantInStock(variant: Product['variants'][0]): boolean {
+export function isVariantInStock(variant: ProductVariant): boolean {
   return variant.stock > 0
 }
 

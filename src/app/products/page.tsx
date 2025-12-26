@@ -3,13 +3,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import { fetchProducts, fetchCategories, fetchFeaturedProducts } from '@/app/actions'
 import { Product, Category } from '@payload-types'
-import { useCart } from '@/context/CartContext'
+import { useCart, type PayloadProductVariant } from '@/context/CartContext'
 import Image from 'next/image'
 import Link from 'next/link'
 
 interface ProductDisplay {
   product: Product;
-  variant: any;
+  variant: PayloadProductVariant | null;
   displayPrice: number;
   displayStock: number;
   displayImages: string[];
