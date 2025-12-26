@@ -47,9 +47,11 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  orders        Order[]
-  accounts      Account[]
-  sessions      Session[]
+  orders          Order[]
+  accounts        Account[]
+  sessions        Session[]
+  rewards         CustomerReward?
+  prizeRedemptions PrizeRedemption[]
 
   @@map("users")
 }
@@ -277,4 +279,123 @@ model SiteSettings {
   updatedAt         DateTime @updatedAt
 
   @@map("site_settings")
+}
+
+// Newsletter Subscribers
+model NewsletterSubscriber {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  name              String?
+  isActive          Boolean  @default(true)
+  subscribedAt      DateTime @default(now())
+  unsubscribedAt    DateTime?
+
+  @@map("newsletter_subscribers")
+}
+
+// Customer Rewards & Gamification
+model CustomerReward {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  points            Int      @default(0)
+  totalSpent        Float    @default(0)
+  totalOrders       Int      @default(0)
+  currentTier       String   @default("Bronze") // Bronze, Silver, Gold, Platinum
+  memberSince       DateTime @default(now())
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  achievements      CustomerAchievement[]
+  pointTransactions PointTransaction[]
+
+  @@map("customer_rewards")
+}
+
+// Point Transactions (earning and spending)
+model PointTransaction {
+  id                String         @id @default(cuid())
+  customerId        String
+  customer          CustomerReward @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  points            Int // Positive for earning, negative for spending
+  type              String // PURCHASE, SIGNUP, BIRTHDAY, REFERRAL, SPEND
+  description       String
+  orderId           String?
+
+  createdAt         DateTime       @default(now())
+
+  @@map("point_transactions")
+}
+
+// Achievements/Badges
+model Achievement {
+  id                String   @id @default(cuid())
+  name              String
+  description       String
+  icon              String   @default("🏆")
+  requirement       String   // Description of how to earn
+  points            Int      @default(0) // Bonus points for earning this
+
+  createdAt         DateTime @default(now())
+
+  customerAchievements CustomerAchievement[]
+
+  @@map("achievements")
+}
+
+// Link between customers and their earned achievements
+model CustomerAchievement {
+  id                String         @id @default(cuid())
+  customerId        String
+  customer          CustomerReward @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  achievementId     String
+  achievement       Achievement    @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  earnedAt          DateTime       @default(now())
+
+  @@unique([customerId, achievementId])
+  @@map("customer_achievements")
+}
+
+// Reward Prizes (what customers can win/redeem)
+model RewardPrize {
+  id                String   @id @default(cuid())
+  name              String
+  description       String
+  image             String?
+  pointsCost        Int      // How many points to redeem
+  isActive          Boolean  @default(true)
+  stockAvailable    Int      @default(0) // -1 for unlimited
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  redemptions       PrizeRedemption[]
+
+  @@map("reward_prizes")
+}
+
+// Prize Redemptions
+model PrizeRedemption {
+  id                String      @id @default(cuid())
+  userId            String
+  user              User        @relation(fields: [userId], references: [id])
+
+  prizeId           String
+  prize             RewardPrize @relation(fields: [prizeId], references: [id])
+
+  pointsSpent       Int
+  status            String      @default("PENDING") // PENDING, SHIPPED, DELIVERED
+  trackingNumber    String?
+  shippingAddress   String?
+
+  redeemedAt        DateTime    @default(now())
+  shippedAt         DateTime?
+  deliveredAt       DateTime?
+
+  @@map("prize_redemptions")
 }

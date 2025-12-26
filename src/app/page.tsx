@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { fetchFeaturedProducts } from '@/app/actions'
+import NewsletterSignup from '@/components/NewsletterSignup'
 
 export default async function Home() {
   const featuredProducts = await fetchFeaturedProducts(6);
@@ -212,6 +213,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Newsletter Signup */}
+      <NewsletterSignup />
     </div>
   );
 }

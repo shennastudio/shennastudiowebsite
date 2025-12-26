@@ -1,0 +1,16 @@
+'use client';
+
+import { signOut } from 'next-auth/react';
+import { Button } from '@/components/ui/button';
+
+export default function LogoutButton() {
+  return (
+    <Button
+      onClick={() => signOut({ callbackUrl: '/login' })}
+      variant="outline"
+      className="bg-white/10 border-white/30 text-white hover:bg-white/20"
+    >
+      Sign Out
+    </Button>
+  );
+}
