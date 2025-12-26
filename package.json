@@ -19,7 +19,7 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
     "railway:build": "prisma generate && prisma migrate deploy && npm run build",
-    "railway:start": "npm run start"
+    "railway:start": "node .next/standalone/server.js"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

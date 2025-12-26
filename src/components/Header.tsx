@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useSession } from 'next-auth/react'
 
 interface SiteSettings {
   siteName: string;
@@ -10,6 +11,7 @@ interface SiteSettings {
 }
 
 export default function Header() {
+  const { data: session } = useSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings>({
     siteName: 'ShennaStudio',
@@ -81,6 +83,36 @@ export default function Header() {
             <Link href="/conservation" className="text-gray-700 hover:text-teal-600 transition-colors">
               🐢
             </Link>
+            {session && session.user.role === 'CUSTOMER' ? (
+              <Link
+                href="/account"
+                className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+              >
+                My Account
+              </Link>
+            ) : session && session.user.role === 'ADMIN' ? (
+              <Link
+                href="/admin"
+                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+              >
+                Admin
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-teal-600 hover:text-teal-700 font-semibold"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/register"
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
 
           <div className="md:hidden">
@@ -120,6 +152,39 @@ export default function Header() {
               <Link href="/cart" className="text-gray-700 hover:text-teal-600 transition-colors py-2">
                 Cart
               </Link>
+
+              <div className="pt-4 border-t space-y-2">
+                {session && session.user.role === 'CUSTOMER' ? (
+                  <Link
+                    href="/account"
+                    className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+                  >
+                    My Account
+                  </Link>
+                ) : session && session.user.role === 'ADMIN' ? (
+                  <Link
+                    href="/admin"
+                    className="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+                  >
+                    Admin
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      className="block w-full text-center text-teal-600 hover:text-teal-700 font-semibold py-2"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/register"
+                      className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold"
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
+              </div>
             </nav>
           </div>
         )}

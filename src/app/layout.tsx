@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import NewsletterPopup from "@/components/NewsletterPopup";
 import { CartProvider } from "@/context/CartContext";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 
@@ -38,6 +39,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <NewsletterPopup />
           </CartProvider>
         </SessionProvider>
       </body>
