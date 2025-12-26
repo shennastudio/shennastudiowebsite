@@ -1,9 +1,22 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import type { Product, Media } from '@payload-types';
 
-// Payload CMS variant type (from Product.variants array)
+// Simple Product type (compatible with Prisma schema)
+interface Product {
+  id: number | string;
+  name: string;
+  sku: string;
+  basePrice: number;
+  inStock?: boolean;
+  images?: { url?: string | null }[];
+  conservationInfo?: {
+    donationPercentage?: number | null;
+    conservationFocus?: string | null;
+  };
+}
+
+// Product variant type
 export interface PayloadProductVariant {
   id?: string | null;
   variantName: string;
@@ -13,16 +26,13 @@ export interface PayloadProductVariant {
   size?: ('small' | 'medium' | 'large') | null;
   color?: string | null;
   material?: string | null;
-  images?: {
-    image?: (number | null) | Media;
-    id?: string | null;
-  }[] | null;
+  images?: { url?: string | null }[];
 }
 
-// Cart item type for Payload CMS products
+// Cart item type
 export interface PayloadCartItem {
   id: string; // Unique cart item identifier (variantId or productId)
-  productId: number;
+  productId: number | string;
   productName: string;
   productSku: string;
   variantId?: string | null; // Variant ID if using variant, null if base product
@@ -61,22 +71,18 @@ type CartAction =
   | { type: 'LOAD_CART'; payload: CartState }
   | { type: 'RECALCULATE_TOTALS' };
 
-// Helper function to get image URL from Payload Media
+// Helper function to get image URL
 function getImageUrl(product: Product, variant?: PayloadProductVariant | null): string | null {
   // Try variant images first
   if (variant?.images && variant.images.length > 0) {
-    const variantImage = variant.images[0]?.image;
-    if (variantImage && typeof variantImage === 'object' && 'url' in variantImage) {
-      return variantImage.url || null;
-    }
+    const url = variant.images[0]?.url;
+    if (url) return url;
   }
 
   // Fall back to product images
   if (product.images && product.images.length > 0) {
-    const productImage = product.images[0]?.image;
-    if (productImage && typeof productImage === 'object' && 'url' in productImage) {
-      return productImage.url || null;
-    }
+    const url = product.images[0]?.url;
+    if (url) return url;
   }
 
   return null;

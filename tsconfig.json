@@ -43,6 +43,15 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "scripts/scripts.disabled/**/*",
+    "src/app/products.disabled/**/*",
+    "src/components/disabled/**/*",
+    "src/context/disabled/**/*",
+    "src/lib/disabled/**/*",
+    "src/context/CartContext.example.tsx",
+    "src/lib/payload-api.ts",
+    "src/lib/payload/**/*",
+    "src/lib/type-adapters.ts"
   ]
 }

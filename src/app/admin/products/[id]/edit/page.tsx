@@ -32,12 +32,13 @@ interface Category {
   name: string;
 }
 
-export default function EditProductPage({ params }: { params: { id: string } }) {
+export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
+  const [productId, setProductId] = useState<string>('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -55,9 +56,14 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchProduct();
-    fetchCategories();
-  }, [params.id]);
+    const initPage = async () => {
+      const { id } = await params;
+      setProductId(id);
+      fetchProduct(id);
+      fetchCategories();
+    };
+    initPage();
+  }, []);
 
   const fetchCategories = async () => {
     try {
@@ -71,9 +77,9 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     }
   };
 
-  const fetchProduct = async () => {
+  const fetchProduct = async (id: string) => {
     try {
-      const response = await fetch(`/api/admin/products/${params.id}`);
+      const response = await fetch(`/api/admin/products/${id}`);
       if (!response.ok) throw new Error('Failed to fetch product');
 
       const product = await response.json();
@@ -158,7 +164,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
     setError('');
 
     try {
-      const response = await fetch(`/api/admin/products/${params.id}`, {
+      const response = await fetch(`/api/admin/products/${productId}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
