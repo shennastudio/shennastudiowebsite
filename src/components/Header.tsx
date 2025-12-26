@@ -1,10 +1,35 @@
 'use client'
 
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+
+interface SiteSettings {
+  siteName: string;
+  logo: string | null;
+}
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [settings, setSettings] = useState<SiteSettings>({
+    siteName: 'ShennaStudio',
+    logo: null,
+  });
+
+  useEffect(() => {
+    // Fetch site settings
+    fetch('/api/admin/settings')
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setSettings({
+            siteName: data.siteName || 'ShennaStudio',
+            logo: data.logo,
+          });
+        }
+      })
+      .catch(err => console.error('Failed to load site settings:', err));
+  }, []);
 
   return (
     <header className="bg-white shadow-sm">
@@ -12,7 +37,20 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold text-teal-600 flex items-center gap-2">
-              🌊 ShennaStudio
+              {settings.logo ? (
+                <>
+                  <Image
+                    src={settings.logo}
+                    alt={settings.siteName}
+                    width={40}
+                    height={40}
+                    className="object-contain"
+                  />
+                  <span>{settings.siteName}</span>
+                </>
+              ) : (
+                <>🌊 {settings.siteName}</>
+              )}
             </Link>
           </div>
 
@@ -65,7 +103,7 @@ export default function Header() {
           <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-2">
               <Link href="/" className="text-gray-700 hover:text-teal-600 transition-colors py-2">
-                🌊 Home
+                Home
               </Link>
               <Link href="/products" className="text-gray-700 hover:text-teal-600 transition-colors py-2">
                 Ocean Collection

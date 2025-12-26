@@ -5,11 +5,8 @@ import { prisma } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // GET is public so the logo can be displayed on the website
+    // No authentication required for reading settings
 
     // Get the first (and should be only) settings record
     let settings = await prisma.siteSettings.findFirst();

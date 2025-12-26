@@ -81,7 +81,7 @@ export default function SettingsPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('✓ Settings saved successfully!');
+        setMessage('✓ Thanks beautiful Shenna I love you!');
         await fetchSettings();
 
         // Clear success message after 3 seconds
