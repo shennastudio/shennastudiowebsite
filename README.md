@@ -161,7 +161,7 @@ curl -X POST http://localhost:3000/api/products \
 
 ### Railway.com (Recommended)
 
-This application is configured for deployment on Railway.com with PostgreSQL database included.
+This application is configured for deployment on Railway.com with PostgreSQL database and automated Prisma migrations.
 
 #### Quick Deploy
 
@@ -173,8 +173,8 @@ This application is configured for deployment on Railway.com with PostgreSQL dat
    # Login to Railway
    railway login
 
-   # Link to your project
-   railway link
+   # Create a new project or link existing
+   railway init
    ```
 
 2. **Add PostgreSQL Database**:
@@ -182,10 +182,26 @@ This application is configured for deployment on Railway.com with PostgreSQL dat
    - Click "New" → "Database" → "PostgreSQL"
    - Railway will automatically set `DATABASE_URL` environment variable
 
-3. **Set Environment Variables**:
+3. **Set Required Environment Variables**:
+
+   In Railway dashboard or via CLI:
    ```bash
-   railway variables set PAYLOAD_SECRET=your-secret-key-here
+   # NextAuth Secret (generate with: openssl rand -base64 32)
+   railway variables set NEXTAUTH_SECRET=your-secure-random-32-char-string
+
+   # NextAuth URL (use your Railway deployment URL)
+   railway variables set NEXTAUTH_URL=https://your-app.up.railway.app
+
+   # Node Environment
    railway variables set NODE_ENV=production
+   ```
+
+   Optional variables (if using):
+   ```bash
+   railway variables set BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
+   railway variables set STRIPE_SECRET_KEY=sk_live_your_stripe_key
+   railway variables set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_your_stripe_key
+   railway variables set NEXT_PUBLIC_URL=https://your-app.up.railway.app
    ```
 
 4. **Deploy**:
@@ -193,37 +209,86 @@ This application is configured for deployment on Railway.com with PostgreSQL dat
    railway up
    ```
 
-#### Environment Variables Required
+   Or connect your GitHub repository in Railway dashboard for automatic deployments.
 
-Set these in your Railway project settings:
+#### Environment Variables Reference
 
-```env
-# Required
-DATABASE_URL=<automatically set by Railway PostgreSQL>
-PAYLOAD_SECRET=<generate a secure random string>
-NODE_ENV=production
+| Variable | Required | Description | Example |
+|----------|----------|-------------|---------|
+| `DATABASE_URL` | ✅ | PostgreSQL connection string | Auto-set by Railway |
+| `NEXTAUTH_SECRET` | ✅ | Secret for NextAuth sessions | Generate with `openssl rand -base64 32` |
+| `NEXTAUTH_URL` | ✅ | Your deployment URL | `https://your-app.up.railway.app` |
+| `NODE_ENV` | ✅ | Environment mode | `production` |
+| `BLOB_READ_WRITE_TOKEN` | ❌ | Vercel Blob for images | Optional |
+| `STRIPE_SECRET_KEY` | ❌ | Stripe payments | Optional |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | ❌ | Stripe client key | Optional |
+| `NEXT_PUBLIC_URL` | ❌ | Public app URL | Same as `NEXTAUTH_URL` |
 
-# Optional (if different from DATABASE_URL)
-POSTGRES_URL=<same as DATABASE_URL>
-DB_USER=<from Railway>
-DB_PASSWORD=<from Railway>
-DB_HOST=<from Railway>
-DB_PORT=5432
-DB_NAME=<from Railway>
+#### Deployment Workflow
+
+Railway deployment includes automatic:
+1. **Prisma Client Generation**: `prisma generate`
+2. **Database Migrations**: `prisma migrate deploy` (runs all pending migrations)
+3. **Next.js Build**: `npm run build`
+
+This is configured in:
+- `railway.json` - Railway deployment config
+- `package.json` - `railway:build` script
+
+#### Post-Deployment Setup
+
+After first deployment:
+
+1. **Seed the Database** (creates admin user and sample data):
+   ```bash
+   railway run npm run db:seed
+   ```
+
+   This creates:
+   - Admin user: `admin@shennastudio.com` / `admin123`
+   - Sample categories
+   - Sample products with variants
+   - Conservation tracking setup
+
+2. **Access Your Site**:
+   - Frontend: `https://your-app.up.railway.app`
+   - Admin Panel: `https://your-app.up.railway.app/admin`
+
+3. **Monitor Deployments**:
+   ```bash
+   railway logs
+   ```
+
+#### Database Migrations on Railway
+
+Migrations run automatically during deployment via `railway:build` script. To manually run migrations:
+
+```bash
+# Deploy pending migrations
+railway run npx prisma migrate deploy
+
+# View migration status
+railway run npx prisma migrate status
+
+# Generate Prisma Client
+railway run npx prisma generate
 ```
 
-#### Post-Deployment
+#### Troubleshooting
 
-After deployment:
-1. Access your site at the Railway-provided URL
-2. Run database migrations:
-   ```bash
-   railway run npm run payload:migrate
-   ```
-3. Seed the admin user:
-   ```bash
-   railway run npm run payload:seed
-   ```
+**Build Failures**:
+- Check `DATABASE_URL` is set correctly
+- Verify all required environment variables are present
+- Review build logs: `railway logs --deployment`
+
+**Migration Errors**:
+- Ensure database is accessible
+- Check if migrations folder is committed to git
+- Manually run: `railway run npx prisma migrate deploy`
+
+**Connection Issues**:
+- Railway's internal network should connect automatically
+- If using external database, ensure firewall allows Railway IPs
 
 ### Alternative: Cloudflare Workers
 
