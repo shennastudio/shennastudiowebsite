@@ -41,12 +41,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Generate Payload types
-        run: npm run payload:generate
-        env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/test
-          PAYLOAD_SECRET: test-secret
-
       - name: TypeScript Check
         run: npx tsc --noEmit
 
@@ -70,7 +64,6 @@ jobs:
         run: npm run build
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test
-          PAYLOAD_SECRET: test-secret
           SKIP_ENV_VALIDATION: true
 
       - name: Upload build artifacts
