@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import NewsletterPopup from "@/components/NewsletterPopup";
+import LayoutWrapper from "@/components/LayoutWrapper";
 import { CartProvider } from "@/context/CartContext";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 
@@ -34,12 +32,9 @@ export default function RootLayout({
       >
         <SessionProvider>
           <CartProvider>
-            <Header />
-            <main className="flex-1">
+            <LayoutWrapper>
               {children}
-            </main>
-            <Footer />
-            <NewsletterPopup />
+            </LayoutWrapper>
           </CartProvider>
         </SessionProvider>
       </body>
