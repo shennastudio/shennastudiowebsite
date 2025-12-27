@@ -105,7 +105,7 @@ export default async function Home() {
                     </span>
                   </div>
                   <Link
-                    href={`/products/${productDisplay.product?.id || '1'}`}
+                    href={`/products/${productDisplay.product?.slug || 'ocean-wave-bracelet'}`}
                     className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg transition-all transform hover:scale-105"
                   >
                     🌊 View Details
