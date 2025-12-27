@@ -103,7 +103,7 @@ export default function SPIPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-teal-50 p-6 rounded-2xl text-center">
-                <div className="text-4xl mb-2">🐢</div>
+                <div className="text-4xl mb-2">🌊🐢</div>
                 <div className="font-bold text-teal-700">Sea Turtles</div>
               </div>
               <div className="bg-blue-50 p-6 rounded-2xl text-center">

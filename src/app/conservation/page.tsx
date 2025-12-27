@@ -7,7 +7,7 @@ export default function ConservationPage() {
       <section className="bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-700 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center items-center gap-6 mb-6">
-            <span className="text-6xl animate-pulse">🐢</span>
+            <span className="text-6xl animate-pulse">🌊🐢</span>
             <h1 className="text-4xl md:text-6xl font-bold text-white">
               Ocean Conservation Mission
             </h1>
@@ -17,7 +17,7 @@ export default function ConservationPage() {
             Protecting marine life in Rio Grande Valley and South Padre Island. 10% of every purchase goes directly to conservation efforts.
           </p>
           <div className="flex justify-center items-center gap-8 text-cyan-100 text-lg">
-            <div>🐢 Sea Turtle Protection</div>
+            <div>🌊🐢 Sea Turtle Protection</div>
             <div>🐋 Whale Conservation</div>
             <div>🦈 Shark Research</div>
           </div>
@@ -85,7 +85,7 @@ export default function ConservationPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
               <div className="text-center mb-4">
-                <div className="text-4xl mb-2">🐢</div>
+                <div className="text-4xl mb-2">🌊🐢</div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   Sea Turtle Restoration Project
                 </h3>
@@ -142,7 +142,7 @@ export default function ConservationPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-xl font-semibold text-teal-700 mb-6">🐢 Sea Turtle Protection</h3>
+              <h3 className="text-xl font-semibold text-teal-700 mb-6">🌊🐢 Sea Turtle Protection</h3>
               <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>

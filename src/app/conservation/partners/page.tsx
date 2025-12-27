@@ -13,7 +13,7 @@ const partners = [
     description: 'Dedicated to the conservation and rehabilitation of sea turtles and their marine habitats. They rescue, rehabilitate, and release endangered sea turtles back into the wild.',
     focus: 'Sea turtle rescue and rehabilitation',
     website: 'seaturtleinc.com',
-    logo: '🐢'
+    logo: '🌊🐢'
   },
   {
     name: 'Rio Grande Valley Birding Festival',

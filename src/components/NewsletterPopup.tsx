@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
+import Image from 'next/image'
 
 export default function NewsletterPopup() {
   const [isOpen, setIsOpen] = useState(false)
@@ -102,10 +103,16 @@ export default function NewsletterPopup() {
 
           {/* Content */}
           <div className="text-center">
-            {/* Ocean Icon */}
+            {/* Sea Turtle Image */}
             <div className="flex justify-center mb-3 sm:mb-4">
-              <div className="bg-gradient-to-br from-cyan-100 to-teal-100 rounded-full p-3 sm:p-4">
-                <span className="text-4xl sm:text-5xl">🌊</span>
+              <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-teal-100 shadow-lg">
+                <Image
+                  src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=200&q=80"
+                  alt="Kemp's Ridley sea turtle swimming underwater"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 96px, 128px"
+                />
               </div>
             </div>
 
@@ -115,7 +122,7 @@ export default function NewsletterPopup() {
             </h2>
 
             <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-              Get <strong className="text-teal-600">10% off</strong> your first order + exclusive access to new ocean-inspired designs and Kemp&apos;s Ridley sea turtle conservation updates from South Padre Island! 🌊🐢
+              Get <strong className="text-teal-600">10% off</strong> your first order + exclusive access to new ocean-inspired designs and Kemp&apos;s Ridley sea turtle conservation updates from South Padre Island! 🌊
             </p>
 
             {/* Success/Error Message */}

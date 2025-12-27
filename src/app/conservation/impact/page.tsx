@@ -37,7 +37,7 @@ const projects = [
     impact: 'Supported the rescue and rehabilitation of 325 endangered sea turtles, including 87 Kemp\'s Ridley sea turtles - the most critically endangered sea turtle species.',
     funds: '$18,500',
     timeline: '2022-2024',
-    image: '🐢'
+    image: '🌊🐢'
   },
   {
     title: 'Coastal Dune Restoration',
