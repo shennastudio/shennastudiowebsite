@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { sendEmail } from '@/lib/email';
+import WelcomeEmail from '@/emails/WelcomeEmail';
 
 export async function POST(request: NextRequest) {
   try {
@@ -34,6 +36,18 @@ export async function POST(request: NextRequest) {
           },
         });
 
+        // Send welcome back email
+        try {
+          await sendEmail({
+            to: email,
+            subject: '🌊 Welcome Back to ShennaStudio!',
+            react: WelcomeEmail({ customerName: name || existing.name || 'Ocean Lover' }),
+          });
+          console.log(`Welcome back email sent to ${email}`);
+        } catch (emailError) {
+          console.error('Failed to send welcome back email:', emailError);
+        }
+
         return NextResponse.json({
           success: true,
           message: 'Welcome back! Your subscription has been reactivated.',
@@ -48,6 +62,19 @@ export async function POST(request: NextRequest) {
         name: name || null,
       },
     });
+
+    // Send welcome email
+    try {
+      await sendEmail({
+        to: email,
+        subject: '🌊 Welcome to ShennaStudio - Your Ocean Conservation Journey Begins!',
+        react: WelcomeEmail({ customerName: name || 'Ocean Lover' }),
+      });
+      console.log(`Welcome email sent to ${email}`);
+    } catch (emailError) {
+      // Don't fail the subscription if email fails
+      console.error('Failed to send welcome email:', emailError);
+    }
 
     return NextResponse.json({
       success: true,
