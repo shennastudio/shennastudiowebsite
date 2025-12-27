@@ -115,7 +115,7 @@ export default function NewsletterPopup() {
             </h2>
 
             <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-              Get <strong className="text-teal-600">10% off</strong> your first order + exclusive access to new ocean-inspired designs and conservation updates from South Padre Island! 🐢
+              Get <strong className="text-teal-600">10% off</strong> your first order + exclusive access to new ocean-inspired designs and Kemp&apos;s Ridley sea turtle conservation updates from South Padre Island! 🌊🐢
             </p>
 
             {/* Success/Error Message */}
@@ -169,8 +169,8 @@ export default function NewsletterPopup() {
                   <span className="leading-tight">Exclusive Deals</span>
                 </div>
                 <div>
-                  <span className="block text-xl sm:text-2xl mb-1">🐢</span>
-                  <span className="leading-tight">Conservation News</span>
+                  <span className="block text-xl sm:text-2xl mb-1">🌊🐢</span>
+                  <span className="leading-tight">Sea Turtle Updates</span>
                 </div>
                 <div>
                   <span className="block text-xl sm:text-2xl mb-1">✨</span>
