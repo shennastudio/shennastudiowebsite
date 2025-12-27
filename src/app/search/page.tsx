@@ -25,7 +25,12 @@ function SearchPageContent() {
   const [results, setResults] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('newest');
-  const [activeFilters, setActiveFilters] = useState({
+  const [activeFilters, setActiveFilters] = useState<{
+    colors: string[];
+    materials: string[];
+    sizes: string[];
+    inStockOnly: boolean;
+  }>({
     colors: [],
     materials: [],
     sizes: [],

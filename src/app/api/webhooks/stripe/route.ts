@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import type { CartItem } from '@/types';
+import type Stripe from 'stripe';
 
 // Make this route dynamic to avoid build-time evaluation
 export const dynamic = 'force-dynamic';
@@ -30,9 +31,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }
 
-  // Dynamically import Stripe type
-  const Stripe = (await import('stripe')).default;
-  let event: InstanceType<typeof Stripe>['Event'];
+  let event: Stripe.Event;
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -50,7 +49,7 @@ export async function POST(request: NextRequest) {
 
   // Handle the checkout.session.completed event
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as InstanceType<typeof Stripe>['Checkout']['Session'];
+    const session = event.data.object as Stripe.Checkout.Session;
 
     try {
       // Lazy load order creation module
@@ -147,15 +146,13 @@ export async function POST(request: NextRequest) {
 
   // Handle payment_intent.succeeded event (backup)
   if (event.type === 'payment_intent.succeeded') {
-    const Stripe = (await import('stripe')).default;
-    const paymentIntent = event.data.object as InstanceType<typeof Stripe>['PaymentIntent'];
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
     console.log('PaymentIntent succeeded:', paymentIntent.id);
   }
 
   // Handle payment_intent.payment_failed event
   if (event.type === 'payment_intent.payment_failed') {
-    const Stripe = (await import('stripe')).default;
-    const paymentIntent = event.data.object as InstanceType<typeof Stripe>['PaymentIntent'];
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
     console.error('PaymentIntent failed:', paymentIntent.id);
 
     // TODO: Send payment failed email to customer (Phase 1.2)

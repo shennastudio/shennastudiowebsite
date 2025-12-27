@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
           product_data: {
             name: 'Shipping',
             description: 'Standard shipping',
-          },
+          } as any,
           unit_amount: Math.round(shipping * 100),
         },
         quantity: 1,
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
         product_data: {
           name: 'Tax',
           description: 'Sales tax (8.25%)',
-        },
+        } as any,
         unit_amount: Math.round(tax * 100),
       },
       quantity: 1,
@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
 
     // Create Stripe checkout session
     const checkoutSession = await stripe.checkout.sessions.create({
-      payment_method_types: STRIPE_CONFIG.paymentMethodTypes,
+      payment_method_types: ['card'],
       mode: STRIPE_CONFIG.mode,
       line_items: lineItems,
       customer_email: customerEmail,
