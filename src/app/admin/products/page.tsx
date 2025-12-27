@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -5,7 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit } from 'lucide-react';
 import { DeleteProductButton } from '@/components/admin/DeleteProductButton';
 
 async function getProducts() {
@@ -80,9 +81,11 @@ export default async function ProductsPage() {
                     <tr key={product.id} className="border-b last:border-0">
                       <td className="py-4">
                         {product.images[0] ? (
-                          <img
+                          <Image
                             src={product.images[0].url}
                             alt={product.name}
+                            width={48}
+                            height={48}
                             className="w-12 h-12 object-cover rounded"
                           />
                         ) : (

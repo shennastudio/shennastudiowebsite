@@ -256,3 +256,21 @@ export type ShippingCalculation = {
   cost: number;
   estimatedDays: number;
 };
+
+// Payload CMS variant type (for type adapters)
+export interface PayloadVariant {
+  id?: string | null;
+  variantName?: string | null;
+  sku: string;
+  price: number;
+  stock: number;
+  size?: ('small' | 'medium' | 'large') | null;
+  color?: string | null;
+  material?: string | null;
+  images?: Array<{ url?: string | null } | string>;
+}
+
+// Error handling utility
+export function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}

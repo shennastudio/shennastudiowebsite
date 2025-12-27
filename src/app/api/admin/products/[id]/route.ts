@@ -31,10 +31,10 @@ export async function GET(
     }
 
     return NextResponse.json(product);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching product:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch product' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to fetch product' },
       { status: 500 }
     );
   }
@@ -94,10 +94,10 @@ export async function PATCH(
     revalidatePath(`/products/${product.slug}`);
 
     return NextResponse.json(product);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating product:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to update product' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to update product' },
       { status: 500 }
     );
   }
@@ -134,10 +134,10 @@ export async function DELETE(
     }
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting product:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to delete product' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to delete product' },
       { status: 500 }
     );
   }

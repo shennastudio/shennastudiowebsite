@@ -4,7 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { revalidatePath } from 'next/cache';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // GET is public so the logo can be displayed on the website
     // No authentication required for reading settings
@@ -23,10 +23,10 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(settings);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching settings:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch settings' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to fetch settings' },
       { status: 500 }
     );
   }
@@ -93,19 +93,23 @@ export async function POST(request: NextRequest) {
     revalidatePath('/', 'layout');
 
     return NextResponse.json({ success: true, settings });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error saving settings:', error);
-    console.error('Error details:', {
-      name: error.name,
-      message: error.message,
-      code: error.code,
-      meta: error.meta,
-    });
+    const errorMessage = error instanceof Error ? error.message : String(error);
+
+    if (error && typeof error === 'object') {
+      console.error('Error details:', {
+        name: 'name' in error ? error.name : undefined,
+        message: errorMessage,
+        code: 'code' in error ? error.code : undefined,
+        meta: 'meta' in error ? error.meta : undefined,
+      });
+    }
 
     return NextResponse.json(
       {
-        error: error.message || 'Failed to save settings',
-        details: process.env.NODE_ENV === 'development' ? error.toString() : undefined
+        error: errorMessage || 'Failed to save settings',
+        details: process.env.NODE_ENV === 'development' ? String(error) : undefined
       },
       { status: 500 }
     );

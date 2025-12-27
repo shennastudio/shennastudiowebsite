@@ -67,7 +67,7 @@ export default function NewsletterPopup() {
         setMessage(data.error || 'Something went wrong. Please try again.')
         setIsSuccess(false)
       }
-    } catch (error) {
+    } catch {
       setMessage('Failed to subscribe. Please try again later.')
       setIsSuccess(false)
     } finally {
@@ -189,7 +189,7 @@ export default function NewsletterPopup() {
               onClick={handleClose}
               className="text-sm text-gray-400 hover:text-gray-600 mt-3 transition-colors"
             >
-              No thanks, I'll browse first
+              No thanks, I&apos;ll browse first
             </button>
           </div>
         </div>

@@ -53,10 +53,10 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Successfully subscribed to our newsletter!',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Newsletter subscription error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to subscribe' },
+      { error: error instanceof Error ? error.message : 'Failed to subscribe' },
       { status: 500 }
     );
   }

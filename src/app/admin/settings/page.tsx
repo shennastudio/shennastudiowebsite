@@ -92,8 +92,8 @@ export default function SettingsPage() {
         setMessage(`✗ ${errorMsg}${details}`);
         console.error('Settings save error:', data);
       }
-    } catch (error: any) {
-      setMessage(`✗ Network error: ${error.message || 'Failed to save settings'}`);
+    } catch (error: unknown) {
+      setMessage(`✗ Network error: ${error instanceof Error ? error.message : 'Failed to save settings'}`);
       console.error('Settings save error:', error);
     } finally {
       setSaving(false);

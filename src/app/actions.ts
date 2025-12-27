@@ -1,6 +1,7 @@
 'use server'
 
 import { prisma } from '@/lib/db';
+import type { Prisma } from '@prisma/client';
 
 interface ProductFilters {
   search?: string;
@@ -35,19 +36,27 @@ interface ProductDisplay {
   displayImages: string[];
 }
 
+type ProductWithRelations = Prisma.ProductGetPayload<{
+  include: {
+    category: true;
+    variants: true;
+    images: true;
+  };
+}>;
+
 // Transform Prisma Product to ProductDisplay format
-function transformProduct(product: any): ProductDisplay {
+function transformProduct(product: ProductWithRelations): ProductDisplay {
   const variants = product.variants || [];
   const firstVariant = variants[0] || null;
 
   // Calculate total stock across all variants
-  const totalStock = variants.reduce((sum: number, v: any) => sum + (v.stock || 0), 0);
+  const totalStock = variants.reduce((sum: number, v) => sum + (v.stock || 0), 0);
 
   // Get price from first variant or base price
   const price = firstVariant?.price || product.basePrice || 0;
 
   // Get images from product images
-  const images = product.images?.map((img: any) => img.url).filter(Boolean) || [];
+  const images = product.images?.map((img) => img.url).filter(Boolean) || [];
 
   return {
     product: {
@@ -72,7 +81,7 @@ export async function fetchProducts(
   pagination: { page: number; limit: number } = { page: 1, limit: 12 }
 ) {
   try {
-    const where: any = {};
+    const where: Prisma.ProductWhereInput = {};
 
     if (filters.featured) {
       where.featured = true;

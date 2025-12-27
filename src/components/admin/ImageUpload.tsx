@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 
@@ -71,8 +72,8 @@ export function ImageUpload({
       } else {
         setError(data.error || 'Upload failed');
       }
-    } catch (err: any) {
-      setError(err.message || 'Upload failed');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setUploading(false);
     }
@@ -88,9 +89,11 @@ export function ImageUpload({
 
       {currentImage ? (
         <div className="relative">
-          <img
+          <Image
             src={currentImage}
             alt="Preview"
+            width={192}
+            height={192}
             className="w-full h-48 object-cover rounded-lg border"
           />
           <div className="absolute top-2 right-2 flex gap-2">

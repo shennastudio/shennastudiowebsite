@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element, react-hooks/rules-of-hooks */
 /**
  * EXAMPLE USAGE OF UPDATED CARTCONTEXT WITH PAYLOAD CMS
  *

@@ -44,16 +44,16 @@ export async function POST(request: NextRequest) {
     revalidatePath(`/products/${product.slug}`);
 
     return NextResponse.json(product, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating product:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create product' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to create product' },
       { status: 500 }
     );
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
@@ -73,10 +73,10 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(products);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching products:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch products' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to fetch products' },
       { status: 500 }
     );
   }

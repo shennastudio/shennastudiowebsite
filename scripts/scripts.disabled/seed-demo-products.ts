@@ -247,7 +247,7 @@ async function seedDemoProducts() {
     const payload = await getPayload({ config })
 
     // First, check if we have a demo category
-    let demoCategory = await payload.find({
+    const demoCategory = await payload.find({
       collection: 'categories',
       where: {
         slug: {
@@ -317,7 +317,7 @@ async function seedDemoProducts() {
             {
               image: demoProduct.imageUrl
             }
-          ] as any,
+          ],
           variants: demoProduct.variants.map(v => ({
             variantName: v.variantName,
             sku: v.sku,

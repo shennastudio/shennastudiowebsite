@@ -1,4 +1,4 @@
-import { AdminDashboard, AdminProductForm } from "@/components/admin/AdminLayout";
+import { AdminDashboard } from "@/components/admin/AdminLayout";
 
 export default function AdminTestPage() {
   return (

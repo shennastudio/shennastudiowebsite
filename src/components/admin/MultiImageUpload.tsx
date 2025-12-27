@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { Upload, X, GripVertical, Loader2, Image as ImageIcon } from 'lucide-react';
+import { X, GripVertical, Loader2, Image as ImageIcon } from 'lucide-react';
 
 interface MultiImageUploadProps {
   images: string[];
@@ -81,8 +82,8 @@ export function MultiImageUpload({
 
       const urls = await Promise.all(uploadPromises);
       onImagesChange([...images, ...urls]);
-    } catch (err: any) {
-      setError(err.message || 'Upload failed');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Upload failed');
     } finally {
       setUploading(false);
     }
@@ -140,9 +141,11 @@ export function MultiImageUpload({
               onDragEnd={handleDragEnd}
               className="relative group cursor-move"
             >
-              <img
+              <Image
                 src={url}
                 alt={`Product image ${index + 1}`}
+                width={128}
+                height={128}
                 className="w-full h-32 object-cover rounded-lg border"
               />
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all rounded-lg flex items-center justify-center">

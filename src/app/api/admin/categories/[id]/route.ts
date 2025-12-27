@@ -28,10 +28,10 @@ export async function PATCH(
     });
 
     return NextResponse.json(category);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating category:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to update category' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to update category' },
       { status: 500 }
     );
   }
@@ -55,10 +55,10 @@ export async function DELETE(
     });
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error deleting category:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to delete category' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to delete category' },
       { status: 500 }
     );
   }

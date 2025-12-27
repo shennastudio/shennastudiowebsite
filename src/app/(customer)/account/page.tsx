@@ -3,7 +3,6 @@ import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
 import LogoutButton from '@/components/customer/LogoutButton';
 
 async function getCustomerData(userId: string) {
@@ -169,7 +168,7 @@ export default async function AccountPage() {
               {orders.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="text-6xl mb-4">🌊</div>
-                  <p className="text-gray-600 mb-4">You haven't placed any orders yet</p>
+                  <p className="text-gray-600 mb-4">You haven&apos;t placed any orders yet</p>
                   <Link
                     href="/products"
                     className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-lg"

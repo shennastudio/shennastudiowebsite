@@ -31,7 +31,7 @@ export function DeleteProductButton({ productId, productName }: DeleteProductBut
       } else {
         alert('Failed to delete product');
       }
-    } catch (error) {
+    } catch {
       alert('Failed to delete product');
     } finally {
       setDeleting(false);

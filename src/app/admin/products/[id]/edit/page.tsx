@@ -21,12 +21,6 @@ interface ProductVariant {
   material?: string;
 }
 
-interface ProductImage {
-  id?: string;
-  url: string;
-  position: number;
-}
-
 interface Category {
   id: string;
   name: string;
@@ -63,7 +57,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       fetchCategories();
     };
     initPage();
-  }, []);
+  }, [params]);
 
   const fetchCategories = async () => {
     try {
@@ -97,7 +91,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       });
 
       setVariants(
-        product.variants.map((v: any) => ({
+        product.variants.map((v: { id?: string; name: string; sku: string; price: number; stock: number; size?: string; color?: string; material?: string }) => ({
           id: v.id,
           name: v.name,
           sku: v.sku,
@@ -109,11 +103,11 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
         }))
       );
 
-      setImages(product.images.map((img: any) => img.url));
+      setImages(product.images.map((img: { url: string }) => img.url));
 
       setLoading(false);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch product');
       setLoading(false);
     }
   };
@@ -196,8 +190,8 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
 
       router.push('/admin/products');
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to update product');
     } finally {
       setSaving(false);
     }

@@ -51,7 +51,7 @@ function LoginForm() {
         router.push('/account');
         router.refresh();
       }
-    } catch (err: any) {
+    } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setLoading(false);
@@ -123,7 +123,7 @@ function LoginForm() {
 
           <div className="mt-6 text-center space-y-3">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="text-teal-600 hover:text-teal-700 font-semibold">
                 Create one now
               </Link>

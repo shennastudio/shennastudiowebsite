@@ -60,7 +60,7 @@ export default function AccountPage() {
       } else {
         setError(data.error || 'Failed to change password');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to change password');
     } finally {
       setSaving(false);
@@ -198,7 +198,7 @@ export default function AccountPage() {
           <ul className="space-y-2 text-sm text-gray-600">
             <li className="flex items-start gap-2">
               <span className="text-blue-600">•</span>
-              <span>Use a strong, unique password that you don't use anywhere else</span>
+              <span>Use a strong, unique password that you don&apos;t use anywhere else</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600">•</span>
@@ -210,7 +210,7 @@ export default function AccountPage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-blue-600">•</span>
-              <span>Log out when you're done using the admin panel</span>
+              <span>Log out when you&apos;re done using the admin panel</span>
             </li>
           </ul>
         </CardContent>

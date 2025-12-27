@@ -7,6 +7,7 @@
 
 import type { Product, Category, Media } from '@payload-types'
 import type { PayloadCartItem } from '@/context/CartContext'
+import type { PayloadVariant } from '@/types'
 
 // ============================================================================
 // CONVERSION FUNCTIONS
@@ -62,7 +63,7 @@ export function payloadCategoryToAppCategory(category: Category) {
 /**
  * Convert Payload Variant to application variant format
  */
-export function payloadVariantToAppVariant(variant: any) {
+export function payloadVariantToAppVariant(variant: PayloadVariant) {
   return {
     id: variant.id,
     name: variant.name || '',
@@ -81,11 +82,11 @@ export function payloadVariantToAppVariant(variant: any) {
  */
 export function createCartItemFromPayload(
   product: Product,
-  variant: any,
+  variant: PayloadVariant,
   quantity: number = 1
 ): PayloadCartItem {
   const variantImages = variant.images && Array.isArray(variant.images)
-    ? variant.images.map((img: any) => {
+    ? variant.images.map((img: { url?: string | null } | string) => {
         if (typeof img.image === 'object' && img.image !== null && 'url' in img.image) {
           return (img.image as Media).url || ''
         }
@@ -117,7 +118,7 @@ export function createCartItemFromPayload(
 /**
  * Get display information for a variant
  */
-export function getVariantDisplayInfo(variant: any) {
+export function getVariantDisplayInfo(variant: PayloadVariant) {
   const attributes: string[] = []
 
   if (variant.size) attributes.push(variant.size)
@@ -142,7 +143,7 @@ export function getProductPriceRange(product: Product): { min: number; max: numb
     return { min: product.basePrice, max: product.basePrice }
   }
 
-  const prices = product.variants.map((v: any) => v.price || product.basePrice)
+  const prices = product.variants.map((v: PayloadVariant) => v.price || product.basePrice)
   return {
     min: Math.min(...prices),
     max: Math.max(...prices),
@@ -165,7 +166,7 @@ export function formatProductPrice(product: Product): string {
 /**
  * Format variant name from attributes
  */
-export function formatVariantName(variant: any): string {
+export function formatVariantName(variant: PayloadVariant): string {
   const parts: string[] = []
 
   if (variant.size) parts.push(variant.size)
@@ -200,7 +201,7 @@ export function productMatchesFilters(
       typeof cat === 'object' && cat !== null ? cat.id : cat
     )
 
-    if (!categoryIds.includes(filters.category as any)) {
+    if (!categoryIds.includes(filters.category as string | number)) {
       return false
     }
   }
@@ -288,7 +289,7 @@ export function getUniqueMaterials(products: Product[]): string[] {
 
   products.forEach(product => {
     if (product.variants) {
-      product.variants.forEach((variant: any) => {
+      product.variants.forEach((variant: PayloadVariant) => {
         if (variant.material) {
           materials.add(variant.material)
         }
@@ -307,7 +308,7 @@ export function getUniqueColors(products: Product[]): string[] {
 
   products.forEach(product => {
     if (product.variants) {
-      product.variants.forEach((variant: any) => {
+      product.variants.forEach((variant: PayloadVariant) => {
         if (variant.color) {
           colors.add(variant.color)
         }
@@ -326,7 +327,7 @@ export function getUniqueSizes(products: Product[]): string[] {
 
   products.forEach(product => {
     if (product.variants) {
-      product.variants.forEach((variant: any) => {
+      product.variants.forEach((variant: PayloadVariant) => {
         if (variant.size) {
           sizes.add(variant.size)
         }
@@ -358,7 +359,7 @@ export function getTotalProductStock(product: Product): number {
     return 0
   }
 
-  return product.variants.reduce((total: number, variant: any) => {
+  return product.variants.reduce((total: number, variant: PayloadVariant) => {
     return total + (variant.stock || 0)
   }, 0)
 }
@@ -373,13 +374,13 @@ export function hasMultipleVariants(product: Product): boolean {
 /**
  * Get default variant for a product
  */
-export function getDefaultVariant(product: Product): any | null {
+export function getDefaultVariant(product: Product): PayloadVariant | null {
   if (!product.variants || product.variants.length === 0) {
     return null
   }
 
   // Return first in-stock variant, or first variant if none in stock
-  const inStockVariant = product.variants.find((v: any) => v.stock > 0)
+  const inStockVariant = product.variants.find((v: PayloadVariant) => v.stock > 0)
   return inStockVariant || product.variants[0]
 }
 

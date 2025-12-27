@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -222,9 +223,11 @@ export default function CategoriesPage() {
                   className="border rounded-lg p-4 hover:shadow-md transition-shadow"
                 >
                   {category.image && (
-                    <img
+                    <Image
                       src={category.image}
                       alt={category.name}
+                      width={64}
+                      height={64}
                       className="w-full h-32 object-cover rounded mb-3"
                     />
                   )}

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
@@ -18,10 +18,10 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(categories);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error fetching categories:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch categories' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to fetch categories' },
       { status: 500 }
     );
   }
@@ -47,10 +47,10 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(category, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating category:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to create category' },
+      { error: error instanceof Error ? error.message : String(error) || 'Failed to create category' },
       { status: 500 }
     );
   }

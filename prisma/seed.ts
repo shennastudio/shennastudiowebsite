@@ -33,7 +33,7 @@ async function main() {
     },
   })
 
-  const conservationCategory = await prisma.category.upsert({
+  await prisma.category.upsert({
     where: { slug: 'conservation-collection' },
     update: {},
     create: {
