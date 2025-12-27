@@ -170,23 +170,6 @@ export default function AdminLoginPage() {
             </div>
           </form>
 
-          {/* Test Credentials */}
-          <div className="mt-6 text-center">
-            <div className="bg-gradient-to-br from-cyan-50 to-blue-50 border border-cyan-200 rounded-lg p-4">
-              <p className="text-xs font-semibold text-cyan-900 mb-2">Default Test Credentials:</p>
-              <div className="space-y-1">
-                <p className="text-xs text-cyan-800">
-                  <span className="font-medium">Email:</span>{' '}
-                  <code className="bg-white px-2 py-1 rounded text-cyan-900">admin@shennastudio.com</code>
-                </p>
-                <p className="text-xs text-cyan-800">
-                  <span className="font-medium">Password:</span>{' '}
-                  <code className="bg-white px-2 py-1 rounded text-cyan-900">admin123</code>
-                </p>
-              </div>
-            </div>
-          </div>
-
           {/* Back to Store Link */}
           <div className="text-center">
             <a
