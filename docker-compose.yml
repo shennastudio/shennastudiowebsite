@@ -1,44 +1,71 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
   postgres:
     image: postgres:16-alpine
+    container_name: shennastudio-db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
+      POSTGRES_USER: ${DB_USER:-shennastudio}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-shennastudio}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "${DB_PORT:-5432}:5432"
+      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-shennastudio}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  # Next.js Application
   app:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: shennastudio-app
     restart: unless-stopped
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: production
-      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
-      POSTGRES_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
-      PAYLOAD_SECRET: ${PAYLOAD_SECRET}
-      BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN}
     depends_on:
       postgres:
         condition: service_healthy
+    environment:
+      # Database
+      DATABASE_URL: postgresql://${DB_USER:-shennastudio}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-shennastudio}
+
+      # NextAuth
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+
+      # Application
+      NEXT_PUBLIC_URL: ${NEXT_PUBLIC_URL}
+      NODE_ENV: production
+
+      # Optional: Stripe (leave empty if not using)
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+
+      # Optional: Vercel Blob Storage (leave empty if not using)
+      BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN:-}
+
+      # Optional: Resend Email (leave empty if not using)
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+    ports:
+      - "3000:3000"
+    volumes:
+      # Optional: Persist uploads if not using external storage
+      - app_uploads:/app/public/uploads
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 40s
 
 volumes:
   postgres_data:
+    driver: local
+  app_uploads:
+    driver: local
