@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import bcrypt from 'bcryptjs';
+import { sendEmail } from '@/lib/email';
+import WelcomeEmail from '@/emails/WelcomeEmail';
 
 export async function POST(request: NextRequest) {
   try {
@@ -60,6 +62,20 @@ export async function POST(request: NextRequest) {
         rewards: true,
       },
     });
+
+    // Send welcome email (don't block registration if email fails)
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: 'Welcome to ShennaStudio! 🌊',
+        react: WelcomeEmail({
+          customerName: user.name,
+        }),
+      });
+      console.log('Welcome email sent to:', user.email);
+    } catch (emailError: unknown) {
+      console.error('Failed to send welcome email:', emailError);
+    }
 
     return NextResponse.json(
       {

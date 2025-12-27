@@ -53,8 +53,19 @@ export interface InventoryTransaction {
   variant?: ProductVariant;
 }
 
-// Shopping cart items
+// Shopping cart items (for order creation and webhook processing)
 export interface CartItem {
+  productId: string | number;
+  variantId: string | null;
+  quantity: number;
+  price: number;
+  name: string;
+  variantName?: string | null;
+  sku: string;
+}
+
+// Legacy cart item (kept for backward compatibility)
+export interface LegacyCartItem {
   id: string; // Unique cart item ID
   variant: ProductVariant;
   quantity: number;
@@ -170,7 +181,7 @@ export type UpdateProductData = Partial<CreateProductData>;
 // Form types for orders
 export interface CreateOrderData {
   customerInfo: CustomerInfo;
-  items: Omit<CartItem, 'id' | 'product'>[];
+  items: CartItem[];
   shippingCost: number;
   tax: number;
 }

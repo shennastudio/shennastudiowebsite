@@ -1,11 +1,15 @@
 'use client'
 
 import { useCart, PayloadCartItem } from '@/context/CartContext'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 export default function CartPage() {
   const { state, clearCart } = useCart();
+  const router = useRouter();
+  const { data: session } = useSession();
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -19,9 +23,15 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    // Will implement Stripe checkout here
-    console.log('Proceeding to checkout...', state.items);
-    alert('Checkout functionality will be implemented next! 🌊');
+    // Check if user is logged in
+    if (!session?.user) {
+      // Redirect to login with callback to checkout
+      router.push('/login?callbackUrl=/checkout');
+      return;
+    }
+
+    // Redirect to checkout page
+    router.push('/checkout');
   };
 
   if (state.items.length === 0) {

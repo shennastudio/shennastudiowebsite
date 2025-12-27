@@ -1,0 +1,146 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { headers } from 'next/headers';
+import { stripe } from '@/lib/stripe';
+import { createOrder } from '@/lib/orders';
+import { sendEmail } from '@/lib/email';
+import OrderConfirmationEmail from '@/emails/OrderConfirmation';
+import type { CartItem } from '@/types';
+import Stripe from 'stripe';
+
+export async function POST(request: NextRequest) {
+  const body = await request.text();
+  const signature = (await headers()).get('stripe-signature');
+
+  if (!signature) {
+    return NextResponse.json({ error: 'No signature provided' }, { status: 400 });
+  }
+
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error('STRIPE_WEBHOOK_SECRET is not configured');
+    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
+  }
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err: unknown) {
+    console.error('Webhook signature verification failed:', err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Invalid signature' },
+      { status: 400 }
+    );
+  }
+
+  // Handle the checkout.session.completed event
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object as Stripe.Checkout.Session;
+
+    try {
+      // Extract metadata from session
+      const metadata = session.metadata;
+      if (!metadata) {
+        throw new Error('No metadata found in session');
+      }
+
+      const userId = metadata.userId;
+      const subtotal = parseFloat(metadata.subtotal);
+      const shipping = parseFloat(metadata.shipping);
+      const tax = parseFloat(metadata.tax);
+      const total = parseFloat(metadata.total);
+      const items: CartItem[] = JSON.parse(metadata.items);
+
+      // Build shipping address
+      const shippingAddress = {
+        name: metadata.shippingName,
+        line1: metadata.shippingLine1,
+        line2: metadata.shippingLine2 || undefined,
+        city: metadata.shippingCity,
+        state: metadata.shippingState,
+        postalCode: metadata.shippingPostalCode,
+        country: metadata.shippingCountry,
+      };
+
+      // Create order in database
+      const order = await createOrder({
+        userId,
+        items,
+        subtotal,
+        shipping,
+        tax,
+        total,
+        stripePaymentIntentId: session.payment_intent as string,
+        customerEmail: session.customer_email || session.customer_details?.email || '',
+        shippingAddress,
+      });
+
+      console.log('Order created successfully:', order.id);
+
+      // Send order confirmation email
+      try {
+        const customerEmail = session.customer_email || session.customer_details?.email || '';
+        const customerName = shippingAddress.name;
+        const conservationAmount = subtotal * 0.10;
+        const rewardsPoints = Math.floor(total);
+
+        if (customerEmail) {
+          await sendEmail({
+            to: customerEmail,
+            subject: `Order Confirmation - ShennaStudio #${order.id.slice(0, 8).toUpperCase()}`,
+            react: OrderConfirmationEmail({
+              orderId: order.id,
+              orderNumber: `#${order.id.slice(0, 8).toUpperCase()}`,
+              customerName,
+              customerEmail,
+              items: items.map(item => ({
+                name: item.name,
+                variantName: item.variantName,
+                quantity: item.quantity,
+                price: item.price,
+              })),
+              subtotal,
+              shipping,
+              tax,
+              total,
+              conservationAmount,
+              rewardsPoints,
+              shippingAddress,
+            }),
+          });
+          console.log('Order confirmation email sent to:', customerEmail);
+        }
+      } catch (emailError: unknown) {
+        // Log email error but don't fail the webhook
+        console.error('Failed to send order confirmation email:', emailError);
+      }
+
+      return NextResponse.json({ received: true, orderId: order.id });
+    } catch (error: unknown) {
+      console.error('Error processing checkout session:', error);
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : 'Failed to process order' },
+        { status: 500 }
+      );
+    }
+  }
+
+  // Handle payment_intent.succeeded event (backup)
+  if (event.type === 'payment_intent.succeeded') {
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    console.log('PaymentIntent succeeded:', paymentIntent.id);
+  }
+
+  // Handle payment_intent.payment_failed event
+  if (event.type === 'payment_intent.payment_failed') {
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    console.error('PaymentIntent failed:', paymentIntent.id);
+
+    // TODO: Send payment failed email to customer (Phase 1.2)
+  }
+
+  return NextResponse.json({ received: true });
+}
