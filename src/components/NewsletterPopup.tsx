@@ -86,9 +86,9 @@ export default function NewsletterPopup() {
       />
 
       {/* Modal */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none overflow-y-auto">
         <div
-          className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 pointer-events-auto transform transition-all animate-in fade-in zoom-in duration-300"
+          className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-4 sm:p-6 md:p-8 pointer-events-auto transform transition-all animate-in fade-in zoom-in duration-300 my-4 max-h-[95vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close Button */}
@@ -103,18 +103,18 @@ export default function NewsletterPopup() {
           {/* Content */}
           <div className="text-center">
             {/* Ocean Icon */}
-            <div className="flex justify-center mb-4">
-              <div className="bg-gradient-to-br from-cyan-100 to-teal-100 rounded-full p-4">
-                <span className="text-5xl">🌊</span>
+            <div className="flex justify-center mb-3 sm:mb-4">
+              <div className="bg-gradient-to-br from-cyan-100 to-teal-100 rounded-full p-3 sm:p-4">
+                <span className="text-4xl sm:text-5xl">🌊</span>
               </div>
             </div>
 
             {/* Headline */}
-            <h2 className="text-3xl font-bold text-teal-700 mb-3">
+            <h2 className="text-2xl sm:text-3xl font-bold text-teal-700 mb-2 sm:mb-3">
               Join Our Ocean Family!
             </h2>
 
-            <p className="text-gray-600 mb-6 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
               Get <strong className="text-teal-600">10% off</strong> your first order + exclusive access to new ocean-inspired designs and conservation updates from South Padre Island! 🐢
             </p>
 
@@ -130,14 +130,14 @@ export default function NewsletterPopup() {
             )}
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
               <div>
                 <input
                   type="text"
                   placeholder="Your name (optional)"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
                 />
               </div>
 
@@ -148,46 +148,47 @@ export default function NewsletterPopup() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
+                  className="w-full px-3 py-2 sm:px-4 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-all"
                 />
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-semibold py-3 rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-semibold py-2.5 sm:py-3 text-sm sm:text-base rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {loading ? 'Subscribing...' : '🌊 Get My 10% Off'}
               </button>
             </form>
 
             {/* Benefits */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="grid grid-cols-3 gap-4 text-sm text-gray-600">
+            <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+              <div className="grid grid-cols-3 gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
                 <div>
-                  <span className="block text-2xl mb-1">🎁</span>
-                  <span>Exclusive Deals</span>
+                  <span className="block text-xl sm:text-2xl mb-1">🎁</span>
+                  <span className="leading-tight">Exclusive Deals</span>
                 </div>
                 <div>
-                  <span className="block text-2xl mb-1">🐢</span>
-                  <span>Conservation News</span>
+                  <span className="block text-xl sm:text-2xl mb-1">🐢</span>
+                  <span className="leading-tight">Conservation News</span>
                 </div>
                 <div>
-                  <span className="block text-2xl mb-1">✨</span>
-                  <span>New Arrivals</span>
+                  <span className="block text-xl sm:text-2xl mb-1">✨</span>
+                  <span className="leading-tight">New Arrivals</span>
                 </div>
               </div>
             </div>
 
             {/* Privacy */}
-            <p className="text-xs text-gray-500 mt-4">
+            <p className="text-xs text-gray-500 mt-3 sm:mt-4">
               We respect your privacy. Unsubscribe anytime.
             </p>
 
-            {/* Skip Link */}
+            {/* Skip Link - Made more prominent and always visible */}
             <button
               onClick={handleClose}
-              className="text-sm text-gray-400 hover:text-gray-600 mt-3 transition-colors"
+              className="text-sm sm:text-base text-gray-500 hover:text-gray-700 underline mt-3 sm:mt-4 transition-colors font-medium min-h-[44px] flex items-center justify-center"
+              type="button"
             >
               No thanks, I&apos;ll browse first
             </button>
