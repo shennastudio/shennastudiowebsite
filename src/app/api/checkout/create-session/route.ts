@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { stripe, STRIPE_CONFIG } from '@/lib/stripe';
 import type { PayloadCartItem } from '@/context/CartContext';
+
+// Make this route dynamic to avoid build-time evaluation
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 interface CheckoutSessionRequest {
   items: PayloadCartItem[];
@@ -24,6 +27,17 @@ interface CheckoutSessionRequest {
 
 export async function POST(request: NextRequest) {
   try {
+    // Lazy load Stripe modules to avoid build-time errors
+    const { stripe, STRIPE_CONFIG, isStripeEnabled } = await import('@/lib/stripe');
+
+    // Check if Stripe is enabled
+    if (!isStripeEnabled() || !stripe) {
+      return NextResponse.json(
+        { error: 'Payment processing is not currently available. Stripe is not configured.' },
+        { status: 503 }
+      );
+    }
+
     const session = await getServerSession(authOptions);
 
     if (!session?.user) {

@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Waves, UserPlus, Gift, Heart, Sparkles } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -69,29 +70,123 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 py-12 px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <span className="text-5xl">🌊</span>
-          </div>
-          <CardTitle className="text-3xl font-bold text-teal-700">
-            Join ShennaStudio
-          </CardTitle>
-          <p className="text-gray-600 mt-2">
-            Create your account to start earning rewards!
-          </p>
-        </CardHeader>
-        <CardContent>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
-          )}
+    <div className="min-h-screen flex">
+      {/* Left Side - Whale Shark Image */}
+      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
+          alt="Whale shark swimming in the ocean"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/40 via-teal-600/30 to-cyan-600/40" />
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+        {/* Branding and Benefits on Image */}
+        <div className="absolute inset-0 flex flex-col justify-between p-12 text-white">
+          {/* Top Branding */}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              <Waves className="h-10 w-10" />
+              <h1 className="text-4xl font-bold">ShennaStudio</h1>
+            </div>
+            <p className="text-xl text-cyan-50 max-w-md">
+              Handcrafted Ocean Bracelets Supporting Marine Life
+            </p>
+          </div>
+
+          {/* Benefits Section */}
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold mb-4">Join Our Ocean Community</h2>
+
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                <Gift className="h-6 w-6 flex-shrink-0 text-yellow-300" />
+                <div>
+                  <h3 className="font-semibold text-lg">100 Welcome Points</h3>
+                  <p className="text-cyan-100 text-sm">Start earning rewards immediately</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                <Heart className="h-6 w-6 flex-shrink-0 text-red-300" />
+                <div>
+                  <h3 className="font-semibold text-lg">Support Conservation</h3>
+                  <p className="text-cyan-100 text-sm">10% of every purchase protects ocean life</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                <Sparkles className="h-6 w-6 flex-shrink-0 text-purple-300" />
+                <div>
+                  <h3 className="font-semibold text-lg">Exclusive Perks</h3>
+                  <p className="text-cyan-100 text-sm">Early access to new designs & special offers</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Side - Registration Form */}
+      <div className="flex-1 flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          {/* Mobile Logo */}
+          <div className="lg:hidden text-center">
+            <div className="flex justify-center items-center gap-2 mb-4">
+              <Waves className="h-10 w-10 text-cyan-600" />
+              <h1 className="text-3xl font-bold text-gray-900">ShennaStudio</h1>
+            </div>
+          </div>
+
+          {/* Form Header */}
+          <div className="text-center">
+            <div className="flex justify-center mb-4">
+              <div className="p-4 bg-gradient-to-br from-cyan-50 to-teal-50 rounded-full">
+                <UserPlus className="h-8 w-8 text-cyan-600" />
+              </div>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Create Your Account
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Join our ocean-loving community today
+            </p>
+          </div>
+
+          {/* Signup Bonus Banner - Mobile */}
+          <div className="lg:hidden bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-lg p-4">
+            <div className="flex items-center gap-3">
+              <Gift className="h-6 w-6 text-yellow-600 flex-shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-yellow-900">100 Welcome Points!</p>
+                <p className="text-xs text-yellow-800">Get started with bonus rewards</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Registration Form */}
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <div className="rounded-lg bg-red-50 border border-red-200 p-4">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm font-medium text-red-800">{error}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div>
+              <Label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Full Name
+              </Label>
               <Input
                 id="name"
                 name="name"
@@ -100,11 +195,14 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="Shenna Rodriguez"
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+            <div>
+              <Label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </Label>
               <Input
                 id="email"
                 name="email"
@@ -113,11 +211,14 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="you@example.com"
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div>
+              <Label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </Label>
               <Input
                 id="password"
                 name="password"
@@ -126,11 +227,14 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="At least 8 characters"
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <div>
+              <Label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                Confirm Password
+              </Label>
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -139,34 +243,55 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="Confirm your password"
+                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
-            <Button
-              type="submit"
-              className="w-full bg-teal-600 hover:bg-teal-700"
-              disabled={loading}
-            >
-              {loading ? 'Creating Account...' : '🌊 Create Account'}
-            </Button>
+            <div className="pt-2">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating Account...
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="h-4 w-4" />
+                    Create My Account
+                  </>
+                )}
+              </Button>
+            </div>
           </form>
 
-          <div className="mt-6 text-center">
+          {/* Already have account */}
+          <div className="text-center">
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
-              <Link href="/login" className="text-teal-600 hover:text-teal-700 font-semibold">
+              <Link href="/login" className="text-cyan-600 hover:text-cyan-700 font-semibold transition-colors">
                 Sign in
               </Link>
             </p>
           </div>
 
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-blue-900 text-center">
-              <strong>🎁 Signup Bonus:</strong> Get 100 points when you create your account!
+          {/* Terms */}
+          <div className="text-center">
+            <p className="text-xs text-gray-500">
+              By creating an account, you agree to our{' '}
+              <a href="#" className="text-cyan-600 hover:text-cyan-700">Terms of Service</a>
+              {' '}and{' '}
+              <a href="#" className="text-cyan-600 hover:text-cyan-700">Privacy Policy</a>
             </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

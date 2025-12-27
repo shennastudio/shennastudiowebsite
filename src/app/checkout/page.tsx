@@ -74,7 +74,14 @@ export default function CheckoutPage() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to create checkout session');
+        // Special handling for Stripe not configured
+        if (response.status === 503) {
+          setError('Payment processing is temporarily unavailable. Please contact support or try again later.');
+        } else {
+          throw new Error(data.error || 'Failed to create checkout session');
+        }
+        setLoading(false);
+        return;
       }
 
       const { url } = await response.json();

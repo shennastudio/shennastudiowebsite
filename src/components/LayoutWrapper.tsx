@@ -7,16 +7,20 @@ import NewsletterPopup from '@/components/NewsletterPopup';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  // Hide header/footer on admin routes, login/register pages
   const isAdminRoute = pathname.startsWith('/admin');
+  const isAuthRoute = pathname === '/login' || pathname === '/register';
+  const shouldHideHeaderFooter = isAdminRoute || isAuthRoute;
 
   return (
     <>
-      {!isAdminRoute && <Header />}
+      {!shouldHideHeaderFooter && <Header />}
       <main className="flex-1">
         {children}
       </main>
-      {!isAdminRoute && <Footer />}
-      {!isAdminRoute && <NewsletterPopup />}
+      {!shouldHideHeaderFooter && <Footer />}
+      {!shouldHideHeaderFooter && <NewsletterPopup />}
     </>
   );
 }

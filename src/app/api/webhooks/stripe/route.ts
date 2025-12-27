@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
-import { stripe } from '@/lib/stripe';
-import { createOrder } from '@/lib/orders';
-import { sendEmail } from '@/lib/email';
-import OrderConfirmationEmail from '@/emails/OrderConfirmation';
 import type { CartItem } from '@/types';
-import Stripe from 'stripe';
+
+// Make this route dynamic to avoid build-time evaluation
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
+  // Lazy load Stripe modules to avoid build-time errors
+  const { stripe, isStripeEnabled } = await import('@/lib/stripe');
+
+  // Check if Stripe is enabled
+  if (!isStripeEnabled() || !stripe) {
+    return NextResponse.json(
+      { error: 'Stripe webhooks are not configured' },
+      { status: 503 }
+    );
+  }
+
   const body = await request.text();
   const signature = (await headers()).get('stripe-signature');
 
@@ -20,7 +30,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }
 
-  let event: Stripe.Event;
+  // Dynamically import Stripe type
+  const Stripe = (await import('stripe')).default;
+  let event: InstanceType<typeof Stripe>['Event'];
 
   try {
     event = stripe.webhooks.constructEvent(
@@ -38,9 +50,14 @@ export async function POST(request: NextRequest) {
 
   // Handle the checkout.session.completed event
   if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as Stripe.Checkout.Session;
+    const session = event.data.object as InstanceType<typeof Stripe>['Checkout']['Session'];
 
     try {
+      // Lazy load order creation module
+      const { createOrder } = await import('@/lib/orders');
+      const { sendEmail } = await import('@/lib/email');
+      const OrderConfirmationEmail = (await import('@/emails/OrderConfirmation')).default;
+
       // Extract metadata from session
       const metadata = session.metadata;
       if (!metadata) {
@@ -130,13 +147,15 @@ export async function POST(request: NextRequest) {
 
   // Handle payment_intent.succeeded event (backup)
   if (event.type === 'payment_intent.succeeded') {
-    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    const Stripe = (await import('stripe')).default;
+    const paymentIntent = event.data.object as InstanceType<typeof Stripe>['PaymentIntent'];
     console.log('PaymentIntent succeeded:', paymentIntent.id);
   }
 
   // Handle payment_intent.payment_failed event
   if (event.type === 'payment_intent.payment_failed') {
-    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    const Stripe = (await import('stripe')).default;
+    const paymentIntent = event.data.object as InstanceType<typeof Stripe>['PaymentIntent'];
     console.error('PaymentIntent failed:', paymentIntent.id);
 
     // TODO: Send payment failed email to customer (Phase 1.2)
