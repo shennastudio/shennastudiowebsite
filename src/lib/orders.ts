@@ -60,13 +60,9 @@ export async function createOrder(params: CreateOrderParams) {
       shippingCountry: shippingAddress.country,
       items: {
         create: items.map((item) => ({
-          productId: item.productId,
           variantId: item.variantId,
           quantity: item.quantity,
           price: item.price,
-          name: item.name,
-          variantName: item.variantName || null,
-          sku: item.sku,
         })),
       },
     },
@@ -80,19 +76,43 @@ export async function createOrder(params: CreateOrderParams) {
     data: {
       orderId: order.id,
       amount: conservationAmount,
+      percentage: 10.0,
       status: 'PLEDGED',
       region: 'South Padre Island', // Default region
     },
   });
 
   // Award customer rewards points
-  await prisma.customerReward.create({
-    data: {
+  // Find or create customer reward record
+  const customerReward = await prisma.customerReward.upsert({
+    where: { userId },
+    create: {
       userId,
       points: rewardsPoints,
-      earnedFrom: 'PURCHASE',
-      orderId: order.id,
+      totalSpent: total,
+      totalOrders: 1,
+    },
+    update: {
+      points: {
+        increment: rewardsPoints,
+      },
+      totalSpent: {
+        increment: total,
+      },
+      totalOrders: {
+        increment: 1,
+      },
+    },
+  });
+
+  // Create point transaction record
+  await prisma.pointTransaction.create({
+    data: {
+      customerId: customerReward.id,
+      points: rewardsPoints,
+      type: 'PURCHASE',
       description: `Purchase #${order.id.slice(0, 8)}`,
+      orderId: order.id,
     },
   });
 
@@ -103,7 +123,7 @@ export async function createOrder(params: CreateOrderParams) {
         variantId: item.variantId,
         quantity: -item.quantity, // Negative for deduction
         type: 'SALE',
-        orderId: order.id,
+        userId,
         notes: `Order #${order.id.slice(0, 8)}`,
       },
     });
@@ -138,8 +158,11 @@ export async function getOrderById(orderId: string) {
     include: {
       items: {
         include: {
-          product: true,
-          variant: true,
+          variant: {
+            include: {
+              product: true,
+            },
+          },
         },
       },
       user: {

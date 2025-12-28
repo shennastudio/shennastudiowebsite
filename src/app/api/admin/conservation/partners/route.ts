@@ -83,7 +83,7 @@ export async function POST(req: Request) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid partner data', details: error.errors },
+        { error: 'Invalid partner data', details: error.issues },
         { status: 400 }
       );
     }
