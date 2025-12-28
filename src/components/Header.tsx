@@ -29,14 +29,18 @@ export default function Header() {
     fetch('/api/admin/settings')
       .then(res => res.json())
       .then(data => {
-        if (data) {
+        if (data && data.logo) {
           setSettings({
             siteName: data.siteName || 'ShennaStudio',
             logo: data.logo,
           });
         }
+        // Keep default logo if API doesn't provide one
       })
-      .catch(err => console.error('Failed to load site settings:', err));
+      .catch(err => {
+        console.error('Failed to load site settings, using default logo:', err);
+        // Keep the default logo on error
+      });
   }, []);
 
   // Close mobile menu when clicking a link
