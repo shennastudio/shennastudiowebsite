@@ -10,21 +10,25 @@ import toast from 'react-hot-toast';
 interface Review {
   id: string;
   rating: number;
-  comment: string;
+  title?: string | null;
+  body: string;
   createdAt: string;
   isApproved: boolean;
   isRejected: boolean;
-  moderatedAt?: string;
-  moderatedBy?: string;
+  moderatedAt?: string | null;
+  moderatedBy?: string | null;
   product: {
     id: string;
     name: string;
     slug: string;
-    images: string[];
+    images: Array<{
+      url: string;
+      alt: string | null;
+    }>;
   };
   user: {
     id: string;
-    name: string;
+    name: string | null;
     email: string;
   };
 }
@@ -216,11 +220,11 @@ export default function ReviewsPage() {
               <CardContent className="p-6">
                 <div className="flex gap-6">
                   {/* Product Image */}
-                  {review.product.images[0] && (
+                  {review.product.images[0]?.url && (
                     <div className="flex-shrink-0">
                       <Image
-                        src={review.product.images[0]}
-                        alt={review.product.name}
+                        src={review.product.images[0].url}
+                        alt={review.product.images[0].alt || review.product.name}
                         width={100}
                         height={100}
                         className="rounded-lg object-cover"
@@ -266,7 +270,7 @@ export default function ReviewsPage() {
                     </div>
 
                     {/* Review Text */}
-                    <p className="text-gray-700 mb-4 whitespace-pre-wrap">{review.comment}</p>
+                    <p className="text-gray-700 mb-4 whitespace-pre-wrap">{review.body}</p>
 
                     {/* User & Date Info */}
                     <div className="flex items-center justify-between text-sm text-gray-600 mb-4">

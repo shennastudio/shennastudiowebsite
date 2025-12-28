@@ -16,14 +16,17 @@ interface InventoryData {
       id: string;
       name: string;
       slug: string;
-      images: string[];
+      images: Array<{
+        url: string;
+        alt: string | null;
+      }>;
     };
   }>;
   recentTransactions: Array<{
     id: string;
     type: string;
     quantity: number;
-    reason: string;
+    notes: string | null;
     createdAt: Date;
     variant: {
       name: string;
@@ -35,7 +38,7 @@ interface InventoryData {
     user: {
       name: string | null;
       email: string;
-    };
+    } | null;
   }>;
   summary: {
     totalVariants: number;
@@ -216,10 +219,10 @@ export default function InventoryPage() {
                 data.variants.map((variant) => (
                   <div key={variant.id} className="p-4">
                     <div className="flex items-start gap-4">
-                      {variant.product.images.length > 0 && (
+                      {variant.product.images.length > 0 && variant.product.images[0]?.url && (
                         <img
-                          src={variant.product.images[0]}
-                          alt={variant.product.name}
+                          src={variant.product.images[0].url}
+                          alt={variant.product.images[0].alt || variant.product.name}
                           className="w-16 h-16 object-cover rounded-lg"
                         />
                       )}
@@ -360,12 +363,14 @@ export default function InventoryPage() {
                       {transaction.type === 'RESTOCK' ? '+' : '-'}
                       {transaction.quantity} units
                     </p>
-                    {transaction.reason && (
-                      <p className="text-xs text-gray-500 mt-1">{transaction.reason}</p>
+                    {transaction.notes && (
+                      <p className="text-xs text-gray-500 mt-1">{transaction.notes}</p>
                     )}
-                    <p className="text-xs text-gray-400 mt-2">
-                      By {transaction.user.name || transaction.user.email}
-                    </p>
+                    {transaction.user && (
+                      <p className="text-xs text-gray-400 mt-2">
+                        By {transaction.user.name || transaction.user.email}
+                      </p>
+                    )}
                   </div>
                 ))
               )}
