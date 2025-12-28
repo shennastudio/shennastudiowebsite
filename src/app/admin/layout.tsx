@@ -1,10 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { UserNav } from '@/components/admin/UserNav';
 import { Toaster } from 'react-hot-toast';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import {
   LayoutDashboard,
   Package,
@@ -18,132 +20,205 @@ import {
   BarChart3,
   Heart,
   Settings,
-  Store
+  Store,
+  Menu,
+  X,
+  ChevronRight
 } from 'lucide-react';
 
-export default async function AdminLayout({
-  children,
-}: {
+interface AdminLayoutProps {
   children: React.ReactNode;
-}) {
-  const session = await getServerSession(authOptions);
+}
 
-  const navItems = [
-    { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/admin/products', label: 'Products', icon: Package },
-    { href: '/admin/inventory', label: 'Inventory', icon: Boxes },
-    { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
-    { href: '/admin/customers', label: 'Customers', icon: Users },
-    { href: '/admin/discounts', label: 'Discounts', icon: Ticket },
-    { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare },
-    { href: '/admin/email-logs', label: 'Emails', icon: Mail },
-    { href: '/admin/payments', label: 'Payments', icon: CreditCard },
-    { href: '/admin/reports', label: 'Reports', icon: BarChart3 },
-    { href: '/admin/conservation', label: 'Conservation', icon: Heart },
-    { href: '/admin/settings', label: 'Settings', icon: Settings },
+export default function AdminLayout({ children }: AdminLayoutProps) {
+  const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const navSections = [
+    {
+      title: 'Overview',
+      items: [
+        { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+        { href: '/admin/reports', label: 'Reports', icon: BarChart3 },
+      ]
+    },
+    {
+      title: 'Catalog',
+      items: [
+        { href: '/admin/products', label: 'Products', icon: Package },
+        { href: '/admin/inventory', label: 'Inventory', icon: Boxes },
+        { href: '/admin/categories', label: 'Categories', icon: Boxes },
+      ]
+    },
+    {
+      title: 'Sales',
+      items: [
+        { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+        { href: '/admin/customers', label: 'Customers', icon: Users },
+        { href: '/admin/payments', label: 'Payments', icon: CreditCard },
+        { href: '/admin/discounts', label: 'Discounts', icon: Ticket },
+      ]
+    },
+    {
+      title: 'Marketing',
+      items: [
+        { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare },
+        { href: '/admin/email-logs', label: 'Email Logs', icon: Mail },
+      ]
+    },
+    {
+      title: 'Impact',
+      items: [
+        { href: '/admin/conservation', label: 'Conservation', icon: Heart },
+      ]
+    },
+    {
+      title: 'System',
+      items: [
+        { href: '/admin/settings', label: 'Settings', icon: Settings },
+      ]
+    }
   ];
 
+  const isActive = (href: string) => {
+    if (href === '/admin') {
+      return pathname === href;
+    }
+    return pathname?.startsWith(href);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <Toaster position="top-right" />
 
-      {/* Modern Light Admin Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 shadow-sm">
-        <div className="flex h-16 items-center px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-8">
-            <Link href="/admin" className="flex items-center gap-2">
+      {/* Professional Sidebar */}
+      <aside className={`fixed left-0 top-0 z-40 h-screen w-72 transform bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
+        <div className="flex h-full flex-col">
+          {/* Sidebar Header */}
+          <div className="flex h-16 items-center justify-between border-b border-slate-700/50 px-6">
+            <Link href="/admin" className="flex items-center gap-3 group">
               <Image
                 src="/images/shenna-studio-logo.png"
-                alt="ShennaStudio Admin"
-                width={140}
-                height={140}
-                className="object-contain h-10 w-auto"
+                alt="ShennaStudio"
+                width={120}
+                height={120}
+                className="h-8 w-auto brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity"
                 priority
               />
-              <span className="hidden sm:inline text-sm font-semibold text-gray-600">Admin</span>
             </Link>
-
-            <nav className="hidden lg:flex items-center gap-1">
-              {navItems.slice(0, 6).map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors font-medium"
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </nav>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden text-slate-400 hover:text-white transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
 
-          <div className="ml-auto flex items-center gap-4">
-            <Link href="/">
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-2"
-              >
-                <Store className="w-4 h-4" />
-                View Store
-              </Button>
-            </Link>
-            {session && <UserNav user={session.user} />}
-          </div>
-        </div>
-      </header>
+          {/* Sidebar Navigation */}
+          <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+            {navSections.map((section) => (
+              <div key={section.title}>
+                <h3 className="px-3 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  {section.title}
+                </h3>
+                <div className="space-y-1">
+                  {section.items.map((item) => {
+                    const Icon = item.icon;
+                    const active = isActive(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setSidebarOpen(false)}
+                        className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative overflow-hidden ${
+                          active
+                            ? 'bg-gradient-to-r from-cyan-500 to-teal-500 text-white shadow-lg shadow-cyan-500/30'
+                            : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                        }`}
+                      >
+                        <Icon className={`h-5 w-5 transition-transform ${active ? '' : 'group-hover:scale-110'}`} />
+                        <span>{item.label}</span>
+                        {active && (
+                          <ChevronRight className="ml-auto h-4 w-4" />
+                        )}
+                        {!active && (
+                          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-cyan-500/10 to-cyan-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </nav>
 
-      {/* Secondary Navigation Bar */}
-      <div className="border-b border-gray-200 bg-white">
-        <div className="px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-1 overflow-x-auto py-2 scrollbar-hide">
-            {navItems.slice(6).map((item) => {
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors whitespace-nowrap"
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <main className="px-4 sm:px-6 lg:px-8 py-8 bg-gray-50 min-h-[calc(100vh-10rem)]">
-        <div className="max-w-7xl mx-auto">
-          {children}
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-600">
-              © 2025 ShennaStudio Admin Panel • Ocean Conservation Platform
-            </p>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <span className="flex items-center gap-2">
-                <Heart className="w-4 h-4 text-teal-600" />
-                10% to Conservation
-              </span>
-              <span>•</span>
-              <Link href="/admin/conservation" className="hover:text-teal-600 transition-colors">
-                View Impact
-              </Link>
+          {/* Sidebar Footer */}
+          <div className="border-t border-slate-700/50 p-4">
+            <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gradient-to-r from-teal-500/20 to-cyan-500/20 border border-teal-500/30">
+              <Heart className="h-5 w-5 text-teal-400 animate-pulse" />
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-white">Conservation Impact</p>
+                <p className="text-[10px] text-slate-400">10% to ocean protection</p>
+              </div>
             </div>
           </div>
         </div>
-      </footer>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="lg:pl-72">
+        {/* Top Header Bar */}
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl px-6 shadow-sm">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden text-slate-600 hover:text-slate-900 transition-colors"
+          >
+            <Menu className="h-6 w-6" />
+          </button>
+
+          <div className="flex flex-1 items-center justify-between">
+            <div className="flex items-center gap-3">
+              <h2 className="text-lg font-bold bg-gradient-to-r from-slate-900 to-cyan-900 bg-clip-text text-transparent">
+                ShennaStudio Admin
+              </h2>
+              <span className="hidden sm:inline-block px-2 py-1 text-[10px] font-semibold bg-gradient-to-r from-cyan-100 to-teal-100 text-cyan-700 rounded-full border border-cyan-200/50">
+                PRO
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Link href="/">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 border-slate-300 hover:border-cyan-500 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-teal-50 hover:text-cyan-700 transition-all duration-200"
+                >
+                  <Store className="w-4 h-4" />
+                  <span className="hidden sm:inline">View Store</span>
+                </Button>
+              </Link>
+              <UserNav user={{ name: 'Admin', email: 'admin@example.com', role: 'ADMIN' }} />
+            </div>
+          </div>
+        </header>
+
+        {/* Page Content */}
+        <main className="p-6 lg:p-8 min-h-[calc(100vh-4rem)] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100/20 via-white to-slate-50/30">
+          <div className="max-w-[1600px] mx-auto">
+            {children}
+          </div>
+        </main>
+      </div>
+
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-30 bg-slate-900/50 backdrop-blur-sm lg:hidden"
+        />
+      )}
     </div>
   );
 }

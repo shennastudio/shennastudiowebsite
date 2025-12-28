@@ -132,103 +132,132 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Review Moderation</h1>
-        <p className="text-gray-600 mt-1">Approve, reject, or delete product reviews</p>
+    <div className="space-y-8">
+      <div className="space-y-2">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">Review Moderation</h1>
+        <p className="text-slate-600 text-lg">Approve, reject, or delete product reviews</p>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Reviews</CardTitle>
-            <MessageSquare className="h-4 w-4 text-muted-foreground" />
+      {/* Enhanced Stats Cards */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="border-slate-200/60 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-cyan-200/30 transition-all duration-300 overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
+            <CardTitle className="text-sm font-semibold text-slate-700">Total Reviews</CardTitle>
+            <div className="p-2 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-lg">
+              <MessageSquare className="h-4 w-4 text-cyan-700" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.totalReviews}</div>
+          <CardContent className="relative">
+            <div className="text-3xl font-bold bg-gradient-to-r from-cyan-700 to-teal-700 bg-clip-text text-transparent">{summary.totalReviews}</div>
+            <p className="text-xs text-slate-500 mt-1">All time</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Review</CardTitle>
-            <Eye className="h-4 w-4 text-yellow-500" />
+        <Card className="border-amber-200/60 shadow-lg shadow-amber-200/50 hover:shadow-xl hover:shadow-amber-300/40 transition-all duration-300 overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
+            <CardTitle className="text-sm font-semibold text-slate-700">Pending Review</CardTitle>
+            <div className="p-2 bg-gradient-to-br from-amber-100 to-yellow-100 rounded-lg">
+              <Eye className="h-4 w-4 text-amber-700" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.pendingReviews}</div>
+          <CardContent className="relative">
+            <div className="text-3xl font-bold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">{summary.pendingReviews}</div>
+            <p className="text-xs text-slate-500 mt-1">Awaiting action</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Approved</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+        <Card className="border-emerald-200/60 shadow-lg shadow-emerald-200/50 hover:shadow-xl hover:shadow-emerald-300/40 transition-all duration-300 overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
+            <CardTitle className="text-sm font-semibold text-slate-700">Approved</CardTitle>
+            <div className="p-2 bg-gradient-to-br from-emerald-100 to-green-100 rounded-lg">
+              <CheckCircle className="h-4 w-4 text-emerald-700" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.approvedReviews}</div>
+          <CardContent className="relative">
+            <div className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">{summary.approvedReviews}</div>
+            <p className="text-xs text-slate-500 mt-1">Published</p>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
-            <Star className="h-4 w-4 text-yellow-500" />
+        <Card className="border-violet-200/60 shadow-lg shadow-violet-200/50 hover:shadow-xl hover:shadow-violet-300/40 transition-all duration-300 overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-br from-violet-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative">
+            <CardTitle className="text-sm font-semibold text-slate-700">Average Rating</CardTitle>
+            <div className="p-2 bg-gradient-to-br from-violet-100 to-purple-100 rounded-lg">
+              <Star className="h-4 w-4 text-violet-700 fill-violet-700" />
+            </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.averageRating.toFixed(1)}</div>
+          <CardContent className="relative">
+            <div className="text-3xl font-bold bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">{summary.averageRating.toFixed(1)}</div>
+            <p className="text-xs text-slate-500 mt-1">Out of 5.0</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Status Filter Tabs */}
-      <div className="flex flex-wrap gap-2">
+      {/* Modern Status Filter Tabs */}
+      <div className="flex flex-wrap gap-3">
         {(['all', 'pending', 'approved', 'rejected'] as const).map((status) => (
           <button
             key={status}
             onClick={() => setStatusFilter(status)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={`group px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 relative overflow-hidden ${
               statusFilter === status
-                ? 'bg-cyan-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                ? 'bg-gradient-to-r from-cyan-600 to-teal-600 text-white shadow-lg shadow-cyan-300/50'
+                : 'bg-white text-slate-700 hover:bg-gradient-to-br hover:from-cyan-50 hover:to-teal-50 border border-slate-200 hover:border-cyan-300 hover:shadow-md'
             }`}
           >
-            {status.charAt(0).toUpperCase() + status.slice(1)} ({statusCounts[status]})
+            <span className="relative z-10">{status.charAt(0).toUpperCase() + status.slice(1)} ({statusCounts[status]})</span>
+            {statusFilter !== status && (
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-100/0 via-cyan-100/30 to-cyan-100/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+            )}
           </button>
         ))}
       </div>
 
-      {/* Reviews List */}
-      <div className="space-y-4">
+      {/* Enhanced Reviews List */}
+      <div className="space-y-5">
         {loading ? (
-          <Card>
-            <CardContent className="py-12">
-              <div className="text-center text-gray-500">Loading reviews...</div>
+          <Card className="border-slate-200/60 shadow-lg">
+            <CardContent className="py-16">
+              <div className="text-center">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-cyan-600 border-r-transparent mb-4"></div>
+                <p className="text-slate-600 font-medium">Loading reviews...</p>
+              </div>
             </CardContent>
           </Card>
         ) : reviews.length === 0 ? (
-          <Card>
-            <CardContent className="py-12">
-              <div className="text-center text-gray-500">
-                No {statusFilter !== 'all' ? statusFilter : ''} reviews found
+          <Card className="border-slate-200/60 shadow-lg bg-gradient-to-br from-slate-50 to-white">
+            <CardContent className="py-16">
+              <div className="text-center">
+                <MessageSquare className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+                <p className="text-slate-600 font-medium text-lg">
+                  No {statusFilter !== 'all' ? statusFilter : ''} reviews found
+                </p>
               </div>
             </CardContent>
           </Card>
         ) : (
           reviews.map((review) => (
-            <Card key={review.id} className="overflow-hidden">
-              <CardContent className="p-6">
+            <Card key={review.id} className="overflow-hidden border-slate-200/60 shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-cyan-200/30 transition-all duration-300 group">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <CardContent className="p-6 relative">
                 <div className="flex gap-6">
                   {/* Product Image */}
                   {review.product.images[0]?.url && (
                     <div className="flex-shrink-0">
-                      <Image
-                        src={review.product.images[0].url}
-                        alt={review.product.images[0].alt || review.product.name}
-                        width={100}
-                        height={100}
-                        className="rounded-lg object-cover"
-                      />
+                      <div className="relative group/image">
+                        <Image
+                          src={review.product.images[0].url}
+                          alt={review.product.images[0].alt || review.product.name}
+                          width={100}
+                          height={100}
+                          className="rounded-xl object-cover ring-2 ring-slate-200/60 group-hover/image:ring-cyan-300/50 transition-all duration-300 shadow-md"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-teal-500/0 group-hover/image:from-cyan-500/10 group-hover/image:to-teal-500/10 rounded-xl transition-all duration-300"></div>
+                      </div>
                     </div>
                   )}
 
@@ -237,10 +266,10 @@ export default function ReviewsPage() {
                     {/* Header */}
                     <div className="flex items-start justify-between gap-4 mb-3">
                       <div>
-                        <h3 className="font-semibold text-lg text-gray-900">{review.product.name}</h3>
-                        <div className="flex items-center gap-3 mt-1">
+                        <h3 className="font-bold text-lg text-slate-900 group-hover:text-cyan-900 transition-colors">{review.product.name}</h3>
+                        <div className="flex items-center gap-3 mt-2">
                           {renderStars(review.rating)}
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm font-semibold text-slate-600 px-2 py-0.5 bg-slate-100 rounded-full">
                             {review.rating.toFixed(1)} / 5.0
                           </span>
                         </div>
@@ -270,22 +299,29 @@ export default function ReviewsPage() {
                     </div>
 
                     {/* Review Text */}
-                    <p className="text-gray-700 mb-4 whitespace-pre-wrap">{review.body}</p>
+                    <p className="text-slate-700 mb-5 whitespace-pre-wrap leading-relaxed">{review.body}</p>
 
                     {/* User & Date Info */}
-                    <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                      <div>
-                        <span className="font-medium text-gray-900">{review.user.name}</span>
-                        <span className="mx-2">•</span>
-                        <span>{review.user.email}</span>
+                    <div className="flex items-center justify-between text-sm text-slate-600 mb-5 p-3 bg-slate-50/50 rounded-lg border border-slate-200/60">
+                      <div className="flex items-center gap-2">
+                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center text-white font-semibold text-xs">
+                          {review.user.name?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                        <div>
+                          <span className="font-semibold text-slate-900 block">{review.user.name}</span>
+                          <span className="text-xs text-slate-500">{review.user.email}</span>
+                        </div>
                       </div>
-                      <div>{new Date(review.createdAt).toLocaleDateString()}</div>
+                      <div className="text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200">
+                        {new Date(review.createdAt).toLocaleDateString()}
+                      </div>
                     </div>
 
                     {/* Moderation Info */}
                     {review.moderatedAt && (
-                      <div className="text-xs text-gray-500 mb-4">
-                        Moderated on {new Date(review.moderatedAt).toLocaleDateString()}
+                      <div className="text-xs text-slate-500 mb-4 flex items-center gap-2 bg-slate-100/50 px-3 py-1.5 rounded-lg border border-slate-200/60 w-fit">
+                        <CheckCircle className="h-3 w-3" />
+                        <span>Moderated on {new Date(review.moderatedAt).toLocaleDateString()}</span>
                       </div>
                     )}
 
@@ -295,10 +331,10 @@ export default function ReviewsPage() {
                         <Button
                           onClick={() => handleReviewAction(review.id, 'approve')}
                           size="sm"
-                          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
+                          className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-lg shadow-emerald-200/50 transition-all duration-200"
                         >
                           <CheckCircle className="h-4 w-4" />
-                          Approve
+                          <span className="font-semibold">Approve</span>
                         </Button>
                       )}
                       {!review.isRejected && (
@@ -306,20 +342,20 @@ export default function ReviewsPage() {
                           onClick={() => handleReviewAction(review.id, 'reject')}
                           size="sm"
                           variant="outline"
-                          className="flex items-center gap-2 text-red-600 hover:bg-red-50"
+                          className="flex items-center gap-2 text-red-600 hover:bg-gradient-to-r hover:from-red-50 hover:to-rose-50 border-red-300 hover:border-red-400 transition-all duration-200"
                         >
                           <XCircle className="h-4 w-4" />
-                          Reject
+                          <span className="font-semibold">Reject</span>
                         </Button>
                       )}
                       <Button
                         onClick={() => handleReviewAction(review.id, 'delete')}
                         size="sm"
                         variant="outline"
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 hover:bg-gradient-to-r hover:from-slate-50 hover:to-gray-50 transition-all duration-200"
                       >
                         <Trash2 className="h-4 w-4" />
-                        Delete
+                        <span className="font-semibold">Delete</span>
                       </Button>
                     </div>
                   </div>
