@@ -52,6 +52,7 @@ model User {
   sessions        Session[]
   rewards         CustomerReward?
   prizeRedemptions PrizeRedemption[]
+  orderNotes      OrderNote[]
 
   @@map("users")
 }
@@ -206,11 +207,19 @@ model Order {
   // Payment
   stripePaymentId   String?
 
+  // Shipping tracking
+  trackingNumber    String?
+  carrier           String?
+  shippingCost      Float       @default(0)
+  shippedAt         DateTime?
+  deliveredAt       DateTime?
+
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
 
   items             OrderItem[]
   conservationDonation ConservationDonation?
+  notes             OrderNote[]
 
   @@map("orders")
 }
@@ -229,6 +238,22 @@ model OrderItem {
   createdAt      DateTime       @default(now())
 
   @@map("order_items")
+}
+
+model OrderNote {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  content     String   @db.Text
+
+  createdAt   DateTime @default(now())
+
+  @@index([orderId])
+  @@map("order_notes")
 }
 
 model InventoryTransaction {

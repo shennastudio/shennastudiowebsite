@@ -44,11 +44,17 @@ export default async function AdminLayout({
                 <Link href="/admin/orders" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Orders
                 </Link>
+                <Link href="/admin/customers" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Customers
+                </Link>
                 <Link href="/admin/discounts" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Discounts
                 </Link>
                 <Link href="/admin/reviews" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Reviews
+                </Link>
+                <Link href="/admin/email-logs" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Emails
                 </Link>
                 <Link href="/admin/conservation" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Conservation
