@@ -17,6 +17,8 @@ interface Review {
   isRejected: boolean;
   moderatedAt?: string | null;
   moderatedBy?: string | null;
+  customerName?: string | null;
+  customerEmail?: string | null;
   product: {
     id: string;
     name: string;
@@ -26,11 +28,11 @@ interface Review {
       alt: string | null;
     }>;
   };
-  user: {
+  user?: {
     id: string;
     name: string | null;
     email: string;
-  };
+  } | null;
 }
 
 interface ReviewSummary {
@@ -305,11 +307,15 @@ export default function ReviewsPage() {
                     <div className="flex items-center justify-between text-sm text-slate-600 mb-5 p-3 bg-slate-50/50 rounded-lg border border-slate-200/60">
                       <div className="flex items-center gap-2">
                         <div className="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center text-white font-semibold text-xs">
-                          {review.user.name?.charAt(0).toUpperCase() || 'U'}
+                          {(review.user?.name || review.customerName)?.charAt(0).toUpperCase() || 'G'}
                         </div>
                         <div>
-                          <span className="font-semibold text-slate-900 block">{review.user.name}</span>
-                          <span className="text-xs text-slate-500">{review.user.email}</span>
+                          <span className="font-semibold text-slate-900 block">
+                            {review.user?.name || review.customerName || 'Guest'}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            {review.user?.email || review.customerEmail || 'No email'}
+                          </span>
                         </div>
                       </div>
                       <div className="text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200">

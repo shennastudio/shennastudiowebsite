@@ -712,6 +712,7 @@ enum EmailTemplate {
   PASSWORD_RESET
   NEWSLETTER
   PRODUCT_BACK_IN_STOCK
+  ADMIN_CUSTOM
 }
 
 model EmailLog {
