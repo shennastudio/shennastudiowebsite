@@ -29,7 +29,8 @@ async function main() {
   // USERS
   // ===========================
 
-  const hashedPassword = await bcrypt.hash('admin123', 10)
+  // ADMIN PASSWORD (SECURE - CHANGE THIS!): ShennaStudio2025!Ocean#SecureAdmin
+  const hashedPassword = await bcrypt.hash('ShennaStudio2025!Ocean#SecureAdmin', 10)
   const customerPassword = await bcrypt.hash('customer123', 10)
 
   const admin = await prisma.user.create({
@@ -40,6 +41,11 @@ async function main() {
       role: 'ADMIN',
     },
   })
+
+  console.log('🔐 ADMIN LOGIN CREDENTIALS:')
+  console.log('   Email: admin@shennastudio.com')
+  console.log('   Password: ShennaStudio2025!Ocean#SecureAdmin')
+  console.log('')
 
   const customer1 = await prisma.user.create({
     data: {
@@ -93,6 +99,12 @@ async function main() {
   })
 
   console.log('✅ Created users')
+  console.log('')
+  console.log('👥 CUSTOMER TEST ACCOUNTS:')
+  console.log('   1. Email: sarah.ocean@example.com | Password: customer123')
+  console.log('   2. Email: mike.turtle@example.com | Password: customer123')
+  console.log('   3. Email: lisa.waves@example.com | Password: customer123')
+  console.log('')
 
   // ===========================
   // CATEGORIES
