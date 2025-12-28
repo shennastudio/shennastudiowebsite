@@ -48,11 +48,13 @@ export default function SalesChart({ data }: SalesChartProps) {
               border: '1px solid #e5e7eb',
               borderRadius: '8px',
             }}
-            formatter={(value: number, name: string) => {
+            formatter={(value: number | string | undefined, name: string | undefined) => {
+              if (value === undefined) return ['$0.00', name || 'Unknown'];
+              const numValue = typeof value === 'number' ? value : parseFloat(value as string);
               if (name === 'revenue') {
-                return [`$${value.toFixed(2)}`, 'Revenue'];
+                return [`$${numValue.toFixed(2)}`, 'Revenue'];
               }
-              return [value, 'Orders'];
+              return [numValue, 'Orders'];
             }}
           />
           <Legend />

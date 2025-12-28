@@ -50,20 +50,21 @@ export async function createOrder(params: CreateOrderParams) {
       shipping,
       tax,
       total,
-      stripePaymentIntentId,
-      shippingName: shippingAddress.name,
-      shippingLine1: shippingAddress.line1,
-      shippingLine2: shippingAddress.line2,
+      stripePaymentId: stripePaymentIntentId,
+      customerName: shippingAddress.name,
+      shippingAddress: `${shippingAddress.line1}${shippingAddress.line2 ? '\n' + shippingAddress.line2 : ''}`,
       shippingCity: shippingAddress.city,
       shippingState: shippingAddress.state,
-      shippingPostalCode: shippingAddress.postalCode,
+      shippingZip: shippingAddress.postalCode,
       shippingCountry: shippingAddress.country,
       items: {
-        create: items.map((item) => ({
-          variantId: item.variantId,
-          quantity: item.quantity,
-          price: item.price,
-        })),
+        create: items
+          .filter((item) => item.variantId !== null)
+          .map((item) => ({
+            variantId: item.variantId as string,
+            quantity: item.quantity,
+            price: item.price,
+          })),
       },
     },
     include: {
@@ -118,6 +119,8 @@ export async function createOrder(params: CreateOrderParams) {
 
   // Deduct inventory for each item
   for (const item of items) {
+    if (!item.variantId) continue; // Skip items without variant
+
     await prisma.inventoryTransaction.create({
       data: {
         variantId: item.variantId,
@@ -182,8 +185,11 @@ export async function getOrdersByUserId(userId: string) {
     include: {
       items: {
         include: {
-          product: true,
-          variant: true,
+          variant: {
+            include: {
+              product: true,
+            },
+          },
         },
       },
     },

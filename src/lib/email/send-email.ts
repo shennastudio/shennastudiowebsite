@@ -36,7 +36,7 @@ export async function sendEmail({ to, subject, template }: SendEmailOptions) {
     const transporter = createTransporter();
 
     // Render the React email component to HTML
-    const html = render(template);
+    const html = await render(template);
 
     const mailOptions = {
       from: process.env.EMAIL_FROM || 'ShennaStudio <noreply@shennastudio.com>',

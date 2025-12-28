@@ -142,7 +142,7 @@ export default function ProductRecommendations({
       sku: variant.sku,
       price: variant.price,
       stock: variant.stock,
-      size: variant.size,
+      size: variant.size as 'small' | 'medium' | 'large' | null | undefined,
       color: variant.color,
       material: variant.material,
       images: variant.images,

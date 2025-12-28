@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
         to: user.email,
         subject: 'Welcome to ShennaStudio! 🌊',
         react: WelcomeEmail({
-          customerName: user.name,
+          customerName: user.name || 'Ocean Lover',
         }),
       });
       console.log('Welcome email sent to:', user.email);

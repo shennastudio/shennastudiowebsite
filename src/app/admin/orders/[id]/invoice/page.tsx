@@ -39,7 +39,7 @@ export default function InvoicePage() {
   }
 
   const handlePrint = useReactToPrint({
-    content: () => invoiceRef.current,
+    contentRef: invoiceRef,
     documentTitle: `Invoice-${order?.orderNumber || 'Unknown'}`,
     pageStyle: `
       @page {
@@ -56,10 +56,59 @@ export default function InvoicePage() {
   });
 
   const handleDownloadPDF = async () => {
-    // For now, use print and "Save as PDF"
-    // In the future, can integrate jspdf for direct PDF generation
-    handlePrint();
-    toast.success('Use "Save as PDF" in the print dialog to download');
+    if (!invoiceRef.current || !order) return;
+
+    try {
+      // Dynamically import jspdf and html2canvas for client-side only
+      const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
+        import('jspdf'),
+        import('html2canvas'),
+      ]);
+
+      toast.loading('Generating PDF...');
+
+      // Capture the invoice as canvas
+      const canvas = await html2canvas(invoiceRef.current, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+
+      // Calculate dimensions to fit A4
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 297; // A4 height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Add additional pages if content is longer than one page
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // Save the PDF
+      pdf.save(`Invoice-${order.orderNumber}.pdf`);
+      toast.dismiss();
+      toast.success('PDF downloaded successfully!');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast.dismiss();
+      toast.error('Failed to generate PDF');
+    }
   };
 
   if (loading) {

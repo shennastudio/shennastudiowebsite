@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const validated = adjustmentSchema.parse(body);
 
-    const { variantId, type, quantity, reason } = validated;
+    const { variantId, type, quantity, notes } = validated;
 
     // Get current variant
     const variant = await prisma.productVariant.findUnique({
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
         variantId,
         type,
         quantity: Math.abs(quantity),
-        notes: reason || `${type} adjustment`,
+        notes: notes || `${type} adjustment`,
         userId: session.user.id,
       },
       include: {

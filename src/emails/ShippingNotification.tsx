@@ -53,7 +53,7 @@ export default function ShippingNotificationEmail({
       {/* Tracking info */}
       <Section style={trackingSection}>
         <Text style={trackingLabel}>Tracking Number</Text>
-        <Text style={trackingNumber}>{trackingNumber}</Text>
+        <Text style={trackingNumberStyle}>{trackingNumber}</Text>
         <Text style={trackingCarrier}>Carrier: {carrier}</Text>
         {estimatedDelivery && (
           <Text style={estimatedText}>
@@ -113,7 +113,7 @@ const heroSection = {
   padding: '32px 0',
 };
 
-const shippingIcon = {
+const shippingIcon: React.CSSProperties = {
   fontSize: '64px',
   lineHeight: '1',
   margin: '0 0 16px',
@@ -151,7 +151,7 @@ const trackingLabel = {
   margin: '0 0 8px',
 };
 
-const trackingNumber = {
+const trackingNumberStyle: React.CSSProperties = {
   color: '#0f172a',
   fontSize: '24px',
   fontWeight: 'bold',
@@ -173,7 +173,7 @@ const estimatedText = {
   margin: '12px 0 0',
 };
 
-const buttonContainer = {
+const buttonContainer: React.CSSProperties = {
   marginTop: '20px',
 };
 

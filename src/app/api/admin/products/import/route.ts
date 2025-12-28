@@ -76,7 +76,7 @@ export async function POST(req: Request) {
         }
 
         // Parse images
-        const images = mainRow.images
+        const imageUrls = mainRow.images
           ? mainRow.images.split('|').map((url) => url.trim())
           : [];
 
@@ -86,8 +86,15 @@ export async function POST(req: Request) {
             name: mainRow.name,
             slug: mainRow.slug,
             description: mainRow.description,
+            sku: mainRow.slug, // Use slug as SKU for CSV import
             basePrice: mainRow.basePrice,
-            images,
+            images: {
+              create: imageUrls.map((url, index) => ({
+                url,
+                alt: mainRow.name,
+                position: index,
+              })),
+            },
             featured: mainRow.featured || false,
             conservationPercentage: mainRow.conservationPercentage || 10,
             conservationFocus: mainRow.conservationFocus,

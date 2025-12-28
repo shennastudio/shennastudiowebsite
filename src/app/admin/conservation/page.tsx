@@ -228,7 +228,11 @@ export default function ConservationPage() {
                   border: '1px solid #e5e7eb',
                   borderRadius: '8px',
                 }}
-                formatter={(value: number) => `$${value.toFixed(2)}`}
+                formatter={(value: number | string | undefined) => {
+                  if (value === undefined) return '$0.00';
+                  const numValue = typeof value === 'number' ? value : parseFloat(value as string);
+                  return `$${numValue.toFixed(2)}`;
+                }}
               />
               <Line
                 type="monotone"
@@ -253,7 +257,7 @@ export default function ConservationPage() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                label={({ name, percent }) => `${name} (${((percent ?? 0) * 100).toFixed(0)}%)`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
@@ -262,7 +266,11 @@ export default function ConservationPage() {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+              <Tooltip formatter={(value: number | string | undefined) => {
+                if (value === undefined) return '$0.00';
+                const numValue = typeof value === 'number' ? value : parseFloat(value as string);
+                return `$${numValue.toFixed(2)}`;
+              }} />
             </PieChart>
           </ResponsiveContainer>
         </div>

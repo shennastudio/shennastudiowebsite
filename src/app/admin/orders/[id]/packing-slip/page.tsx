@@ -39,7 +39,7 @@ export default function PackingSlipPage() {
   }
 
   const handlePrint = useReactToPrint({
-    content: () => slipRef.current,
+    contentRef: slipRef,
     documentTitle: `Packing-Slip-${order?.orderNumber || 'Unknown'}`,
     pageStyle: `
       @page {

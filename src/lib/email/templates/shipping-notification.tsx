@@ -66,7 +66,7 @@ export const ShippingNotificationEmail = ({
               <Text style={trackingLabel}>Carrier:</Text>
               <Text style={trackingValue}>{carrier}</Text>
               <Text style={trackingLabel}>Tracking Number:</Text>
-              <Text style={trackingNumber}>{trackingNumber}</Text>
+              <Text style={trackingNumberStyle}>{trackingNumber}</Text>
               {estimatedDelivery && (
                 <>
                   <Text style={trackingLabel}>Estimated Delivery:</Text>
@@ -191,7 +191,7 @@ const trackingSection = {
   margin: '20px',
 };
 
-const trackingBox = {
+const trackingBox: React.CSSProperties = {
   backgroundColor: '#f9fafb',
   padding: '20px',
   borderRadius: '8px',
@@ -211,7 +211,7 @@ const trackingValue = {
   margin: '0 0 12px 0',
 };
 
-const trackingNumber = {
+const trackingNumberStyle: React.CSSProperties = {
   fontSize: '18px',
   color: '#2563eb',
   fontFamily: 'monospace',

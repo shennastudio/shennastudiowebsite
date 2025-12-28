@@ -13,8 +13,7 @@ export const ai = genkit({
     // Falls back to rule-based if API key not available
     ...(process.env.GOOGLE_AI_API_KEY ? [googleAI()] : []),
   ],
-  // Enable logging in development
-  logLevel: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+  // Note: Logging configured via environment variables instead of logLevel option
 });
 
 // AI Configuration

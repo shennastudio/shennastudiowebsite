@@ -33,9 +33,7 @@ export async function searchProducts(
   const skip = (page - 1) * limit;
 
   // Build where clause
-  const where: Prisma.ProductWhereInput = {
-    status: 'ACTIVE',
-  };
+  const where: Prisma.ProductWhereInput = {};
 
   // Text search
   if (filters.query) {
@@ -133,7 +131,6 @@ export async function searchProducts(
 
   // Get filter metadata (available options)
   const allProducts = await prisma.product.findMany({
-    where: { status: 'ACTIVE' },
     include: {
       variants: true,
     },
