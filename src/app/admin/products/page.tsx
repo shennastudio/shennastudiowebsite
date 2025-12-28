@@ -6,7 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { Plus, Edit } from 'lucide-react';
+import { Plus, Edit, Upload, Edit3, Package } from 'lucide-react';
 import { DeleteProductButton } from '@/components/admin/DeleteProductButton';
 
 async function getProducts() {
@@ -43,6 +43,48 @@ export default async function ProductsPage() {
             <Plus className="h-4 w-4 mr-2" />
             Add Product
           </Button>
+        </Link>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Link
+          href="/admin/products/import"
+          className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+        >
+          <div className="p-3 bg-blue-50 rounded-lg">
+            <Upload className="w-6 h-6 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">CSV Import</h3>
+            <p className="text-sm text-gray-500">Bulk import products</p>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/products/bulk-edit"
+          className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+        >
+          <div className="p-3 bg-purple-50 rounded-lg">
+            <Edit3 className="w-6 h-6 text-purple-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">Bulk Edit</h3>
+            <p className="text-sm text-gray-500">Edit multiple products</p>
+          </div>
+        </Link>
+
+        <Link
+          href="/admin/inventory"
+          className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow"
+        >
+          <div className="p-3 bg-green-50 rounded-lg">
+            <Package className="w-6 h-6 text-green-600" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-gray-900">Inventory</h3>
+            <p className="text-sm text-gray-500">Manage stock levels</p>
+          </div>
         </Link>
       </div>
 

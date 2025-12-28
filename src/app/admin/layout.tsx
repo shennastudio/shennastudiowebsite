@@ -30,8 +30,8 @@ export default async function AdminLayout({
                 <Link href="/admin/products" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Products
                 </Link>
-                <Link href="/admin/categories" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Categories
+                <Link href="/admin/inventory" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Inventory
                 </Link>
                 <Link href="/admin/orders" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Orders
@@ -44,9 +44,6 @@ export default async function AdminLayout({
                 </Link>
                 <Link href="/admin/settings" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Settings
-                </Link>
-                <Link href="/admin/account" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
-                  Account
                 </Link>
               </nav>
             </div>
