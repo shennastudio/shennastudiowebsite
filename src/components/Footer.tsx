@@ -18,7 +18,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-cyan-200 leading-relaxed">
-              Handcrafted bracelets inspired by ocean. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
+              Handcrafted bracelets inspired by the ocean. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
             </p>
             <div className="flex space-x-4 text-2xl">
               <span>🪼</span>
@@ -143,10 +143,32 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Web Development Partner */}
+        <div className="mt-8 pt-8 border-t border-cyan-700">
+          <div className="bg-gradient-to-r from-cyan-800/40 to-blue-800/40 rounded-xl p-6 backdrop-blur-sm">
+            <div className="text-center">
+              <h3 className="text-lg font-semibold text-coral-400 mb-2">Website Developed By</h3>
+              <a
+                href="https://www.softwarepros.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block text-xl font-bold text-white hover:text-coral-400 transition-colors mb-3"
+              >
+                SoftwarePros.org →
+              </a>
+              <p className="text-cyan-200 leading-relaxed max-w-3xl mx-auto">
+                Fantastic team specializing in modern websites with beautiful admin panels and mobile application
+                development for various business types. Visit them and use their wonderful services for all your
+                web and mobile development needs!
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
         <div className="mt-8 pt-8 border-t border-cyan-700">
           <div className="flex flex-col md:flex-row justify-between items-center text-cyan-300 text-sm">
-            <p>© 2024 ShennaStudio. Protecting oceans, one bracelet at a time.</p>
+            <p>© 2025 ShennaStudio (Since March 2025). Protecting oceans, one bracelet at a time.</p>
             <div className="flex items-center gap-4 mt-4 md:mt-0">
               <span>Made with 🌊 in Texas</span>
               <span>•</span>
