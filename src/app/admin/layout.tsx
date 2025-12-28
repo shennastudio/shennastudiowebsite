@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { Store } from 'lucide-react';
+import { headers } from 'next/headers';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -13,6 +14,21 @@ interface AdminLayoutProps {
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
   const session = await getServerSession(authOptions);
+  const headersList = await headers();
+  const pathname = headersList.get('x-pathname') || '';
+
+  // Check if we're on the login page
+  const isLoginPage = pathname.includes('/admin/login');
+
+  // If it's the login page, just render children without sidebar/header
+  if (isLoginPage) {
+    return (
+      <>
+        <Toaster position="top-right" />
+        {children}
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">

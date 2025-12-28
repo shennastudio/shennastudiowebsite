@@ -7,11 +7,15 @@ export default withAuth(
     const isAuth = !!token
     const isAuthPage = req.nextUrl.pathname.startsWith('/admin/login')
 
+    // Create response with pathname header
+    const response = NextResponse.next()
+    response.headers.set('x-pathname', req.nextUrl.pathname)
+
     if (isAuthPage) {
       if (isAuth) {
         return NextResponse.redirect(new URL('/admin', req.url))
       }
-      return null
+      return response
     }
 
     // Check if user has admin or staff role
@@ -19,7 +23,7 @@ export default withAuth(
       return NextResponse.redirect(new URL('/admin/login', req.url))
     }
 
-    return null
+    return response
   },
   {
     callbacks: {
