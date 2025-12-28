@@ -30,6 +30,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@genkit-ai/googleai": "^1.27.0",
     "@genkit-ai/mcp": "^1.27.0",
+    "@heroui/react": "^2.8.7",
     "@hookform/resolvers": "^5.2.2",
     "@next-auth/prisma-adapter": "^1.0.7",
     "@next/third-parties": "^15.4.10",

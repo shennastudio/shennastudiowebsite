@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { heroui } from "@heroui/react";
 
 const config: Config = {
   darkMode: "class",
@@ -6,6 +7,7 @@ const config: Config = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -58,7 +60,22 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [heroui({
+    themes: {
+      dark: {
+        colors: {
+          primary: {
+            DEFAULT: "#06b6d4", // cyan-500
+            foreground: "#ffffff",
+          },
+          secondary: {
+            DEFAULT: "#14b8a6", // teal-500
+            foreground: "#ffffff",
+          },
+        },
+      },
+    },
+  })],
 };
 
 export default config;
