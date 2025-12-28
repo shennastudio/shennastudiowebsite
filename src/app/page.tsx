@@ -2,6 +2,9 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { fetchFeaturedProducts } from '@/app/actions'
 
+// Force dynamic rendering since we fetch personalized recommendations
+export const dynamic = 'force-dynamic'
+
 interface ProductWithScore {
   id: string;
   name: string;
@@ -34,13 +37,24 @@ interface RecommendationsResponse {
 
 async function fetchPersonalizedRecommendations(limit: number = 6): Promise<RecommendationsResponse> {
   try {
+    // Skip during build time - server isn't running yet
+    if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_BASE_URL) {
+      return {
+        success: false,
+        recommendations: [],
+        count: 0,
+        personalized: false,
+      };
+    }
+
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
     const response = await fetch(`${baseUrl}/api/recommendations/personalized?limit=${limit}`, {
       cache: 'no-store',
+      // Fail fast during build
+      signal: AbortSignal.timeout(3000),
     });
 
     if (!response.ok) {
-      console.error('Failed to fetch recommendations:', response.statusText);
       return {
         success: false,
         recommendations: [],
@@ -51,7 +65,7 @@ async function fetchPersonalizedRecommendations(limit: number = 6): Promise<Reco
 
     return await response.json();
   } catch (error) {
-    console.error('Error fetching personalized recommendations:', error);
+    // Silently fail during build/deployment
     return {
       success: false,
       recommendations: [],
