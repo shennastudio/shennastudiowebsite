@@ -11,7 +11,7 @@ const noteSchema = z.object({
 // GET - Fetch all notes for an order
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -20,8 +20,9 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const notes = await prisma.orderNote.findMany({
-      where: { orderId: params.id },
+      where: { orderId: id },
       include: {
         user: {
           select: {
@@ -46,7 +47,7 @@ export async function GET(
 // POST - Add a note to an order
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -55,12 +56,13 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await req.json();
     const validated = noteSchema.parse(body);
 
     const note = await prisma.orderNote.create({
       data: {
-        orderId: params.id,
+        orderId: id,
         userId: session.user.id,
         content: validated.content,
       },

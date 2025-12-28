@@ -69,7 +69,7 @@ function getTrackingUrl(trackingNumber: string | null, carrier: string | null) {
 export default async function OrderDetailsPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await getServerSession(authOptions);
 
@@ -77,7 +77,8 @@ export default async function OrderDetailsPage({
     redirect('/admin/login');
   }
 
-  const order = await getOrderDetails(params.id, session.user.id);
+  const { id } = await params;
+  const order = await getOrderDetails(id, session.user.id);
 
   if (!order) {
     redirect('/account');

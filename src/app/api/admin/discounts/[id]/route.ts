@@ -23,7 +23,7 @@ const updateDiscountSchema = z.object({
 // GET - Get single discount code
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -32,8 +32,9 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const discount = await prisma.discountCode.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         usages: {
           include: {
@@ -69,7 +70,7 @@ export async function GET(
 // PATCH - Update discount code
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -78,12 +79,13 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     const body = await req.json();
     const validatedData = updateDiscountSchema.parse(body);
 
     // Check if discount exists
     const existingDiscount = await prisma.discountCode.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingDiscount) {
@@ -108,7 +110,7 @@ export async function PATCH(
     }
 
     const discount = await prisma.discountCode.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...validatedData,
         startsAt: validatedData.startsAt ? new Date(validatedData.startsAt) : undefined,
@@ -136,7 +138,7 @@ export async function PATCH(
 // DELETE - Delete discount code
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -145,9 +147,10 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const { id } = await params;
     // Check if discount exists
     const existingDiscount = await prisma.discountCode.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingDiscount) {
@@ -158,7 +161,7 @@ export async function DELETE(
     }
 
     await prisma.discountCode.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: 'Discount code deleted successfully' });
