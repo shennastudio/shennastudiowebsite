@@ -167,13 +167,23 @@ export default async function ProductDetailPage({
                   product={{
                     id: product.id,
                     name: product.name,
-                    sku: product.sku,
+                    sku: variant?.sku || product.slug, // Use variant SKU or fallback to slug
                     basePrice: product.basePrice,
-                    images: product.images,
+                    images: displayImages.map(url => ({ url })), // Convert string URLs to image objects
                     conservationPercentage: product.conservationPercentage,
                     conservationFocus: product.conservationFocus,
                   }}
-                  variant={variant}
+                  variant={variant ? {
+                    id: variant.id,
+                    variantName: variant.name,
+                    sku: variant.sku,
+                    price: variant.price,
+                    stock: variant.stock,
+                    size: variant.size,
+                    color: variant.color,
+                    material: variant.material,
+                    images: displayImages.map(url => ({ url })),
+                  } : null}
                   stock={displayStock}
                 />
                 <Link
