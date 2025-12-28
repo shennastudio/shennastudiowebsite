@@ -63,7 +63,7 @@ export default async function ProductsPage() {
                     {/* Featured Badge */}
                     {productDisplay.product.featured && (
                       <div className="absolute top-4 right-4 bg-coral-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
-                        ⭐ Featured
+                         Featured
                       </div>
                     )}
 
@@ -76,7 +76,7 @@ export default async function ProductsPage() {
 
                     {/* Marine Life Icon */}
                     <div className="absolute bottom-4 left-4 text-3xl opacity-0 group-hover:opacity-100 transition-opacity">
-                      🪼🐙
+                    
                     </div>
                   </div>
 
@@ -127,7 +127,7 @@ export default async function ProductsPage() {
                       href={`/products/${productDisplay.product.slug}`}
                       className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg transition-all transform hover:scale-105 font-semibold"
                     >
-                      🌊 View Details
+                      View Details
                     </Link>
                   </div>
                 </div>

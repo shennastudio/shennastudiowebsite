@@ -106,7 +106,7 @@ export default async function RewardsPage() {
               <div className="text-6xl">🛍️</div>
               <div className="flex-1">
                 <div className="text-2xl font-bold text-green-900 mb-1">Make a Purchase</div>
-                <div className="text-lg font-semibold text-green-700">Earn 4 Points Per Purchase ⭐⭐⭐⭐</div>
+                <div className="text-lg font-semibold text-green-700">Earn 4 Points Per Purchase </div>
                 <div className="text-sm text-green-600 mt-2">
                   Every order earns you points • 10 purchases = 40 points = 1 FREE item!
                 </div>
@@ -120,7 +120,7 @@ export default async function RewardsPage() {
               <div className="text-6xl">🎁</div>
               <div className="flex-1">
                 <div className="text-2xl font-bold text-orange-900 mb-1">Redeem Your Points</div>
-                <div className="text-lg font-semibold text-orange-700">40 Points = 1 Free Bracelet + FREE Shipping! 🚢</div>
+                <div className="text-lg font-semibold text-orange-700">40 Points = 1 Free Bracelet + FREE Shipping!</div>
                 <div className="text-sm text-orange-600 mt-2">
                   Choose any item from our collection when you reach 40 points
                 </div>

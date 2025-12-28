@@ -52,7 +52,7 @@ export default function NewsletterPopup() {
       const data = await response.json()
 
       if (response.ok) {
-        setMessage('🎉 Welcome aboard! Check your email for exclusive ocean deals.')
+        setMessage('Welcome aboard! Check your email for exclusive ocean deals.')
         setIsSuccess(true)
         setEmail('')
         setName('')
@@ -122,7 +122,7 @@ export default function NewsletterPopup() {
             </h2>
 
             <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 leading-relaxed">
-              Get <strong className="text-teal-600">10% off</strong> your first order + exclusive access to new ocean-inspired designs and Kemp&apos;s Ridley sea turtle conservation updates from South Padre Island! 🌊
+              Get <strong className="text-teal-600">10% off</strong> your first order + exclusive access to new ocean-inspired designs and Kemp&apos;s Ridley sea turtle conservation updates from South Padre Island!
             </p>
 
             {/* Success/Error Message */}
@@ -164,7 +164,7 @@ export default function NewsletterPopup() {
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-semibold py-2.5 sm:py-3 text-sm sm:text-base rounded-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
-                {loading ? 'Subscribing...' : '🌊 Get My 10% Off'}
+                {loading ? 'Subscribing...' : 'Get My 10% Off'}
               </button>
             </form>
 
@@ -180,7 +180,7 @@ export default function NewsletterPopup() {
                   <span className="leading-tight">Sea Turtle Updates</span>
                 </div>
                 <div>
-                  <span className="block text-xl sm:text-2xl mb-1">✨</span>
+                  <span className="block text-xl sm:text-2xl mb-1"></span>
                   <span className="leading-tight">New Arrivals</span>
                 </div>
               </div>

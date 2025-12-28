@@ -65,13 +65,13 @@ export default async function Home() {
                 href="/products"
                 className="inline-block bg-coral-500 hover:bg-coral-600 text-white px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-105"
               >
-                🌊 Shop Ocean Collection
+                Shop Ocean Collection
               </Link>
               <Link
                 href="/conservation"
                 className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all"
               >
-                🌊🌊🪼 Sea Turtle Conservation
+              Sea Turtle Conservation
               </Link>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default async function Home() {
                       )}
                       {/* Marine Life Icons */}
                       <div className="absolute top-4 left-4 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        🌊🪼
+                      
                       </div>
                     </div>
                     <div className="p-6">
@@ -147,7 +147,7 @@ export default async function Home() {
                         href={`/products/${product.slug}`}
                         className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg transition-all transform hover:scale-105"
                       >
-                        🌊 View Details
+                        View Details
                       </Link>
                     </div>
                   </div>
@@ -201,12 +201,12 @@ export default async function Home() {
                   )}
                   {productDisplay.product?.featured && (
                     <div className="absolute top-4 right-4 bg-coral-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
-                      🌊 Featured
+                      Featured
                     </div>
                   )}
                   {/* Marine Life Icons */}
                   <div className="absolute top-4 left-4 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    🌊🪼
+                  
                   </div>
                 </div>
                 <div className="p-6">
@@ -228,7 +228,7 @@ export default async function Home() {
                     href={`/products/${productDisplay.product?.slug || 'ocean-wave-bracelet'}`}
                     className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg transition-all transform hover:scale-105"
                   >
-                    🌊 View Details
+                    View Details
                   </Link>
                 </div>
               </div>
@@ -305,13 +305,13 @@ export default async function Home() {
               href="/products"
               className="inline-block bg-coral-500 hover:bg-coral-600 text-white px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-105"
             >
-              🌊 Shop Ocean Collection
+              Shop Ocean Collection
             </Link>
             <Link
               href="/conservation"
               className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all"
             >
-              🌊🪼 Learn Our Mission
+             Learn Our Mission
             </Link>
           </div>
           

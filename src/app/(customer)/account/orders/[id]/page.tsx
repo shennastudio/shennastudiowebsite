@@ -296,7 +296,7 @@ export default async function OrderDetailsPage({
                   }`}
                 >
                   {order.conservationDonation.status === 'DONATED'
-                    ? '✓ Donation Completed'
+                    ? 'Donation Completed'
                     : 'Donation Pending'}
                 </span>
               </div>

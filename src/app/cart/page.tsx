@@ -8,7 +8,7 @@ import Link from 'next/link'
 import CartUpsells from '@/components/CartUpsells'
 
 export default function CartPage() {
-  const { state, clearCart } = useCart();
+  const { state, clearCart, updateQuantity, removeItem } = useCart();
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -50,7 +50,7 @@ export default function CartPage() {
             href="/products"
             className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-full font-semibold transition-colors"
           >
-            🌊 Shop Ocean Collection
+            Shop Ocean Collection
           </Link>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function CartPage() {
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <h1 className="text-2xl font-bold text-gray-900">
-            🌊 Your Ocean Conservation Cart
+            Your Ocean Conservation Cart
           </h1>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default function CartPage() {
                   </div>
 
                   {/* Product Details */}
-                  <div className="flex-1 space-y-2">
+                  <div className="flex-1 space-y-3">
                     <div>
                       <h3 className="text-lg font-semibold text-gray-900">
                         {item.productName}
@@ -102,19 +102,75 @@ export default function CartPage() {
                           {item.variantName}
                         </p>
                       )}
+                      <div className="text-xs text-gray-500 mt-1">
+                        SKU: {item.variantSku || item.productSku}
+                      </div>
                     </div>
 
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-gray-600">
-                        ${item.price} × {item.quantity}
+                        ${item.price.toFixed(2)} each
                       </div>
                       <div className="text-lg font-bold text-teal-600">
                         {calculateItemTotal(item)}
                       </div>
                     </div>
 
-                    <div className="text-xs text-gray-500">
-                      SKU: {item.variantSku || item.productSku}
+                    {/* Quantity Controls */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-medium text-gray-700">Quantity:</span>
+                        <div className="flex items-center border border-gray-300 rounded-lg">
+                          <button
+                            onClick={() => {
+                              if (item.quantity > 1) {
+                                updateQuantity(item.id, item.quantity - 1);
+                              }
+                            }}
+                            className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={item.quantity <= 1}
+                          >
+                            −
+                          </button>
+                          <input
+                            type="number"
+                            min="1"
+                            max={item.stock}
+                            value={item.quantity}
+                            onChange={(e) => {
+                              const newQty = parseInt(e.target.value) || 1;
+                              if (newQty > 0 && newQty <= item.stock) {
+                                updateQuantity(item.id, newQty);
+                              }
+                            }}
+                            className="w-16 text-center border-x border-gray-300 py-1 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                          />
+                          <button
+                            onClick={() => {
+                              if (item.quantity < item.stock) {
+                                updateQuantity(item.id, item.quantity + 1);
+                              }
+                            }}
+                            className="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={item.quantity >= item.stock}
+                          >
+                            +
+                          </button>
+                        </div>
+                        {item.stock <= 10 && (
+                          <span className="text-xs text-orange-600 font-medium">
+                            Only {item.stock} left
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Remove Button */}
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="text-sm text-red-600 hover:text-red-700 font-medium hover:underline transition-colors"
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -165,7 +221,7 @@ export default function CartPage() {
               <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg border border-cyan-200 mb-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-teal-600 mb-2">
-                    🪼 {formatPrice(state.total * 0.10)}
+                    {formatPrice(state.total * 0.10)}
                   </div>
                   <div className="text-sm text-gray-700">
                     10% of your purchase goes to ocean conservation
@@ -179,7 +235,7 @@ export default function CartPage() {
               {/* Free Shipping Banner */}
               {state.subtotal >= 50 && (
                 <div className="bg-green-100 text-green-800 p-3 rounded-lg text-center">
-                  <div className="font-semibold">🎉 FREE SHIPPING</div>
+                  <div className="font-semibold">FREE SHIPPING</div>
                   <div className="text-sm">Your order qualifies for free shipping!</div>
                 </div>
               )}
@@ -190,7 +246,7 @@ export default function CartPage() {
                   onClick={handleCheckout}
                   className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg font-semibold transition-colors"
                 >
-                  🌊 Proceed to Checkout
+                  Proceed to Checkout
                 </button>
                 <button
                   onClick={clearCart}

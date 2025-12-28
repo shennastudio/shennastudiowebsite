@@ -117,7 +117,7 @@ function LoginForm() {
               className="w-full bg-teal-600 hover:bg-teal-700"
               disabled={loading}
             >
-              {loading ? 'Signing in...' : '🌊 Sign In'}
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
 
@@ -137,7 +137,7 @@ function LoginForm() {
 
           <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-teal-50 rounded-lg border border-teal-200">
             <p className="text-sm text-teal-900 text-center">
-              <strong>🎁 Member Benefits:</strong> Earn points, win prizes, and support ocean conservation!
+              <strong>Member Benefits:</strong> Earn points, win prizes, and support ocean conservation!
             </p>
           </div>
         </CardContent>

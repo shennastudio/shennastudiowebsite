@@ -60,7 +60,7 @@ export default async function ProductDetailPage({
                 )}
                 {product.featured && (
                   <div className="absolute top-4 right-4 bg-coral-500 text-white px-4 py-2 rounded-full text-sm font-semibold animate-pulse">
-                    ⭐ Featured
+                     Featured
                   </div>
                 )}
               </div>

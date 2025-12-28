@@ -198,7 +198,7 @@ export default function SPIPage() {
               href="/products"
               className="bg-white text-teal-600 px-10 py-4 rounded-full font-bold hover:bg-teal-50 transition-all shadow-lg"
             >
-              🌊 Shop Local Collection
+              Shop Local Collection
             </Link>
             <Link
               href="/contact"

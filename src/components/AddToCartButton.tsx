@@ -83,7 +83,7 @@ export default function AddToCartButton({
       setJustAdded(true);
       toast.success(
         <div>
-          <div className="font-semibold">Added to cart! 🌊</div>
+          <div className="font-semibold">Added to cart!</div>
           <div className="text-sm">{product.name}</div>
         </div>,
         {

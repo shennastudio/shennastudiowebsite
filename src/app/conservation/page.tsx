@@ -17,8 +17,8 @@ export default function ConservationPage() {
             Protecting marine life in Rio Grande Valley and South Padre Island. 10% of every purchase goes directly to conservation efforts.
           </p>
           <div className="flex justify-center items-center gap-8 text-cyan-100 text-lg">
-            <div>🌊🪼 Sea Turtle Protection</div>
-            <div>🐙 Whale Conservation</div>
+            <div>🌊Sea Turtle Protection</div>
+            <div>Whale Conservation</div>
             <div>🦈 Shark Research</div>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function ConservationPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <h3 className="text-xl font-semibold text-teal-700 mb-6">🌊🪼 Sea Turtle Protection</h3>
+              <h3 className="text-xl font-semibold text-teal-700 mb-6">🌊Sea Turtle Protection</h3>
               <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
@@ -164,7 +164,7 @@ export default function ConservationPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-teal-700 mb-6">🐙 Whale Conservation</h3>
+              <h3 className="text-xl font-semibold text-teal-700 mb-6">Whale Conservation</h3>
               <ul className="space-y-3 text-gray-600">
                 <li className="flex items-start">
                   <span className="text-green-500 mr-2">✓</span>
@@ -206,7 +206,7 @@ export default function ConservationPage() {
               href="/products"
               className="inline-block bg-coral-500 hover:bg-coral-600 text-white px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-105"
             >
-              🌊 Shop Ocean Collection
+              Shop Ocean Collection
             </Link>
             <Link
               href="/contact"

@@ -36,7 +36,7 @@ const projects = [
     location: 'South Padre Island',
     impact: 'Supported the rescue and rehabilitation of 325 endangered sea turtles, including 87 Kemp\'s Ridley sea turtles - the most critically endangered sea turtle species.',
     funds: '$18,500',
-    timeline: '2022-2024',
+    timeline: '2022-2025',
     image: '🌊🪼'
   },
   {
@@ -45,7 +45,7 @@ const projects = [
     location: 'Port Mansfield',
     impact: 'Helped restore 12 acres of critical coastal dune habitat, protecting nesting sites for sea turtles and shorebirds while preventing coastal erosion.',
     funds: '$12,000',
-    timeline: '2023-2024',
+    timeline: '2023-2025',
     image: '🏖️'
   },
   {
@@ -54,7 +54,7 @@ const projects = [
     location: 'Brownsville ISD',
     impact: 'Funded marine conservation education for 2,500+ students, creating the next generation of ocean stewards in the Rio Grande Valley.',
     funds: '$8,250',
-    timeline: '2023-2024',
+    timeline: '2023-2025',
     image: '🎓'
   },
   {
@@ -63,7 +63,7 @@ const projects = [
     location: 'Los Fresnos',
     impact: 'Protected critical wetland habitats serving as stopover points for 200+ migratory bird species and home to coastal marine life.',
     funds: '$14,000',
-    timeline: '2022-2024',
+    timeline: '2022-2025',
     image: '🦩'
   }
 ]
@@ -147,7 +147,7 @@ export default function ImpactPage() {
               href="/products"
               className="inline-block bg-teal-600 text-white px-10 py-4 rounded-full font-bold hover:bg-teal-700 transition-all transform hover:scale-105 shadow-lg"
             >
-              🌊 Shop All Bracelets
+              Shop All Bracelets
             </Link>
             <Link
               href="/conservation/partners"

@@ -93,7 +93,7 @@ export default async function AccountPage() {
           <div className="flex items-center justify-between">
             <div className="space-y-2">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-700 via-teal-700 to-blue-700 bg-clip-text text-transparent animate-gradient">
-                Welcome back, {user?.name}! 🌊
+                Welcome back, {user?.name}!
               </h1>
               <p className="text-slate-600 text-lg">Here's your ocean conservation journey</p>
             </div>
@@ -139,7 +139,7 @@ export default async function AccountPage() {
                     className="block w-full text-center bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                   >
                     <span className="flex items-center justify-center gap-2">
-                      🎁 View All Rewards
+                      View All Rewards
                     </span>
                   </Link>
                 </div>
@@ -199,7 +199,7 @@ export default async function AccountPage() {
                     href="/products"
                     className="inline-block bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                   >
-                    🛍️ Start Shopping
+                    Start Shopping
                   </Link>
                 </div>
               ) : (

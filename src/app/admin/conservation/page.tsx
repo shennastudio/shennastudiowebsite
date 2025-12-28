@@ -115,7 +115,7 @@ export default function ConservationPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Conservation Impact</h1>
           <p className="text-gray-600 mt-1">
-            Track donations and partnerships for marine conservation 🪼🐙🐚🐡
+            Track donations and partnerships for marine conservation🐙🐚🐡
           </p>
         </div>
         <button

@@ -26,7 +26,7 @@ export default function NewsletterSignup() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('🎉 Thanks for subscribing! Check your email for ocean updates.');
+        setMessage('Thanks for subscribing! Check your email for ocean updates.');
         setIsSuccess(true);
         setEmail('');
         setName('');
@@ -90,7 +90,7 @@ export default function NewsletterSignup() {
               disabled={loading}
               className="bg-white text-teal-600 hover:bg-gray-100 font-semibold whitespace-nowrap"
             >
-              {loading ? 'Subscribing...' : '🌊 Subscribe'}
+              {loading ? 'Subscribing...' : 'Subscribe'}
             </Button>
           </div>
           <p className="text-xs text-cyan-100 mt-3 text-center">

@@ -25,11 +25,11 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold text-teal-700 mb-6">
-                🌊🪼 How ShennaStudio Began
+               How ShennaStudio Began
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Founded in 2024, ShennaStudio started as a small family business creating handmade bracelets in our home studio in South Texas. 
+                  Founded in 2025, ShennaStudio started as a small family business creating handmade bracelets in our home studio in South Texas. 
                   What began as a creative outlet quickly evolved into a mission-driven enterprise when we witnessed firsthand 
                   the impact of plastic pollution and climate change on our local marine ecosystems.
                 </p>
@@ -182,13 +182,13 @@ export default function AboutPage() {
               href="/products"
               className="inline-block bg-white text-teal-600 px-8 py-3 rounded-full font-semibold hover:bg-cyan-50 transition-all transform hover:scale-105"
             >
-              🌊 Shop Ocean Collection
+              Shop Ocean Collection
             </Link>
             <Link
               href="/conservation"
               className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all"
             >
-              🌊🪼 Learn About Conservation
+             Learn About Conservation
             </Link>
           </div>
         </div>

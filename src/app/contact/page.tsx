@@ -173,7 +173,7 @@ export default function ContactPage() {
                       type="submit"
                       className="w-full bg-teal-600 text-white font-bold py-4 rounded-xl hover:bg-teal-700 transition-all shadow-lg flex items-center justify-center gap-2"
                     >
-                      <span>🌊 Send Message</span>
+                      <span>Send Message</span>
                     </button>
                   </form>
                 </div>

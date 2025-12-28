@@ -78,7 +78,7 @@ export default function MiniCart() {
 
         <p className="text-xs text-center text-gray-600">
           {cart.shipping === 0 ? (
-            <span className="text-green-600 font-semibold">🎉 Free shipping!</span>
+            <span className="text-green-600 font-semibold">Free shipping!</span>
           ) : (
             <span>
               Add {formatPrice(50 - cart.subtotal)} more for free shipping

@@ -239,7 +239,7 @@ export default function ProductRecommendations({
                       {/* Featured Badge */}
                       {product.featured && (
                         <div className="absolute top-3 right-3 bg-yellow-400 text-yellow-900 px-2 py-1 rounded-full text-xs font-semibold">
-                          ⭐ Featured
+                           Featured
                         </div>
                       )}
 
@@ -254,7 +254,7 @@ export default function ProductRecommendations({
 
                       {/* Marine Life Icon on Hover */}
                       <div className="absolute bottom-3 left-3 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        🪼
+                       
                       </div>
                     </div>
                   </Link>

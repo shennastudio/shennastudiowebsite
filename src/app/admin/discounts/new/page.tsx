@@ -139,7 +139,7 @@ export default function NewDiscountPage() {
             value={formData.code}
             onChange={handleChange}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent uppercase"
-            placeholder="SUMMER2024"
+            placeholder="SUMMER2025"
             required
           />
           <p className="text-sm text-gray-500 mt-1">Customers will enter this code at checkout</p>

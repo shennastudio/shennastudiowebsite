@@ -239,7 +239,7 @@ export default function CheckoutPage() {
 
                   {!session?.user && (
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <p className="text-sm text-blue-900 font-medium mb-1">💡 Want to track your order?</p>
+                      <p className="text-sm text-blue-900 font-medium mb-1">Want to track your order?</p>
                       <p className="text-xs text-blue-700">
                         You can checkout as a guest, or{' '}
                         <Link href="/admin/login?callbackUrl=/checkout" className="underline font-semibold hover:text-blue-900">
@@ -323,7 +323,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-teal-900 font-medium">Conservation Impact 🌊</p>
+                  <p className="text-sm text-teal-900 font-medium">Conservation Impact</p>
                   <p className="text-xs text-teal-700 mt-1">
                     10% (${(cart.subtotal * 0.10).toFixed(2)}) of your purchase supports marine conservation in South Padre Island
                   </p>
@@ -338,7 +338,7 @@ export default function CheckoutPage() {
 
                     <div className="bg-white/70 rounded-lg p-3 mb-3">
                       <p className="text-sm text-blue-900 font-semibold mb-1">
-                        This Purchase: +4 Points ⭐
+                        This Purchase: +4 Points 
                       </p>
                       <p className="text-xs text-blue-700">
                         Every purchase earns you points toward free items!
@@ -347,7 +347,7 @@ export default function CheckoutPage() {
 
                     <div className="space-y-2 text-xs">
                       <div className="bg-white/50 rounded p-2 border border-purple-200">
-                        <p className="font-bold text-purple-900 mb-1">🏆 How It Works:</p>
+                        <p className="font-bold text-purple-900 mb-1">How It Works:</p>
                         <div className="space-y-1 text-purple-800">
                           <div className="flex items-start gap-2">
                             <span className="text-green-600 font-bold">1.</span>
@@ -359,14 +359,14 @@ export default function CheckoutPage() {
                           </div>
                           <div className="flex items-start gap-2">
                             <span className="text-green-600 font-bold">3.</span>
-                            <span>Redeem → Get <strong>1 FREE item</strong> + FREE shipping! 🚢</span>
+                            <span>Redeem → Get <strong>1 FREE item</strong> + FREE shipping!</span>
                           </div>
                         </div>
                       </div>
 
                       <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded p-2 border border-yellow-300">
                         <p className="text-yellow-900 font-semibold">
-                          ✨ 40 Points = 1 Free Bracelet + Free Shipping!
+                           40 Points = 1 Free Bracelet + Free Shipping!
                         </p>
                       </div>
                     </div>

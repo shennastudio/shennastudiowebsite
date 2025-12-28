@@ -209,7 +209,7 @@ export default function AIFeaturesPage() {
               </div>
               <p className="text-slate-600 text-lg max-w-3xl">
                 Powered by advanced machine learning and AI algorithms to enhance customer experience,
-                optimize operations, and support ocean conservation efforts 🌊🐢
+                optimize operations, and support ocean conservation efforts🐢
               </p>
             </div>
             <div className="text-right">
