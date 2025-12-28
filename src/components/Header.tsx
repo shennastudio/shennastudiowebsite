@@ -21,7 +21,7 @@ export default function Header() {
   const [showMiniCart, setShowMiniCart] = useState(false);
   const [settings, setSettings] = useState<SiteSettings>({
     siteName: 'ShennaStudio',
-    logo: null,
+    logo: '/images/shenna-studio-logo.png',
   });
 
   useEffect(() => {
@@ -52,16 +52,14 @@ export default function Header() {
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-teal-600 flex items-center gap-2 hover:text-teal-700 transition-colors">
               {settings.logo ? (
-                <>
-                  <Image
-                    src={settings.logo}
-                    alt={settings.siteName}
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                  />
-                  <span className="hidden sm:inline">{settings.siteName}</span>
-                </>
+                <Image
+                  src={settings.logo}
+                  alt={settings.siteName}
+                  width={120}
+                  height={120}
+                  className="object-contain h-12 w-auto"
+                  priority
+                />
               ) : (
                 <>
                   <span className="text-3xl">🌊</span>

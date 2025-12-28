@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Footer() {
   return (
@@ -7,9 +8,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold text-coral-400">🌊</span>
-              <span className="text-2xl font-bold">ShennaStudio</span>
+            <div className="flex items-center">
+              <Image
+                src="/images/shenna-studio-logo.png"
+                alt="Shenna's Studio"
+                width={150}
+                height={150}
+                className="object-contain h-20 w-auto brightness-110"
+              />
             </div>
             <p className="text-cyan-200 leading-relaxed">
               Handcrafted bracelets inspired by ocean. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
