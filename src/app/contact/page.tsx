@@ -90,12 +90,24 @@ export default function ContactPage() {
                   <span className="text-2xl">📍</span>
                   <h3 className="text-xl font-bold text-gray-900">Our Studio</h3>
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  Rio Grande Valley / South Padre Island, Texas
+                <p className="text-gray-800 text-sm font-semibold mb-2">
+                  Shenna Studio LLC
                 </p>
-                <p className="text-gray-600 text-sm mt-2 font-medium">
+                <p className="text-gray-600 text-sm leading-relaxed mb-1">
+                  2436 Pablo Kisel Blvd
+                </p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-3">
+                  Brownsville, TX 78520
+                </p>
+                <p className="text-gray-600 text-sm leading-relaxed mb-1">
+                  Rio Grande Valley / South Padre Island
+                </p>
+                <a
+                  href="mailto:info@shennastudio.com"
+                  className="text-teal-600 hover:text-teal-700 text-sm font-medium mt-3 inline-block"
+                >
                   info@shennastudio.com
-                </p>
+                </a>
               </div>
             </div>
 

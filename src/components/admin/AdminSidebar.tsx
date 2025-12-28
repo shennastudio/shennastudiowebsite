@@ -104,14 +104,15 @@ export function AdminSidebar({ userName }: AdminSidebarProps) {
           {/* Sidebar Header */}
           <div className="flex h-16 items-center justify-between border-b border-slate-700/50 px-6">
             <Link href="/admin" className="flex items-center gap-3 group">
-              <Image
-                src="/images/shenna-studio-logo.png"
-                alt="ShennaStudio"
-                width={120}
-                height={120}
-                className="h-8 w-auto brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity"
-                priority
-              />
+              <div className="relative h-12 w-32">
+                <Image
+                  src="/images/shenna-studio-logo.png"
+                  alt="ShennaStudio"
+                  fill
+                  className="object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity"
+                  priority
+                />
+              </div>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
