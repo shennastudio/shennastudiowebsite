@@ -51,7 +51,7 @@ export default function Header() {
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-28">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="text-2xl font-bold text-teal-600 flex items-center gap-2 hover:text-teal-700 transition-colors">
@@ -59,9 +59,9 @@ export default function Header() {
                 <Image
                   src={settings.logo}
                   alt={settings.siteName}
-                  width={300}
-                  height={300}
-                  className="object-contain h-20 w-auto"
+                  width={400}
+                  height={400}
+                  className="object-contain h-24 w-auto"
                   priority
                 />
               ) : (
