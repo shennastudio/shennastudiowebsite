@@ -55,6 +55,7 @@ model User {
   orderNotes      OrderNote[]
   reviews         ProductReview[]
   inventoryTransactions InventoryTransaction[]
+  calendarEvents  CalendarEvent[]
 
   @@map("users")
 }
@@ -749,6 +750,54 @@ model EmailLog {
   @@index([template])
   @@index([archived])
   @@map("email_logs")
+}
+
+// ============================================================================
+// CALENDAR & EVENTS
+// ============================================================================
+
+model CalendarEvent {
+  id          String   @id @default(cuid())
+  title       String
+  description String?  @db.Text
+
+  // Date and time
+  date        DateTime
+  time        String   // Store as HH:MM format
+  endTime     String?  // Optional end time
+  allDay      Boolean  @default(false)
+
+  // Categorization
+  category    String   @default("general") // general, meeting, deadline, personal, marketing
+  color       String   @default("from-blue-500 to-cyan-500") // Tailwind gradient
+
+  // Location and attendees
+  location    String?
+  attendees   String[] // Email addresses
+
+  // Recurring events
+  recurring   Boolean  @default(false)
+  recurringPattern String? // daily, weekly, monthly, yearly
+  recurringEnd DateTime?
+
+  // Reminders
+  reminder    Boolean  @default(false)
+  reminderTime Int?    // Minutes before event
+
+  // Status
+  status      String   @default("scheduled") // scheduled, completed, cancelled
+
+  // Owner
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([date])
+  @@index([category])
+  @@map("calendar_events")
 }
 
 // ============================================================================

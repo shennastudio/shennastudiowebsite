@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { fetchProductBySlug } from '@/app/actions';
 import { notFound } from 'next/navigation';
 import ProductRecommendations from '@/components/ProductRecommendations';
+import AddToCartButton from '@/components/AddToCartButton';
 
 export default async function ProductDetailPage({
   params,
@@ -162,16 +163,19 @@ export default async function ProductDetailPage({
 
               {/* Add to Cart Button */}
               <div className="space-y-4">
-                <button
-                  disabled={displayStock === 0}
-                  className={`w-full py-4 rounded-lg font-semibold text-lg transition-all transform ${
-                    displayStock > 0
-                      ? 'bg-teal-600 hover:bg-teal-700 text-white hover:scale-105'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  {displayStock > 0 ? '🛒 Add to Cart' : 'Out of Stock'}
-                </button>
+                <AddToCartButton
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    sku: product.sku,
+                    basePrice: product.basePrice,
+                    images: product.images,
+                    conservationPercentage: product.conservationPercentage,
+                    conservationFocus: product.conservationFocus,
+                  }}
+                  variant={variant}
+                  stock={displayStock}
+                />
                 <Link
                   href="/products"
                   className="block w-full text-center border-2 border-teal-600 text-teal-600 py-4 rounded-lg font-semibold hover:bg-teal-50 transition-colors"
