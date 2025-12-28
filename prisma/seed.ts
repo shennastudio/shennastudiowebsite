@@ -29,22 +29,22 @@ async function main() {
   // USERS
   // ===========================
 
-  // ADMIN PASSWORD (SECURE - CHANGE THIS!): ShennaStudio2025!Ocean#SecureAdmin
-  const hashedPassword = await bcrypt.hash('ShennaStudio2025!Ocean#SecureAdmin', 10)
+  // ADMIN PASSWORD (SECURE): Sh3nn@R0ng3l!2025$Ocean#Admin
+  const hashedPassword = await bcrypt.hash('Sh3nn@R0ng3l!2025$Ocean#Admin', 10)
   const customerPassword = await bcrypt.hash('customer123', 10)
 
   const admin = await prisma.user.create({
     data: {
-      email: 'admin@shennastudio.com',
+      email: 'shenna.rangel@yahoo.com',
       password: hashedPassword,
-      name: 'Admin User',
+      name: 'Shenna Rangel',
       role: 'ADMIN',
     },
   })
 
   console.log('🔐 ADMIN LOGIN CREDENTIALS:')
-  console.log('   Email: admin@shennastudio.com')
-  console.log('   Password: ShennaStudio2025!Ocean#SecureAdmin')
+  console.log('   Email: shenna.rangel@yahoo.com')
+  console.log('   Password: Sh3nn@R0ng3l!2025$Ocean#Admin')
   console.log('')
 
   const customer1 = await prisma.user.create({
@@ -764,7 +764,7 @@ async function main() {
   console.log('   - 3 email logs')
   console.log('   - 1 conservation partner\n')
   console.log('🔑 Login credentials:')
-  console.log('   Admin: admin@shennastudio.com / admin123')
+  console.log('   Admin: shenna.rangel@yahoo.com / Sh3nn@R0ng3l!2025$Ocean#Admin')
   console.log('   Customer: sarah.ocean@example.com / customer123')
   console.log('   Customer: mike.turtle@example.com / customer123')
   console.log('   Customer: lisa.waves@example.com / customer123\n')
