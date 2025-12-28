@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
+import { sendShippingNotificationEmail } from '@/lib/email/send-email';
 
 const bulkOrderSchema = z.object({
   orderIds: z.array(z.string()).min(1),
@@ -70,10 +71,31 @@ export async function POST(req: Request) {
             break;
         }
 
-        await prisma.order.update({
+        const updatedOrder = await prisma.order.update({
           where: { id: orderId },
           data: updateData,
+          include: {
+            items: {
+              include: {
+                variant: {
+                  include: {
+                    product: true,
+                  },
+                },
+              },
+            },
+          },
         });
+
+        // Send shipping notification email if order was marked as shipped
+        if (action === 'mark_shipped' && trackingNumber) {
+          try {
+            await sendShippingNotificationEmail(updatedOrder);
+          } catch (emailError) {
+            console.error('Failed to send shipping notification:', emailError);
+            // Don't fail the order update if email fails
+          }
+        }
 
         updated++;
       } catch (error: any) {

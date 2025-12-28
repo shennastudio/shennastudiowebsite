@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Package, DollarSign, TrendingUp, Clock, Search, Filter, Truck, CheckCircle, XCircle } from 'lucide-react';
+import { Package, DollarSign, TrendingUp, Clock, Search, Filter, Truck, CheckCircle, XCircle, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 interface Order {
   id: string;
@@ -447,6 +448,7 @@ export default function OrdersPage() {
                     <th className="pb-3 font-semibold">Status</th>
                     <th className="pb-3 font-semibold">Tracking</th>
                     <th className="pb-3 font-semibold">Date</th>
+                    <th className="pb-3 font-semibold">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -503,6 +505,14 @@ export default function OrdersPage() {
                       </td>
                       <td className="py-4 text-sm text-gray-600">
                         {new Date(order.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="py-4">
+                        <Link href={`/admin/orders/${order.id}/invoice`}>
+                          <Button size="sm" variant="outline" className="flex items-center gap-1">
+                            <FileText className="h-3 w-3" />
+                            Invoice
+                          </Button>
+                        </Link>
                       </td>
                     </tr>
                   ))}
