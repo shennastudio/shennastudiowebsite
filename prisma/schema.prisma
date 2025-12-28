@@ -56,6 +56,7 @@ model User {
   reviews         ProductReview[]
   inventoryTransactions InventoryTransaction[]
   calendarEvents  CalendarEvent[]
+  blogPosts       BlogPost[] @relation("BlogAuthor")
 
   @@map("users")
 }
@@ -867,4 +868,37 @@ model ShippingLabel {
   @@index([orderId])
   @@index([trackingNumber])
   @@map("shipping_labels")
+}
+
+// ============================================================================
+// BLOG MANAGEMENT SYSTEM
+// ============================================================================
+
+model BlogPost {
+  id             String    @id @default(cuid())
+  title          String
+  slug           String    @unique
+  excerpt        String?   @db.Text
+  content        String    @db.Text
+  featuredImage  String?
+  category       String?
+  tags           String[]  // Array of tags
+  featured       Boolean   @default(false)
+  published      Boolean   @default(false)
+  publishedAt    DateTime?
+
+  // Author relationship
+  authorId       String
+  author         User      @relation("BlogAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Indexes for performance
+  @@index([slug])
+  @@index([category])
+  @@index([published, publishedAt])
+  @@index([featured, published])
+  @@index([authorId])
+  @@map("blog_posts")
 }

@@ -20,7 +20,8 @@ import {
   Menu,
   X,
   ChevronRight,
-  Calendar
+  Calendar,
+  FileText
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -60,6 +61,7 @@ export function AdminSidebar({ userName }: AdminSidebarProps) {
     {
       title: 'Marketing',
       items: [
+        { href: '/admin/blog', label: 'Blog Posts', icon: FileText, color: 'from-purple-400 to-pink-500' },
         { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare, color: 'from-sky-400 to-blue-500' },
         { href: '/admin/email', label: 'Email Client', icon: Mail, color: 'from-cyan-400 to-teal-500' },
         { href: '/admin/email-logs', label: 'Email Logs', icon: Mail, color: 'from-slate-400 to-gray-500' },
