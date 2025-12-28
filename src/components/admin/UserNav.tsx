@@ -43,33 +43,33 @@ export function UserNav({ user }: UserNavProps) {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 bg-gray-800 border-gray-700 text-gray-100" align="end" forceMount>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-semibold text-white">{user.name || 'Admin User'}</p>
-            <p className="text-xs text-gray-400">{user.email}</p>
+            <p className="text-sm font-semibold">{user.name || 'Admin User'}</p>
+            <p className="text-xs text-muted-foreground">{user.email}</p>
             {user.role && (
-              <p className="text-xs text-gray-500 uppercase font-semibold">{user.role}</p>
+              <p className="text-xs text-muted-foreground uppercase font-semibold">{user.role}</p>
             )}
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator className="bg-gray-700" />
-        <DropdownMenuItem asChild className="text-gray-300 focus:bg-gray-700 focus:text-white cursor-pointer">
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild className="cursor-pointer">
           <a href="/admin/account" className="flex items-center">
             <UserIcon className="mr-2 h-4 w-4" />
             <span>My Account</span>
           </a>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild className="text-gray-300 focus:bg-gray-700 focus:text-white cursor-pointer">
+        <DropdownMenuItem asChild className="cursor-pointer">
           <a href="/admin/settings" className="flex items-center">
             <SettingsIcon className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </a>
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="bg-gray-700" />
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => signOut({ callbackUrl: '/admin/login' })}
-          className="text-red-400 focus:bg-red-900/20 focus:text-red-300 cursor-pointer"
+          className="text-red-600 focus:text-red-700 cursor-pointer"
         >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Sign Out</span>

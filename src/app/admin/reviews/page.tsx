@@ -134,49 +134,49 @@ export default function ReviewsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-white">Review Moderation</h1>
-        <p className="text-gray-400 mt-1">Approve, reject, or delete product reviews</p>
+        <h1 className="text-3xl font-bold text-gray-900">Review Moderation</h1>
+        <p className="text-gray-600 mt-1">Approve, reject, or delete product reviews</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="bg-gray-800 border-gray-700">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Total Reviews</CardTitle>
-            <MessageSquare className="h-4 w-4 text-gray-400" />
+            <CardTitle className="text-sm font-medium">Total Reviews</CardTitle>
+            <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{summary.totalReviews}</div>
+            <div className="text-2xl font-bold">{summary.totalReviews}</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Pending Review</CardTitle>
+            <CardTitle className="text-sm font-medium">Pending Review</CardTitle>
             <Eye className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{summary.pendingReviews}</div>
+            <div className="text-2xl font-bold">{summary.pendingReviews}</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Approved</CardTitle>
+            <CardTitle className="text-sm font-medium">Approved</CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{summary.approvedReviews}</div>
+            <div className="text-2xl font-bold">{summary.approvedReviews}</div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gray-800 border-gray-700">
+        <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-gray-300">Average Rating</CardTitle>
+            <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
             <Star className="h-4 w-4 text-yellow-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-white">{summary.averageRating.toFixed(1)}</div>
+            <div className="text-2xl font-bold">{summary.averageRating.toFixed(1)}</div>
           </CardContent>
         </Card>
       </div>
@@ -190,7 +190,7 @@ export default function ReviewsPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               statusFilter === status
                 ? 'bg-cyan-600 text-white'
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700 border border-gray-700'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
             }`}
           >
             {status.charAt(0).toUpperCase() + status.slice(1)} ({statusCounts[status]})
@@ -201,22 +201,22 @@ export default function ReviewsPage() {
       {/* Reviews List */}
       <div className="space-y-4">
         {loading ? (
-          <Card className="bg-gray-800 border-gray-700">
+          <Card>
             <CardContent className="py-12">
-              <div className="text-center text-gray-400">Loading reviews...</div>
+              <div className="text-center text-gray-500">Loading reviews...</div>
             </CardContent>
           </Card>
         ) : reviews.length === 0 ? (
-          <Card className="bg-gray-800 border-gray-700">
+          <Card>
             <CardContent className="py-12">
-              <div className="text-center text-gray-400">
+              <div className="text-center text-gray-500">
                 No {statusFilter !== 'all' ? statusFilter : ''} reviews found
               </div>
             </CardContent>
           </Card>
         ) : (
           reviews.map((review) => (
-            <Card key={review.id} className="overflow-hidden bg-gray-800 border-gray-700">
+            <Card key={review.id} className="overflow-hidden">
               <CardContent className="p-6">
                 <div className="flex gap-6">
                   {/* Product Image */}
@@ -237,10 +237,10 @@ export default function ReviewsPage() {
                     {/* Header */}
                     <div className="flex items-start justify-between gap-4 mb-3">
                       <div>
-                        <h3 className="font-semibold text-lg text-white">{review.product.name}</h3>
+                        <h3 className="font-semibold text-lg text-gray-900">{review.product.name}</h3>
                         <div className="flex items-center gap-3 mt-1">
                           {renderStars(review.rating)}
-                          <span className="text-sm text-gray-400">
+                          <span className="text-sm text-gray-600">
                             {review.rating.toFixed(1)} / 5.0
                           </span>
                         </div>
@@ -270,12 +270,12 @@ export default function ReviewsPage() {
                     </div>
 
                     {/* Review Text */}
-                    <p className="text-gray-300 mb-4 whitespace-pre-wrap">{review.body}</p>
+                    <p className="text-gray-700 mb-4 whitespace-pre-wrap">{review.body}</p>
 
                     {/* User & Date Info */}
-                    <div className="flex items-center justify-between text-sm text-gray-400 mb-4">
+                    <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
                       <div>
-                        <span className="font-medium text-gray-300">{review.user.name}</span>
+                        <span className="font-medium text-gray-900">{review.user.name}</span>
                         <span className="mx-2">•</span>
                         <span>{review.user.email}</span>
                       </div>
@@ -295,7 +295,7 @@ export default function ReviewsPage() {
                         <Button
                           onClick={() => handleReviewAction(review.id, 'approve')}
                           size="sm"
-                          className="flex items-center gap-2 bg-green-600 hover:bg-green-700"
+                          className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white"
                         >
                           <CheckCircle className="h-4 w-4" />
                           Approve
@@ -306,7 +306,7 @@ export default function ReviewsPage() {
                           onClick={() => handleReviewAction(review.id, 'reject')}
                           size="sm"
                           variant="outline"
-                          className="flex items-center gap-2 border-red-300 text-red-600 hover:bg-red-50"
+                          className="flex items-center gap-2 text-red-600 hover:bg-red-50"
                         >
                           <XCircle className="h-4 w-4" />
                           Reject
@@ -316,7 +316,7 @@ export default function ReviewsPage() {
                         onClick={() => handleReviewAction(review.id, 'delete')}
                         size="sm"
                         variant="outline"
-                        className="flex items-center gap-2 border-gray-300 text-gray-600 hover:bg-gray-50"
+                        className="flex items-center gap-2"
                       >
                         <Trash2 className="h-4 w-4" />
                         Delete
