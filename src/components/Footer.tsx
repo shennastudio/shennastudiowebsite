@@ -149,7 +149,7 @@ export default function Footer() {
             <div className="text-center">
               <h3 className="text-lg font-semibold text-coral-400 mb-2">Website Developed By</h3>
               <a
-                href="https://www.softwarepros.org"
+                href="https://softwarepros.org"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block text-xl font-bold text-white hover:text-coral-400 transition-colors mb-3"
