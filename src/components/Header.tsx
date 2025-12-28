@@ -84,6 +84,9 @@ export default function Header() {
             <Link href="/conservation" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
               Conservation
             </Link>
+            <Link href="/blog" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
+              Blog
+            </Link>
             <Link href="/about" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
               About
             </Link>
@@ -198,6 +201,13 @@ export default function Header() {
                 onClick={closeMobileMenu}
               >
                 Conservation
+              </Link>
+              <Link
+                href="/blog"
+                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
+                onClick={closeMobileMenu}
+              >
+                Blog
               </Link>
               <Link
                 href="/about"

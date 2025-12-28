@@ -6,13 +6,9 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center items-center gap-4 mb-6">
-            <span className="text-5xl animate-pulse">🌊</span>
-            <h1 className="text-4xl md:text-6xl font-bold text-white">
-              Our Ocean Conservation Mission
-            </h1>
-            <span className="text-5xl animate-pulse">🌊🪼</span>
-          </div>
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            Our Ocean Conservation Mission
+          </h1>
           <p className="text-xl text-cyan-100 mb-8 max-w-4xl mx-auto leading-relaxed">
             ShennaStudio was born from love of ocean and commitment to protecting marine life in Rio Grande Valley and South Padre Island.
           </p>

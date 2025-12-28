@@ -6,20 +6,16 @@ export default function ConservationPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-700 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center items-center gap-6 mb-6">
-            <span className="text-6xl animate-pulse">🌊🪼</span>
-            <h1 className="text-4xl md:text-6xl font-bold text-white">
-              Ocean Conservation Mission
-            </h1>
-            <span className="text-6xl animate-pulse">🐙</span>
-          </div>
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            Ocean Conservation Mission
+          </h1>
           <p className="text-xl text-cyan-100 mb-8 max-w-4xl mx-auto leading-relaxed">
             Protecting marine life in Rio Grande Valley and South Padre Island. 10% of every purchase goes directly to conservation efforts.
           </p>
           <div className="flex justify-center items-center gap-8 text-cyan-100 text-lg">
-            <div>🌊Sea Turtle Protection</div>
+            <div>Sea Turtle Protection</div>
             <div>Whale Conservation</div>
-            <div>🦈 Shark Research</div>
+            <div>Shark Research</div>
           </div>
         </div>
       </section>

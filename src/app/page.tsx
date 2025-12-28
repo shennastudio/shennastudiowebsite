@@ -41,23 +41,11 @@ export default async function Home() {
     <div className="min-h-screen">
       {/* Ocean Hero Section */}
       <section className="relative bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-20 overflow-hidden">
-        {/* Ocean Wave Background */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-10 left-10 text-6xl animate-pulse">🌊🌊🪼</div>
-          <div className="absolute top-20 right-20 text-5xl animate-bounce">🐙</div>
-          <div className="absolute bottom-10 left-1/4 text-4xl animate-pulse">🦈</div>
-          <div className="absolute bottom-20 right-10 text-3xl animate-bounce">🐠</div>
-        </div>
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center">
-            <div className="flex justify-center items-center gap-3 mb-6">
-              <span className="text-5xl animate-pulse">🌊</span>
-              <h1 className="text-4xl md:text-6xl font-bold text-white">
-                ShennaStudio Ocean Collection
-              </h1>
-              <span className="text-4xl animate-pulse">🌊</span>
-            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+              ShennaStudio Ocean Collection
+            </h1>
             <p className="text-xl md:text-2xl text-cyan-100 mb-8 max-w-4xl mx-auto leading-relaxed">
               Handcrafted bracelets inspired by the beauty of South Padre Island. Each purchase protects marine life - 10% supports sea turtles, whales, and ocean conservation in Rio Grande Valley.
             </p>
@@ -172,13 +160,9 @@ export default async function Home() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="flex justify-center items-center gap-3 mb-4">
-              <span className="text-3xl">🌊🪼</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-teal-700">
-                Ocean Treasures
-              </h2>
-              <span className="text-3xl">🐙</span>
-            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-4">
+              Ocean Treasures
+            </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Handpicked bracelets inspired by sea turtles, whales, and marine life of South Padre Island
             </p>
@@ -201,14 +185,10 @@ export default async function Home() {
                     </div>
                   )}
                   {productDisplay.product?.featured && (
-                    <div className="absolute top-4 right-4 bg-coral-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
+                    <div className="absolute top-4 right-4 bg-coral-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                       Featured
                     </div>
                   )}
-                  {/* Marine Life Icons */}
-                  <div className="absolute top-4 left-4 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                  
-                  </div>
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -251,36 +231,23 @@ export default async function Home() {
       <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="flex justify-center items-center gap-3 mb-4">
-              <span className="text-3xl">🌊🪼</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-teal-700">
-                Why Choose ShennaStudio Ocean Collection?
-              </h2>
-              <span className="text-3xl">🐙</span>
-            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-4">
+              Why Choose ShennaStudio Ocean Collection?
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-cyan-100">
-              <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🌊🪼</span>
-              </div>
               <h3 className="text-xl font-semibold text-teal-700 mb-2">Sea Turtle Conservation</h3>
               <p className="text-gray-600">Each purchase directly supports sea turtle protection programs in South Padre Island nesting grounds.</p>
             </div>
 
             <div className="text-center bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-teal-100">
-              <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🐙</span>
-              </div>
               <h3 className="text-xl font-semibold text-teal-700 mb-2">Ocean-Quality Materials</h3>
               <p className="text-gray-600">Premium, sustainably sourced materials that honor marine life and coastal ecosystems.</p>
             </div>
 
             <div className="text-center bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-teal-100">
-              <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🦈</span>
-              </div>
               <h3 className="text-xl font-semibold text-teal-700 mb-2">Shark Research Support</h3>
               <p className="text-gray-600">10% of every sale funds important shark research and ocean conservation efforts.</p>
             </div>
@@ -295,13 +262,9 @@ export default async function Home() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="flex justify-center items-center gap-3 mb-4">
-              <span className="text-3xl">📸</span>
-              <h2 className="text-3xl md:text-4xl font-bold text-teal-700">
-                Follow Us on Instagram
-              </h2>
-              <span className="text-3xl">📸</span>
-            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-4">
+              Follow Us on Instagram
+            </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
               Join our ocean-loving community! See behind-the-scenes bracelet making, conservation updates, and customer photos at @shennastudio
             </p>
@@ -341,13 +304,9 @@ export default async function Home() {
       {/* Ocean Conservation CTA Section */}
       <section className="bg-gradient-to-r from-teal-600 via-blue-600 to-cyan-700 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center items-center gap-4 mb-6">
-            <span className="text-4xl">🌊🪼</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-white">
-              Protect Ocean Life with Every Bracelet
-            </h2>
-            <span className="text-4xl">🐙</span>
-          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+            Protect Ocean Life with Every Bracelet
+          </h2>
           <p className="text-xl text-cyan-100 mb-8 max-w-3xl mx-auto">
             Each purchase directly supports sea turtle conservation, whale protection, and marine ecosystem restoration in Rio Grande Valley and South Padre Island.
           </p>

@@ -192,7 +192,6 @@ export default async function AccountPage() {
 
               {orders.length === 0 ? (
                 <div className="text-center py-16">
-                  <div className="text-8xl mb-4 animate-bounce">🌊</div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">No Orders Yet</h3>
                   <p className="text-slate-600 mb-6">Start your ocean conservation journey today!</p>
                   <Link
