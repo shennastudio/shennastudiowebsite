@@ -734,6 +734,9 @@ model EmailLog {
   openedAt    DateTime?
   clickedAt   DateTime?
 
+  // Archive flag for admin email client
+  archived    Boolean       @default(false)
+
   // Error handling
   error       String?
   retryCount  Int          @default(0)
@@ -744,6 +747,7 @@ model EmailLog {
   @@index([to, createdAt])
   @@index([status])
   @@index([template])
+  @@index([archived])
   @@map("email_logs")
 }
 
