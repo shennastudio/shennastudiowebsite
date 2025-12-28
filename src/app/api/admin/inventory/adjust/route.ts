@@ -8,7 +8,7 @@ const adjustmentSchema = z.object({
   variantId: z.string(),
   type: z.enum(['RESTOCK', 'ADJUSTMENT', 'SALE']),
   quantity: z.number().int(),
-  reason: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
         variantId,
         type,
         quantity: Math.abs(quantity),
-        reason: reason || `${type} adjustment`,
+        notes: reason || `${type} adjustment`,
         userId: session.user.id,
       },
       include: {

@@ -134,7 +134,7 @@ export async function POST(req: Request) {
                   variantId: variant.id,
                   type: 'RESTOCK',
                   quantity: row.variantStock,
-                  reason: 'Initial stock from CSV import',
+                  notes: 'Initial stock from CSV import',
                   userId: session.user.id,
                 },
               });

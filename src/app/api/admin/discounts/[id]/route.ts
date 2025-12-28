@@ -36,17 +36,7 @@ export async function GET(
     const discount = await prisma.discountCode.findUnique({
       where: { id },
       include: {
-        usages: {
-          include: {
-            order: {
-              select: {
-                id: true,
-                total: true,
-                createdAt: true,
-              },
-            },
-          },
-        },
+        usages: true,
       },
     });
 

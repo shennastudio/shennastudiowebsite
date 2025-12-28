@@ -124,7 +124,7 @@ export async function POST(req: Request) {
                   variantId: variant.id,
                   type: data.stockType === 'add' ? 'RESTOCK' : 'ADJUSTMENT',
                   quantity: Math.abs(newStock - variant.stock),
-                  reason: `Bulk edit: ${data.stockType} ${data.stockAdjustment}`,
+                  notes: `Bulk edit: ${data.stockType} ${data.stockAdjustment}`,
                   userId: session.user.id,
                 },
               });
