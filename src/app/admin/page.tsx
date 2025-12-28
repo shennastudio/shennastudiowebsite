@@ -4,6 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import EnhancedDashboard from '@/components/admin/EnhancedDashboard';
 
 interface DashboardStats {
   totalProducts: number;
@@ -107,16 +108,8 @@ export default async function AdminDashboard() {
         </p>
       </div>
 
-      <Suspense fallback={
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatsCardSkeleton />
-          <StatsCardSkeleton />
-          <StatsCardSkeleton />
-          <StatsCardSkeleton />
-        </div>
-      }>
-        <DashboardStats />
-      </Suspense>
+      {/* Enhanced Analytics Dashboard */}
+      <EnhancedDashboard />
 
       {/* Quick Actions */}
       <Card>
@@ -149,6 +142,24 @@ export default async function AdminDashboard() {
             <div className="flex-1">
               <h3 className="font-semibold">View Orders</h3>
               <p className="text-sm text-muted-foreground">Process and manage orders</p>
+            </div>
+          </a>
+          <a
+            href="/admin/discounts/new"
+            className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex-1">
+              <h3 className="font-semibold">Create Discount</h3>
+              <p className="text-sm text-muted-foreground">Set up promotional codes</p>
+            </div>
+          </a>
+          <a
+            href="/admin/conservation"
+            className="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex-1">
+              <h3 className="font-semibold">Conservation Impact</h3>
+              <p className="text-sm text-muted-foreground">Track donations and partners</p>
             </div>
           </a>
         </CardContent>

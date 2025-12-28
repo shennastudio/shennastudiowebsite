@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { UserNav } from '@/components/admin/UserNav';
+import { Toaster } from 'react-hot-toast';
 
 export default async function AdminLayout({
   children,
@@ -13,6 +14,7 @@ export default async function AdminLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Toaster position="top-right" />
       {/* Admin Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,6 +35,12 @@ export default async function AdminLayout({
                 </Link>
                 <Link href="/admin/orders" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Orders
+                </Link>
+                <Link href="/admin/discounts" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Discounts
+                </Link>
+                <Link href="/admin/conservation" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Conservation
                 </Link>
                 <Link href="/admin/settings" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Settings

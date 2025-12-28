@@ -1,0 +1,172 @@
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { z } from 'zod';
+
+const updateDiscountSchema = z.object({
+  code: z.string().min(3).max(50).toUpperCase().optional(),
+  type: z.enum(['PERCENTAGE', 'FIXED_AMOUNT', 'FREE_SHIPPING', 'BUY_X_GET_Y']).optional(),
+  value: z.number().positive().optional(),
+  description: z.string().optional(),
+  internalNote: z.string().optional(),
+  usageLimit: z.number().int().positive().nullable().optional(),
+  usageLimitPerCustomer: z.number().int().positive().nullable().optional(),
+  minPurchaseAmount: z.number().positive().nullable().optional(),
+  applicableProducts: z.array(z.string()).optional(),
+  applicableCategories: z.array(z.string()).optional(),
+  startsAt: z.string().nullable().optional(),
+  expiresAt: z.string().nullable().optional(),
+  isActive: z.boolean().optional(),
+});
+
+// GET - Get single discount code
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const discount = await prisma.discountCode.findUnique({
+      where: { id: params.id },
+      include: {
+        usages: {
+          include: {
+            order: {
+              select: {
+                id: true,
+                total: true,
+                createdAt: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!discount) {
+      return NextResponse.json(
+        { error: 'Discount code not found' },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(discount);
+  } catch (error) {
+    console.error('Fetch discount error:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch discount code' },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH - Update discount code
+export async function PATCH(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await req.json();
+    const validatedData = updateDiscountSchema.parse(body);
+
+    // Check if discount exists
+    const existingDiscount = await prisma.discountCode.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!existingDiscount) {
+      return NextResponse.json(
+        { error: 'Discount code not found' },
+        { status: 404 }
+      );
+    }
+
+    // If updating code, check it's not already taken
+    if (validatedData.code && validatedData.code !== existingDiscount.code) {
+      const codeExists = await prisma.discountCode.findUnique({
+        where: { code: validatedData.code },
+      });
+
+      if (codeExists) {
+        return NextResponse.json(
+          { error: 'Discount code already exists' },
+          { status: 400 }
+        );
+      }
+    }
+
+    const discount = await prisma.discountCode.update({
+      where: { id: params.id },
+      data: {
+        ...validatedData,
+        startsAt: validatedData.startsAt ? new Date(validatedData.startsAt) : undefined,
+        expiresAt: validatedData.expiresAt ? new Date(validatedData.expiresAt) : undefined,
+      },
+    });
+
+    return NextResponse.json(discount);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Invalid discount data', details: error.errors },
+        { status: 400 }
+      );
+    }
+
+    console.error('Update discount error:', error);
+    return NextResponse.json(
+      { error: 'Failed to update discount code' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE - Delete discount code
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Check if discount exists
+    const existingDiscount = await prisma.discountCode.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!existingDiscount) {
+      return NextResponse.json(
+        { error: 'Discount code not found' },
+        { status: 404 }
+      );
+    }
+
+    await prisma.discountCode.delete({
+      where: { id: params.id },
+    });
+
+    return NextResponse.json({ message: 'Discount code deleted successfully' });
+  } catch (error) {
+    console.error('Delete discount error:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete discount code' },
+      { status: 500 }
+    );
+  }
+}

@@ -257,6 +257,9 @@ model ConservationDonation {
   status            DonationStatus  @default(PLEDGED)
   receiptUrl        String?
 
+  partnerId         String?
+  partner           ConservationPartner? @relation(fields: [partnerId], references: [id])
+
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
 
@@ -505,4 +508,271 @@ model UserBrowsingPattern {
   updatedAt         DateTime @updatedAt
 
   @@map("user_browsing_patterns")
+}
+
+// ============================================================================
+// DISCOUNT & PROMOTION SYSTEM
+// ============================================================================
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+  FREE_SHIPPING
+  BUY_X_GET_Y
+}
+
+model DiscountCode {
+  id              String       @id @default(cuid())
+  code            String       @unique
+  type            DiscountType
+  value           Float        // Percentage (0-100) or fixed amount
+
+  // Usage limits
+  usageLimit      Int?         // Max total uses
+  usageLimitPerCustomer Int?   // Max uses per customer
+  usageCount      Int          @default(0)
+
+  // Validity
+  startsAt        DateTime?
+  expiresAt       DateTime?
+  isActive        Boolean      @default(true)
+
+  // Conditions
+  minPurchaseAmount Float?      // Minimum order amount
+  applicableProducts String[]   // Product IDs (empty = all)
+  applicableCategories String[] // Category IDs (empty = all)
+
+  // Metadata
+  description     String?
+  internalNote    String?      // Admin notes
+  createdBy       String?      // Admin user ID
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([code])
+  @@index([isActive, expiresAt])
+  @@map("discount_codes")
+}
+
+model DiscountUsage {
+  id            String   @id @default(cuid())
+  discountId    String
+  orderId       String
+  userId        String?
+  discountAmount Float
+  usedAt        DateTime @default(now())
+
+  @@index([discountId])
+  @@index([orderId])
+  @@map("discount_usage")
+}
+
+// ============================================================================
+// CONSERVATION ENHANCEMENT
+// ============================================================================
+
+model ConservationPartner {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  logo            String?
+  website         String?
+  contactEmail    String?
+
+  // Focus areas
+  focusAreas      String[] // ["Sea Turtles", "Whales", "Coral Reefs"]
+  location        String?  // "South Padre Island", "Rio Grande Valley"
+
+  // Metrics
+  totalDonations  Float    @default(0)
+  donationCount   Int      @default(0)
+
+  // Status
+  isActive        Boolean  @default(true)
+  verifiedAt      DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  donations       ConservationDonation[]
+
+  @@map("conservation_partners")
+}
+
+model ConservationImpact {
+  id              String   @id @default(cuid())
+
+  // Time period
+  periodStart     DateTime
+  periodEnd       DateTime
+  periodType      String   // "daily", "weekly", "monthly", "yearly"
+
+  // Metrics
+  totalDonations  Float
+  orderCount      Int
+
+  // Impact estimates (calculated)
+  turtlesSaved    Int?     // Estimated based on donation amount
+  oceanCleaned    Float?   // Square meters
+  coralRestored   Float?   // Square meters
+
+  // Breakdown by focus
+  focusBreakdown  Json     // { "Sea Turtles": 500, "Whales": 300, ... }
+
+  createdAt       DateTime @default(now())
+
+  @@index([periodType, periodStart])
+  @@map("conservation_impact")
+}
+
+// ============================================================================
+// PRODUCT REVIEWS
+// ============================================================================
+
+model ProductReview {
+  id          String   @id @default(cuid())
+  productId   String
+  userId      String?
+
+  // Review content
+  rating      Int      // 1-5 stars
+  title       String?
+  body        String
+  photos      String[] // Photo URLs
+
+  // Customer info (for non-logged-in reviews)
+  customerName  String?
+  customerEmail String?
+
+  // Moderation
+  isApproved  Boolean  @default(false)
+  isVerifiedPurchase Boolean @default(false)
+  approvedBy  String?  // Admin user ID
+  approvedAt  DateTime?
+
+  // Engagement
+  helpfulCount Int     @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([productId, isApproved])
+  @@index([rating])
+  @@map("product_reviews")
+}
+
+// ============================================================================
+// EMAIL SYSTEM
+// ============================================================================
+
+enum EmailTemplate {
+  ORDER_CONFIRMATION
+  SHIPPING_NOTIFICATION
+  DELIVERY_CONFIRMATION
+  ABANDONED_CART
+  WELCOME
+  PASSWORD_RESET
+  NEWSLETTER
+  PRODUCT_BACK_IN_STOCK
+}
+
+model EmailLog {
+  id          String        @id @default(cuid())
+  to          String
+  subject     String
+  template    EmailTemplate
+
+  // Content
+  htmlContent String?       @db.Text
+  variables   Json?         // Template variables
+
+  // Status
+  status      String        // sent, failed, pending, bounced
+  provider    String?       // resend, sendgrid, etc
+  providerId  String?       // External email ID
+
+  // Tracking
+  openedAt    DateTime?
+  clickedAt   DateTime?
+
+  // Error handling
+  error       String?
+  retryCount  Int          @default(0)
+
+  sentAt      DateTime?
+  createdAt   DateTime     @default(now())
+
+  @@index([to, createdAt])
+  @@index([status])
+  @@index([template])
+  @@map("email_logs")
+}
+
+// ============================================================================
+// SHIPPING MANAGEMENT
+// ============================================================================
+
+model ShippingZone {
+  id          String   @id @default(cuid())
+  name        String
+  countries   String[] // ISO country codes
+  states      String[] // State codes (for US)
+  zipCodes    String[] // Zip code patterns
+
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rates       ShippingRate[]
+
+  @@map("shipping_zones")
+}
+
+model ShippingRate {
+  id            String   @id @default(cuid())
+  zoneId        String
+  zone          ShippingZone @relation(fields: [zoneId], references: [id], onDelete: Cascade)
+
+  name          String
+  description   String?
+
+  // Pricing
+  basePrice     Float
+  pricePerPound Float?   // Additional charge per pound
+  freeAbove     Float?   // Free shipping threshold
+
+  // Conditions
+  minWeight     Float?
+  maxWeight     Float?
+
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([zoneId])
+  @@map("shipping_rates")
+}
+
+model ShippingLabel {
+  id              String   @id @default(cuid())
+  orderId         String
+
+  carrier         String   // USPS, FedEx, UPS
+  service         String   // Priority, Express, Ground
+  trackingNumber  String   @unique
+  labelUrl        String?  // PDF URL
+
+  cost            Float
+  weight          Float?
+
+  status          String   @default("created") // created, printed, shipped, delivered
+
+  createdAt       DateTime @default(now())
+  printedAt       DateTime?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+
+  @@index([orderId])
+  @@index([trackingNumber])
+  @@map("shipping_labels")
 }
