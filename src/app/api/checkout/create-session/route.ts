@@ -56,8 +56,8 @@ export async function POST(request: NextRequest) {
     // Calculate conservation donation (10% of subtotal)
     const conservationAmount = subtotal * 0.10;
 
-    // Calculate rewards points (1 point per $1)
-    const rewardsPoints = Math.floor(total);
+    // Calculate rewards points (4 points per purchase)
+    const rewardsPoints = 4;
 
     // Create Stripe line items from cart items
     const lineItems = items.map((item) => ({

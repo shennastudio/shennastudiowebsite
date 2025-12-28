@@ -95,13 +95,42 @@ export default async function RewardsPage() {
 
         {/* How to Earn Points */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-semibold mb-4">How to Earn Points</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-              <div className="text-3xl mb-2">🛍️</div>
-              <div className="font-semibold text-green-900">Make a Purchase</div>
-              <div className="text-sm text-green-700">1 point per $1 spent</div>
+          <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+            <span>🎮</span>
+            How to Earn Points
+          </h2>
+
+          {/* Main Earning Method - Highlighted */}
+          <div className="mb-6 p-6 bg-gradient-to-r from-green-50 to-teal-50 rounded-xl border-2 border-green-300">
+            <div className="flex items-center gap-4">
+              <div className="text-6xl">🛍️</div>
+              <div className="flex-1">
+                <div className="text-2xl font-bold text-green-900 mb-1">Make a Purchase</div>
+                <div className="text-lg font-semibold text-green-700">Earn 4 Points Per Purchase ⭐⭐⭐⭐</div>
+                <div className="text-sm text-green-600 mt-2">
+                  Every order earns you points • 10 purchases = 40 points = 1 FREE item!
+                </div>
+              </div>
             </div>
+          </div>
+
+          {/* Redemption Info - Highlighted */}
+          <div className="mb-6 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border-2 border-yellow-300">
+            <div className="flex items-center gap-4">
+              <div className="text-6xl">🎁</div>
+              <div className="flex-1">
+                <div className="text-2xl font-bold text-orange-900 mb-1">Redeem Your Points</div>
+                <div className="text-lg font-semibold text-orange-700">40 Points = 1 Free Bracelet + FREE Shipping! 🚢</div>
+                <div className="text-sm text-orange-600 mt-2">
+                  Choose any item from our collection when you reach 40 points
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Ways to Earn */}
+          <div className="mb-2 text-sm font-semibold text-gray-700">Bonus Points:</div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <div className="text-3xl mb-2">🎂</div>
               <div className="font-semibold text-blue-900">Birthday Bonus</div>
@@ -112,10 +141,10 @@ export default async function RewardsPage() {
               <div className="font-semibold text-purple-900">Refer a Friend</div>
               <div className="text-sm text-purple-700">50 points per referral</div>
             </div>
-            <div className="p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+            <div className="p-4 bg-pink-50 rounded-lg border border-pink-200">
               <div className="text-3xl mb-2">🏆</div>
-              <div className="font-semibold text-yellow-900">Unlock Achievements</div>
-              <div className="text-sm text-yellow-700">Bonus points for milestones</div>
+              <div className="font-semibold text-pink-900">Unlock Achievements</div>
+              <div className="text-sm text-pink-700">Bonus points for milestones</div>
             </div>
           </div>
         </div>

@@ -37,8 +37,8 @@ export async function createOrder(params: CreateOrderParams) {
   // Calculate conservation donation (10% of subtotal by default)
   const conservationAmount = subtotal * 0.10;
 
-  // Calculate rewards points (1 point per $1 spent)
-  const rewardsPoints = Math.floor(total);
+  // Calculate rewards points (4 points per purchase)
+  const rewardsPoints = 4;
 
   // Create order in database
   const order = await prisma.order.create({

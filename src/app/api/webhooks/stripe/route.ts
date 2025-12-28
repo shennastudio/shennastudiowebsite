@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
         const customerEmail = session.customer_email || session.customer_details?.email || '';
         const customerName = shippingAddress.name;
         const conservationAmount = subtotal * 0.10;
-        const rewardsPoints = Math.floor(total);
+        const rewardsPoints = 4; // 4 points per purchase
 
         if (customerEmail) {
           await sendEmail({

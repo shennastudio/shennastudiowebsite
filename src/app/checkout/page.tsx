@@ -330,11 +330,46 @@ export default function CheckoutPage() {
                 </div>
 
                 {session?.user && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                    <p className="text-sm text-blue-900 font-medium">Rewards Points 🎁</p>
-                    <p className="text-xs text-blue-700 mt-1">
-                      You&apos;ll earn {Math.floor(cart.total)} points with this purchase!
-                    </p>
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-200 rounded-xl p-5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-2xl">🎁</span>
+                      <p className="text-base text-blue-900 font-bold">Rewards Points</p>
+                    </div>
+
+                    <div className="bg-white/70 rounded-lg p-3 mb-3">
+                      <p className="text-sm text-blue-900 font-semibold mb-1">
+                        This Purchase: +4 Points ⭐
+                      </p>
+                      <p className="text-xs text-blue-700">
+                        Every purchase earns you points toward free items!
+                      </p>
+                    </div>
+
+                    <div className="space-y-2 text-xs">
+                      <div className="bg-white/50 rounded p-2 border border-purple-200">
+                        <p className="font-bold text-purple-900 mb-1">🏆 How It Works:</p>
+                        <div className="space-y-1 text-purple-800">
+                          <div className="flex items-start gap-2">
+                            <span className="text-green-600 font-bold">1.</span>
+                            <span>Make a purchase → Earn <strong>4 points</strong></span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-green-600 font-bold">2.</span>
+                            <span>Collect <strong>40 points</strong> (10 purchases)</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-green-600 font-bold">3.</span>
+                            <span>Redeem → Get <strong>1 FREE item</strong> + FREE shipping! 🚢</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded p-2 border border-yellow-300">
+                        <p className="text-yellow-900 font-semibold">
+                          ✨ 40 Points = 1 Free Bracelet + Free Shipping!
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
               </CardContent>
