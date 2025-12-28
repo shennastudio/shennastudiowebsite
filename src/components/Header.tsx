@@ -59,9 +59,9 @@ export default function Header() {
                 <Image
                   src={settings.logo}
                   alt={settings.siteName}
-                  width={120}
-                  height={120}
-                  className="object-contain h-12 w-auto"
+                  width={300}
+                  height={300}
+                  className="object-contain h-20 w-auto"
                   priority
                 />
               ) : (
