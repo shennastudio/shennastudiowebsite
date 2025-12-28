@@ -2,8 +2,72 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { fetchFeaturedProducts } from '@/app/actions'
 
+interface ProductWithScore {
+  id: string;
+  name: string;
+  slug: string;
+  basePrice: number;
+  categoryId: string | null;
+  description: string | null;
+  conservationFocus: string | null;
+  featured: boolean;
+  score: number;
+  reason?: string;
+  variants?: Array<{
+    id: string;
+    stock: number;
+  }>;
+  images?: Array<{
+    id: string;
+    url: string;
+    alt: string | null;
+    position: number;
+  }>;
+}
+
+interface RecommendationsResponse {
+  success: boolean;
+  recommendations: ProductWithScore[];
+  count: number;
+  personalized: boolean;
+}
+
+async function fetchPersonalizedRecommendations(limit: number = 6): Promise<RecommendationsResponse> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/api/recommendations/personalized?limit=${limit}`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      console.error('Failed to fetch recommendations:', response.statusText);
+      return {
+        success: false,
+        recommendations: [],
+        count: 0,
+        personalized: false,
+      };
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching personalized recommendations:', error);
+    return {
+      success: false,
+      recommendations: [],
+      count: 0,
+      personalized: false,
+    };
+  }
+}
+
 export default async function Home() {
-  const featuredProducts = await fetchFeaturedProducts(6);
+  const [featuredProducts, recommendationsData] = await Promise.all([
+    fetchFeaturedProducts(6),
+    fetchPersonalizedRecommendations(6),
+  ]);
+
+  const { recommendations, personalized } = recommendationsData;
 
   return (
     <div className="min-h-screen">
@@ -46,6 +110,95 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Personalized Recommendations Section */}
+      {recommendations.length > 0 && (
+        <section className="py-16 bg-gradient-to-br from-blue-50 to-cyan-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <div className="flex justify-center items-center gap-3 mb-4">
+                <span className="text-3xl">🌊</span>
+                <h2 className="text-3xl md:text-4xl font-bold text-teal-700">
+                  {personalized ? 'Recommended For You' : 'Featured Products'}
+                </h2>
+                <span className="text-3xl">🌊</span>
+              </div>
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                {personalized
+                  ? 'Handpicked ocean treasures based on your style'
+                  : 'Discover our most popular ocean-inspired bracelets'
+                }
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {recommendations.map((product) => {
+                const totalStock = product.variants?.reduce((sum, v) => sum + v.stock, 0) || 0;
+                const firstImage = product.images?.[0]?.url;
+
+                return (
+                  <div key={product.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all border border-teal-100 group">
+                    <div className="relative h-64 bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
+                      {firstImage ? (
+                        <Image
+                          src={firstImage}
+                          alt={product.images?.[0]?.alt || product.name}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <div className="text-6xl opacity-30">🌊🐢</div>
+                        </div>
+                      )}
+                      {product.reason && (
+                        <div className="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                          {product.reason}
+                        </div>
+                      )}
+                      {/* Marine Life Icons */}
+                      <div className="absolute top-4 left-4 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
+                        🌊🐢
+                      </div>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-600 mb-4 line-clamp-2">
+                        {product.description || 'Ocean-inspired bracelet'}
+                      </p>
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-2xl font-bold text-teal-600">
+                          ${product.basePrice.toFixed(2)}
+                        </span>
+                        <span className="text-sm px-2 py-1 rounded-full bg-green-100 text-green-800">
+                          {totalStock > 0 ? `${totalStock} in stock` : 'Out of Stock'}
+                        </span>
+                      </div>
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-2 rounded-lg transition-all transform hover:scale-105"
+                      >
+                        🌊 View Details
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="text-center mt-12">
+              <Link
+                href="/products"
+                className="inline-block border-2 border-teal-600 text-teal-600 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition-colors"
+              >
+                {personalized ? 'Explore More Ocean Treasures' : 'View All Products'}
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Featured Products */}
       <section className="py-16 bg-white">

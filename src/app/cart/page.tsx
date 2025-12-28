@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
+import CartUpsells from '@/components/CartUpsells'
 
 export default function CartPage() {
   const { state, clearCart } = useCart();
@@ -119,6 +120,14 @@ export default function CartPage() {
                 </div>
               </div>
             ))}
+
+            {/* Frequently Bought Together - Show for first/main item */}
+            {state.items.length > 0 && (
+              <CartUpsells
+                productId={state.items[0].productId}
+                productName={state.items[0].productName}
+              />
+            )}
           </div>
 
           {/* Cart Summary */}

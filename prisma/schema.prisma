@@ -399,3 +399,110 @@ model PrizeRedemption {
 
   @@map("prize_redemptions")
 }
+
+// Analytics Event Types
+enum AnalyticsEventType {
+  PRODUCT_VIEW
+  ADD_TO_CART
+  REMOVE_FROM_CART
+  PURCHASE
+  SEARCH
+  CATEGORY_VIEW
+}
+
+// Analytics Events - Privacy-conscious event tracking
+// Stores aggregated browsing behavior for recommendation improvement
+// No PII (personally identifiable information) stored
+model AnalyticsEvent {
+  id                String              @id @default(cuid())
+
+  // Event metadata
+  eventType         AnalyticsEventType
+  timestamp         DateTime            @default(now())
+
+  // User tracking (anonymized session, optional user link)
+  sessionId         String              // Anonymous session identifier
+  userId            String?             // Optional: linked user for personalization
+
+  // Product interaction tracking
+  productId         String?
+  variantId         String?
+  categoryId        String?
+
+  // Event-specific data (JSON for flexibility)
+  metadata          Json?               // Additional context (price, quantity, search query, etc.)
+
+  // Referrer and context (privacy-conscious)
+  referrer          String?             // Where user came from (page, not external sites)
+  deviceType        String?             // mobile, tablet, desktop
+
+  // Index for efficient querying
+  @@index([eventType, timestamp])
+  @@index([userId, timestamp])
+  @@index([sessionId, timestamp])
+  @@index([productId, timestamp])
+  @@map("analytics_events")
+}
+
+// Aggregated Product Analytics - Privacy-conscious summary data
+// Used for trending, popularity, and recommendation scoring
+model ProductAnalytics {
+  id                String   @id @default(cuid())
+  productId         String   @unique
+
+  // View metrics (last 30 days rolling window)
+  viewsLast7Days    Int      @default(0)
+  viewsLast30Days   Int      @default(0)
+
+  // Cart metrics
+  addToCartLast7Days    Int  @default(0)
+  addToCartLast30Days   Int  @default(0)
+
+  // Purchase metrics
+  purchasesLast7Days    Int  @default(0)
+  purchasesLast30Days   Int  @default(0)
+
+  // Conversion rates (calculated)
+  viewToCartRate    Float    @default(0) // addToCart / views
+  cartToPurchaseRate Float   @default(0) // purchases / addToCart
+
+  // Trending score (0-100, calculated daily)
+  trendingScore     Float    @default(0)
+
+  // Last updated timestamp
+  lastUpdated       DateTime @default(now()) @updatedAt
+
+  @@map("product_analytics")
+}
+
+// User Browsing Patterns - Privacy-conscious behavioral summary
+// Stores aggregated patterns, not individual events
+model UserBrowsingPattern {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+
+  // Category preferences (JSON array of {categoryId, score})
+  categoryPreferences Json   @default("[]")
+
+  // Price range preferences
+  avgPriceViewed    Float?
+  minPriceViewed    Float?
+  maxPriceViewed    Float?
+
+  // Conservation interests
+  conservationInterests Json @default("[]") // Array of conservation focuses
+
+  // Behavioral patterns
+  totalViews        Int      @default(0)
+  totalAddToCarts   Int      @default(0)
+  totalPurchases    Int      @default(0)
+
+  // Time-based patterns
+  preferredBrowsingTimes Json @default("[]") // Hours of day when most active
+
+  // Last updated
+  lastActivity      DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("user_browsing_patterns")
+}

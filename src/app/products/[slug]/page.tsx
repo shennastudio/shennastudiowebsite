@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { fetchProductBySlug } from '@/app/actions';
 import { notFound } from 'next/navigation';
+import ProductRecommendations from '@/components/ProductRecommendations';
 
 export default async function ProductDetailPage({
   params,
@@ -208,6 +209,15 @@ export default async function ProductDetailPage({
           </div>
         </div>
       </section>
+
+      {/* You May Also Like - Product Recommendations */}
+      <ProductRecommendations
+        productId={product.id}
+        limit={6}
+        recommendationType="similar"
+        title="You May Also Like"
+        className="bg-white"
+      />
 
       {/* Conservation CTA */}
       <section className="bg-gradient-to-r from-teal-600 to-blue-600 py-12">

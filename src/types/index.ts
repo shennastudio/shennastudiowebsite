@@ -285,3 +285,148 @@ export interface PayloadVariant {
 export function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
+
+// ============================================================================
+// ANALYTICS TYPES
+// ============================================================================
+
+/**
+ * Analytics event types for tracking user behavior
+ */
+export type AnalyticsEventType =
+  | 'PRODUCT_VIEW'
+  | 'ADD_TO_CART'
+  | 'REMOVE_FROM_CART'
+  | 'PURCHASE'
+  | 'SEARCH'
+  | 'CATEGORY_VIEW';
+
+/**
+ * Device type for analytics
+ */
+export type DeviceType = 'mobile' | 'tablet' | 'desktop';
+
+/**
+ * Base analytics event interface
+ */
+export interface AnalyticsEvent {
+  id: string;
+  eventType: AnalyticsEventType;
+  sessionId: string;
+  userId?: string | null;
+  timestamp: Date;
+  productId?: string | null;
+  variantId?: string | null;
+  categoryId?: string | null;
+  metadata?: Record<string, unknown>;
+  referrer?: string | null;
+  deviceType?: DeviceType | null;
+}
+
+/**
+ * Product analytics metrics
+ */
+export interface ProductAnalytics {
+  id: string;
+  productId: string;
+  viewsLast7Days: number;
+  viewsLast30Days: number;
+  addToCartLast7Days: number;
+  addToCartLast30Days: number;
+  purchasesLast7Days: number;
+  purchasesLast30Days: number;
+  viewToCartRate: number;
+  cartToPurchaseRate: number;
+  trendingScore: number;
+  lastUpdated: Date;
+}
+
+/**
+ * Category preference for user browsing patterns
+ */
+export interface CategoryPreference {
+  categoryId: string;
+  score: number; // 0-1, higher = stronger preference
+}
+
+/**
+ * User browsing pattern for personalization
+ */
+export interface UserBrowsingPattern {
+  id: string;
+  userId: string;
+  categoryPreferences: CategoryPreference[];
+  avgPriceViewed?: number | null;
+  minPriceViewed?: number | null;
+  maxPriceViewed?: number | null;
+  conservationInterests: string[];
+  totalViews: number;
+  totalAddToCarts: number;
+  totalPurchases: number;
+  preferredBrowsingTimes: number[]; // Hours of day (0-23)
+  lastActivity: Date;
+  updatedAt: Date;
+}
+
+/**
+ * Analytics tracking request payload
+ */
+export interface AnalyticsTrackingRequest {
+  eventType: AnalyticsEventType;
+  sessionId: string;
+  data?: {
+    productId?: string;
+    variantId?: string;
+    categoryId?: string;
+    price?: number;
+    quantity?: number;
+    source?: string;
+    orderId?: string;
+    totalAmount?: number;
+    itemCount?: number;
+    products?: Array<{
+      productId: string;
+      variantId: string;
+      quantity: number;
+      price: number;
+    }>;
+    query?: string;
+    [key: string]: unknown;
+  };
+}
+
+/**
+ * Product with analytics score (for recommendations)
+ */
+export interface ProductWithAnalytics extends Product {
+  analytics?: ProductAnalytics;
+  trendingScore?: number;
+  recommendationReason?: string;
+}
+
+/**
+ * Analytics summary for dashboard
+ */
+export interface AnalyticsSummary {
+  totalViews: number;
+  totalAddToCarts: number;
+  totalPurchases: number;
+  conversionRate: number;
+  averageOrderValue: number;
+  topProducts: Array<{
+    productId: string;
+    productName: string;
+    views: number;
+    purchases: number;
+  }>;
+  topCategories: Array<{
+    categoryId: string;
+    categoryName: string;
+    views: number;
+  }>;
+  deviceBreakdown: {
+    mobile: number;
+    tablet: number;
+    desktop: number;
+  };
+}

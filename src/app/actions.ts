@@ -243,3 +243,49 @@ export async function fetchProductById(id: string) {
     return null;
   }
 }
+
+export async function fetchSimilarProducts(productId: string, limit: number = 6) {
+  try {
+    // Get the current product to find similar ones
+    const currentProduct = await prisma.product.findUnique({
+      where: { id: productId },
+      select: {
+        categoryId: true,
+      },
+    });
+
+    if (!currentProduct) {
+      return [];
+    }
+
+    // Fetch products from the same category, excluding the current product
+    const products = await prisma.product.findMany({
+      where: {
+        AND: [
+          { id: { not: productId } },
+          currentProduct.categoryId
+            ? { categoryId: currentProduct.categoryId }
+            : {},
+        ],
+      },
+      include: {
+        category: true,
+        variants: true,
+        images: {
+          orderBy: {
+            position: 'asc',
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      take: limit,
+    });
+
+    return products.map(transformProduct);
+  } catch (error) {
+    console.error('Error fetching similar products:', error);
+    return [];
+  }
+}
