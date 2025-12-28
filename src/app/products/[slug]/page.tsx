@@ -113,7 +113,7 @@ export default async function ProductDetailPage({
               {product.conservationPercentage > 0 && (
                 <div className="bg-gradient-to-r from-green-50 to-teal-50 border border-green-200 rounded-lg p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <span className="text-3xl">🐢</span>
+                    <span className="text-3xl">🪼</span>
                     <div>
                       <h3 className="text-lg font-semibold text-green-900">
                         Conservation Impact
@@ -223,11 +223,11 @@ export default async function ProductDetailPage({
       <section className="bg-gradient-to-r from-teal-600 to-blue-600 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center items-center gap-3 mb-4">
-            <span className="text-3xl">🐢</span>
+            <span className="text-3xl">🪼</span>
             <h2 className="text-3xl font-bold text-white">
               Protect Ocean Life with Every Purchase
             </h2>
-            <span className="text-3xl">🐋</span>
+            <span className="text-3xl">🐙</span>
           </div>
           <p className="text-xl text-cyan-100 mb-6">
             Learn how your purchase supports sea turtles, whales, and marine ecosystems

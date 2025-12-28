@@ -15,9 +15,10 @@ export default function Footer() {
               Handcrafted bracelets inspired by ocean. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
             </p>
             <div className="flex space-x-4 text-2xl">
-              <span>🐢</span>
-              <span>🐋</span>
-              <span>🦈</span>
+              <span>🪼</span>
+              <span>🐙</span>
+              <span>🐚</span>
+              <span>🐡</span>
             </div>
           </div>
 
@@ -112,24 +113,24 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-cyan-700">
           <div className="text-center">
             <div className="flex justify-center items-center gap-4 mb-4">
-              <span className="text-3xl">🐢</span>
+              <span className="text-3xl">🪼</span>
               <span className="text-xl font-bold text-coral-400">10% Donated</span>
-              <span className="text-3xl">🐋</span>
+              <span className="text-3xl">🐙</span>
             </div>
             <p className="text-cyan-200 mb-4">
               Every purchase supports marine life conservation in Rio Grande Valley and South Padre Island
             </p>
             <div className="flex justify-center items-center gap-8 text-sm text-cyan-300">
               <div className="flex items-center gap-2">
-                <span>🐢</span>
+                <span>🪼</span>
                 <span>Sea Turtle Protection</span>
               </div>
               <div className="flex items-center gap-2">
-                <span>🐋</span>
+                <span>🐙</span>
                 <span>Whale Conservation</span>
               </div>
               <div className="flex items-center gap-2">
-                <span>🦈</span>
+                <span>🐡</span>
                 <span>Shark Research</span>
               </div>
             </div>
@@ -143,7 +144,7 @@ export default function Footer() {
             <div className="flex items-center gap-4 mt-4 md:mt-0">
               <span>Made with 🌊 in Texas</span>
               <span>•</span>
-              <span>Supporting 🐢🐋🦈</span>
+              <span>Supporting 🪼🐙🐡🐚</span>
             </div>
           </div>
         </div>

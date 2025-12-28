@@ -254,7 +254,7 @@ export default function ProductRecommendations({
 
                       {/* Marine Life Icon on Hover */}
                       <div className="absolute bottom-3 left-3 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        🐢
+                        🪼
                       </div>
                     </div>
                   </Link>

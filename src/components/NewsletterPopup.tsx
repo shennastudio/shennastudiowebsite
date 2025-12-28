@@ -176,7 +176,7 @@ export default function NewsletterPopup() {
                   <span className="leading-tight">Exclusive Deals</span>
                 </div>
                 <div>
-                  <span className="block text-xl sm:text-2xl mb-1">🌊🐢</span>
+                  <span className="block text-xl sm:text-2xl mb-1">🌊🪼</span>
                   <span className="leading-tight">Sea Turtle Updates</span>
                 </div>
                 <div>

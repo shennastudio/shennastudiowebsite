@@ -165,7 +165,7 @@ export default function CartPage() {
               <div className="bg-gradient-to-r from-blue-50 to-cyan-50 p-4 rounded-lg border border-cyan-200 mb-6">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-teal-600 mb-2">
-                    🐢 {formatPrice(state.total * 0.10)}
+                    🪼 {formatPrice(state.total * 0.10)}
                   </div>
                   <div className="text-sm text-gray-700">
                     10% of your purchase goes to ocean conservation

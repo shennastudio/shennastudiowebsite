@@ -153,7 +153,7 @@ export default async function AccountPage() {
                   🌊 Shop Products
                 </Link>
                 <Link href="/conservation" className="block text-teal-600 hover:text-teal-700">
-                  🐢 Conservation Impact
+                  🪼 Conservation Impact
                 </Link>
               </div>
             </div>

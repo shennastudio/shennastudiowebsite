@@ -11,7 +11,7 @@ export default function AboutPage() {
             <h1 className="text-4xl md:text-6xl font-bold text-white">
               Our Ocean Conservation Mission
             </h1>
-            <span className="text-5xl animate-pulse">🌊🐢</span>
+            <span className="text-5xl animate-pulse">🌊🪼</span>
           </div>
           <p className="text-xl text-cyan-100 mb-8 max-w-4xl mx-auto leading-relaxed">
             ShennaStudio was born from love of ocean and commitment to protecting marine life in Rio Grande Valley and South Padre Island.
@@ -25,7 +25,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl font-bold text-teal-700 mb-6">
-                🌊🐢 How ShennaStudio Began
+                🌊🪼 How ShennaStudio Began
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
@@ -48,7 +48,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="bg-gradient-to-br from-cyan-100 to-blue-100 rounded-2xl p-8">
                 <div className="text-center">
-                  <div className="text-6xl mb-4">🐋</div>
+                  <div className="text-6xl mb-4">🐙</div>
                   <div className="text-2xl font-bold text-teal-700 mb-2">
                     Every Bracelet Makes a Difference
                   </div>
@@ -76,7 +76,7 @@ export default function AboutPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-xl border border-cyan-100">
-              <div className="text-4xl mb-4">🌊🐢</div>
+              <div className="text-4xl mb-4">🌊🪼</div>
               <h3 className="text-xl font-bold text-teal-700 mb-2">
                 Sea Turtle Protection
               </h3>
@@ -87,7 +87,7 @@ export default function AboutPage() {
             </div>
 
             <div className="text-center bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-xl border border-blue-100">
-              <div className="text-4xl mb-4">🐋</div>
+              <div className="text-4xl mb-4">🐙</div>
               <h3 className="text-xl font-bold text-teal-700 mb-2">
                 Whale Conservation
               </h3>
@@ -188,7 +188,7 @@ export default function AboutPage() {
               href="/conservation"
               className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all"
             >
-              🌊🐢 Learn About Conservation
+              🌊🪼 Learn About Conservation
             </Link>
           </div>
         </div>

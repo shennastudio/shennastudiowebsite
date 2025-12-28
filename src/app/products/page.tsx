@@ -76,7 +76,7 @@ export default async function ProductsPage() {
 
                     {/* Marine Life Icon */}
                     <div className="absolute bottom-4 left-4 text-3xl opacity-0 group-hover:opacity-100 transition-opacity">
-                      🐢
+                      🪼🐙
                     </div>
                   </div>
 
@@ -109,7 +109,7 @@ export default async function ProductsPage() {
                     {productDisplay.product.conservationPercentage > 0 && (
                       <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
                         <div className="flex items-center gap-2 text-sm text-green-800">
-                          <span>🐢</span>
+                          <span>🪼</span>
                           <span className="font-semibold">
                             {productDisplay.product.conservationPercentage}% supports conservation
                           </span>
@@ -141,11 +141,11 @@ export default async function ProductsPage() {
       <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center items-center gap-3 mb-4">
-            <span className="text-3xl">🐢</span>
+            <span className="text-3xl">🐚🪼</span>
             <h2 className="text-3xl font-bold text-teal-700">
               Every Purchase Protects Ocean Life
             </h2>
-            <span className="text-3xl">🐋</span>
+            <span className="text-3xl">🐙🐡</span>
           </div>
           <p className="text-lg text-gray-700 mb-6">
             10% of every bracelet sale supports sea turtle conservation, whale protection,

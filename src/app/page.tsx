@@ -75,8 +75,8 @@ export default async function Home() {
       <section className="relative bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-20 overflow-hidden">
         {/* Ocean Wave Background */}
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-10 left-10 text-6xl animate-pulse">🌊🌊🐢</div>
-          <div className="absolute top-20 right-20 text-5xl animate-bounce">🐋</div>
+          <div className="absolute top-10 left-10 text-6xl animate-pulse">🌊🌊🪼</div>
+          <div className="absolute top-20 right-20 text-5xl animate-bounce">🐙</div>
           <div className="absolute bottom-10 left-1/4 text-4xl animate-pulse">🦈</div>
           <div className="absolute bottom-20 right-10 text-3xl animate-bounce">🐠</div>
         </div>
@@ -104,7 +104,7 @@ export default async function Home() {
                 href="/conservation"
                 className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all"
               >
-                🌊🌊🐢 Sea Turtle Conservation
+                🌊🌊🪼 Sea Turtle Conservation
               </Link>
             </div>
           </div>
@@ -148,7 +148,7 @@ export default async function Home() {
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <div className="text-6xl opacity-30">🌊🐢</div>
+                          <div className="text-6xl opacity-30">🌊🪼</div>
                         </div>
                       )}
                       {product.reason && (
@@ -158,7 +158,7 @@ export default async function Home() {
                       )}
                       {/* Marine Life Icons */}
                       <div className="absolute top-4 left-4 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                        🌊🐢
+                        🌊🪼
                       </div>
                     </div>
                     <div className="p-6">
@@ -205,11 +205,11 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="flex justify-center items-center gap-3 mb-4">
-              <span className="text-3xl">🌊🐢</span>
+              <span className="text-3xl">🌊🪼</span>
               <h2 className="text-3xl md:text-4xl font-bold text-teal-700">
                 Ocean Treasures
               </h2>
-              <span className="text-3xl">🐋</span>
+              <span className="text-3xl">🐙</span>
             </div>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Handpicked bracelets inspired by sea turtles, whales, and marine life of South Padre Island
@@ -239,7 +239,7 @@ export default async function Home() {
                   )}
                   {/* Marine Life Icons */}
                   <div className="absolute top-4 left-4 text-2xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    🌊🐢
+                    🌊🪼
                   </div>
                 </div>
                 <div className="p-6">
@@ -284,18 +284,18 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <div className="flex justify-center items-center gap-3 mb-4">
-              <span className="text-3xl">🌊🐢</span>
+              <span className="text-3xl">🌊🪼</span>
               <h2 className="text-3xl md:text-4xl font-bold text-teal-700">
                 Why Choose ShennaStudio Ocean Collection?
               </h2>
-              <span className="text-3xl">🐋</span>
+              <span className="text-3xl">🐙</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-cyan-100">
               <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🌊🐢</span>
+                <span className="text-3xl">🌊🪼</span>
               </div>
               <h3 className="text-xl font-semibold text-teal-700 mb-2">Sea Turtle Conservation</h3>
               <p className="text-gray-600">Each purchase directly supports sea turtle protection programs in South Padre Island nesting grounds.</p>
@@ -303,7 +303,7 @@ export default async function Home() {
 
             <div className="text-center bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow border border-teal-100">
               <div className="w-16 h-16 bg-cyan-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-3xl">🐋</span>
+                <span className="text-3xl">🐙</span>
               </div>
               <h3 className="text-xl font-semibold text-teal-700 mb-2">Ocean-Quality Materials</h3>
               <p className="text-gray-600">Premium, sustainably sourced materials that honor marine life and coastal ecosystems.</p>
@@ -324,11 +324,11 @@ export default async function Home() {
       <section className="bg-gradient-to-r from-teal-600 via-blue-600 to-cyan-700 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center items-center gap-4 mb-6">
-            <span className="text-4xl">🌊🐢</span>
+            <span className="text-4xl">🌊🪼</span>
             <h2 className="text-3xl md:text-4xl font-bold text-white">
               Protect Ocean Life with Every Bracelet
             </h2>
-            <span className="text-4xl">🐋</span>
+            <span className="text-4xl">🐙</span>
           </div>
           <p className="text-xl text-cyan-100 mb-8 max-w-3xl mx-auto">
             Each purchase directly supports sea turtle conservation, whale protection, and marine ecosystem restoration in Rio Grande Valley and South Padre Island.
@@ -344,7 +344,7 @@ export default async function Home() {
               href="/conservation"
               className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all"
             >
-              🌊🐢 Learn Our Mission
+              🌊🪼 Learn Our Mission
             </Link>
           </div>
           
