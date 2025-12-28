@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -20,8 +21,15 @@ export default async function AdminLayout({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
-              <Link href="/admin" className="text-xl font-bold text-blue-600">
-                ShennaStudio Admin
+              <Link href="/admin" className="flex items-center">
+                <Image
+                  src="/images/shenna-studio-logo.png"
+                  alt="ShennaStudio Admin"
+                  width={180}
+                  height={180}
+                  className="object-contain h-12 w-auto"
+                  priority
+                />
               </Link>
               <nav className="hidden md:flex space-x-4">
                 <Link href="/admin" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
@@ -38,6 +46,9 @@ export default async function AdminLayout({
                 </Link>
                 <Link href="/admin/discounts" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Discounts
+                </Link>
+                <Link href="/admin/reviews" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Reviews
                 </Link>
                 <Link href="/admin/conservation" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Conservation
