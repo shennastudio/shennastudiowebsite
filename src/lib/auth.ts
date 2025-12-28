@@ -26,11 +26,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Invalid credentials')
         }
 
-        // Only allow ADMIN and STAFF roles
-        if (user.role !== 'ADMIN' && user.role !== 'STAFF') {
-          throw new Error('Unauthorized - Admin access required')
-        }
-
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
           user.password
