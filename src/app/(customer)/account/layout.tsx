@@ -2,7 +2,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Card } from '@heroui/react';
+import { Button } from '@/components/ui/button';
 import {
   Package,
   Heart,
@@ -49,20 +49,19 @@ export default async function CustomerAccountLayout({
             <div className="flex items-center gap-3">
               <Link href="/products">
                 <Button
-                  color="default"
-                  variant="flat"
-                  startContent={<ShoppingBag className="w-4 h-4" />}
-                  className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold"
+                  variant="secondary"
+                  className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold border-0"
                 >
+                  <ShoppingBag className="w-4 h-4 mr-2" />
                   Continue Shopping
                 </Button>
               </Link>
               <Link href="/">
                 <Button
-                  variant="bordered"
-                  startContent={<Home className="w-4 h-4" />}
+                  variant="outline"
                   className="border-white/40 hover:bg-white/20 text-white font-semibold"
                 >
+                  <Home className="w-4 h-4 mr-2" />
                   Home
                 </Button>
               </Link>
@@ -115,12 +114,11 @@ export default async function CustomerAccountLayout({
             </div>
             <Link href="/conservation">
               <Button
-                color="default"
-                variant="flat"
-                endContent={<Gift className="w-4 h-4" />}
-                className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold"
+                variant="secondary"
+                className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold border-0"
               >
                 View Our Impact
+                <Gift className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </div>
