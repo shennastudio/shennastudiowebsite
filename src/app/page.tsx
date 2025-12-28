@@ -28,60 +28,13 @@ interface ProductWithScore {
   }>;
 }
 
-interface RecommendationsResponse {
-  success: boolean;
-  recommendations: ProductWithScore[];
-  count: number;
-  personalized: boolean;
-}
-
-async function fetchPersonalizedRecommendations(limit: number = 6): Promise<RecommendationsResponse> {
-  try {
-    // Skip during build time - server isn't running yet
-    if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_BASE_URL) {
-      return {
-        success: false,
-        recommendations: [],
-        count: 0,
-        personalized: false,
-      };
-    }
-
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/recommendations/personalized?limit=${limit}`, {
-      cache: 'no-store',
-      // Fail fast during build
-      signal: AbortSignal.timeout(3000),
-    });
-
-    if (!response.ok) {
-      return {
-        success: false,
-        recommendations: [],
-        count: 0,
-        personalized: false,
-      };
-    }
-
-    return await response.json();
-  } catch (error) {
-    // Silently fail during build/deployment
-    return {
-      success: false,
-      recommendations: [],
-      count: 0,
-      personalized: false,
-    };
-  }
-}
-
 export default async function Home() {
-  const [featuredProducts, recommendationsData] = await Promise.all([
-    fetchFeaturedProducts(6),
-    fetchPersonalizedRecommendations(6),
-  ]);
+  // Only fetch featured products during build
+  const featuredProducts = await fetchFeaturedProducts(6);
 
-  const { recommendations, personalized } = recommendationsData;
+  // Recommendations would require client-side session data
+  const recommendations: ProductWithScore[] = [];
+  const personalized = false;
 
   return (
     <div className="min-h-screen">
