@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { Waves, Lock } from 'lucide-react'
+import { Lock } from 'lucide-react'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -54,9 +54,15 @@ export default function AdminLoginPage() {
 
         {/* Branding on Image */}
         <div className="absolute inset-0 flex flex-col justify-end p-12 text-white">
-          <div className="flex items-center gap-3 mb-6">
-            <Waves className="h-12 w-12" />
-            <h1 className="text-5xl font-bold">ShennaStudio</h1>
+          <div className="flex items-center gap-4 mb-6">
+            <Image
+              src="/images/shenna-studio-logo.png"
+              alt="ShennaStudio"
+              width={200}
+              height={200}
+              className="object-contain h-16 w-auto"
+              priority
+            />
           </div>
           <p className="text-2xl font-light mb-2">Ocean-Inspired Bracelets</p>
           <p className="text-lg text-cyan-100 max-w-md">
@@ -69,10 +75,16 @@ export default function AdminLoginPage() {
       <div className="flex-1 flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           {/* Mobile Logo */}
-          <div className="lg:hidden text-center">
-            <div className="flex justify-center items-center gap-2 mb-4">
-              <Waves className="h-10 w-10 text-cyan-600" />
-              <h1 className="text-3xl font-bold text-gray-900">ShennaStudio</h1>
+          <div className="lg:hidden text-center mb-4">
+            <div className="flex justify-center">
+              <Image
+                src="/images/shenna-studio-logo.png"
+                alt="ShennaStudio"
+                width={180}
+                height={180}
+                className="object-contain h-12 w-auto"
+                priority
+              />
             </div>
           </div>
 
