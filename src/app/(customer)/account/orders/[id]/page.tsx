@@ -1,146 +1,89 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter, useParams } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, Package, Truck, MapPin, Calendar, DollarSign, Heart } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { ArrowLeft, Package, Truck, MapPin, DollarSign, Heart } from 'lucide-react';
 
-interface OrderDetails {
-  id: string;
-  orderNumber: string;
-  total: number;
-  subtotal: number;
-  shipping: number;
-  tax: number;
-  status: string;
-  createdAt: string;
-  shippedAt: string | null;
-  deliveredAt: string | null;
-  trackingNumber: string | null;
-  carrier: string | null;
-  customerName: string;
-  customerEmail: string;
-  shippingAddress: string;
-  shippingCity: string;
-  shippingState: string;
-  shippingZip: string;
-  shippingCountry: string;
-  items: Array<{
-    id: string;
-    quantity: number;
-    price: number;
-    variant: {
-      name: string;
-      product: {
-        name: string;
-        conservationPercentage: number;
-        images: Array<{
-          url: string;
-          alt: string | null;
-        }>;
-      };
-    };
-  }>;
-  conservationDonation: {
-    amount: number;
-    percentage: number;
-    organization: string | null;
-    region: string | null;
-    status: string;
-    partner: {
-      name: string;
-      website: string | null;
-    } | null;
-  } | null;
+async function getOrderDetails(orderId: string, userId: string) {
+  const order = await prisma.order.findUnique({
+    where: {
+      id: orderId,
+      userId: userId, // Ensure user can only see their own orders
+    },
+    include: {
+      items: {
+        include: {
+          variant: {
+            include: {
+              product: {
+                include: {
+                  images: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      conservationDonation: {
+        include: {
+          partner: true,
+        },
+      },
+    },
+  });
+
+  return order;
 }
 
-export default function OrderDetailsPage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const params = useParams();
-  const [order, setOrder] = useState<OrderDetails | null>(null);
-  const [loading, setLoading] = useState(true);
+function getStatusColor(status: string) {
+  switch (status) {
+    case 'PENDING':
+      return 'bg-yellow-100 text-yellow-700';
+    case 'PROCESSING':
+      return 'bg-blue-100 text-blue-700';
+    case 'SHIPPED':
+      return 'bg-purple-100 text-purple-700';
+    case 'DELIVERED':
+      return 'bg-green-100 text-green-700';
+    case 'CANCELLED':
+      return 'bg-red-100 text-red-700';
+    default:
+      return 'bg-gray-100 text-gray-700';
+  }
+}
 
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/admin/login');
-    }
-  }, [status, router]);
+function getTrackingUrl(trackingNumber: string | null, carrier: string | null) {
+  if (!trackingNumber || !carrier) return null;
 
-  useEffect(() => {
-    if (session && params.id) {
-      fetchOrder();
-    }
-  }, [session, params.id]);
+  const carriers: Record<string, string> = {
+    USPS: `https://tools.usps.com/go/TrackConfirmAction?tLabels=${trackingNumber}`,
+    FedEx: `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`,
+    UPS: `https://www.ups.com/track?tracknum=${trackingNumber}`,
+  };
 
-  async function fetchOrder() {
-    try {
-      const response = await fetch(`/api/customer/orders/${params.id}`);
-      const data = await response.json();
+  return carriers[carrier] || null;
+}
 
-      if (response.ok) {
-        setOrder(data.order);
-      } else {
-        toast.error(data.error || 'Failed to fetch order');
-        router.push('/account');
-      }
-    } catch (error) {
-      console.error('Fetch order error:', error);
-      toast.error('Failed to fetch order');
-      router.push('/account');
-    } finally {
-      setLoading(false);
-    }
+export default async function OrderDetailsPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user) {
+    redirect('/admin/login');
   }
 
-  function getStatusColor(status: string) {
-    switch (status) {
-      case 'PENDING':
-        return 'bg-yellow-100 text-yellow-700';
-      case 'PROCESSING':
-        return 'bg-blue-100 text-blue-700';
-      case 'SHIPPED':
-        return 'bg-purple-100 text-purple-700';
-      case 'DELIVERED':
-        return 'bg-green-100 text-green-700';
-      case 'CANCELLED':
-        return 'bg-red-100 text-red-700';
-      default:
-        return 'bg-gray-100 text-gray-700';
-    }
+  const order = await getOrderDetails(params.id, session.user.id);
+
+  if (!order) {
+    redirect('/account');
   }
 
-  function getTrackingUrl() {
-    if (!order?.trackingNumber || !order?.carrier) return null;
-
-    const carriers: Record<string, string> = {
-      USPS: `https://tools.usps.com/go/TrackConfirmAction?tLabels=${order.trackingNumber}`,
-      FedEx: `https://www.fedex.com/fedextrack/?trknbr=${order.trackingNumber}`,
-      UPS: `https://www.ups.com/track?tracknum=${order.trackingNumber}`,
-    };
-
-    return carriers[order.carrier] || null;
-  }
-
-  if (status === 'loading' || loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading order details...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!session || !order) {
-    return null;
-  }
-
-  const trackingUrl = getTrackingUrl();
+  const trackingUrl = getTrackingUrl(order.trackingNumber, order.carrier);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50 py-12">
@@ -187,10 +130,10 @@ export default function OrderDetailsPage() {
               <div>
                 <h3 className="font-semibold text-gray-900">Shipping Status</h3>
                 <p className="text-sm text-gray-600">
-                  {order.status === 'DELIVERED'
-                    ? `Delivered on ${new Date(order.deliveredAt!).toLocaleDateString()}`
-                    : order.status === 'SHIPPED'
-                    ? `Shipped on ${new Date(order.shippedAt!).toLocaleDateString()}`
+                  {order.status === 'DELIVERED' && order.deliveredAt
+                    ? `Delivered on ${new Date(order.deliveredAt).toLocaleDateString()}`
+                    : order.status === 'SHIPPED' && order.shippedAt
+                    ? `Shipped on ${new Date(order.shippedAt).toLocaleDateString()}`
                     : order.status === 'PROCESSING'
                     ? 'Processing your order'
                     : 'Awaiting confirmation'}
