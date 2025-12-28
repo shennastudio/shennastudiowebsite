@@ -56,6 +56,12 @@ export default async function AdminLayout({
                 <Link href="/admin/email-logs" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Emails
                 </Link>
+                <Link href="/admin/payments" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Payments
+                </Link>
+                <Link href="/admin/reports" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
+                  Reports
+                </Link>
                 <Link href="/admin/conservation" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">
                   Conservation
                 </Link>
