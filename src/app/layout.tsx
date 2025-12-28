@@ -18,6 +18,10 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'ShennaStudio - Ocean-Themed Handcrafted Bracelets | Marine Conservation',
   description: 'Handcrafted ocean-inspired bracelets supporting marine life conservation in South Padre Island and Rio Grande Valley. 10% of every purchase protects sea turtles, whales, and ocean ecosystems.',
+  icons: {
+    icon: '/icon',
+    apple: '/apple-icon',
+  },
 };
 
 export default function RootLayout({
