@@ -38,11 +38,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get session if available (optional - supports guest checkout)
     const session = await getServerSession(authOptions);
-
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
 
     const data: CheckoutSessionRequest = await request.json();
     const { items, subtotal, shipping, tax, total, shippingAddress, customerEmail } = data;
@@ -120,7 +117,9 @@ export async function POST(request: NextRequest) {
       success_url: `${request.headers.get('origin')}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${request.headers.get('origin')}/cart`,
       metadata: {
-        userId: session.user.id,
+        // Include userId only if user is logged in (supports guest checkout)
+        ...(session?.user?.id && { userId: session.user.id }),
+        customerEmail,
         subtotal: subtotal.toFixed(2),
         shipping: shipping.toFixed(2),
         tax: tax.toFixed(2),

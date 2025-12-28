@@ -2,7 +2,7 @@ import { prisma } from '@/lib/db';
 import type { CartItem } from '@/types';
 
 interface CreateOrderParams {
-  userId: string;
+  userId?: string | null; // Optional for guest checkout
   items: CartItem[];
   subtotal: number;
   shipping: number;
@@ -83,39 +83,41 @@ export async function createOrder(params: CreateOrderParams) {
     },
   });
 
-  // Award customer rewards points
-  // Find or create customer reward record
-  const customerReward = await prisma.customerReward.upsert({
-    where: { userId },
-    create: {
-      userId,
-      points: rewardsPoints,
-      totalSpent: total,
-      totalOrders: 1,
-    },
-    update: {
-      points: {
-        increment: rewardsPoints,
+  // Award customer rewards points (only for logged-in users)
+  if (userId) {
+    // Find or create customer reward record
+    const customerReward = await prisma.customerReward.upsert({
+      where: { userId },
+      create: {
+        userId,
+        points: rewardsPoints,
+        totalSpent: total,
+        totalOrders: 1,
       },
-      totalSpent: {
-        increment: total,
+      update: {
+        points: {
+          increment: rewardsPoints,
+        },
+        totalSpent: {
+          increment: total,
+        },
+        totalOrders: {
+          increment: 1,
+        },
       },
-      totalOrders: {
-        increment: 1,
-      },
-    },
-  });
+    });
 
-  // Create point transaction record
-  await prisma.pointTransaction.create({
-    data: {
-      customerId: customerReward.id,
-      points: rewardsPoints,
-      type: 'PURCHASE',
-      description: `Purchase #${order.id.slice(0, 8)}`,
-      orderId: order.id,
-    },
-  });
+    // Create point transaction record
+    await prisma.pointTransaction.create({
+      data: {
+        customerId: customerReward.id,
+        points: rewardsPoints,
+        type: 'PURCHASE',
+        description: `Purchase #${order.id.slice(0, 8)}`,
+        orderId: order.id,
+      },
+    });
+  }
 
   // Deduct inventory for each item
   for (const item of items) {
@@ -126,7 +128,7 @@ export async function createOrder(params: CreateOrderParams) {
         variantId: item.variantId,
         quantity: -item.quantity, // Negative for deduction
         type: 'SALE',
-        userId,
+        userId: userId || null, // null for guest orders
         notes: `Order #${order.id.slice(0, 8)}`,
       },
     });

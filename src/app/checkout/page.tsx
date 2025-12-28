@@ -41,13 +41,7 @@ export default function CheckoutPage() {
     setError('');
 
     try {
-      // Validate session
-      if (!session?.user) {
-        router.push('/login?callbackUrl=/checkout');
-        return;
-      }
-
-      // Create checkout session
+      // Create checkout session (works for both guest and logged-in users)
       const response = await fetch('/api/checkout/create-session', {
         method: 'POST',
         headers: {
@@ -243,6 +237,19 @@ export default function CheckoutPage() {
                     </div>
                   )}
 
+                  {!session?.user && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-sm text-blue-900 font-medium mb-1">💡 Want to track your order?</p>
+                      <p className="text-xs text-blue-700">
+                        You can checkout as a guest, or{' '}
+                        <Link href="/admin/login?callbackUrl=/checkout" className="underline font-semibold hover:text-blue-900">
+                          create an account
+                        </Link>
+                        {' '}to easily view your order history and tracking information.
+                      </p>
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
                     className="w-full"
@@ -316,18 +323,20 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="bg-teal-50 border border-teal-200 rounded-lg p-4 mt-4">
-                  <p className="text-sm text-teal-900 font-medium">Conservation Impact</p>
+                  <p className="text-sm text-teal-900 font-medium">Conservation Impact 🌊</p>
                   <p className="text-xs text-teal-700 mt-1">
                     10% (${(cart.subtotal * 0.10).toFixed(2)}) of your purchase supports marine conservation in South Padre Island
                   </p>
                 </div>
 
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-900 font-medium">Rewards Points</p>
-                  <p className="text-xs text-blue-700 mt-1">
-                    You&apos;ll earn {Math.floor(cart.total)} points with this purchase!
-                  </p>
-                </div>
+                {session?.user && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p className="text-sm text-blue-900 font-medium">Rewards Points 🎁</p>
+                    <p className="text-xs text-blue-700 mt-1">
+                      You&apos;ll earn {Math.floor(cart.total)} points with this purchase!
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>

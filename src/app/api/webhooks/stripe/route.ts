@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         throw new Error('No metadata found in session');
       }
 
-      const userId = metadata.userId;
+      const userId = metadata.userId || null; // Optional for guest checkout
       const subtotal = parseFloat(metadata.subtotal);
       const shipping = parseFloat(metadata.shipping);
       const tax = parseFloat(metadata.tax);
