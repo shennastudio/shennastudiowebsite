@@ -1,12 +1,26 @@
-'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Sparkles, Save, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+
+const AI_MODELS = {
+  gemini: [
+    { name: 'gemini-1.5-flash', displayName: 'Gemini 1.5 Flash' },
+    { name: 'gemini-1.5-pro', displayName: 'Gemini 1.5 Pro' },
+  ],
+  claude: [
+    { name: 'claude-3-haiku-20240307', displayName: 'Claude 3 Haiku' },
+    { name: 'claude-3-opus-20240229', displayName: 'Claude 3 Opus' },
+    { name: 'claude-3-sonnet-20240229', displayName: 'Claude 3 Sonnet' },
+  ],
+  huggingface: [
+    { name: 'mistralai/Mixtral-8x7B-Instruct-v0.1', displayName: 'Mixtral 8x7B Instruct' },
+    { name: 'meta-llama/Llama-2-70b-chat-hf', displayName: 'Llama 2 70B Chat' },
+  ],
+};
 
 interface GeneratedBlog {
   title: string;
@@ -26,7 +40,16 @@ export default function BlogGeneratorPage() {
     tone: 'Educational and Inspiring',
     length: 'medium',
     provider: 'gemini',
+    model: AI_MODELS.gemini[0].name,
   });
+
+  useEffect(() => {
+    // When provider changes, set the model to the first available one for that provider
+    setFormData(prev => ({
+      ...prev,
+      model: AI_MODELS[prev.provider as keyof typeof AI_MODELS][0].name
+    }));
+  }, [formData.provider]);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,17 +139,33 @@ export default function BlogGeneratorPage() {
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleGenerate} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">AI Provider</label>
-                  <select
-                    value={formData.provider}
-                    onChange={(e) => setFormData({ ...formData, provider: e.target.value })}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
-                  >
-                    <option value="gemini">Google Gemini</option>
-                    <option value="claude">Anthropic Claude</option>
-                    <option value="huggingface">Hugging Face</option>
-                  </select>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">AI Provider</label>
+                    <select
+                      value={formData.provider}
+                      onChange={(e) => setFormData({ ...formData, provider: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                    >
+                      <option value="gemini">Google Gemini</option>
+                      <option value="claude">Anthropic Claude</option>
+                      <option value="huggingface">Hugging Face</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">Model</label>
+                    <select
+                      value={formData.model}
+                      onChange={(e) => setFormData({ ...formData, model: e.target.value })}
+                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                    >
+                      {AI_MODELS[formData.provider as keyof typeof AI_MODELS].map((model) => (
+                        <option key={model.name} value={model.name}>
+                          {model.displayName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 <div>

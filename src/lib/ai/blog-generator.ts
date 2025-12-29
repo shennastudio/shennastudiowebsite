@@ -4,15 +4,39 @@ import { HfInference } from '@huggingface/inference';
 
 export type AIProvider = 'gemini' | 'claude' | 'huggingface';
 
-interface BlogGenerationParams {
+export interface ModelConfig {
+  name: string;
+  displayName: string;
+}
+
+export const AI_MODELS: Record<AIProvider, ModelConfig[]> = {
+  gemini: [
+    { name: 'gemini-1.5-flash', displayName: 'Gemini 1.5 Flash' },
+    { name: 'gemini-1.5-pro', displayName: 'Gemini 1.5 Pro' },
+    // Add other Gemini models as needed
+  ],
+  claude: [
+    { name: 'claude-3-haiku-20240307', displayName: 'Claude 3 Haiku' },
+    { name: 'claude-3-opus-20240229', displayName: 'Claude 3 Opus' },
+    { name: 'claude-3-sonnet-20240229', displayName: 'Claude 3 Sonnet' },
+    // Add other Claude models as needed
+  ],
+  huggingface: [
+    { name: 'mistralai/Mixtral-8x7B-Instruct-v0.1', displayName: 'Mixtral 8x7B Instruct' },
+    // Add other Hugging Face models as needed
+  ],
+};
+
+export interface BlogGenerationParams {
   topic: string;
   keywords: string[];
   tone?: string;
   length?: 'short' | 'medium' | 'long';
   provider: AIProvider;
+  model: string; // Model name to use for the selected provider
 }
 
-interface GeneratedBlog {
+export interface GeneratedBlog {
   title: string;
   content: string; // HTML content
   excerpt: string;
@@ -44,11 +68,11 @@ export class BlogGenerator {
 
     switch (params.provider) {
       case 'gemini':
-        return this.generateWithGemini(prompt);
+        return this.generateWithGemini(prompt, params.model);
       case 'claude':
-        return this.generateWithClaude(prompt);
+        return this.generateWithClaude(prompt, params.model);
       case 'huggingface':
-        return this.generateWithHuggingFace(prompt);
+        return this.generateWithHuggingFace(prompt, params.model);
       default:
         throw new Error('Invalid AI provider selected');
     }
@@ -76,10 +100,11 @@ export class BlogGenerator {
     `;
   }
 
-  private async generateWithGemini(prompt: string): Promise<GeneratedBlog> {
+  private async generateWithGemini(prompt: string, modelName: string): Promise<GeneratedBlog> {
     if (!this.gemini) throw new Error('Gemini API key not configured');
     
-    const model = this.gemini.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    // Use the specified model name
+    const model = this.gemini.getGenerativeModel({ model: modelName });
     const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response.text();
@@ -87,11 +112,11 @@ export class BlogGenerator {
     return this.parseResponse(text);
   }
 
-  private async generateWithClaude(prompt: string): Promise<GeneratedBlog> {
+  private async generateWithClaude(prompt: string, modelName: string): Promise<GeneratedBlog> {
     if (!this.claude) throw new Error('Claude API key not configured');
 
     const msg = await this.claude.messages.create({
-      model: 'claude-3-haiku-20240307',
+      model: modelName, // Use the specified model name
       max_tokens: 4000,
       messages: [{ role: 'user', content: prompt }],
     });
@@ -100,11 +125,11 @@ export class BlogGenerator {
     return this.parseResponse(text);
   }
 
-  private async generateWithHuggingFace(prompt: string): Promise<GeneratedBlog> {
+  private async generateWithHuggingFace(prompt: string, modelName: string): Promise<GeneratedBlog> {
     if (!this.huggingface) throw new Error('Hugging Face API key not configured');
 
     const result = await this.huggingface.textGeneration({
-      model: 'mistralai/Mixtral-8x7B-Instruct-v0.1',
+      model: modelName, // Use the specified model name
       inputs: prompt,
       parameters: {
         max_new_tokens: 2000,

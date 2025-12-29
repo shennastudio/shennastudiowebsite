@@ -12,11 +12,11 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { topic, keywords, tone, length, provider } = body;
+    const { topic, keywords, tone, length, provider, model } = body;
 
-    if (!topic || !provider) {
+    if (!topic || !provider || !model) {
       return NextResponse.json(
-        { error: 'Topic and provider are required' },
+        { error: 'Topic, provider, and model are required' },
         { status: 400 }
       );
     }
@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
       tone,
       length,
       provider: provider as AIProvider,
+      model,
     });
 
     return NextResponse.json({ success: true, blog: result });
