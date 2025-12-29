@@ -1,7 +1,16 @@
 import { Shippo } from 'shippo';
 
 // Initialize Shippo with the API key
-// In a real production environment, use process.env.SHIPPO_API_KEY
-const SHIPPO_API_KEY = process.env.SHIPPO_API_KEY || 'shippo_test_d98d542ed5ceba3bf8028604c607bffee676c3a8';
+const SHIPPO_API_KEY = process.env.SHIPPO_API_KEY;
 
-export const shippo = new Shippo({ apiKeyHeader: SHIPPO_API_KEY });
+if (!SHIPPO_API_KEY) {
+  console.warn('⚠️ SHIPPO_API_KEY not configured. Shipping features will not work.');
+}
+
+// Create Shippo instance only if API key is available
+export const shippo = SHIPPO_API_KEY
+  ? new Shippo({ apiKeyHeader: SHIPPO_API_KEY })
+  : null;
+
+// Helper to check if Shippo is configured
+export const isShippoConfigured = (): boolean => !!SHIPPO_API_KEY;
