@@ -11,16 +11,18 @@ export default function AppleIcon() {
     (
       <div
         style={{
-          fontSize: 120,
           background: 'linear-gradient(135deg, #0891b2 0%, #06b6d4 100%)',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          borderRadius: '22%', // Apple icon style rounded corners
         }}
       >
-        🦈
+        <div style={{ fontSize: 100 }}>
+          🐡
+        </div>
       </div>
     ),
     {

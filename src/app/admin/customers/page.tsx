@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, Search, DollarSign, Package, TrendingUp } from 'lucide-react';
+import { Users, Search, DollarSign, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -25,11 +25,7 @@ export default function CustomersPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    fetchCustomers();
-  }, [searchQuery]);
-
-  async function fetchCustomers() {
+  const fetchCustomers = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -49,7 +45,11 @@ export default function CustomersPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   const totalCustomers = customers.length;
   const totalRevenue = customers.reduce((sum, c) => sum + c.totalSpent, 0);

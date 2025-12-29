@@ -17,7 +17,7 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: '20%',
+          borderRadius: '50%',
         }}
       >
         <svg
@@ -33,16 +33,23 @@ export default function Icon() {
             fill="white"
             opacity="0.95"
           />
-          {/* Whale Shark Spots */}
-          <circle cx="6" cy="10" r="0.8" fill="#0891b2" opacity="0.6" />
-          <circle cx="9" cy="10" r="0.8" fill="#0891b2" opacity="0.6" />
-          <circle cx="12" cy="10" r="0.8" fill="#0891b2" opacity="0.6" />
-          <circle cx="15" cy="10" r="0.8" fill="#0891b2" opacity="0.6" />
-          <circle cx="7.5" cy="11.5" r="0.6" fill="#0891b2" opacity="0.5" />
-          <circle cx="10.5" cy="11.5" r="0.6" fill="#0891b2" opacity="0.5" />
-          <circle cx="13.5" cy="11.5" r="0.6" fill="#0891b2" opacity="0.5" />
+          {/* Spots */}
+          <circle cx="6" cy="10" r="0.5" fill="#0891b2" opacity="0.8" />
+          <circle cx="9" cy="10" r="0.5" fill="#0891b2" opacity="0.8" />
+          <circle cx="12" cy="10" r="0.5" fill="#0891b2" opacity="0.8" />
+          <circle cx="15" cy="10" r="0.5" fill="#0891b2" opacity="0.8" />
+          
+          <circle cx="7.5" cy="11" r="0.4" fill="#0891b2" opacity="0.6" />
+          <circle cx="10.5" cy="11" r="0.4" fill="#0891b2" opacity="0.6" />
+          <circle cx="13.5" cy="11" r="0.4" fill="#0891b2" opacity="0.6" />
+          
           {/* Eye */}
-          <circle cx="16" cy="10" r="1" fill="#0891b2" />
+          <circle cx="17" cy="10.5" r="0.8" fill="#0891b2" />
+          
+          {/* Gills */}
+          <path d="M14 9V11" stroke="#0891b2" strokeWidth="0.5" opacity="0.5" />
+          <path d="M14.5 9V11" stroke="#0891b2" strokeWidth="0.5" opacity="0.5" />
+          <path d="M15 9V11" stroke="#0891b2" strokeWidth="0.5" opacity="0.5" />
         </svg>
       </div>
     ),

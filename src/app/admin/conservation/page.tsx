@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, DollarSign, TrendingUp, Users, Plus } from 'lucide-react';
+import { Heart, DollarSign, TrendingUp, Users } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
 import {
@@ -16,7 +16,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend,
 } from 'recharts';
 
 interface ConservationData {
@@ -57,11 +56,7 @@ export default function ConservationPage() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<ConservationData | null>(null);
 
-  useEffect(() => {
-    fetchConservationData();
-  }, [period]);
-
-  async function fetchConservationData() {
+  const fetchConservationData = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/admin/conservation/impact?period=${period}`);
@@ -78,7 +73,11 @@ export default function ConservationPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [period]);
+
+  useEffect(() => {
+    fetchConservationData();
+  }, [fetchConservationData]);
 
   const COLORS = ['#0d9488', '#06b6d4', '#8b5cf6', '#ec4899', '#f59e0b'];
 

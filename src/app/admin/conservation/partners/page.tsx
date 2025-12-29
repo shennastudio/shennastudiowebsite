@@ -1,7 +1,6 @@
-'use client';
-
 import { useEffect, useState } from 'react';
-import { Plus, ExternalLink, Mail, MapPin, Trash2, Edit } from 'lucide-react';
+import { Plus, ExternalLink, Mail, MapPin } from 'lucide-react';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 
 interface Partner {
@@ -252,11 +251,14 @@ export default function PartnersPage() {
             >
               <div className="flex items-start gap-6">
                 {partner.logo && (
-                  <img
-                    src={partner.logo}
-                    alt={partner.name}
-                    className="w-20 h-20 object-contain rounded-lg border border-gray-200"
-                  />
+                  <div className="relative w-20 h-20 rounded-lg border border-gray-200 overflow-hidden">
+                    <Image
+                      src={partner.logo}
+                      alt={partner.name}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
                 )}
 
                 <div className="flex-1">
