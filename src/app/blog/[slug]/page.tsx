@@ -1,17 +1,30 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { blogPosts } from '../blogData'
+import { prisma } from '@/lib/db'
+
+export const revalidate = 3600
 
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
+  const posts = await prisma.blogPost.findMany({
+    select: {
+      slug: true,
+    },
+    where: {
+      published: true,
+    },
+  })
+
+  return posts.map((post) => ({
     slug: post.slug,
   }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = blogPosts.find((p) => p.slug === slug)
+  const post = await prisma.blogPost.findUnique({
+    where: { slug },
+  })
 
   if (!post) {
     return {
@@ -22,39 +35,50 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${post.title} | ShennaStudio Blog`,
     description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: post.featuredImage ? [post.featuredImage] : [],
+    },
   }
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = blogPosts.find((p) => p.slug === slug)
+  const post = await prisma.blogPost.findUnique({
+    where: { slug },
+  })
 
-  if (!post) {
+  if (!post || !post.published) {
     notFound()
   }
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Image */}
-      <div className="relative h-96 bg-gradient-to-br from-teal-600 to-blue-600">
-        <Image
-          src={post.image}
-          alt={post.title}
-          fill
-          className="object-cover opacity-80"
-          priority
-        />
+      <div className="relative h-96 bg-gradient-to-br from-teal-600 to-blue-600 bg-slate-200">
+        {post.featuredImage && (
+          <Image
+            src={post.featuredImage}
+            alt={post.title}
+            fill
+            className="object-cover opacity-80"
+            priority
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
 
         {/* Title Overlay */}
         <div className="absolute bottom-0 left-0 right-0 p-8">
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-4">
-              <span className="bg-teal-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                {post.category}
-              </span>
+              {post.category && (
+                <span className="bg-teal-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                  {post.category}
+                </span>
+              )}
               <span className="text-white text-sm">
-                {new Date(post.date).toLocaleDateString('en-US', {
+                {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric'

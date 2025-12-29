@@ -1,17 +1,26 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { blogPosts } from './blogData'
+import { prisma } from '@/lib/db'
 
 export const metadata = {
   title: 'Conservation Blog | ShennaStudio',
   description: 'Read about our ocean conservation efforts supporting Sea Turtle Inc. and marine life protection in South Padre Island and the Rio Grande Valley.'
 }
 
-const blogPostsForDisplay = blogPosts.slice(0, 10) // Show first 10 posts
+export const revalidate = 3600 // Revalidate every hour
 
-export default function BlogPage() {
-  const featuredPosts = blogPosts.filter(post => post.featured)
-  const recentPosts = blogPosts.filter(post => !post.featured)
+export default async function BlogPage() {
+  const posts = await prisma.blogPost.findMany({
+    where: {
+      published: true,
+    },
+    orderBy: {
+      publishedAt: 'desc',
+    },
+  })
+
+  const featuredPosts = posts.filter(post => post.featured)
+  const recentPosts = posts.filter(post => !post.featured)
 
   return (
     <div className="min-h-screen bg-white">
@@ -30,104 +39,128 @@ export default function BlogPage() {
       </section>
 
       {/* Featured Posts */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 to-cyan-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-12">
-            Featured Stories
-          </h2>
+      {featuredPosts.length > 0 && (
+        <section className="py-16 bg-gradient-to-br from-blue-50 to-cyan-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-12">
+              Featured Stories
+            </h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {featuredPosts.map((post) => (
-              <article
-                key={post.id}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all border border-teal-100 group"
-              >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4 bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    {post.category}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {featuredPosts.map((post) => (
+                <article
+                  key={post.id}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all border border-teal-100 group"
+                >
+                  <div className="relative h-64 overflow-hidden bg-slate-200">
+                    {post.featuredImage ? (
+                      <Image
+                        src={post.featuredImage}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-slate-400">
+                        <span className="text-4xl">🌊</span>
+                      </div>
+                    )}
+                    {post.category && (
+                      <div className="absolute top-4 right-4 bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        {post.category}
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="p-8">
-                  <div className="text-sm text-gray-500 mb-2">
-                    {new Date(post.date).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
+                  <div className="p-8">
+                    <div className="text-sm text-gray-500 mb-2">
+                      {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-teal-700 transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-600 mb-6 leading-relaxed line-clamp-3">
+                      {post.excerpt}
+                    </p>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-105"
+                    >
+                      Read Full Story
+                    </Link>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-teal-700 transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">
-                    {post.excerpt}
-                  </p>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-105"
-                  >
-                    Read Full Story
-                  </Link>
-                </div>
-              </article>
-            ))}
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Recent Posts */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-12">
-            Recent Updates
+            {featuredPosts.length > 0 ? 'Recent Updates' : 'All Stories'}
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {recentPosts.map((post) => (
-              <article
-                key={post.id}
-                className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all border border-gray-200 group"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <Image
-                    src={post.image}
-                    alt={post.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    {post.category}
+          {recentPosts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {recentPosts.map((post) => (
+                <article
+                  key={post.id}
+                  className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all border border-gray-200 group"
+                >
+                  <div className="relative h-48 overflow-hidden bg-slate-200">
+                    {post.featuredImage ? (
+                      <Image
+                        src={post.featuredImage}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-slate-400">
+                        <span className="text-4xl">🌊</span>
+                      </div>
+                    )}
+                    {post.category && (
+                      <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        {post.category}
+                      </div>
+                    )}
                   </div>
-                </div>
-                <div className="p-6">
-                  <div className="text-sm text-gray-500 mb-2">
-                    {new Date(post.date).toLocaleDateString('en-US', {
-                      month: 'long',
-                      day: 'numeric',
-                      year: 'numeric'
-                    })}
+                  <div className="p-6">
+                    <div className="text-sm text-gray-500 mb-2">
+                      {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition-colors">
+                      {post.title}
+                    </h3>
+                    <p className="text-gray-600 mb-4 line-clamp-2">
+                      {post.excerpt}
+                    </p>
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="inline-block text-teal-600 hover:text-teal-700 font-semibold transition-colors"
+                    >
+                      Read More →
+                    </Link>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">
-                    {post.excerpt}
-                  </p>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="inline-block text-teal-600 hover:text-teal-700 font-semibold transition-colors"
-                  >
-                    Read More →
-                  </Link>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-slate-500">
+              <p>No recent posts found. Check back soon!</p>
+            </div>
+          )}
         </div>
       </section>
 
