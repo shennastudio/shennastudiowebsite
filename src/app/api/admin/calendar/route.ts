@@ -6,20 +6,20 @@ import { z } from 'zod';
 
 const calendarEventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   date: z.string(), // ISO date string
   time: z.string(), // HH:MM format
-  endTime: z.string().optional(),
+  endTime: z.string().optional().nullable(),
   allDay: z.boolean().optional().default(false),
   category: z.string().default('general'),
   color: z.string().default('from-blue-500 to-cyan-500'),
-  location: z.string().optional(),
+  location: z.string().optional().nullable(),
   attendees: z.array(z.string().email()).optional().default([]),
   recurring: z.boolean().optional().default(false),
-  recurringPattern: z.enum(['daily', 'weekly', 'monthly', 'yearly']).optional(),
-  recurringEnd: z.string().optional(), // ISO date string
+  recurringPattern: z.enum(['daily', 'weekly', 'monthly', 'yearly']).optional().nullable(),
+  recurringEnd: z.string().optional().nullable(), // ISO date string
   reminder: z.boolean().optional().default(false),
-  reminderTime: z.number().int().positive().optional(),
+  reminderTime: z.number().int().positive().optional().nullable(),
   status: z.enum(['scheduled', 'completed', 'cancelled']).optional().default('scheduled'),
 });
 
