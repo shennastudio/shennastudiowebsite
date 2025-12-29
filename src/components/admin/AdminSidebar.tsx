@@ -106,12 +106,12 @@ export function AdminSidebar({}: AdminSidebarProps) {
           {/* Sidebar Header */}
           <div className="flex h-16 items-center justify-between border-b border-slate-700/50 px-6">
             <Link href="/admin" className="flex items-center gap-3 group">
-              <div className="relative h-12 w-32">
+              <div className="relative h-12 w-36">
                 <Image
                   src="/images/shenna-studio-logo.png"
                   alt="ShennaStudio"
                   fill
-                  className="object-contain brightness-0 invert opacity-90 group-hover:opacity-100 transition-opacity"
+                  className="object-contain drop-shadow-lg"
                   priority
                 />
               </div>

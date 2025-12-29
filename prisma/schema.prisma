@@ -764,17 +764,17 @@ model CalendarEvent {
 
   // Date and time
   date        DateTime
-  time        String   // Store as HH:MM format
+  time        String?  // Store as HH:MM format (optional for all-day events)
   endTime     String?  // Optional end time
   allDay      Boolean  @default(false)
 
   // Categorization
-  category    String   @default("general") // general, meeting, deadline, personal, marketing
+  category    String   @default("general") // general, meeting, deadline, personal, marketing, goal, task, note
   color       String   @default("from-blue-500 to-cyan-500") // Tailwind gradient
 
   // Location and attendees
   location    String?
-  attendees   String[] // Email addresses
+  attendees   String[] // Names or email addresses
 
   // Recurring events
   recurring   Boolean  @default(false)
@@ -786,7 +786,29 @@ model CalendarEvent {
   reminderTime Int?    // Minutes before event
 
   // Status
-  status      String   @default("scheduled") // scheduled, completed, cancelled
+  status      String   @default("scheduled") // scheduled, completed, cancelled, in_progress
+
+  // === BUSINESS JOURNAL FEATURES ===
+
+  // Priority for task management
+  priority    String   @default("medium") // low, medium, high, urgent
+
+  // Tags for flexible categorization
+  tags        String[] // Custom tags like "sales", "inventory", "client"
+
+  // Journal/Notes entry (extended notes for business journaling)
+  journalEntry String?  @db.Text
+
+  // Business metrics tracking
+  projectedRevenue Float?   // Expected revenue for this event/task
+  actualRevenue    Float?   // Actual revenue achieved
+
+  // Task completion tracking
+  completionPercent Int     @default(0) // 0-100 for progress tracking
+  checklist         Json?   // JSON array of checklist items [{text: string, done: boolean}]
+
+  // Links and references
+  links       String[] // Related URLs or references
 
   // Owner
   userId      String
@@ -798,6 +820,7 @@ model CalendarEvent {
   @@index([userId, date])
   @@index([date])
   @@index([category])
+  @@index([priority])
   @@map("calendar_events")
 }
 
