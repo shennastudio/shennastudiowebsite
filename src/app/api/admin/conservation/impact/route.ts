@@ -70,7 +70,7 @@ export async function GET(req: Request) {
     const totalDonations = donations.reduce((sum, d) => sum + d.amount, 0);
 
     // Group by region
-    const donationsByRegion = donations.reduce((acc: any, donation) => {
+    const donationsByRegion = donations.reduce((acc: Record<string, { pledged: number; donated: number; total: number; count: number }>, donation) => {
       const region = donation.region || 'Other';
       if (!acc[region]) {
         acc[region] = { pledged: 0, donated: 0, total: 0, count: 0 };
@@ -86,7 +86,7 @@ export async function GET(req: Request) {
     }, {});
 
     // Group by partner
-    const donationsByPartner = donations.reduce((acc: any, donation) => {
+    const donationsByPartner = donations.reduce((acc: Record<string, { pledged: number; donated: number; total: number; count: number }>, donation) => {
       if (!donation.partner) return acc;
 
       const partnerId = donation.partner.id;

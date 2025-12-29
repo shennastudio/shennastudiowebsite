@@ -356,29 +356,6 @@ function extractInternalReferrer(referer: string): string | undefined {
  */
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
-function checkRateLimit(sessionId: string, limit: number = 100): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(sessionId);
-
-  // Reset every minute
-  const resetInterval = 60 * 1000;
-
-  if (!entry || now > entry.resetTime) {
-    rateLimitMap.set(sessionId, {
-      count: 1,
-      resetTime: now + resetInterval,
-    });
-    return true;
-  }
-
-  if (entry.count >= limit) {
-    return false;
-  }
-
-  entry.count++;
-  return true;
-}
-
 // Cleanup old entries periodically
 setInterval(
   () => {

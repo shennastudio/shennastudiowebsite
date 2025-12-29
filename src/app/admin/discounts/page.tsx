@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Trash2, Edit, Plus, Copy, Clock, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -28,11 +28,7 @@ export default function DiscountsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('active'); // active, expired, all
 
-  useEffect(() => {
-    fetchDiscounts();
-  }, [filter]);
-
-  async function fetchDiscounts() {
+  const fetchDiscounts = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/admin/discounts?status=${filter}`);
@@ -49,7 +45,11 @@ export default function DiscountsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [filter]);
+
+  useEffect(() => {
+    fetchDiscounts();
+  }, [fetchDiscounts]);
 
   async function deleteDiscount(id: string) {
     if (!confirm('Are you sure you want to delete this discount code?')) {

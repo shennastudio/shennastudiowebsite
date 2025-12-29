@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     const template = searchParams.get('template');
     const limit = parseInt(searchParams.get('limit') || '50');
 
-    let where: any = {};
+    const where: Record<string, unknown> = {};
 
     if (status) {
       where.status = status;

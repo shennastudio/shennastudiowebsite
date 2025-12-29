@@ -41,7 +41,6 @@ interface OrderConfirmationEmailProps {
 export default function OrderConfirmationEmail({
   orderId,
   orderNumber,
-  customerName,
   items,
   subtotal,
   shipping,

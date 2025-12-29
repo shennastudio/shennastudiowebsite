@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
     for (const orderId of orderIds) {
       try {
-        const updateData: any = {};
+        const updateData: Record<string, unknown> = {};
 
         switch (action) {
           case 'mark_shipped':
@@ -98,8 +98,8 @@ export async function POST(req: Request) {
         }
 
         updated++;
-      } catch (error: any) {
-        errors.push({ id: orderId, error: error.message });
+      } catch (error) {
+        errors.push({ id: orderId, error: error instanceof Error ? error.message : 'Unknown error' });
       }
     }
 
@@ -109,7 +109,7 @@ export async function POST(req: Request) {
       failed: errors.length,
       errors: errors.length > 0 ? errors : undefined,
     });
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.issues },
@@ -119,7 +119,7 @@ export async function POST(req: Request) {
 
     console.error('Bulk order action error:', error);
     return NextResponse.json(
-      { error: 'Failed to perform bulk action', details: error.message },
+      { error: 'Failed to perform bulk action', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

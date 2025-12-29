@@ -1,21 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, CheckCircle, XCircle, Clock, Eye } from 'lucide-react';
+import { Mail, CheckCircle, XCircle, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
+import type { EmailLog } from '@/types';
 
 export default function EmailLogsPage() {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<EmailLog[]>([]);
   const [summary, setSummary] = useState({ total: 0, sent: 0, failed: 0, pending: 0 });
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
 
-  useEffect(() => {
-    fetchLogs();
-  }, [statusFilter]);
+  const fetchLogs = useCallback(async () => {
 
-  async function fetchLogs() {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -36,7 +34,11 @@ export default function EmailLogsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [statusFilter]);
+
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]);
 
   function getStatusIcon(status: string) {
     switch (status) {

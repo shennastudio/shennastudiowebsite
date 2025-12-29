@@ -2,7 +2,6 @@ import {
   Text,
   Section,
   Heading,
-  Link,
   Button,
 } from '@react-email/components';
 import * as React from 'react';

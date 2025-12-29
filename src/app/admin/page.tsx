@@ -11,7 +11,6 @@ import {
   TrendingUp,
   TrendingDown,
   ArrowUpRight,
-  ArrowDownRight,
   Heart,
   Star,
   Mail
@@ -175,7 +174,7 @@ export default async function AdminDashboard() {
         <h1 className="text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">
           Dashboard Overview
         </h1>
-        <p className="text-slate-600 text-lg">Welcome back! Here's what's happening with your ocean conservation store.</p>
+        <p className="text-slate-600 text-lg">Welcome back! Here&apos;s what&apos;s happening with your ocean conservation store.</p>
       </div>
 
       {/* Stats Grid */}

@@ -401,7 +401,7 @@ async function main() {
   })
 
   // Order 1: Sarah's completed order
-  const order1 = await prisma.order.create({
+  await prisma.order.create({
     data: {
       orderNumber: 'ORD-2024-001',
       userId: customer1.id,
@@ -497,7 +497,7 @@ async function main() {
   })
 
   // Order 3: Lisa's pending order
-  const order3 = await prisma.order.create({
+  await prisma.order.create({
     data: {
       orderNumber: 'ORD-2024-003',
       userId: customer3.id,

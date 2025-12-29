@@ -34,7 +34,7 @@ export async function GET(req: Request) {
 
     const now = new Date();
 
-    let where: any = {};
+    let where: Record<string, unknown> = {};
 
     if (status === 'active') {
       where = {

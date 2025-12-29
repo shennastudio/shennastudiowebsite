@@ -63,10 +63,42 @@ export async function sendEmail({ to, subject, template }: SendEmailOptions) {
   }
 }
 
-export async function sendOrderConfirmationEmail(order: any) {
+interface OrderForEmail {
+  orderNumber: string;
+  customerEmail: string;
+  customerName: string;
+  createdAt: Date;
+  subtotal: number;
+  shippingCost: number;
+  tax: number;
+  total: number;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZip: string;
+  shippingCountry: string;
+  trackingNumber?: string | null;
+  carrier?: string | null;
+  items: Array<{
+    quantity: number;
+    price: number;
+    variant: {
+      product: { name: string };
+      size?: string | null;
+      color?: string | null;
+      material?: string | null;
+    };
+  }>;
+  conservationDonation?: {
+    amount: number;
+    percentage: number;
+  } | null;
+}
+
+export async function sendOrderConfirmationEmail(order: OrderForEmail) {
   const { OrderConfirmationEmail } = await import('./templates/order-confirmation');
 
-  const items = order.items.map((item: any) => ({
+  const items = order.items.map((item) => ({
     name: item.variant.product.name,
     quantity: item.quantity,
     price: item.price,
@@ -104,10 +136,10 @@ export async function sendOrderConfirmationEmail(order: any) {
   });
 }
 
-export async function sendShippingNotificationEmail(order: any) {
+export async function sendShippingNotificationEmail(order: OrderForEmail) {
   const { ShippingNotificationEmail } = await import('./templates/shipping-notification');
 
-  const items = order.items.map((item: any) => ({
+  const items = order.items.map((item) => ({
     name: item.variant.product.name,
     quantity: item.quantity,
   }));

@@ -77,7 +77,7 @@ export async function POST(
     });
 
     return NextResponse.json({ note });
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.issues },
@@ -87,7 +87,7 @@ export async function POST(
 
     console.error('Create order note error:', error);
     return NextResponse.json(
-      { error: 'Failed to create note', details: error.message },
+      { error: 'Failed to create note', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

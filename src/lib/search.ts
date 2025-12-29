@@ -14,8 +14,39 @@ export interface SearchFilters {
   sortBy?: 'newest' | 'price-asc' | 'price-desc' | 'popular' | 'name';
 }
 
+interface ProductWithVariants {
+  id: string;
+  name: string;
+  description: string | null;
+  basePrice: number;
+  sku: string;
+  featured: boolean;
+  categoryId: string | null;
+  conservationFocus: string | null;
+  createdAt: Date;
+  variants: Array<{
+    id: string;
+    price: number;
+    stock: number;
+    color: string | null;
+    material: string | null;
+    size: string | null;
+  }>;
+  images: Array<{
+    id: string;
+    url: string;
+    alt: string | null;
+    position: number;
+  }>;
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  } | null;
+}
+
 export interface SearchResult {
-  products: any[];
+  products: ProductWithVariants[];
   total: number;
   filters: {
     availableColors: string[];
@@ -56,7 +87,7 @@ export async function searchProducts(
   }
 
   // Variant filters (price, stock, color, material, size)
-  const variantFilters: any = {};
+  const variantFilters: Prisma.ProductVariantWhereInput = {};
 
   if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
     variantFilters.price = {};

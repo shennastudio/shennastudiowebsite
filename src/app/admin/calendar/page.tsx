@@ -500,21 +500,21 @@ export default function CalendarPage() {
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-          <Card className="w-full max-w-3xl shadow-2xl my-8">
-            <CardHeader className="border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white sticky top-0 z-10">
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-4xl max-h-[90vh] flex flex-col shadow-2xl my-8">
+            <CardHeader className="border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white sticky top-0 z-10 shrink-0">
               <div className="flex items-center justify-between">
-                <CardTitle>{editingEvent ? 'Edit Event' : 'Add New Event'}</CardTitle>
+                <CardTitle className="text-xl">{editingEvent ? 'Edit Event' : 'Add New Event'}</CardTitle>
                 <Button variant="ghost" size="sm" onClick={resetForm}>
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </Button>
               </div>
             </CardHeader>
-            <CardContent className="p-6">
+            <CardContent className="p-8 overflow-y-auto">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Title */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-base font-semibold text-slate-700 mb-2">
                     Event Title *
                   </label>
                   <input
@@ -522,20 +522,20 @@ export default function CalendarPage() {
                     required
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                     placeholder="Enter event title"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-base font-semibold text-slate-700 mb-2">
                     Description
                   </label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                     rows={3}
                     placeholder="Event description (optional)"
                   />
@@ -544,7 +544,7 @@ export default function CalendarPage() {
                 {/* Date and Time */}
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-base font-semibold text-slate-700 mb-2">
                       Date *
                     </label>
                     <input
@@ -552,12 +552,12 @@ export default function CalendarPage() {
                       required
                       value={formData.date}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                      className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-base font-semibold text-slate-700 mb-2">
                       Start Time {!formData.allDay && '*'}
                     </label>
                     <input
@@ -566,12 +566,12 @@ export default function CalendarPage() {
                       disabled={formData.allDay}
                       value={formData.time}
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent disabled:bg-slate-100"
+                      className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent disabled:bg-slate-100"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-base font-semibold text-slate-700 mb-2">
                       End Time
                     </label>
                     <input
@@ -579,34 +579,34 @@ export default function CalendarPage() {
                       disabled={formData.allDay}
                       value={formData.endTime}
                       onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent disabled:bg-slate-100"
+                      className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent disabled:bg-slate-100"
                     />
                   </div>
                 </div>
 
                 {/* All Day Toggle */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <input
                     type="checkbox"
                     id="allDay"
                     checked={formData.allDay}
                     onChange={(e) => setFormData({ ...formData, allDay: e.target.checked })}
-                    className="w-4 h-4 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
+                    className="w-5 h-5 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
                   />
-                  <label htmlFor="allDay" className="text-sm font-medium text-slate-700">
+                  <label htmlFor="allDay" className="text-base font-semibold text-slate-700">
                     All day event
                   </label>
                 </div>
 
                 {/* Category */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-base font-semibold text-slate-700 mb-2">
                     Category
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                   >
                     {categories.map(cat => (
                       <option key={cat.value} value={cat.value}>
@@ -618,7 +618,7 @@ export default function CalendarPage() {
 
                 {/* Color Theme */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-base font-semibold text-slate-700 mb-2">
                     Color Theme
                   </label>
                   <div className="grid grid-cols-6 gap-2">
@@ -638,43 +638,43 @@ export default function CalendarPage() {
 
                 {/* Location */}
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    <MapPin className="w-4 h-4 inline mr-1" />
+                  <label className="block text-base font-semibold text-slate-700 mb-2">
+                    <MapPin className="w-5 h-5 inline mr-1" />
                     Location
                   </label>
                   <input
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                     placeholder="Event location (optional)"
                   />
                 </div>
 
                 {/* Recurring Event */}
-                <div className="space-y-3 border border-slate-200 rounded-lg p-4">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-4 border border-slate-200 rounded-lg p-5">
+                  <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       id="recurring"
                       checked={formData.recurring}
                       onChange={(e) => setFormData({ ...formData, recurring: e.target.checked })}
-                      className="w-4 h-4 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
+                      className="w-5 h-5 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
                     />
-                    <label htmlFor="recurring" className="text-sm font-medium text-slate-700">
-                      <Repeat className="w-4 h-4 inline mr-1" />
+                    <label htmlFor="recurring" className="text-base font-semibold text-slate-700">
+                      <Repeat className="w-5 h-5 inline mr-1" />
                       Recurring event
                     </label>
                   </div>
 
                   {formData.recurring && (
-                    <div className="grid grid-cols-2 gap-3 mt-3">
+                    <div className="grid grid-cols-2 gap-4 mt-3">
                       <div>
-                        <label className="block text-sm text-slate-600 mb-1">Pattern</label>
+                        <label className="block text-base font-medium text-slate-600 mb-2">Pattern</label>
                         <select
                           value={formData.recurringPattern || 'weekly'}
                           onChange={(e) => setFormData({ ...formData, recurringPattern: e.target.value as 'daily' | 'weekly' | 'monthly' | 'yearly' })}
-                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg text-base"
                         >
                           <option value="daily">Daily</option>
                           <option value="weekly">Weekly</option>
@@ -683,12 +683,12 @@ export default function CalendarPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="block text-sm text-slate-600 mb-1">End Date</label>
+                        <label className="block text-base font-medium text-slate-600 mb-2">End Date</label>
                         <input
                           type="date"
                           value={formData.recurringEnd}
                           onChange={(e) => setFormData({ ...formData, recurringEnd: e.target.value })}
-                          className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                          className="w-full px-4 py-3 border border-slate-300 rounded-lg text-base"
                         />
                       </div>
                     </div>
@@ -696,28 +696,28 @@ export default function CalendarPage() {
                 </div>
 
                 {/* Reminder */}
-                <div className="space-y-3 border border-slate-200 rounded-lg p-4">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-4 border border-slate-200 rounded-lg p-5">
+                  <div className="flex items-center gap-3">
                     <input
                       type="checkbox"
                       id="reminder"
                       checked={formData.reminder}
                       onChange={(e) => setFormData({ ...formData, reminder: e.target.checked })}
-                      className="w-4 h-4 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
+                      className="w-5 h-5 text-cyan-600 border-slate-300 rounded focus:ring-cyan-500"
                     />
-                    <label htmlFor="reminder" className="text-sm font-medium text-slate-700">
-                      <Bell className="w-4 h-4 inline mr-1" />
+                    <label htmlFor="reminder" className="text-base font-semibold text-slate-700">
+                      <Bell className="w-5 h-5 inline mr-1" />
                       Set reminder
                     </label>
                   </div>
 
                   {formData.reminder && (
                     <div>
-                      <label className="block text-sm text-slate-600 mb-1">Remind me before</label>
+                      <label className="block text-base font-medium text-slate-600 mb-2">Remind me before</label>
                       <select
                         value={formData.reminderTime}
                         onChange={(e) => setFormData({ ...formData, reminderTime: Number(e.target.value) })}
-                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                        className="w-full px-4 py-3 border border-slate-300 rounded-lg text-base"
                       >
                         <option value={5}>5 minutes</option>
                         <option value={15}>15 minutes</option>
@@ -732,13 +732,13 @@ export default function CalendarPage() {
                 {/* Status (for editing) */}
                 {editingEvent && (
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-base font-semibold text-slate-700 mb-2">
                       Status
                     </label>
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value as 'scheduled' | 'completed' | 'cancelled' })}
-                      className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                      className="w-full px-4 py-3 text-base border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                     >
                       <option value="scheduled">Scheduled</option>
                       <option value="completed">Completed</option>

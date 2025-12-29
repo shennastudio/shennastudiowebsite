@@ -14,7 +14,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const search = searchParams.get('search');
 
-    let where: any = {
+    const where: Record<string, unknown> = {
       role: 'CUSTOMER',
     };
 

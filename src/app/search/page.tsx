@@ -7,8 +7,32 @@ import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 import ProductFilters from '@/components/ProductFilters';
 
+interface ProductVariant {
+  price: number;
+  stock: number;
+}
+
+interface ProductImage {
+  url: string;
+}
+
+interface ProductCategory {
+  name: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  featured?: boolean;
+  conservationPercentage: number;
+  images?: ProductImage[];
+  variants: ProductVariant[];
+  category?: ProductCategory;
+}
+
 interface SearchResult {
-  products: any[];
+  products: Product[];
   total: number;
   filters: {
     availableColors: string[];
@@ -39,6 +63,7 @@ function SearchPageContent() {
 
   useEffect(() => {
     fetchResults();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, sortBy, activeFilters]);
 
   const fetchResults = async () => {
@@ -133,10 +158,10 @@ function SearchPageContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {results.products.map((product) => {
                   const firstImage = product.images?.[0]?.url;
-                  const minPrice = Math.min(...product.variants.map((v: any) => v.price));
-                  const maxPrice = Math.max(...product.variants.map((v: any) => v.price));
+                  const minPrice = Math.min(...product.variants.map((v) => v.price));
+                  const maxPrice = Math.max(...product.variants.map((v) => v.price));
                   const totalStock = product.variants.reduce(
-                    (sum: number, v: any) => sum + v.stock,
+                    (sum, v) => sum + v.stock,
                     0
                   );
 

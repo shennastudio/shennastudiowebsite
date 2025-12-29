@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Star, MessageSquare, CheckCircle, XCircle, Trash2, Eye } from 'lucide-react';
@@ -53,11 +53,7 @@ export default function ReviewsPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('pending');
 
-  useEffect(() => {
-    fetchReviews();
-  }, [statusFilter]);
-
-  async function fetchReviews() {
+  const fetchReviews = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -78,7 +74,11 @@ export default function ReviewsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [statusFilter]);
+
+  useEffect(() => {
+    fetchReviews();
+  }, [fetchReviews]);
 
   async function handleReviewAction(reviewId: string, action: 'approve' | 'reject' | 'delete') {
     const confirmMessage =

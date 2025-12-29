@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Package, DollarSign, TrendingUp, Clock, Search, Filter, Truck, CheckCircle, XCircle, FileText } from 'lucide-react';
+import { Package, DollarSign, TrendingUp, Search, Filter, CheckCircle, FileText } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -15,7 +15,11 @@ interface Order {
   total: number;
   status: string;
   createdAt: string;
-  items: any[];
+  items: Array<{
+    id: string;
+    quantity: number;
+    price: number;
+  }>;
   conservationDonation?: {
     amount: number;
     percentage: number;
@@ -71,11 +75,7 @@ export default function OrdersPage() {
   const [trackingNumber, setTrackingNumber] = useState('');
   const [carrier, setCarrier] = useState('');
 
-  useEffect(() => {
-    fetchOrders();
-  }, [statusFilter, searchQuery, dateFrom, dateTo, minAmount, maxAmount]);
-
-  async function fetchOrders() {
+  const fetchOrders = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -101,7 +101,11 @@ export default function OrdersPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [statusFilter, searchQuery, dateFrom, dateTo, minAmount, maxAmount]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   function toggleOrderSelection(orderId: string) {
     const newSelection = new Set(selectedOrders);
@@ -473,7 +477,7 @@ export default function OrdersPage() {
                       </td>
                       <td className="py-4">
                         <div className="text-sm">
-                          {order.items.slice(0, 2).map((item: any, idx: number) => (
+                          {order.items.slice(0, 2).map((item, idx: number) => (
                             <div key={idx}>
                               {item.variant?.product?.name || 'Unknown'} x{item.quantity}
                             </div>

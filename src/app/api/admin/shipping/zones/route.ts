@@ -12,7 +12,7 @@ const zoneSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ zone });
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.issues },
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 
     console.error('Create shipping zone error:', error);
     return NextResponse.json(
-      { error: 'Failed to create shipping zone', details: error.message },
+      { error: 'Failed to create shipping zone', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

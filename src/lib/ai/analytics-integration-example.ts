@@ -219,7 +219,7 @@ export async function getNewArrivalsForUser(
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-  let newProducts = await prisma.product.findMany({
+  const newProducts = await prisma.product.findMany({
     where: {
       createdAt: { gte: thirtyDaysAgo },
       variants: { some: { stock: { gt: 0 } } },

@@ -16,7 +16,7 @@ export async function GET(req: Request) {
     const dateFrom = searchParams.get('dateFrom');
     const dateTo = searchParams.get('dateTo');
 
-    let where: any = {
+    const where: Record<string, unknown> = {
       stripePaymentId: { not: null },
     };
 

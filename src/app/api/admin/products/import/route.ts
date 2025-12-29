@@ -148,9 +148,9 @@ export async function POST(req: Request) {
             }
           }
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error(`Error creating product ${slug}:`, error);
-        errors.push({ slug, error: error.message });
+        errors.push({ slug, error: error instanceof Error ? error.message : 'Unknown error' });
       }
     }
 
@@ -161,10 +161,10 @@ export async function POST(req: Request) {
       createdProducts: created,
       errors: errors.length > 0 ? errors : undefined,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Import error:', error);
     return NextResponse.json(
-      { error: 'Failed to import products', details: error.message },
+      { error: 'Failed to import products', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,19 +8,17 @@ import { PackingSlipTemplate } from '@/components/admin/PackingSlipTemplate';
 import { Printer, ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useReactToPrint } from 'react-to-print';
+import type { OrderDetail } from '@/types';
 
 export default function PackingSlipPage() {
   const params = useParams();
   const router = useRouter();
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<OrderDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const slipRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchOrder();
-  }, []);
+  const fetchOrder = useCallback(async () => {
 
-  async function fetchOrder() {
     try {
       const response = await fetch(`/api/admin/orders/${params.id}/invoice`);
       const data = await response.json();
@@ -36,7 +34,11 @@ export default function PackingSlipPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchOrder();
+  }, [fetchOrder]);
 
   const handlePrint = useReactToPrint({
     contentRef: slipRef,

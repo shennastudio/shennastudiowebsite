@@ -21,7 +21,7 @@ export async function GET(req: Request) {
     const minAmount = searchParams.get('minAmount');
     const maxAmount = searchParams.get('maxAmount');
 
-    let where: any = {};
+    const where: Record<string, unknown> = {};
 
     // Status filter
     if (status && status !== 'all') {

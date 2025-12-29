@@ -1,23 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Mail, Package, Award, DollarSign } from 'lucide-react';
+import { ArrowLeft, Package, Award, DollarSign } from 'lucide-react';
 import toast from 'react-hot-toast';
+import type { CustomerDetail } from '@/types';
 
 export default function CustomerDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [customer, setCustomer] = useState<any>(null);
+  const [customer, setCustomer] = useState<CustomerDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchCustomer();
-  }, []);
+  const fetchCustomer = useCallback(async () => {
 
-  async function fetchCustomer() {
     try {
       const response = await fetch(`/api/admin/customers/${params.id}`);
       const data = await response.json();
@@ -33,7 +31,11 @@ export default function CustomerDetailPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchCustomer();
+  }, [fetchCustomer]);
 
   function getStatusColor(status: string) {
     switch (status) {
@@ -139,7 +141,7 @@ export default function CustomerDetailPage() {
                 <p className="text-gray-500 text-center py-8">No orders yet</p>
               ) : (
                 <div className="space-y-4">
-                  {customer.orders.map((order: any) => (
+                  {customer.orders.map((order) => (
                     <div key={order.id} className="border rounded-lg p-4 hover:bg-gray-50">
                       <div className="flex justify-between items-start mb-2">
                         <div>

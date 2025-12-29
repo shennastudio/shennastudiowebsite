@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import type { OrderDetail } from '@/types';
 
 interface TimelineEvent {
   type: string;
@@ -27,21 +28,27 @@ interface TimelineEvent {
   user?: string;
 }
 
+interface OrderNote {
+  id: string;
+  content: string;
+  createdAt: string;
+  user?: {
+    name: string;
+  } | null;
+}
+
 export default function OrderDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<OrderDetail | null>(null);
   const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
-  const [notes, setNotes] = useState<any[]>([]);
+  const [notes, setNotes] = useState<OrderNote[]>([]);
   const [newNote, setNewNote] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchOrderDetails();
-  }, []);
+  const fetchOrderDetails = useCallback(async () => {
 
-  async function fetchOrderDetails() {
     setLoading(true);
     try {
       const [timelineRes, notesRes] = await Promise.all([
@@ -65,7 +72,11 @@ export default function OrderDetailPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [params.id]);
+
+  useEffect(() => {
+    fetchOrderDetails();
+  }, [fetchOrderDetails]);
 
   async function handleAddNote(e: React.FormEvent) {
     e.preventDefault();
@@ -96,7 +107,7 @@ export default function OrderDetailPage() {
   }
 
   function getIcon(iconName: string) {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType> = {
       'shopping-bag': ShoppingBag,
       'clock': Clock,
       'truck': Truck,

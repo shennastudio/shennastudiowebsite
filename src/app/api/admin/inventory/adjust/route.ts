@@ -79,7 +79,7 @@ export async function POST(req: Request) {
       newStock,
       transaction,
     });
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid adjustment data', details: error.issues },
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
 
     console.error('Inventory adjustment error:', error);
     return NextResponse.json(
-      { error: 'Failed to adjust inventory', details: error.message },
+      { error: 'Failed to adjust inventory', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

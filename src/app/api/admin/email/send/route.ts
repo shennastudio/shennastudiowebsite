@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
               <div style="padding: 40px 30px;">
                 ${body.split('\n').map((paragraph: string) => {
                   // Convert basic markdown to HTML
-                  let html = paragraph
+                  const html = paragraph
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>')
                     .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" style="color: #0891b2;">$1</a>');
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
               <div style="padding: 40px 30px;">
                 ${body.split('\n').map((paragraph: string) => {
                   // Convert basic markdown to HTML
-                  let html = paragraph
+                  const html = paragraph
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                     .replace(/\*(.*?)\*/g, '<em>$1</em>')
                     .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" style="color: #0891b2;">$1</a>');

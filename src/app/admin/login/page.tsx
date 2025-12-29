@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import Link from 'next/link'
 import { Lock } from 'lucide-react'
 
 export default function AdminLoginPage() {
@@ -184,12 +185,12 @@ export default function AdminLoginPage() {
 
           {/* Back to Store Link */}
           <div className="text-center">
-            <a
+            <Link
               href="/"
               className="text-sm text-cyan-600 hover:text-cyan-700 font-medium transition-colors"
             >
               ← Back to Store
-            </a>
+            </Link>
           </div>
         </div>
       </div>

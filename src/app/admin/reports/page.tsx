@@ -1,22 +1,36 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DollarSign, Package, TrendingUp, Download } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+interface ReportData {
+  summary: {
+    totalRevenue: number;
+    totalOrders: number;
+    totalSubtotal: number;
+    totalShipping: number;
+    totalTax: number;
+    totalDonations: number;
+    netRevenue: number;
+    averageOrderValue: number;
+  };
+  topProducts: Array<{
+    name: string;
+    quantity: number;
+    revenue: number;
+  }>;
+}
+
 export default function ReportsPage() {
-  const [report, setReport] = useState<any>(null);
+  const [report, setReport] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
 
-  useEffect(() => {
-    fetchReport();
-  }, [dateFrom, dateTo]);
-
-  async function fetchReport() {
+  const fetchReport = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -37,7 +51,11 @@ export default function ReportsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [dateFrom, dateTo]);
+
+  useEffect(() => {
+    fetchReport();
+  }, [fetchReport]);
 
   function exportToCSV() {
     if (!report) return;
@@ -58,7 +76,7 @@ export default function ReportsPage() {
       [''],
       ['Top Products'],
       ['Product', 'Quantity Sold', 'Revenue'],
-      ...report.topProducts.map((p: any) => [
+      ...report.topProducts.map((p) => [
         p.name,
         p.quantity,
         `$${p.revenue.toFixed(2)}`,
@@ -210,7 +228,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {report.topProducts.map((product: any, index: number) => (
+              {report.topProducts.map((product: { name: string; quantity: number; revenue: number }, index: number) => (
                 <div key={index} className="flex justify-between items-center">
                   <div className="flex-1">
                     <p className="font-medium text-sm">{product.name}</p>

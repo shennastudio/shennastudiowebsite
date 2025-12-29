@@ -9,7 +9,6 @@ import {
   Hr,
   Link,
   Img,
-  Button,
 } from '@react-email/components';
 
 interface ShippingNotificationEmailProps {
@@ -108,7 +107,7 @@ export const ShippingNotificationEmail = ({
           {/* Additional Info */}
           <Section style={infoSection}>
             <Text style={infoText}>
-              💡 <strong>Tip:</strong> Make sure someone is available to receive your package. If you're not
+              💡 <strong>Tip:</strong> Make sure someone is available to receive your package. If you&apos;re not
               home, the carrier may leave a notice with instructions for pickup or redelivery.
             </Text>
           </Section>

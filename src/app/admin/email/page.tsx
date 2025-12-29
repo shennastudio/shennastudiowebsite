@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -51,13 +51,7 @@ export default function EmailClientPage() {
   const [showCc, setShowCc] = useState(false);
   const [showBcc, setShowBcc] = useState(false);
 
-  useEffect(() => {
-    if (activeTab === 'sent' || activeTab === 'archived') {
-      fetchEmails();
-    }
-  }, [activeTab]);
-
-  async function fetchEmails() {
+  const fetchEmails = useCallback(async () => {
     setLoading(true);
     try {
       const endpoint = activeTab === 'sent' ? '/api/admin/email/sent' : '/api/admin/email/archived';
@@ -75,7 +69,13 @@ export default function EmailClientPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'sent' || activeTab === 'archived') {
+      fetchEmails();
+    }
+  }, [activeTab, fetchEmails]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -506,7 +506,7 @@ You can use basic markdown formatting:
             <Inbox className="w-20 h-20 text-emerald-300 mx-auto mb-6" />
             <h3 className="text-2xl font-bold text-slate-900 mb-3">Incoming Email Integration</h3>
             <p className="text-slate-600 text-lg mb-4">
-              Resend is an outgoing email service. To receive emails, you'll need to integrate with an incoming email provider.
+              Resend is an outgoing email service. To receive emails, you&apos;ll need to integrate with an incoming email provider.
             </p>
             <div className="max-w-md mx-auto bg-white rounded-xl p-6 border-2 border-emerald-200 shadow-lg">
               <h4 className="font-semibold text-slate-900 mb-3">Recommended Providers:</h4>

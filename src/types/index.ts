@@ -430,3 +430,123 @@ export interface AnalyticsSummary {
     desktop: number;
   };
 }
+
+// ============================================================================
+// ADMIN SPECIFIC TYPES
+// ============================================================================
+
+/**
+ * Customer detail with metrics
+ */
+export interface CustomerDetail {
+  id: string;
+  name: string | null;
+  email: string;
+  createdAt: Date;
+  orders: AdminOrderSummary[];
+  metrics: {
+    totalSpent: number;
+    orderCount: number;
+    avgOrderValue: number;
+    totalDonations: number;
+  };
+  rewards?: {
+    points: number;
+    currentTier: string;
+  } | null;
+}
+
+/**
+ * Admin order summary
+ */
+export interface AdminOrderSummary {
+  id: string;
+  orderNumber: string;
+  status: string;
+  total: number;
+  createdAt: Date;
+  items: Array<{
+    id: string;
+    quantity: number;
+    price: number;
+  }>;
+}
+
+/**
+ * Email log entry
+ */
+export interface EmailLog {
+  id: string;
+  to: string;
+  subject: string;
+  template: string;
+  status: 'sent' | 'failed' | 'pending';
+  sentAt: Date | null;
+  createdAt: Date;
+  error?: string | null;
+}
+
+/**
+ * Discount code data
+ */
+export interface DiscountData {
+  code: string;
+  type: 'PERCENTAGE' | 'FIXED_AMOUNT' | 'FREE_SHIPPING' | 'BUY_X_GET_Y';
+  value: number;
+  description?: string;
+  internalNote?: string;
+  isActive: boolean;
+  usageLimit?: number;
+  usageLimitPerCustomer?: number;
+  minPurchaseAmount?: number;
+  startsAt?: string;
+  expiresAt?: string;
+}
+
+/**
+ * Order with full details for admin
+ */
+export interface OrderDetail {
+  id: string;
+  orderNumber: string;
+  customerEmail: string;
+  customerName: string;
+  status: string;
+  total: number;
+  subtotal: number;
+  tax: number;
+  shippingCost: number;
+  createdAt: Date;
+  shippedAt?: Date | null;
+  deliveredAt?: Date | null;
+  trackingNumber?: string | null;
+  carrier?: string | null;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZip: string;
+  shippingCountry: string;
+  items: Array<{
+    id: string;
+    quantity: number;
+    price: number;
+    variant: {
+      id: string;
+      name: string;
+      sku: string;
+      size?: string | null;
+      color?: string | null;
+      material?: string | null;
+      product: {
+        id: string;
+        name: string;
+        slug: string;
+      };
+    };
+  }>;
+  conservationDonation?: {
+    amount: number;
+    percentage: number;
+    organization: string;
+  } | null;
+}

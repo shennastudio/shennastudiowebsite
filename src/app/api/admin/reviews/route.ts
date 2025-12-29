@@ -21,7 +21,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const status = searchParams.get('status'); // all, pending, approved, rejected
 
-    let where: any = {};
+    const where: Record<string, unknown> = {};
 
     if (status === 'pending') {
       where.isApproved = false;
@@ -117,7 +117,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const updateData: any = {};
+    const updateData: Record<string, unknown> = {};
 
     if (action === 'approve') {
       updateData.isApproved = true;
@@ -140,7 +140,7 @@ export async function POST(req: Request) {
       success: true,
       review,
     });
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.issues },
@@ -150,7 +150,7 @@ export async function POST(req: Request) {
 
     console.error('Review moderation error:', error);
     return NextResponse.json(
-      { error: 'Failed to moderate review', details: error.message },
+      { error: 'Failed to moderate review', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

@@ -63,7 +63,7 @@ export const OrderConfirmationEmail = ({
         {/* Greeting */}
         <Text style={text}>Hi {customerName},</Text>
         <Text style={text}>
-          Thank you for your order! We've received your order and are preparing it for shipment.
+          Thank you for your order! We&apos;ve received your order and are preparing it for shipment.
         </Text>
 
         {/* Order Details */}

@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Package, AlertTriangle, TrendingUp, DollarSign, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import Image from 'next/image';
 
 interface InventoryData {
   variants: Array<{
@@ -58,11 +59,7 @@ export default function InventoryPage() {
   const [adjustmentQty, setAdjustmentQty] = useState(0);
   const [adjustmentReason, setAdjustmentReason] = useState('');
 
-  useEffect(() => {
-    fetchInventory();
-  }, [filter]);
-
-  async function fetchInventory() {
+  const fetchInventory = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/admin/inventory?filter=${filter}`);
@@ -71,12 +68,16 @@ export default function InventoryPage() {
 
       const inventoryData = await response.json();
       setData(inventoryData);
-    } catch (error) {
+    } catch {
       toast.error('Failed to load inventory');
     } finally {
       setLoading(false);
     }
-  }
+  }, [filter]);
+
+  useEffect(() => {
+    fetchInventory();
+  }, [fetchInventory]);
 
   async function handleAdjustment(variantId: string) {
     if (adjustmentQty === 0) {
@@ -106,8 +107,8 @@ export default function InventoryPage() {
       setAdjustmentQty(0);
       setAdjustmentReason('');
       fetchInventory();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to adjust stock');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to adjust stock');
     }
   }
 
@@ -220,9 +221,11 @@ export default function InventoryPage() {
                   <div key={variant.id} className="p-4">
                     <div className="flex items-start gap-4">
                       {variant.product.images.length > 0 && variant.product.images[0]?.url && (
-                        <img
+                        <Image
                           src={variant.product.images[0].url}
                           alt={variant.product.images[0].alt || variant.product.name}
+                          width={64}
+                          height={64}
                           className="w-16 h-16 object-cover rounded-lg"
                         />
                       )}
@@ -271,7 +274,7 @@ export default function InventoryPage() {
                             </label>
                             <select
                               value={adjustmentType}
-                              onChange={(e) => setAdjustmentType(e.target.value as any)}
+                              onChange={(e) => setAdjustmentType(e.target.value as 'RESTOCK' | 'ADJUSTMENT')}
                               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
                             >
                               <option value="RESTOCK">Add Stock</option>

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
+import type { DiscountData } from '@/types';
 
 export default function NewDiscountPage() {
   const router = useRouter();
@@ -60,7 +61,7 @@ export default function NewDiscountPage() {
       }
 
       // Prepare data
-      const discountData: any = {
+      const discountData: Partial<DiscountData> = {
         code: formData.code.toUpperCase().trim(),
         type: formData.type,
         value: Number(formData.value),
@@ -102,9 +103,9 @@ export default function NewDiscountPage() {
 
       toast.success('Discount code created successfully');
       router.push('/admin/discounts');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error creating discount:', error);
-      toast.error(error.message || 'Failed to create discount code');
+      toast.error(error instanceof Error ? error.message : 'Failed to create discount code');
     } finally {
       setLoading(false);
     }

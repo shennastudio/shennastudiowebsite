@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useCart } from '@/context/CartContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +12,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function CheckoutPage() {
-  const router = useRouter();
   const { data: session } = useSession();
   const { state: cart } = useCart();
   const [loading, setLoading] = useState(false);

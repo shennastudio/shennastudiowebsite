@@ -48,7 +48,7 @@ export default function BulkEditPage() {
       if (!response.ok) throw new Error('Failed to fetch products');
       const data = await response.json();
       setProducts(data);
-    } catch (error) {
+    } catch {
       toast.error('Failed to load products');
     } finally {
       setLoading(false);
@@ -89,7 +89,16 @@ export default function BulkEditPage() {
     setProcessing(true);
 
     try {
-      let requestData: any = {
+      const requestData: {
+        productIds: string[];
+        action: string;
+        priceChange?: number;
+        priceType?: string;
+        stockChange?: number;
+        stockType?: string;
+        status?: string;
+        featured?: boolean;
+      } = {
         productIds: Array.from(selectedIds),
         action,
       };
@@ -130,8 +139,8 @@ export default function BulkEditPage() {
       // Refresh products list
       fetchProducts();
       deselectAll();
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to perform bulk edit');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'Failed to perform bulk edit');
     } finally {
       setProcessing(false);
     }
@@ -316,7 +325,7 @@ export default function BulkEditPage() {
                   </label>
                   <select
                     value={priceType}
-                    onChange={(e) => setPriceType(e.target.value as any)}
+                    onChange={(e) => setPriceType(e.target.value as 'percentage' | 'fixed')}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   >
                     <option value="percentage">Percentage (%)</option>
@@ -345,7 +354,7 @@ export default function BulkEditPage() {
                   </label>
                   <select
                     value={stockType}
-                    onChange={(e) => setStockType(e.target.value as any)}
+                    onChange={(e) => setStockType(e.target.value as 'add' | 'subtract' | 'set')}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   >
                     <option value="set">Set to value</option>

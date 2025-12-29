@@ -28,7 +28,7 @@ interface AdminSidebarProps {
   userName?: string | null;
 }
 
-export function AdminSidebar({ userName }: AdminSidebarProps) {
+export function AdminSidebar({}: AdminSidebarProps) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

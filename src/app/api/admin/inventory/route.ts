@@ -15,7 +15,7 @@ export async function GET(req: Request) {
     const filter = searchParams.get('filter') || 'all'; // all, low_stock, out_of_stock
 
     // Get all variants with product info
-    let where: any = {};
+    const where: Record<string, unknown> = {};
 
     if (filter === 'low_stock') {
       where.stock = { lte: 10, gt: 0 };

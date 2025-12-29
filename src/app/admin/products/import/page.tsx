@@ -44,7 +44,7 @@ export default function ImportProductsPage() {
             success: false,
             created: 0,
             failed: data.invalid.length,
-            errors: data.invalid.map((inv: any) => ({
+            errors: data.invalid.map((inv: { row: number; errors: string[] }) => ({
               slug: `Row ${inv.row}`,
               error: inv.errors.join(', '),
             })),
@@ -62,9 +62,9 @@ export default function ImportProductsPage() {
       if (data.failed > 0) {
         toast.error(`${data.failed} products failed to import`);
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('Import error:', error);
-      toast.error(error.message || 'Failed to import products');
+      toast.error(error instanceof Error ? error.message : 'Failed to import products');
     } finally {
       setImporting(false);
     }

@@ -82,8 +82,8 @@ export async function POST(req: Request) {
             }
 
             updated++;
-          } catch (error: any) {
-            errors.push({ id: productId, error: error.message });
+          } catch (error) {
+            errors.push({ id: productId, error: error instanceof Error ? error.message : 'Unknown error' });
           }
         }
         break;
@@ -131,8 +131,8 @@ export async function POST(req: Request) {
             }
 
             updated++;
-          } catch (error: any) {
-            errors.push({ id: productId, error: error.message });
+          } catch (error) {
+            errors.push({ id: productId, error: error instanceof Error ? error.message : 'Unknown error' });
           }
         }
         break;
@@ -152,8 +152,8 @@ export async function POST(req: Request) {
               data: { featured: data.featured },
             });
             updated++;
-          } catch (error: any) {
-            errors.push({ id: productId, error: error.message });
+          } catch (error) {
+            errors.push({ id: productId, error: error instanceof Error ? error.message : 'Unknown error' });
           }
         }
         break;
@@ -182,8 +182,8 @@ export async function POST(req: Request) {
               where: { id: productId },
             });
             updated++;
-          } catch (error: any) {
-            errors.push({ id: productId, error: error.message });
+          } catch (error) {
+            errors.push({ id: productId, error: error instanceof Error ? error.message : 'Unknown error' });
           }
         }
         break;
@@ -195,7 +195,7 @@ export async function POST(req: Request) {
       failed: errors.length,
       errors: errors.length > 0 ? errors : undefined,
     });
-  } catch (error: any) {
+  } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: 'Invalid request data', details: error.issues },
@@ -205,7 +205,7 @@ export async function POST(req: Request) {
 
     console.error('Bulk edit error:', error);
     return NextResponse.json(
-      { error: 'Failed to perform bulk edit', details: error.message },
+      { error: 'Failed to perform bulk edit', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }
