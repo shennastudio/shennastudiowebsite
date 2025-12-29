@@ -1,39 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { use } from 'react';
+import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Save, Eye, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 import toast from 'react-hot-toast';
 
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  content: string;
-  featuredImage: string | null;
-  category: string | null;
-  tags: string[];
-  featured: boolean;
-  published: boolean;
-  author: {
-    id: string;
-    name: string | null;
-    email: string;
-  };
-}
-
 export default function EditBlogPostPage({ params }: { params: Promise<{ id: string }> }) {
-  const resolvedParams = use(params);
   const router = useRouter();
+  const { id } = use(params);
+  
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [post, setPost] = useState<BlogPost | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
@@ -48,34 +30,40 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
   const [tagInput, setTagInput] = useState('');
 
   useEffect(() => {
-    fetchPost();
-  }, [resolvedParams.id]);
-
-  const fetchPost = async () => {
-    try {
-      const response = await fetch(`/api/admin/blog/${resolvedParams.id}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch blog post');
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`/api/admin/blog/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog post');
+        }
+        const post = await response.json();
+        setFormData({
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt || '',
+          content: post.content,
+          featuredImage: post.featuredImage || '',
+          category: post.category || '',
+          tags: post.tags || [],
+          featured: post.featured,
+          published: post.published,
+        });
+      } catch (error) {
+        console.error('Error fetching post:', error);
+        toast.error('Failed to load blog post');
+        router.push('/admin/blog');
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      setPost(data);
-      setFormData({
-        title: data.title,
-        slug: data.slug,
-        excerpt: data.excerpt || '',
-        content: data.content,
-        featuredImage: data.featuredImage || '',
-        category: data.category || '',
-        tags: data.tags || [],
-        featured: data.featured,
-        published: data.published,
-      });
-    } catch (error) {
-      console.error('Error fetching blog post:', error);
-      toast.error('Failed to load blog post');
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    fetchPost();
+  }, [id, router]);
+
+  const handleTitleChange = (title: string) => {
+    // Only auto-generate slug if it's currently empty or matches the old title
+    // But since this is edit, we probably shouldn't auto-update slug unless explicitly cleared
+    setFormData(prev => ({ ...prev, title }));
   };
 
   const handleAddTag = () => {
@@ -95,7 +83,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
     });
   };
 
-  const handleSubmit = async (publish?: boolean) => {
+  const handleSubmit = async (publishStatus?: boolean) => {
     if (!formData.title || !formData.slug || !formData.content) {
       toast.error('Please fill in all required fields (Title, Slug, and Content)');
       return;
@@ -104,14 +92,14 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
     setSaving(true);
 
     try {
-      const response = await fetch(`/api/admin/blog/${resolvedParams.id}`, {
+      const response = await fetch(`/api/admin/blog/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           ...formData,
-          published: publish !== undefined ? publish : formData.published,
+          published: publishStatus !== undefined ? publishStatus : formData.published,
         }),
       });
 
@@ -133,24 +121,8 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-cyan-600 animate-spin mx-auto mb-4" />
-          <p className="text-slate-600">Loading blog post...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (!post) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-slate-600 mb-4">Blog post not found</p>
-          <Link href="/admin/blog">
-            <Button>Back to Blog Posts</Button>
-          </Link>
-        </div>
+      <div className="flex items-center justify-center h-96">
+        <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
       </div>
     );
   }
@@ -170,40 +142,26 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
             <h1 className="text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">
               Edit Blog Post
             </h1>
-            <p className="text-slate-600 mt-2">
-              Last updated by {post.author.name || post.author.email}
-            </p>
+            <p className="text-slate-600 mt-2">Update your conservation story</p>
           </div>
         </div>
         <div className="flex gap-2">
-          {formData.published ? (
-            <Button
-              variant="outline"
-              onClick={() => handleSubmit(false)}
-              disabled={saving}
-              className="hover:bg-slate-50"
-            >
-              <Save className="h-4 w-4 mr-2" />
-              {saving ? 'Unpublishing...' : 'Unpublish'}
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              onClick={() => handleSubmit(false)}
-              disabled={saving}
-              className="hover:bg-slate-50"
-            >
-              <Save className="h-4 w-4 mr-2" />
-              {saving ? 'Saving...' : 'Save Draft'}
-            </Button>
-          )}
           <Button
-            onClick={() => handleSubmit(true)}
+            variant="outline"
+            onClick={() => handleSubmit(false)} // Save as draft
+            disabled={saving}
+            className="hover:bg-slate-50"
+          >
+            <Save className="h-4 w-4 mr-2" />
+            {saving ? 'Saving...' : 'Save Draft'}
+          </Button>
+          <Button
+            onClick={() => handleSubmit(true)} // Publish
             disabled={saving}
             className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700"
           >
             <Eye className="h-4 w-4 mr-2" />
-            {saving ? 'Saving...' : formData.published ? 'Update & Keep Published' : 'Save & Publish'}
+            {saving ? 'Publishing...' : 'Publish'}
           </Button>
         </div>
       </div>
@@ -224,7 +182,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
                 <input
                   type="text"
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) => handleTitleChange(e.target.value)}
                   placeholder="Enter blog post title"
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                   required
@@ -282,45 +240,18 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Status Badge */}
-          <Card className="border-slate-200/60 shadow-lg">
-            <CardContent className="pt-6">
-              {formData.published ? (
-                <div className="flex items-center gap-2 text-green-700">
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  <span className="font-semibold">Published</span>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 text-amber-700">
-                  <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-                  <span className="font-semibold">Draft</span>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
           {/* Featured Image */}
           <Card className="border-slate-200/60 shadow-lg">
             <CardHeader className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white">
               <CardTitle className="text-base">Featured Image</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
-              <input
-                type="url"
-                value={formData.featuredImage}
-                onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
-                placeholder="https://example.com/image.jpg"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-sm"
+              <ImageUpload
+                currentImage={formData.featuredImage}
+                onUploadComplete={(url) => setFormData({ ...formData, featuredImage: url })}
+                onRemove={() => setFormData({ ...formData, featuredImage: '' })}
+                label="Featured Image"
               />
-              {formData.featuredImage && (
-                <div className="mt-4 rounded-lg overflow-hidden border border-slate-200">
-                  <img
-                    src={formData.featuredImage}
-                    alt="Featured preview"
-                    className="w-full h-48 object-cover"
-                  />
-                </div>
-              )}
             </CardContent>
           </Card>
 

@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { RichTextEditor } from '@/components/admin/RichTextEditor';
 import toast from 'react-hot-toast';
 
+import { ImageUpload } from '@/components/admin/ImageUpload';
+
 export default function NewBlogPostPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
@@ -211,22 +213,12 @@ export default function NewBlogPostPage() {
               <CardTitle className="text-base">Featured Image</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
-              <input
-                type="url"
-                value={formData.featuredImage}
-                onChange={(e) => setFormData({ ...formData, featuredImage: e.target.value })}
-                placeholder="https://example.com/image.jpg"
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-sm"
+              <ImageUpload
+                currentImage={formData.featuredImage}
+                onUploadComplete={(url) => setFormData({ ...formData, featuredImage: url })}
+                onRemove={() => setFormData({ ...formData, featuredImage: '' })}
+                label="Featured Image"
               />
-              {formData.featuredImage && (
-                <div className="mt-4 rounded-lg overflow-hidden border border-slate-200">
-                  <img
-                    src={formData.featuredImage}
-                    alt="Featured preview"
-                    className="w-full h-48 object-cover"
-                  />
-                </div>
-              )}
             </CardContent>
           </Card>
 

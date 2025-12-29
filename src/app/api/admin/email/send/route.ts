@@ -4,8 +4,6 @@ import { authOptions } from '@/lib/auth';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/db';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -13,6 +11,17 @@ export async function POST(request: NextRequest) {
     if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'STAFF')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      console.error('RESEND_API_KEY is not defined');
+      return NextResponse.json(
+        { error: 'Email service not configured' },
+        { status: 500 }
+      );
+    }
+
+    const resend = new Resend(apiKey);
 
     const { to, cc, bcc, subject, body } = await request.json();
 
