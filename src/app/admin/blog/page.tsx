@@ -5,11 +5,12 @@ import { prisma } from '@/lib/db';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Search, FileText, Eye } from 'lucide-react';
+import { Plus, Edit, Search, FileText, Eye } from 'lucide-react';
 import { DeleteBlogPostButton } from '@/components/admin/DeleteBlogPostButton';
+import { Prisma } from '@prisma/client';
 
 async function getBlogPosts(searchQuery?: string, status?: string, category?: string) {
-  const where: any = {};
+  const where: Prisma.BlogPostWhereInput = {};
 
   if (searchQuery) {
     where.OR = [

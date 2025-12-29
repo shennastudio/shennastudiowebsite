@@ -82,7 +82,7 @@ export default function CalendarPage() {
       if (!response.ok) throw new Error('Failed to load events');
 
       const data = await response.json();
-      setEvents(data.events.map((e: any) => ({
+      setEvents(data.events.map((e: CalendarEvent) => ({
         ...e,
         date: new Date(e.date).toISOString().split('T')[0],
       })));
@@ -160,11 +160,11 @@ export default function CalendarPage() {
       location: event.location || '',
       attendees: event.attendees || [],
       recurring: event.recurring,
-      recurringPattern: (event.recurringPattern as any) || 'weekly',
+      recurringPattern: (event.recurringPattern as 'daily' | 'weekly' | 'monthly' | 'yearly') || 'weekly',
       recurringEnd: event.recurringEnd || '',
       reminder: event.reminder,
       reminderTime: event.reminderTime || 30,
-      status: event.status as any,
+      status: event.status as 'scheduled' | 'completed' | 'cancelled',
     });
     setShowModal(true);
   };
@@ -410,7 +410,7 @@ export default function CalendarPage() {
             ) : filteredEvents.length === 0 ? (
               <div className="text-center py-12 text-slate-500">
                 <CalendarIcon className="w-12 h-12 mx-auto mb-4 text-slate-300" />
-                <p>No events found. Click "Add Event" to get started!</p>
+                <p>No events found. Click &quot;Add Event&quot; to get started!</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -672,8 +672,8 @@ export default function CalendarPage() {
                       <div>
                         <label className="block text-sm text-slate-600 mb-1">Pattern</label>
                         <select
-                          value={formData.recurringPattern}
-                          onChange={(e) => setFormData({ ...formData, recurringPattern: e.target.value as any })}
+                          value={formData.recurringPattern || 'weekly'}
+                          onChange={(e) => setFormData({ ...formData, recurringPattern: e.target.value as 'daily' | 'weekly' | 'monthly' | 'yearly' })}
                           className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
                         >
                           <option value="daily">Daily</option>
@@ -737,7 +737,7 @@ export default function CalendarPage() {
                     </label>
                     <select
                       value={formData.status}
-                      onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                      onChange={(e) => setFormData({ ...formData, status: e.target.value as 'scheduled' | 'completed' | 'cancelled' })}
                       className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                     >
                       <option value="scheduled">Scheduled</option>

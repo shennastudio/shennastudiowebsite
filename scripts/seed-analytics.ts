@@ -1,355 +1,153 @@
-import { PrismaClient, AnalyticsEventType } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// Helper to generate random date within last 30 days
-function randomDate(daysAgo: number = 30): Date {
-  const now = new Date();
-  const past = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
-  return new Date(past.getTime() + Math.random() * (now.getTime() - past.getTime()));
+// Add explicit types
+interface SeedProduct {
+  id: string;
+  name: string;
+  basePrice: number;
 }
 
-// Helper to generate session ID
-function generateSessionId(): string {
-  return `session_${Math.random().toString(36).substring(2, 15)}`;
+interface SeedOrder {
+  id: string;
+  createdAt: Date;
+  total: number;
+  status: string;
 }
 
-async function seedAnalytics() {
-  console.log('🌊 Starting analytics data seeding...\n');
+async function main() {
+  console.log('🌱 Seeding analytics data...');
 
-  try {
-    // Get all products and users for realistic data
-    const products = await prisma.product.findMany({
-      include: { variants: true },
-    });
+  // Get products
+  const products = await prisma.product.findMany({
+    select: { id: true, name: true, basePrice: true },
+    take: 20
+  }) as SeedProduct[];
 
-    const users = await prisma.user.findMany();
-
-    console.log(`📊 Found ${products.length} products and ${users.length} users\n`);
-
-    if (products.length === 0) {
-      console.log('⚠️  No products found. Please seed products first.');
-      return;
-    }
-
-    // Clear existing analytics data
-    console.log('🧹 Clearing old analytics data...');
-    await prisma.analyticsEvent.deleteMany({});
-    await prisma.productAnalytics.deleteMany({});
-    await prisma.userBrowsingPattern.deleteMany({});
-    console.log('✅ Cleared old data\n');
-
-    // Generate analytics events for last 30 days
-    const events: any[] = [];
-    const sessionsPerUser = 5; // Average sessions per user
-    const eventsPerSession = 8; // Average events per session
-    const anonymousSessions = 50; // Sessions from non-logged-in users
-
-    console.log('📝 Generating analytics events...');
-
-    // Events from logged-in users
-    for (const user of users) {
-      for (let session = 0; session < sessionsPerUser; session++) {
-        const sessionId = generateSessionId();
-        const sessionDate = randomDate(30);
-
-        for (let i = 0; i < eventsPerSession; i++) {
-          const eventDate = new Date(sessionDate.getTime() + i * 60000); // 1 min apart
-          const product = products[Math.floor(Math.random() * products.length)];
-          const variant = product.variants[0];
-
-          // Determine event type (higher probability for views)
-          const rand = Math.random();
-          let eventType: AnalyticsEventType;
-          let metadata: any = {};
-
-          if (rand < 0.5) {
-            eventType = 'PRODUCT_VIEW';
-            metadata = {
-              productName: product.name,
-              price: variant?.price || product.basePrice,
-            };
-          } else if (rand < 0.7) {
-            eventType = 'ADD_TO_CART';
-            metadata = {
-              productName: product.name,
-              variantId: variant?.id,
-              price: variant?.price || product.basePrice,
-              quantity: Math.floor(Math.random() * 3) + 1,
-            };
-          } else if (rand < 0.8) {
-            eventType = 'SEARCH';
-            metadata = {
-              query: ['ocean', 'turtle', 'bracelet', 'blue', 'pearl'][
-                Math.floor(Math.random() * 5)
-              ],
-            };
-          } else if (rand < 0.9) {
-            eventType = 'CATEGORY_VIEW';
-            metadata = {
-              categoryId: product.categoryId,
-            };
-          } else if (rand < 0.95) {
-            eventType = 'REMOVE_FROM_CART';
-            metadata = {
-              productName: product.name,
-              variantId: variant?.id,
-            };
-          } else {
-            eventType = 'PURCHASE';
-            metadata = {
-              productName: product.name,
-              variantId: variant?.id,
-              price: variant?.price || product.basePrice,
-              quantity: Math.floor(Math.random() * 2) + 1,
-              total: (variant?.price || product.basePrice) * (Math.floor(Math.random() * 2) + 1),
-            };
-          }
-
-          events.push({
-            eventType,
-            timestamp: eventDate,
-            sessionId,
-            userId: user.id,
-            productId: product.id,
-            variantId: variant?.id || null,
-            categoryId: product.categoryId,
-            metadata,
-            deviceType: ['mobile', 'desktop', 'tablet'][Math.floor(Math.random() * 3)],
-            referrer: ['/', '/products', '/categories', null][Math.floor(Math.random() * 4)],
-          });
-        }
-      }
-    }
-
-    // Events from anonymous users
-    console.log('👤 Adding anonymous user events...');
-    for (let i = 0; i < anonymousSessions; i++) {
-      const sessionId = generateSessionId();
-      const sessionDate = randomDate(30);
-
-      for (let j = 0; j < Math.floor(Math.random() * 10) + 3; j++) {
-        const eventDate = new Date(sessionDate.getTime() + j * 60000);
-        const product = products[Math.floor(Math.random() * products.length)];
-        const variant = product.variants[0];
-
-        const rand = Math.random();
-        let eventType: AnalyticsEventType;
-        let metadata: any = {};
-
-        if (rand < 0.6) {
-          eventType = 'PRODUCT_VIEW';
-          metadata = {
-            productName: product.name,
-            price: variant?.price || product.basePrice,
-          };
-        } else if (rand < 0.8) {
-          eventType = 'ADD_TO_CART';
-          metadata = {
-            productName: product.name,
-            price: variant?.price || product.basePrice,
-            quantity: 1,
-          };
-        } else {
-          eventType = 'SEARCH';
-          metadata = {
-            query: ['ocean', 'sea', 'marine', 'conservation'][Math.floor(Math.random() * 4)],
-          };
-        }
-
-        events.push({
-          eventType,
-          timestamp: eventDate,
-          sessionId,
-          userId: null,
-          productId: product.id,
-          variantId: variant?.id || null,
-          categoryId: product.categoryId,
-          metadata,
-          deviceType: ['mobile', 'desktop', 'tablet'][Math.floor(Math.random() * 3)],
-          referrer: null,
-        });
-      }
-    }
-
-    console.log(`📊 Creating ${events.length} analytics events...`);
-    await prisma.analyticsEvent.createMany({
-      data: events,
-    });
-    console.log(`✅ Created ${events.length} events\n`);
-
-    // Generate ProductAnalytics summaries
-    console.log('📈 Calculating product analytics...');
-    for (const product of products) {
-      const now = new Date();
-      const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-      const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-
-      const viewsLast7Days = await prisma.analyticsEvent.count({
-        where: {
-          productId: product.id,
-          eventType: 'PRODUCT_VIEW',
-          timestamp: { gte: last7Days },
-        },
-      });
-
-      const viewsLast30Days = await prisma.analyticsEvent.count({
-        where: {
-          productId: product.id,
-          eventType: 'PRODUCT_VIEW',
-          timestamp: { gte: last30Days },
-        },
-      });
-
-      const addToCartLast7Days = await prisma.analyticsEvent.count({
-        where: {
-          productId: product.id,
-          eventType: 'ADD_TO_CART',
-          timestamp: { gte: last7Days },
-        },
-      });
-
-      const addToCartLast30Days = await prisma.analyticsEvent.count({
-        where: {
-          productId: product.id,
-          eventType: 'ADD_TO_CART',
-          timestamp: { gte: last30Days },
-        },
-      });
-
-      const purchasesLast7Days = await prisma.analyticsEvent.count({
-        where: {
-          productId: product.id,
-          eventType: 'PURCHASE',
-          timestamp: { gte: last7Days },
-        },
-      });
-
-      const purchasesLast30Days = await prisma.analyticsEvent.count({
-        where: {
-          productId: product.id,
-          eventType: 'PURCHASE',
-          timestamp: { gte: last30Days },
-        },
-      });
-
-      const viewToCartRate = viewsLast30Days > 0 ? addToCartLast30Days / viewsLast30Days : 0;
-      const cartToPurchaseRate =
-        addToCartLast30Days > 0 ? purchasesLast30Days / addToCartLast30Days : 0;
-
-      // Calculate trending score (weighted by recency and conversion)
-      const trendingScore = Math.min(
-        100,
-        (viewsLast7Days * 2 + addToCartLast7Days * 5 + purchasesLast7Days * 10) / 2
-      );
-
-      await prisma.productAnalytics.create({
-        data: {
-          productId: product.id,
-          viewsLast7Days,
-          viewsLast30Days,
-          addToCartLast7Days,
-          addToCartLast30Days,
-          purchasesLast7Days,
-          purchasesLast30Days,
-          viewToCartRate,
-          cartToPurchaseRate,
-          trendingScore,
-        },
-      });
-    }
-    console.log(`✅ Created analytics for ${products.length} products\n`);
-
-    // Generate UserBrowsingPatterns for logged-in users
-    console.log('👥 Creating user browsing patterns...');
-    for (const user of users) {
-      const userEvents = await prisma.analyticsEvent.findMany({
-        where: { userId: user.id },
-        include: {
-          // Include relations if needed
-        },
-      });
-
-      const totalViews = userEvents.filter((e) => e.eventType === 'PRODUCT_VIEW').length;
-      const totalAddToCarts = userEvents.filter((e) => e.eventType === 'ADD_TO_CART').length;
-      const totalPurchases = userEvents.filter((e) => e.eventType === 'PURCHASE').length;
-
-      // Calculate category preferences
-      const categoryViews: Record<string, number> = {};
-      userEvents
-        .filter((e) => e.categoryId)
-        .forEach((e) => {
-          const catId = e.categoryId!;
-          categoryViews[catId] = (categoryViews[catId] || 0) + 1;
-        });
-
-      const categoryPreferences = Object.entries(categoryViews).map(([categoryId, count]) => ({
-        categoryId,
-        score: count,
-      }));
-
-      // Calculate price preferences
-      const prices = userEvents
-        .filter((e) => e.metadata && typeof e.metadata === 'object' && 'price' in e.metadata)
-        .map((e: any) => e.metadata.price as number);
-
-      const avgPrice = prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : null;
-      const minPrice = prices.length > 0 ? Math.min(...prices) : null;
-      const maxPrice = prices.length > 0 ? Math.max(...prices) : null;
-
-      // Calculate browsing time patterns (hour of day)
-      const hourCounts: Record<number, number> = {};
-      userEvents.forEach((e) => {
-        const hour = new Date(e.timestamp).getHours();
-        hourCounts[hour] = (hourCounts[hour] || 0) + 1;
-      });
-
-      const preferredBrowsingTimes = Object.entries(hourCounts)
-        .map(([hour, count]) => ({ hour: Number(hour), count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 3);
-
-      await prisma.userBrowsingPattern.create({
-        data: {
-          userId: user.id,
-          categoryPreferences: categoryPreferences as any,
-          avgPriceViewed: avgPrice,
-          minPriceViewed: minPrice,
-          maxPriceViewed: maxPrice,
-          totalViews,
-          totalAddToCarts,
-          totalPurchases,
-          preferredBrowsingTimes: preferredBrowsingTimes as any,
-          conservationInterests: [
-            'Sea Turtles',
-            'Marine Conservation',
-            'Ocean Cleanup',
-          ].slice(0, Math.floor(Math.random() * 3) + 1) as any,
-        },
-      });
-    }
-    console.log(`✅ Created browsing patterns for ${users.length} users\n`);
-
-    console.log('🎉 Analytics seeding completed successfully!\n');
-    console.log('📊 Summary:');
-    console.log(`  - Total events: ${events.length}`);
-    console.log(`  - Products analyzed: ${products.length}`);
-    console.log(`  - User patterns: ${users.length}`);
-    console.log(`  - Anonymous sessions: ${anonymousSessions}`);
-  } catch (error) {
-    console.error('❌ Error seeding analytics:', error);
-    throw error;
-  } finally {
-    await prisma.$disconnect();
+  if (products.length === 0) {
+    console.log('❌ No products found. Please seed products first.');
+    return;
   }
+
+  // Get users
+  const users = await prisma.user.findMany({
+    select: { id: true },
+    take: 10
+  });
+
+  // 1. Seed Product Analytics
+  console.log('📊 Seeding product analytics...');
+  for (const product of products) {
+    const views7 = Math.floor(Math.random() * 100) + 20;
+    const views30 = views7 * 4 + Math.floor(Math.random() * 50);
+    const carts7 = Math.floor(views7 * 0.15);
+    const carts30 = Math.floor(views30 * 0.15);
+    const purchases7 = Math.floor(carts7 * 0.4);
+    const purchases30 = Math.floor(carts30 * 0.4);
+
+    // Calculate trending score based on recent views and conversion
+    const recentActivity = views7 + (carts7 * 2) + (purchases7 * 5);
+    const trendingScore = Math.min(100, Math.floor(recentActivity / 2));
+
+    await prisma.productAnalytics.upsert({
+      where: { productId: product.id },
+      update: {
+        viewsLast7Days: views7,
+        viewsLast30Days: views30,
+        addToCartLast7Days: carts7,
+        addToCartLast30Days: carts30,
+        purchasesLast7Days: purchases7,
+        purchasesLast30Days: purchases30,
+        trendingScore: trendingScore,
+        viewToCartRate: views30 > 0 ? carts30 / views30 : 0,
+        cartToPurchaseRate: carts30 > 0 ? purchases30 / carts30 : 0,
+      },
+      create: {
+        productId: product.id,
+        viewsLast7Days: views7,
+        viewsLast30Days: views30,
+        addToCartLast7Days: carts7,
+        addToCartLast30Days: carts30,
+        purchasesLast7Days: purchases7,
+        purchasesLast30Days: purchases30,
+        trendingScore: trendingScore,
+        viewToCartRate: views30 > 0 ? carts30 / views30 : 0,
+        cartToPurchaseRate: carts30 > 0 ? purchases30 / carts30 : 0,
+      }
+    });
+  }
+
+  // 2. Seed Analytics Events (Historical)
+  console.log('🕰️ Seeding historical events...');
+  const eventTypes = ['PRODUCT_VIEW', 'ADD_TO_CART', 'PURCHASE', 'CATEGORY_VIEW'];
+  const now = new Date();
+  
+  // Create 200 random events over the last 30 days
+  for (let i = 0; i < 200; i++) {
+    const randomProduct = products[Math.floor(Math.random() * products.length)];
+    const randomUser = users.length > 0 ? users[Math.floor(Math.random() * users.length)] : null;
+    const randomType = eventTypes[Math.floor(Math.random() * eventTypes.length)] as 'PRODUCT_VIEW' | 'ADD_TO_CART' | 'PURCHASE' | 'CATEGORY_VIEW';
+    const daysAgo = Math.floor(Math.random() * 30);
+    const eventDate = new Date(now.getTime() - (daysAgo * 24 * 60 * 60 * 1000));
+
+    await prisma.analyticsEvent.create({
+      data: {
+        eventType: randomType,
+        timestamp: eventDate,
+        sessionId: `session_${Math.random().toString(36).substring(7)}`,
+        userId: randomUser?.id,
+        productId: randomProduct.id,
+        metadata: {
+          price: randomProduct.basePrice,
+          source: 'seed_script'
+        }
+      }
+    });
+  }
+
+  // 3. Seed Conservation Impact
+  console.log('🐢 Seeding conservation impact...');
+  const periods = ['daily', 'weekly', 'monthly', 'yearly'];
+  
+  for (const period of periods) {
+    const orders = await prisma.order.findMany({
+      where: {
+        status: { in: ['DELIVERED', 'SHIPPED', 'PROCESSING'] }
+      },
+      select: { id: true, createdAt: true, total: true, status: true }
+    }) as SeedOrder[];
+
+    const totalDonations = orders.reduce((sum, order) => sum + (order.total * 0.1), 0);
+    const orderCount = orders.length;
+
+    await prisma.conservationImpact.create({
+      data: {
+        periodStart: new Date(now.getFullYear(), 0, 1),
+        periodEnd: now,
+        periodType: period,
+        totalDonations,
+        orderCount,
+        turtlesSaved: Math.floor(totalDonations / 50), // Approx $50 per turtle
+        oceanCleaned: totalDonations * 2, // 2 sqm per dollar
+        coralRestored: totalDonations * 0.5, // 0.5 sqm per dollar
+        focusBreakdown: {
+          "Sea Turtles": Math.floor(totalDonations * 0.6),
+          "Ocean Cleanup": Math.floor(totalDonations * 0.2),
+          "Coral Reefs": Math.floor(totalDonations * 0.2)
+        }
+      }
+    });
+  }
+
+  console.log('✅ Analytics seeding completed');
 }
 
-seedAnalytics()
-  .then(() => {
-    console.log('\n✨ Done!');
-    process.exit(0);
-  })
-  .catch((error) => {
-    console.error('\n❌ Fatal error:', error);
+main()
+  .catch((e) => {
+    console.error(e);
     process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
   });

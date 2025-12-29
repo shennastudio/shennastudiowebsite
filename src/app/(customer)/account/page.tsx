@@ -3,7 +3,6 @@ import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import Link from 'next/link';
-import LogoutButton from '@/components/customer/LogoutButton';
 
 async function getCustomerData(userId: string) {
   const [user, orders, rewards] = await Promise.all([
@@ -95,7 +94,7 @@ export default async function AccountPage() {
               <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-700 via-teal-700 to-blue-700 bg-clip-text text-transparent animate-gradient">
                 Welcome back, {user?.name}!
               </h1>
-              <p className="text-slate-600 text-lg">Here's your ocean conservation journey</p>
+              <p className="text-slate-600 text-lg">Here&apos;s your ocean conservation journey</p>
             </div>
             <div className="hidden sm:flex items-center gap-3">
               <span className="text-sm text-slate-500">Member since {new Date(user?.createdAt || '').getFullYear()}</span>
