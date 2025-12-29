@@ -27,6 +27,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  serverExternalPackages: ['sharp'],
 };
 
 // Temporarily disabled for testing shadcn/ui: export default withPayload(nextConfig);
