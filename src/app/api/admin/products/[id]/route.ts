@@ -54,15 +54,6 @@ export async function PATCH(
     const { id } = await params;
     const data = await request.json();
 
-    // Delete existing variants and images to replace with new ones
-    await prisma.productVariant.deleteMany({
-      where: { productId: id },
-    });
-
-    await prisma.productImage.deleteMany({
-      where: { productId: id },
-    });
-
     const product = await prisma.product.update({
       where: { id },
       data: {
@@ -76,9 +67,11 @@ export async function PATCH(
         conservationFocus: data.conservationFocus,
         categoryId: data.categoryId || null,
         variants: {
+          deleteMany: {},
           create: data.variants || [],
         },
         images: {
+          deleteMany: {},
           create: data.images || [],
         },
       },

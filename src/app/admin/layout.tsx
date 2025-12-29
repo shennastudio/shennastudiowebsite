@@ -40,10 +40,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content Area */}
       <div className="lg:pl-72">
         {/* Top Header Bar */}
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl px-6 shadow-sm">
+        <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center gap-2 sm:gap-4 border-b border-slate-200/60 bg-white/80 backdrop-blur-xl pl-14 pr-3 sm:pl-6 sm:pr-6 shadow-sm">
           <div className="flex flex-1 items-center justify-between">
-            <div className="flex items-center gap-3">
-              <h2 className="text-lg font-bold bg-gradient-to-r from-slate-900 to-cyan-900 bg-clip-text text-transparent">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <h2 className="text-sm sm:text-lg font-bold bg-gradient-to-r from-slate-900 to-cyan-900 bg-clip-text text-transparent truncate">
                 ShennaStudio Admin
               </h2>
               <span className="hidden sm:inline-block px-2 py-1 text-[10px] font-semibold bg-gradient-to-r from-cyan-100 to-teal-100 text-cyan-700 rounded-full border border-cyan-200/50">
@@ -51,12 +51,12 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <Link href="/">
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 border-slate-300 hover:border-cyan-500 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-teal-50 hover:text-cyan-700 transition-all duration-200"
+                  className="gap-1 sm:gap-2 border-slate-300 hover:border-cyan-500 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-teal-50 hover:text-cyan-700 transition-all duration-200 px-2 sm:px-3"
                 >
                   <Store className="w-4 h-4" />
                   <span className="hidden sm:inline">View Store</span>
@@ -68,7 +68,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="p-6 lg:p-8 min-h-[calc(100vh-4rem)] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100/20 via-white to-slate-50/30">
+        <main className="p-3 sm:p-6 lg:p-8 min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-100/20 via-white to-slate-50/30">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>

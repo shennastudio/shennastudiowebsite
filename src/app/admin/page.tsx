@@ -168,17 +168,17 @@ export default async function AdminDashboard() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8 animate-in fade-in duration-500">
       {/* Header */}
-      <div className="space-y-2">
-        <h1 className="text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">
+      <div className="space-y-1 sm:space-y-2">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">
           Dashboard Overview
         </h1>
-        <p className="text-slate-600 text-lg">Welcome back! Here&apos;s what&apos;s happening with your ocean conservation store.</p>
+        <p className="text-slate-600 text-sm sm:text-base lg:text-lg">Welcome back! Here&apos;s what&apos;s happening with your ocean conservation store.</p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+      <div className="grid gap-3 sm:gap-4 lg:gap-6 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
         {stats.map((stat, index) => {
           const Icon = stat.icon;
           const TrendIcon = stat.trend === 'up' ? TrendingUp : stat.trend === 'down' ? TrendingDown : Star;
@@ -191,18 +191,18 @@ export default async function AdminDashboard() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 relative z-10">
-                <CardTitle className="text-sm font-semibold text-slate-700">{stat.title}</CardTitle>
-                <div className={`p-2.5 bg-gradient-to-br ${stat.iconBg} rounded-xl group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className={`h-5 w-5 text-transparent bg-gradient-to-r ${stat.color} bg-clip-text`} fill="currentColor" />
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6 relative z-10">
+                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-700">{stat.title}</CardTitle>
+                <div className={`p-1.5 sm:p-2.5 bg-gradient-to-br ${stat.iconBg} rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform duration-300`}>
+                  <Icon className={`h-4 w-4 sm:h-5 sm:w-5 text-transparent bg-gradient-to-r ${stat.color} bg-clip-text`} fill="currentColor" />
                 </div>
               </CardHeader>
 
-              <CardContent className="relative z-10">
-                <div className={`text-3xl font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1`}>
+              <CardContent className="relative z-10 p-3 sm:p-6 pt-0 sm:pt-0">
+                <div className={`text-lg sm:text-2xl lg:text-3xl font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-1`}>
                   {stat.value}
                 </div>
-                <div className="flex items-center gap-1 text-xs">
+                <div className="flex items-center gap-1 text-[10px] sm:text-xs flex-wrap">
                   {stat.trend !== 'neutral' && (
                     <TrendIcon className={`h-3 w-3 ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} />
                   )}
@@ -210,7 +210,7 @@ export default async function AdminDashboard() {
                     {stat.change}
                   </span>
                   {stat.trend !== 'neutral' && (
-                    <span className="text-slate-500">from last month</span>
+                    <span className="text-slate-500 hidden sm:inline">from last month</span>
                   )}
                 </div>
               </CardContent>
@@ -219,47 +219,47 @@ export default async function AdminDashboard() {
         })}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         {/* Recent Orders */}
         <Card className="border-slate-200/60 shadow-xl hover:shadow-2xl transition-shadow">
-          <CardHeader className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white">
+          <CardHeader className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white p-3 sm:p-6">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <ShoppingCart className="w-5 h-5 text-cyan-600" />
+              <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600" />
                 Recent Orders
               </CardTitle>
               <Link
                 href="/admin/orders"
-                className="text-sm font-semibold text-cyan-600 hover:text-cyan-700 flex items-center gap-1 group"
+                className="text-xs sm:text-sm font-semibold text-cyan-600 hover:text-cyan-700 flex items-center gap-1 group"
               >
                 View All
-                <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
             </div>
           </CardHeader>
-          <CardContent className="p-6">
-            <div className="space-y-4">
+          <CardContent className="p-3 sm:p-6">
+            <div className="space-y-3 sm:space-y-4">
               {data.recentOrders.map((order, idx) => (
                 <div
                   key={order.id}
-                  className="group flex items-center gap-4 p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-cyan-300/50 transition-all duration-200"
+                  className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-cyan-300/50 transition-all duration-200"
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="font-bold text-slate-900">#{order.orderNumber}</p>
-                      <span className={`px-3 py-0.5 rounded-full text-xs font-bold border ${getStatusColor(order.status)}`}>
+                    <div className="flex items-center gap-2 mb-1 flex-wrap">
+                      <p className="font-bold text-slate-900 text-sm sm:text-base">#{order.orderNumber}</p>
+                      <span className={`px-2 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold border ${getStatusColor(order.status)}`}>
                         {order.status}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-600 truncate">{order.user?.name || 'Guest'}</p>
-                    <p className="text-xs text-slate-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs sm:text-sm text-slate-600 truncate">{order.user?.name || 'Guest'}</p>
+                    <p className="text-[10px] sm:text-xs text-slate-500">{new Date(order.createdAt).toLocaleDateString()}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xl font-black bg-gradient-to-r from-cyan-700 to-teal-700 bg-clip-text text-transparent">
+                  <div className="text-right shrink-0">
+                    <p className="text-base sm:text-xl font-black bg-gradient-to-r from-cyan-700 to-teal-700 bg-clip-text text-transparent">
                       ${order.total.toFixed(2)}
                     </p>
-                    <p className="text-xs text-slate-500">{order.items.length} items</p>
+                    <p className="text-[10px] sm:text-xs text-slate-500">{order.items.length} items</p>
                   </div>
                 </div>
               ))}
@@ -269,48 +269,48 @@ export default async function AdminDashboard() {
 
         {/* Top Products */}
         <Card className="border-slate-200/60 shadow-xl hover:shadow-2xl transition-shadow">
-          <CardHeader className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white">
+          <CardHeader className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white p-3 sm:p-6">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Star className="w-5 h-5 text-amber-600" />
+              <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
+                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
                 Top Selling Products
               </CardTitle>
               <Link
                 href="/admin/products"
-                className="text-sm font-semibold text-cyan-600 hover:text-cyan-700 flex items-center gap-1 group"
+                className="text-xs sm:text-sm font-semibold text-cyan-600 hover:text-cyan-700 flex items-center gap-1 group"
               >
                 View All
-                <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
             </div>
           </CardHeader>
-          <CardContent className="p-6">
-            <div className="space-y-4">
+          <CardContent className="p-3 sm:p-6">
+            <div className="space-y-3 sm:space-y-4">
               {data.topProducts.map((product, idx) => (
                 <div
                   key={idx}
-                  className="group flex items-center justify-between p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-amber-300/50 transition-all duration-200"
+                  className="group flex items-center justify-between p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-amber-300/50 transition-all duration-200"
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
-                  <div className="flex items-center gap-3">
-                    <div className={`flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br ${
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                    <div className={`flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br shrink-0 ${
                       idx === 0 ? 'from-amber-100 to-yellow-100' :
                       idx === 1 ? 'from-slate-100 to-gray-100' :
                       idx === 2 ? 'from-orange-100 to-amber-100' :
                       'from-slate-50 to-white'
-                    } font-bold text-sm`}>
+                    } font-bold text-xs sm:text-sm`}>
                       #{idx + 1}
                     </div>
-                    <p className="font-semibold text-slate-900 group-hover:text-cyan-700 transition-colors">
+                    <p className="font-semibold text-slate-900 group-hover:text-cyan-700 transition-colors text-xs sm:text-sm truncate">
                       {product.name}
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 shrink-0">
                     <div className="text-right">
-                      <p className="text-lg font-black bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                      <p className="text-base sm:text-lg font-black bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
                         {product.quantity}
                       </p>
-                      <p className="text-xs text-slate-500">sold</p>
+                      <p className="text-[10px] sm:text-xs text-slate-500">sold</p>
                     </div>
                   </div>
                 </div>
@@ -322,60 +322,60 @@ export default async function AdminDashboard() {
 
       {/* Quick Actions */}
       <Card className="border-slate-200/60 shadow-xl bg-gradient-to-br from-cyan-50/50 to-teal-50/50">
-        <CardHeader>
-          <CardTitle className="text-lg">Quick Actions</CardTitle>
+        <CardHeader className="p-3 sm:p-6">
+          <CardTitle className="text-base sm:text-lg">Quick Actions</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
+        <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
+          <div className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-4">
             <Link
               href="/admin/products/new"
-              className="group flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-cyan-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-cyan-300/50 transition-all duration-200"
             >
-              <div className="p-3 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Package className="w-5 h-5 text-cyan-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-lg group-hover:scale-110 transition-transform">
+                <Package className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-700" />
               </div>
-              <div>
-                <p className="font-semibold text-slate-900 group-hover:text-cyan-700 transition-colors">Add Product</p>
-                <p className="text-xs text-slate-500">Create new listing</p>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-900 group-hover:text-cyan-700 transition-colors text-xs sm:text-sm">Add Product</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Create new listing</p>
               </div>
             </Link>
 
             <Link
               href="/admin/email"
-              className="group flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-purple-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-purple-300/50 transition-all duration-200"
             >
-              <div className="p-3 bg-gradient-to-br from-purple-100 to-violet-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Mail className="w-5 h-5 text-purple-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-100 to-violet-100 rounded-lg group-hover:scale-110 transition-transform">
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-purple-700" />
               </div>
-              <div>
-                <p className="font-semibold text-slate-900 group-hover:text-purple-700 transition-colors">Send Email</p>
-                <p className="text-xs text-slate-500">Compose message</p>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-900 group-hover:text-purple-700 transition-colors text-xs sm:text-sm">Send Email</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Compose message</p>
               </div>
             </Link>
 
             <Link
               href="/admin/calendar"
-              className="group flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-pink-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-pink-300/50 transition-all duration-200"
             >
-              <div className="p-3 bg-gradient-to-br from-pink-100 to-rose-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Star className="w-5 h-5 text-pink-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-pink-100 to-rose-100 rounded-lg group-hover:scale-110 transition-transform">
+                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-pink-700" />
               </div>
-              <div>
-                <p className="font-semibold text-slate-900 group-hover:text-pink-700 transition-colors">Calendar</p>
-                <p className="text-xs text-slate-500">View events</p>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-900 group-hover:text-pink-700 transition-colors text-xs sm:text-sm">Calendar</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">View events</p>
               </div>
             </Link>
 
             <Link
               href="/admin/conservation"
-              className="group flex items-center gap-3 p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-teal-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-teal-300/50 transition-all duration-200"
             >
-              <div className="p-3 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Heart className="w-5 h-5 text-teal-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-lg group-hover:scale-110 transition-transform">
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-teal-700" />
               </div>
-              <div>
-                <p className="font-semibold text-slate-900 group-hover:text-teal-700 transition-colors">Conservation</p>
-                <p className="text-xs text-slate-500">Track impact</p>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-900 group-hover:text-teal-700 transition-colors text-xs sm:text-sm">Conservation</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Track impact</p>
               </div>
             </Link>
           </div>

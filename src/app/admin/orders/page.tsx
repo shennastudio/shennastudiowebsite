@@ -3,9 +3,20 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Package, DollarSign, TrendingUp, Search, Filter, CheckCircle, FileText } from 'lucide-react';
+import { Package, DollarSign, TrendingUp, Search, Filter, CheckCircle, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+
+interface OrderItem {
+  id: string;
+  quantity: number;
+  price: number;
+  variant?: {
+    product?: {
+      name: string;
+    };
+  };
+}
 
 interface Order {
   id: string;
@@ -15,11 +26,7 @@ interface Order {
   total: number;
   status: string;
   createdAt: string;
-  items: Array<{
-    id: string;
-    quantity: number;
-    price: number;
-  }>;
+  items: OrderItem[];
   conservationDonation?: {
     amount: number;
     percentage: number;
@@ -74,6 +81,7 @@ export default function OrdersPage() {
   const [bulkAction, setBulkAction] = useState('');
   const [trackingNumber, setTrackingNumber] = useState('');
   const [carrier, setCarrier] = useState('');
+  const [showBulkOptions, setShowBulkOptions] = useState(false);
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -193,30 +201,32 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h1 className="text-3xl font-bold">Orders Management</h1>
-          <p className="text-gray-600 mt-1">Advanced filtering and bulk actions</p>
+          <h1 className="text-2xl sm:text-3xl font-bold">Orders Management</h1>
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">Advanced filtering and bulk actions</p>
         </div>
         <Button
           onClick={() => setShowFilters(!showFilters)}
           variant="outline"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 w-full sm:w-auto"
         >
           <Filter className="h-4 w-4" />
           {showFilters ? 'Hide Filters' : 'Show Filters'}
+          {showFilters ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </Button>
       </div>
 
       {/* Advanced Filters */}
       {showFilters && (
         <Card>
-          <CardHeader>
-            <CardTitle>Advanced Filters</CardTitle>
+          <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-4">
+            <CardTitle className="text-base sm:text-lg">Advanced Filters</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <CardContent className="p-4 sm:p-6 pt-0 space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {/* Search */}
               <div>
                 <label className="block text-sm font-medium mb-1">Search</label>
@@ -227,7 +237,7 @@ export default function OrdersPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Order #, email, or name..."
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm"
                   />
                 </div>
               </div>
@@ -239,7 +249,7 @@ export default function OrdersPage() {
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                 />
               </div>
 
@@ -250,7 +260,7 @@ export default function OrdersPage() {
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                 />
               </div>
 
@@ -263,7 +273,7 @@ export default function OrdersPage() {
                   onChange={(e) => setMinAmount(e.target.value)}
                   placeholder="0.00"
                   step="0.01"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                 />
               </div>
 
@@ -276,13 +286,13 @@ export default function OrdersPage() {
                   onChange={(e) => setMaxAmount(e.target.value)}
                   placeholder="1000.00"
                   step="0.01"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-2">
-              <Button onClick={clearFilters} variant="outline">
+            <div className="flex justify-end">
+              <Button onClick={clearFilters} variant="outline" size="sm">
                 Clear Filters
               </Button>
             </div>
@@ -291,131 +301,143 @@ export default function OrdersPage() {
       )}
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
             <Package className="h-4 w-4 text-gray-600" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.totalOrders}</div>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl sm:text-2xl font-bold">{summary.totalOrders}</div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <DollarSign className="h-4 w-4 text-gray-600" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${summary.totalRevenue.toFixed(2)}</div>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl sm:text-2xl font-bold">${summary.totalRevenue.toFixed(2)}</div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Average Order Value</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
+            <CardTitle className="text-sm font-medium">Avg Order Value</CardTitle>
             <TrendingUp className="h-4 w-4 text-gray-600" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${summary.averageOrderValue.toFixed(2)}</div>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl sm:text-2xl font-bold">${summary.averageOrderValue.toFixed(2)}</div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Status Filter Tabs */}
-      <div className="flex flex-wrap gap-2">
-        {(['all', 'PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const).map((status) => (
-          <button
-            key={status}
-            onClick={() => setStatusFilter(status)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              statusFilter === status
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            {status === 'all' ? 'All' : status} ({statusCounts[status]})
-          </button>
-        ))}
+      {/* Status Filter Tabs - Scrollable on mobile */}
+      <div className="overflow-x-auto pb-2 -mx-3 px-3 sm:mx-0 sm:px-0">
+        <div className="flex gap-2 min-w-max">
+          {(['all', 'PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'] as const).map((status) => (
+            <button
+              key={status}
+              onClick={() => setStatusFilter(status)}
+              className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
+                statusFilter === status
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {status === 'all' ? 'All' : status} ({statusCounts[status]})
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Bulk Actions */}
       {selectedOrders.size > 0 && (
         <Card className="border-blue-200 bg-blue-50">
-          <CardContent className="pt-6">
-            <div className="flex flex-wrap items-end gap-4">
-              <div>
-                <p className="text-sm font-medium mb-2">
+          <CardContent className="p-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium">
                   {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
                 </p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowBulkOptions(!showBulkOptions)}
+                  className="sm:hidden"
+                >
+                  {showBulkOptions ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </Button>
               </div>
 
-              <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Action</label>
-                  <select
-                    value={bulkAction}
-                    onChange={(e) => setBulkAction(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                  >
-                    <option value="">Select action...</option>
-                    <option value="mark_processing">Mark Processing</option>
-                    <option value="mark_shipped">Mark Shipped</option>
-                    <option value="mark_delivered">Mark Delivered</option>
-                    <option value="cancel">Cancel Orders</option>
-                  </select>
+              <div className={`space-y-3 sm:space-y-0 sm:flex sm:items-end sm:gap-4 ${showBulkOptions ? 'block' : 'hidden sm:flex'}`}>
+                <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Action</label>
+                    <select
+                      value={bulkAction}
+                      onChange={(e) => setBulkAction(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                    >
+                      <option value="">Select action...</option>
+                      <option value="mark_processing">Mark Processing</option>
+                      <option value="mark_shipped">Mark Shipped</option>
+                      <option value="mark_delivered">Mark Delivered</option>
+                      <option value="cancel">Cancel Orders</option>
+                    </select>
+                  </div>
+
+                  {bulkAction === 'mark_shipped' && (
+                    <>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Tracking Number</label>
+                        <input
+                          type="text"
+                          value={trackingNumber}
+                          onChange={(e) => setTrackingNumber(e.target.value)}
+                          placeholder="1Z999AA10123456784"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-1">Carrier</label>
+                        <select
+                          value={carrier}
+                          onChange={(e) => setCarrier(e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        >
+                          <option value="">Select carrier...</option>
+                          <option value="USPS">USPS</option>
+                          <option value="UPS">UPS</option>
+                          <option value="FedEx">FedEx</option>
+                          <option value="DHL">DHL</option>
+                        </select>
+                      </div>
+                    </>
+                  )}
                 </div>
 
-                {bulkAction === 'mark_shipped' && (
-                  <>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Tracking Number</label>
-                      <input
-                        type="text"
-                        value={trackingNumber}
-                        onChange={(e) => setTrackingNumber(e.target.value)}
-                        placeholder="1Z999AA10123456784"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Carrier</label>
-                      <select
-                        value={carrier}
-                        onChange={(e) => setCarrier(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                      >
-                        <option value="">Select carrier...</option>
-                        <option value="USPS">USPS</option>
-                        <option value="UPS">UPS</option>
-                        <option value="FedEx">FedEx</option>
-                        <option value="DHL">DHL</option>
-                      </select>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="flex gap-2">
-                <Button onClick={handleBulkAction} className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  Apply
-                </Button>
-                <Button onClick={() => setSelectedOrders(new Set())} variant="outline">
-                  Clear Selection
-                </Button>
+                <div className="flex gap-2">
+                  <Button onClick={handleBulkAction} className="flex-1 sm:flex-none flex items-center justify-center gap-2">
+                    <CheckCircle className="h-4 w-4" />
+                    Apply
+                  </Button>
+                  <Button onClick={() => setSelectedOrders(new Set())} variant="outline" className="flex-1 sm:flex-none">
+                    Clear
+                  </Button>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Orders Table */}
+      {/* Orders */}
       <Card>
-        <CardHeader>
+        <CardHeader className="p-4 sm:p-6">
           <div className="flex justify-between items-center">
-            <CardTitle>Orders ({orders.length})</CardTitle>
+            <CardTitle className="text-base sm:text-lg">Orders ({orders.length})</CardTitle>
             {orders.length > 0 && (
               <Button onClick={toggleSelectAll} variant="outline" size="sm">
                 {selectedOrders.size === orders.length ? 'Deselect All' : 'Select All'}
@@ -423,7 +445,7 @@ export default function OrdersPage() {
             )}
           </div>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-4 sm:p-6 pt-0">
           {loading ? (
             <div className="text-center py-12">
               <p className="text-gray-500">Loading orders...</p>
@@ -433,96 +455,160 @@ export default function OrdersPage() {
               <p className="text-gray-500">No orders found</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="border-b">
-                  <tr className="text-left">
-                    <th className="pb-3 w-10">
-                      <input
-                        type="checkbox"
-                        checked={selectedOrders.size === orders.length}
-                        onChange={toggleSelectAll}
-                        className="rounded"
-                      />
-                    </th>
-                    <th className="pb-3 font-semibold">Order #</th>
-                    <th className="pb-3 font-semibold">Customer</th>
-                    <th className="pb-3 font-semibold">Items</th>
-                    <th className="pb-3 font-semibold">Total</th>
-                    <th className="pb-3 font-semibold">Status</th>
-                    <th className="pb-3 font-semibold">Tracking</th>
-                    <th className="pb-3 font-semibold">Date</th>
-                    <th className="pb-3 font-semibold">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map((order) => (
-                    <tr key={order.id} className="border-b last:border-0 hover:bg-gray-50">
-                      <td className="py-4">
+            <>
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-3">
+                {orders.map((order) => (
+                  <div
+                    key={order.id}
+                    className={`bg-white border rounded-lg p-4 space-y-3 ${
+                      selectedOrders.has(order.id) ? 'border-blue-400 bg-blue-50/50' : 'border-gray-200'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
                         <input
                           type="checkbox"
                           checked={selectedOrders.has(order.id)}
                           onChange={() => toggleOrderSelection(order.id)}
+                          className="rounded mt-1"
+                        />
+                        <div>
+                          <p className="font-mono text-sm font-medium">#{order.orderNumber.slice(0, 8)}</p>
+                          <p className="text-sm text-gray-900">{order.customerName}</p>
+                          <p className="text-xs text-gray-500">{order.customerEmail}</p>
+                        </div>
+                      </div>
+                      <span className={`px-2 py-1 text-xs rounded-full shrink-0 ${getStatusColor(order.status)}`}>
+                        {order.status}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <span className="text-gray-500">Total:</span>
+                        <span className="font-semibold ml-1">${order.total.toFixed(2)}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Items:</span>
+                        <span className="font-medium ml-1">{order.items.length}</span>
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Date:</span>
+                        <span className="ml-1">{new Date(order.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      {order.trackingNumber && (
+                        <div>
+                          <span className="text-gray-500">Tracking:</span>
+                          <span className="font-mono text-xs ml-1">{order.trackingNumber}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="pt-2 border-t border-gray-100">
+                      <Link href={`/admin/orders/${order.id}/invoice`}>
+                        <Button size="sm" variant="outline" className="w-full flex items-center justify-center gap-1">
+                          <FileText className="h-3 w-3" />
+                          View Invoice
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full">
+                  <thead className="border-b">
+                    <tr className="text-left">
+                      <th className="pb-3 w-10">
+                        <input
+                          type="checkbox"
+                          checked={selectedOrders.size === orders.length}
+                          onChange={toggleSelectAll}
                           className="rounded"
                         />
-                      </td>
-                      <td className="py-4 font-mono text-sm">
-                        #{order.orderNumber.slice(0, 8)}
-                      </td>
-                      <td className="py-4">
-                        <div>
-                          <div className="font-medium">{order.customerName}</div>
-                          <div className="text-sm text-gray-600">{order.customerEmail}</div>
-                        </div>
-                      </td>
-                      <td className="py-4">
-                        <div className="text-sm">
-                          {order.items.slice(0, 2).map((item, idx: number) => (
-                            <div key={idx}>
-                              {item.variant?.product?.name || 'Unknown'} x{item.quantity}
-                            </div>
-                          ))}
-                          {order.items.length > 2 && (
-                            <div className="text-gray-500">+{order.items.length - 2} more</div>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-4 font-medium">${order.total.toFixed(2)}</td>
-                      <td className="py-4">
-                        <span
-                          className={`inline-block px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}
-                        >
-                          {order.status}
-                        </span>
-                      </td>
-                      <td className="py-4">
-                        {order.trackingNumber ? (
+                      </th>
+                      <th className="pb-3 font-semibold">Order #</th>
+                      <th className="pb-3 font-semibold">Customer</th>
+                      <th className="pb-3 font-semibold">Items</th>
+                      <th className="pb-3 font-semibold">Total</th>
+                      <th className="pb-3 font-semibold">Status</th>
+                      <th className="pb-3 font-semibold">Tracking</th>
+                      <th className="pb-3 font-semibold">Date</th>
+                      <th className="pb-3 font-semibold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.map((order) => (
+                      <tr key={order.id} className="border-b last:border-0 hover:bg-gray-50">
+                        <td className="py-4">
+                          <input
+                            type="checkbox"
+                            checked={selectedOrders.has(order.id)}
+                            onChange={() => toggleOrderSelection(order.id)}
+                            className="rounded"
+                          />
+                        </td>
+                        <td className="py-4 font-mono text-sm">
+                          #{order.orderNumber.slice(0, 8)}
+                        </td>
+                        <td className="py-4">
+                          <div>
+                            <div className="font-medium">{order.customerName}</div>
+                            <div className="text-sm text-gray-600">{order.customerEmail}</div>
+                          </div>
+                        </td>
+                        <td className="py-4">
                           <div className="text-sm">
-                            <div className="font-mono">{order.trackingNumber}</div>
-                            {order.carrier && (
-                              <div className="text-gray-600">{order.carrier}</div>
+                            {order.items.slice(0, 2).map((item, idx: number) => (
+                              <div key={idx}>
+                                {item.variant?.product?.name || 'Unknown'} x{item.quantity}
+                              </div>
+                            ))}
+                            {order.items.length > 2 && (
+                              <div className="text-gray-500">+{order.items.length - 2} more</div>
                             )}
                           </div>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </td>
-                      <td className="py-4 text-sm text-gray-600">
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </td>
-                      <td className="py-4">
-                        <Link href={`/admin/orders/${order.id}/invoice`}>
-                          <Button size="sm" variant="outline" className="flex items-center gap-1">
-                            <FileText className="h-3 w-3" />
-                            Invoice
-                          </Button>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                        </td>
+                        <td className="py-4 font-medium">${order.total.toFixed(2)}</td>
+                        <td className="py-4">
+                          <span
+                            className={`inline-block px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}
+                          >
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="py-4">
+                          {order.trackingNumber ? (
+                            <div className="text-sm">
+                              <div className="font-mono">{order.trackingNumber}</div>
+                              {order.carrier && (
+                                <div className="text-gray-600">{order.carrier}</div>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-gray-400">-</span>
+                          )}
+                        </td>
+                        <td className="py-4 text-sm text-gray-600">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="py-4">
+                          <Link href={`/admin/orders/${order.id}/invoice`}>
+                            <Button size="sm" variant="outline" className="flex items-center gap-1">
+                              <FileText className="h-3 w-3" />
+                              Invoice
+                            </Button>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </CardContent>
       </Card>

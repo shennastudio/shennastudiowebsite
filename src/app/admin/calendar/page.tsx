@@ -399,104 +399,104 @@ export default function CalendarPage() {
   const pendingTasks = filteredEvents.filter(e => e.status === 'scheduled' || e.status === 'in_progress').length;
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6 lg:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">
-            Business Calendar & Journal
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">
+            Business Calendar
           </h1>
-          <p className="text-slate-600 text-lg mt-1">Track events, goals, tasks, and business insights</p>
+          <p className="text-slate-600 text-sm sm:text-base lg:text-lg mt-1">Track events, goals, tasks, and insights</p>
         </div>
-        <div className="flex gap-3">
-          <div className="flex gap-2 border border-slate-200 rounded-lg p-1">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <div className="flex gap-1 sm:gap-2 border border-slate-200 rounded-lg p-1 overflow-x-auto">
             <Button
               variant={viewMode === 'month' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('month')}
-              className={viewMode === 'month' ? 'bg-gradient-to-r from-cyan-600 to-teal-600' : ''}
+              className={`text-xs sm:text-sm px-2 sm:px-3 ${viewMode === 'month' ? 'bg-gradient-to-r from-cyan-600 to-teal-600' : ''}`}
             >
-              <Grid3x3 className="w-4 h-4 mr-2" />
-              Month
+              <Grid3x3 className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Month</span>
             </Button>
             <Button
               variant={viewMode === 'list' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('list')}
-              className={viewMode === 'list' ? 'bg-gradient-to-r from-cyan-600 to-teal-600' : ''}
+              className={`text-xs sm:text-sm px-2 sm:px-3 ${viewMode === 'list' ? 'bg-gradient-to-r from-cyan-600 to-teal-600' : ''}`}
             >
-              <List className="w-4 h-4 mr-2" />
-              List
+              <List className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+              <span className="hidden sm:inline">List</span>
             </Button>
             <Button
               variant={viewMode === 'journal' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('journal')}
-              className={viewMode === 'journal' ? 'bg-gradient-to-r from-cyan-600 to-teal-600' : ''}
+              className={`text-xs sm:text-sm px-2 sm:px-3 ${viewMode === 'journal' ? 'bg-gradient-to-r from-cyan-600 to-teal-600' : ''}`}
             >
-              <BookOpen className="w-4 h-4 mr-2" />
-              Journal
+              <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-2" />
+              <span className="hidden sm:inline">Journal</span>
             </Button>
           </div>
           <Button
             onClick={() => setShowModal(true)}
-            className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white shadow-lg"
+            className="bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white shadow-lg text-sm"
           >
-            <Plus className="w-4 h-4 mr-2" />
+            <Plus className="w-4 h-4 mr-1 sm:mr-2" />
             Add Entry
           </Button>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
         <Card className="border-slate-200/60 shadow-lg">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Target className="w-5 h-5 text-blue-600" />
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-blue-100 rounded-lg">
+                <Target className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
               </div>
               <div>
-                <p className="text-xs text-slate-500">Pending Tasks</p>
-                <p className="text-xl font-bold text-slate-900">{pendingTasks}</p>
+                <p className="text-[10px] sm:text-xs text-slate-500">Pending</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-900">{pendingTasks}</p>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card className="border-slate-200/60 shadow-lg">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <CheckSquare className="w-5 h-5 text-green-600" />
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-green-100 rounded-lg">
+                <CheckSquare className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
               </div>
               <div>
-                <p className="text-xs text-slate-500">Completed</p>
-                <p className="text-xl font-bold text-slate-900">{completedTasks}</p>
+                <p className="text-[10px] sm:text-xs text-slate-500">Completed</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-900">{completedTasks}</p>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card className="border-slate-200/60 shadow-lg">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <TrendingUp className="w-5 h-5 text-purple-600" />
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-purple-100 rounded-lg">
+                <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
               </div>
               <div>
-                <p className="text-xs text-slate-500">Projected Revenue</p>
-                <p className="text-xl font-bold text-slate-900">${totalProjectedRevenue.toLocaleString()}</p>
+                <p className="text-[10px] sm:text-xs text-slate-500">Projected</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-900">${totalProjectedRevenue.toLocaleString()}</p>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card className="border-slate-200/60 shadow-lg">
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-100 rounded-lg">
-                <DollarSign className="w-5 h-5 text-emerald-600" />
+          <CardContent className="p-3 sm:p-4">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="p-1.5 sm:p-2 bg-emerald-100 rounded-lg">
+                <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
               </div>
               <div>
-                <p className="text-xs text-slate-500">Actual Revenue</p>
-                <p className="text-xl font-bold text-slate-900">${totalActualRevenue.toLocaleString()}</p>
+                <p className="text-[10px] sm:text-xs text-slate-500">Actual</p>
+                <p className="text-lg sm:text-xl font-bold text-slate-900">${totalActualRevenue.toLocaleString()}</p>
               </div>
             </div>
           </CardContent>
