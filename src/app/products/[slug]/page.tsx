@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { fetchProductBySlug } from '@/app/actions';
 import { notFound } from 'next/navigation';
 import ProductRecommendations from '@/components/ProductRecommendations';
+import ProductVariantSelector from '@/components/ProductVariantSelector';
 import AddToCartButton from '@/components/AddToCartButton';
 import ProductImageGallery from '@/components/ProductImageGallery';
 
@@ -58,21 +59,8 @@ export default async function ProductDetailPage({
                 <p className="text-gray-600 dark:text-gray-400">{product.description}</p>
               </div>
 
-              {/* Price */}
-              <div className="border-t dark:border-slate-800 border-b py-6">
-                <div className="flex items-baseline gap-4">
-                  <span className="text-4xl font-bold text-teal-600 dark:text-teal-400">
-                    ${displayPrice.toFixed(2)}
-                  </span>
-                  <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
-                    displayStock > 0
-                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                      : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
-                  }`}>
-                    {displayStock > 0 ? `${displayStock} in stock` : 'Out of Stock'}
-                  </span>
-                </div>
-              </div>
+              {/* Price handled by ProductVariantSelector */}
+
 
               {/* Conservation Info */}
               {product.conservationPercentage > 0 && (
@@ -96,61 +84,14 @@ export default async function ProductDetailPage({
                 </div>
               )}
 
-              {/* Product Details */}
-              <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900 dark:text-gray-200 text-lg">Product Details</h3>
-                <dl className="space-y-2">
-                  <div className="flex gap-3">
-                    <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">SKU:</dt>
-                    <dd className="text-gray-900 dark:text-gray-300 font-medium">{variant?.sku || product.slug}</dd>
-                  </div>
-                  {variant?.size && (
-                    <div className="flex gap-3">
-                      <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Size:</dt>
-                      <dd className="text-gray-900 dark:text-gray-300">{variant.size}</dd>
-                    </div>
-                  )}
-                  {variant?.color && (
-                    <div className="flex gap-3">
-                      <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Color:</dt>
-                      <dd className="text-gray-900 dark:text-gray-300">{variant.color}</dd>
-                    </div>
-                  )}
-                  {variant?.material && (
-                    <div className="flex gap-3">
-                      <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Material:</dt>
-                      <dd className="text-gray-900 dark:text-gray-300">{variant.material}</dd>
-                    </div>
-                  )}
-                </dl>
-              </div>
+              <ProductVariantSelector 
+                product={product}
+                variants={productData.variants}
+                initialVariant={variant}
+                displayImages={displayImages}
+              />
 
-              {/* Add to Cart Button */}
-              <div className="space-y-4">
-                <AddToCartButton
-                  product={{
-                    id: product.id,
-                    name: product.name,
-                    sku: variant?.sku || product.slug, // Use variant SKU or fallback to slug
-                    basePrice: product.basePrice,
-                    images: displayImages.map(url => ({ url })), // Convert string URLs to image objects
-                    conservationPercentage: product.conservationPercentage,
-                    conservationFocus: product.conservationFocus,
-                  }}
-                  variant={variant ? {
-                    id: variant.id,
-                    variantName: variant.name,
-                    sku: variant.sku,
-                    price: variant.price,
-                    stock: variant.stock,
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    size: variant.size as any,
-                    color: variant.color,
-                    material: variant.material,
-                    images: displayImages.map(url => ({ url })),
-                  } : null}
-                  stock={displayStock}
-                />
+              <div className="space-y-4 pt-4">
                 <Link
                   href="/products"
                   className="block w-full text-center border-2 border-teal-600 text-teal-600 dark:text-teal-400 dark:border-teal-400 py-4 rounded-lg font-semibold hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors"

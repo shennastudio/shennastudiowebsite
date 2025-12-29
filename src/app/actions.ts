@@ -34,6 +34,16 @@ interface ProductDisplay {
   displayPrice: number;
   displayStock: number;
   displayImages: string[];
+  variants: Array<{
+    id: string;
+    name: string;
+    sku: string;
+    price: number;
+    stock: number;
+    size: string | null;
+    color: string | null;
+    material: string | null;
+  }>;
 }
 
 type ProductWithRelations = Prisma.ProductGetPayload<{
@@ -73,6 +83,16 @@ function transformProduct(product: ProductWithRelations): ProductDisplay {
     displayPrice: price,
     displayStock: totalStock,
     displayImages: images,
+    variants: variants.map(v => ({
+      id: v.id,
+      name: v.name,
+      sku: v.sku,
+      price: v.price,
+      stock: v.stock,
+      size: v.size,
+      color: v.color,
+      material: v.material,
+    })),
   };
 }
 
