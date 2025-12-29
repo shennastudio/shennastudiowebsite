@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { Plus, ExternalLink, Mail, MapPin } from 'lucide-react';
 import Image from 'next/image';
