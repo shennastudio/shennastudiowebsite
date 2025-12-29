@@ -16,6 +16,13 @@ export default function CheckoutPage() {
   const { state: cart } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // Shipping State
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [shippingRates, setShippingRates] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectedRate, setSelectedRate] = useState<any>(null);
+  const [calculatingRates, setCalculatingRates] = useState(false);
 
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
@@ -30,7 +37,47 @@ export default function CheckoutPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData(prev => {
+      const newData = { ...prev, [name]: value };
+      
+      // Trigger rate fetch if address looks complete enough
+      if (name === 'postalCode' || name === 'state' || name === 'city') {
+        if (newData.line1 && newData.city && newData.state && newData.postalCode.length >= 5) {
+          fetchShippingRates(newData);
+        }
+      }
+      return newData;
+    });
+  };
+
+  const fetchShippingRates = async (addressData: typeof formData) => {
+    setCalculatingRates(true);
+    setShippingRates([]);
+    setSelectedRate(null);
+    
+    try {
+      const response = await fetch('/api/shipping/rates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          address: addressData,
+          items: cart.items
+        })
+      });
+      
+      const data = await response.json();
+      if (response.ok && data.rates) {
+        setShippingRates(data.rates);
+        // Pre-select the first (cheapest) rate
+        if (data.rates.length > 0) {
+          setSelectedRate(data.rates[0]);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to fetch rates", err);
+    } finally {
+      setCalculatingRates(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,7 +85,19 @@ export default function CheckoutPage() {
     setLoading(true);
     setError('');
 
+    if (!selectedRate && shippingRates.length > 0) {
+      setError('Please select a shipping method');
+      setLoading(false);
+      return;
+    }
+
     try {
+      // Use selected shipping cost or fallback to cart default if no rates found (e.g. error)
+      const shippingCost = selectedRate ? parseFloat(selectedRate.amount) : cart.shipping;
+      
+      // Recalculate total with new shipping
+      const finalTotal = cart.subtotal + shippingCost + cart.tax;
+
       // Create checkout session (works for both guest and logged-in users)
       const response = await fetch('/api/checkout/create-session', {
         method: 'POST',
@@ -48,9 +107,9 @@ export default function CheckoutPage() {
         body: JSON.stringify({
           items: cart.items,
           subtotal: cart.subtotal,
-          shipping: cart.shipping,
+          shipping: shippingCost,
           tax: cart.tax,
-          total: cart.total,
+          total: finalTotal,
           shippingAddress: {
             name: formData.name,
             line1: formData.line1,
@@ -235,8 +294,47 @@ export default function CheckoutPage() {
                     </div>
                   )}
 
+                  {/* Shipping Method Selection */}
+                  <div className="pt-4 border-t">
+                    <h3 className="text-lg font-semibold mb-3">Shipping Method</h3>
+                    {calculatingRates ? (
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Calculating rates...
+                      </div>
+                    ) : shippingRates.length > 0 ? (
+                      <div className="space-y-2">
+                        {shippingRates.map((rate) => (
+                          <div 
+                            key={rate.id}
+                            className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors ${
+                              selectedRate?.id === rate.id ? 'border-teal-500 bg-teal-50' : 'hover:bg-gray-50'
+                            }`}
+                            onClick={() => setSelectedRate(rate)}
+                          >
+                            <div className="flex items-center">
+                              <input 
+                                type="radio" 
+                                checked={selectedRate?.id === rate.id} 
+                                onChange={() => setSelectedRate(rate)}
+                                className="mr-3 text-teal-600 focus:ring-teal-500"
+                              />
+                              <div>
+                                <p className="font-medium text-sm">{rate.provider} {rate.servicelevel.name}</p>
+                                <p className="text-xs text-gray-500">{rate.estimated_days ? `${rate.estimated_days} days` : rate.duration_terms}</p>
+                              </div>
+                            </div>
+                            <span className="font-semibold text-sm">${rate.amount}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500 italic">Enter your full address to see shipping rates.</p>
+                    )}
+                  </div>
+
                   {!session?.user && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
                       <p className="text-sm text-blue-900 font-medium mb-1">Want to track your order?</p>
                       <p className="text-xs text-blue-700">
                         You can checkout as a guest, or{' '}
@@ -308,7 +406,11 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Shipping</span>
-                    <span>{cart.shipping === 0 ? 'FREE' : `$${cart.shipping.toFixed(2)}`}</span>
+                    <span>
+                      {selectedRate 
+                        ? `$${selectedRate.amount}` 
+                        : (cart.shipping === 0 ? 'FREE' : `$${cart.shipping.toFixed(2)}`)}
+                    </span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Tax</span>
@@ -316,7 +418,9 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between font-bold text-lg border-t pt-2">
                     <span>Total</span>
-                    <span>${cart.total.toFixed(2)}</span>
+                    <span>
+                      ${(cart.subtotal + (selectedRate ? parseFloat(selectedRate.amount) : cart.shipping) + cart.tax).toFixed(2)}
+                    </span>
                   </div>
                 </div>
 
