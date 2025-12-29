@@ -44,9 +44,11 @@ export default function AddToCartButton({
   const { addItem } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
+  const [isFlying, setIsFlying] = useState(false);
 
   const handleAddToCart = () => {
     setIsAdding(true);
+    setIsFlying(true);
 
     try {
       // Convert product to CartContext format
@@ -70,7 +72,8 @@ export default function AddToCartButton({
         sku: variant.sku,
         price: variant.price,
         stock: variant.stock,
-        size: variant.size,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        size: variant.size as any,
         color: variant.color,
         material: variant.material,
         images: variant.images,
@@ -92,10 +95,9 @@ export default function AddToCartButton({
         }
       );
 
-      // Reset button state after animation
-      setTimeout(() => {
-        setJustAdded(false);
-      }, 2000);
+      // Reset states
+      setTimeout(() => setJustAdded(false), 2000);
+      setTimeout(() => setIsFlying(false), 1000);
     } catch (error) {
       console.error('Error adding to cart:', error);
       toast.error('Failed to add to cart. Please try again.');
@@ -117,23 +119,65 @@ export default function AddToCartButton({
   }
 
   return (
-    <Button
-      onClick={handleAddToCart}
-      disabled={isAdding || justAdded}
-      className={`w-full bg-teal-600 hover:bg-teal-700 text-white transition-all transform hover:scale-105 ${className}`}
-      size="lg"
-    >
-      {justAdded ? (
-        <>
-          <Check className="w-5 h-5 mr-2" />
-          Added to Cart!
-        </>
-      ) : (
-        <>
-          <ShoppingCart className="w-5 h-5 mr-2" />
-          {isAdding ? 'Adding...' : 'Add to Cart'}
-        </>
+    <>
+      {isFlying && (
+        <div 
+          className="fixed z-50 pointer-events-none transition-all duration-1000 ease-in-out"
+          style={{
+            top: '50%',
+            left: '50%',
+            width: '50px',
+            height: '50px',
+            animation: 'flyToCart 1s forwards'
+          }}
+        >
+          {product.images?.[0]?.url ? (
+            <img 
+              src={product.images[0].url} 
+              alt="flying product" 
+              className="w-full h-full object-cover rounded-full border-2 border-teal-500 shadow-lg"
+            />
+          ) : (
+            <div className="w-full h-full bg-teal-500 rounded-full flex items-center justify-center text-white">
+              <ShoppingCart size={24} />
+            </div>
+          )}
+        </div>
       )}
-    </Button>
+      <style jsx global>{`
+        @keyframes flyToCart {
+          0% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+            top: 50%;
+            left: 50%;
+          }
+          100% {
+            transform: translate(0, 0) scale(0.2);
+            opacity: 0;
+            top: 2rem;
+            left: calc(100% - 2rem);
+          }
+        }
+      `}</style>
+      <Button
+        onClick={handleAddToCart}
+        disabled={isAdding || justAdded}
+        className={`w-full bg-teal-600 hover:bg-teal-700 text-white transition-all transform hover:scale-105 ${className}`}
+        size="lg"
+      >
+        {justAdded ? (
+          <>
+            <Check className="w-5 h-5 mr-2" />
+            Added to Cart!
+          </>
+        ) : (
+          <>
+            <ShoppingCart className="w-5 h-5 mr-2" />
+            {isAdding ? 'Adding...' : 'Add to Cart'}
+          </>
+        )}
+      </Button>
+    </>
   );
 }

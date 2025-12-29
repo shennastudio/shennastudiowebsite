@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { fetchProductBySlug } from '@/app/actions';
 import { notFound } from 'next/navigation';
 import ProductRecommendations from '@/components/ProductRecommendations';
 import AddToCartButton from '@/components/AddToCartButton';
+import ProductImageGallery from '@/components/ProductImageGallery';
 
 export default async function ProductDetailPage({
   params,
@@ -20,20 +20,20 @@ export default async function ProductDetailPage({
   const { product, variant, displayPrice, displayStock, displayImages } = productData;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
       {/* Breadcrumb */}
-      <div className="bg-white border-b">
+      <div className="bg-white dark:bg-slate-900 border-b dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <nav className="flex items-center gap-2 text-sm text-gray-600">
-            <Link href="/" className="hover:text-teal-600">
+          <nav className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+            <Link href="/" className="hover:text-teal-600 dark:hover:text-teal-400">
               Home
             </Link>
             <span>›</span>
-            <Link href="/products" className="hover:text-teal-600">
+            <Link href="/products" className="hover:text-teal-600 dark:hover:text-teal-400">
               Products
             </Link>
             <span>›</span>
-            <span className="text-gray-900">{product.name}</span>
+            <span className="text-gray-900 dark:text-gray-200">{product.name}</span>
           </nav>
         </div>
       </div>
@@ -43,67 +43,31 @@ export default async function ProductDetailPage({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Images */}
-            <div className="space-y-4">
-              <div className="relative aspect-square bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg overflow-hidden">
-                {displayImages[0] ? (
-                  <Image
-                    src={displayImages[0]}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <div className="text-9xl opacity-30">🌊</div>
-                  </div>
-                )}
-                {product.featured && (
-                  <div className="absolute top-4 right-4 bg-coral-500 text-white px-4 py-2 rounded-full text-sm font-semibold animate-pulse">
-                     Featured
-                  </div>
-                )}
-              </div>
-
-              {/* Additional Images */}
-              {displayImages.length > 1 && (
-                <div className="grid grid-cols-4 gap-4">
-                  {displayImages.slice(1, 5).map((img, idx) => (
-                    <div
-                      key={idx}
-                      className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden"
-                    >
-                      <Image
-                        src={img}
-                        alt={`${product.name} - Image ${idx + 2}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <ProductImageGallery 
+              images={displayImages} 
+              productName={product.name}
+              featured={product.featured} 
+            />
 
             {/* Product Info */}
             <div className="space-y-6">
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                   {product.name}
                 </h1>
-                <p className="text-gray-600">{product.description}</p>
+                <p className="text-gray-600 dark:text-gray-400">{product.description}</p>
               </div>
 
               {/* Price */}
-              <div className="border-t border-b py-6">
+              <div className="border-t dark:border-slate-800 border-b py-6">
                 <div className="flex items-baseline gap-4">
-                  <span className="text-4xl font-bold text-teal-600">
+                  <span className="text-4xl font-bold text-teal-600 dark:text-teal-400">
                     ${displayPrice.toFixed(2)}
                   </span>
                   <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
                     displayStock > 0
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
+                      : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
                   }`}>
                     {displayStock > 0 ? `${displayStock} in stock` : 'Out of Stock'}
                   </span>
@@ -112,20 +76,20 @@ export default async function ProductDetailPage({
 
               {/* Conservation Info */}
               {product.conservationPercentage > 0 && (
-                <div className="bg-gradient-to-r from-green-50 to-teal-50 border border-green-200 rounded-lg p-6">
+                <div className="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-3xl">🪼</span>
                     <div>
-                      <h3 className="text-lg font-semibold text-green-900">
+                      <h3 className="text-lg font-semibold text-green-900 dark:text-green-300">
                         Conservation Impact
                       </h3>
-                      <p className="text-green-700">
+                      <p className="text-green-700 dark:text-green-400">
                         {product.conservationPercentage}% of this purchase supports ocean conservation
                       </p>
                     </div>
                   </div>
                   {product.conservationFocus && (
-                    <p className="text-sm text-green-800 bg-white/50 rounded p-3">
+                    <p className="text-sm text-green-800 dark:text-green-300 bg-white/50 dark:bg-black/30 rounded p-3">
                       <strong>Focus:</strong> {product.conservationFocus}
                     </p>
                   )}
@@ -134,28 +98,28 @@ export default async function ProductDetailPage({
 
               {/* Product Details */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900 text-lg">Product Details</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-gray-200 text-lg">Product Details</h3>
                 <dl className="space-y-2">
                   <div className="flex gap-3">
-                    <dt className="text-gray-600 min-w-[100px]">SKU:</dt>
-                    <dd className="text-gray-900 font-medium">{variant?.sku || product.slug}</dd>
+                    <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">SKU:</dt>
+                    <dd className="text-gray-900 dark:text-gray-300 font-medium">{variant?.sku || product.slug}</dd>
                   </div>
                   {variant?.size && (
                     <div className="flex gap-3">
-                      <dt className="text-gray-600 min-w-[100px]">Size:</dt>
-                      <dd className="text-gray-900">{variant.size}</dd>
+                      <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Size:</dt>
+                      <dd className="text-gray-900 dark:text-gray-300">{variant.size}</dd>
                     </div>
                   )}
                   {variant?.color && (
                     <div className="flex gap-3">
-                      <dt className="text-gray-600 min-w-[100px]">Color:</dt>
-                      <dd className="text-gray-900">{variant.color}</dd>
+                      <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Color:</dt>
+                      <dd className="text-gray-900 dark:text-gray-300">{variant.color}</dd>
                     </div>
                   )}
                   {variant?.material && (
                     <div className="flex gap-3">
-                      <dt className="text-gray-600 min-w-[100px]">Material:</dt>
-                      <dd className="text-gray-900">{variant.material}</dd>
+                      <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Material:</dt>
+                      <dd className="text-gray-900 dark:text-gray-300">{variant.material}</dd>
                     </div>
                   )}
                 </dl>
@@ -179,7 +143,8 @@ export default async function ProductDetailPage({
                     sku: variant.sku,
                     price: variant.price,
                     stock: variant.stock,
-                    size: variant.size,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    size: variant.size as any,
                     color: variant.color,
                     material: variant.material,
                     images: displayImages.map(url => ({ url })),
@@ -188,33 +153,33 @@ export default async function ProductDetailPage({
                 />
                 <Link
                   href="/products"
-                  className="block w-full text-center border-2 border-teal-600 text-teal-600 py-4 rounded-lg font-semibold hover:bg-teal-50 transition-colors"
+                  className="block w-full text-center border-2 border-teal-600 text-teal-600 dark:text-teal-400 dark:border-teal-400 py-4 rounded-lg font-semibold hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-colors"
                 >
                   ← Back to All Products
                 </Link>
               </div>
 
               {/* Features */}
-              <div className="bg-blue-50 rounded-lg p-6 space-y-3">
-                <h3 className="font-semibold text-gray-900 flex items-center gap-2">
+              <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 space-y-3">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
                   <span>🌊</span>
                   Why Choose ShennaStudio
                 </h3>
-                <ul className="space-y-2 text-sm text-gray-700">
+                <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
                     <span>Handcrafted with care in South Padre Island</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
                     <span>10% supports marine conservation efforts</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
                     <span>Premium ocean-inspired materials</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-600 mt-0.5">✓</span>
+                    <span className="text-green-600 dark:text-green-400 mt-0.5">✓</span>
                     <span>Free shipping on orders over $50</span>
                   </li>
                 </ul>
@@ -230,11 +195,11 @@ export default async function ProductDetailPage({
         limit={6}
         recommendationType="similar"
         title="You May Also Like"
-        className="bg-white"
+        className="bg-white dark:bg-slate-900"
       />
 
       {/* Conservation CTA */}
-      <section className="bg-gradient-to-r from-teal-600 to-blue-600 py-12">
+      <section className="bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-800 dark:to-blue-900 py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex justify-center items-center gap-3 mb-4">
             <span className="text-3xl">🪼</span>
@@ -243,7 +208,7 @@ export default async function ProductDetailPage({
             </h2>
             <span className="text-3xl">🐙</span>
           </div>
-          <p className="text-xl text-cyan-100 mb-6">
+          <p className="text-xl text-cyan-100 dark:text-cyan-200 mb-6">
             Learn how your purchase supports sea turtles, whales, and marine ecosystems
             in South Padre Island and Rio Grande Valley
           </p>

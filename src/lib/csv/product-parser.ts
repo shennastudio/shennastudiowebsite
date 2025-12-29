@@ -54,7 +54,8 @@ export function parseCSV(csvText: string): ProductCSVRow[] {
       }
     });
 
-    rows.push(row);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rows.push(row as any);
   }
 
   return rows;

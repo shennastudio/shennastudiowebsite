@@ -3,18 +3,21 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { 
-  Sparkles, 
-  Target, 
-  Zap, 
-  Brain,
-  TrendingUp,
-  Activity,
+import {
+  Sparkles,
+  BarChart3,
+  Users,
+  Package,
   ArrowRight,
+  Brain,
+  Activity,
   CheckCircle2,
   Info,
   Heart,
-  LineChart
+  LineChart,
+  TrendingUp,
+  Zap,
+  Target
 } from 'lucide-react';
 export default function AIFeaturesPage() {
   const [activeDemo, setActiveDemo] = useState<string | null>(null);

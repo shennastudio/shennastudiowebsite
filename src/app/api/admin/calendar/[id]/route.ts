@@ -97,6 +97,7 @@ export async function PATCH(
         ...validated,
         date: validated.date ? new Date(validated.date) : undefined,
         recurringEnd: validated.recurringEnd ? new Date(validated.recurringEnd) : undefined,
+        checklist: validated.checklist ?? undefined,
       },
     });
 

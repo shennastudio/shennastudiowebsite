@@ -157,8 +157,20 @@ export default function InvoicePage() {
         {/* Invoice Preview */}
         <Card>
           <CardContent className="p-0">
-            <InvoiceTemplate ref={invoiceRef} order={order} />
-          </CardContent>
+            <InvoiceTemplate ref={invoiceRef} order={{
+              ...order,
+                          createdAt: order.createdAt.toISOString(),
+                          items: order.items.map(item => ({
+                            ...item,
+                            variant: {
+                              ...item.variant,
+                              size: item.variant.size || undefined,
+                              color: item.variant.color || undefined,
+                                              material: item.variant.material || undefined
+                                            }
+                                          })),
+                                          conservationDonation: order.conservationDonation || undefined
+                                        }} />          </CardContent>
         </Card>
       </div>
     </div>

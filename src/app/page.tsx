@@ -256,7 +256,7 @@ export default async function Home() {
       </section>
 
       {/* Product Reviews Section */}
-      <ProductReviews />
+      <ProductReviews productId="homepage" />
 
       {/* Instagram Section */}
       <section className="py-16 bg-white">

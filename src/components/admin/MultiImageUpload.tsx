@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { X, GripVertical, Loader2, Image as ImageIcon } from 'lucide-react';
 
+import { uploadProductImage } from '@/app/actions/upload';
+
 interface MultiImageUploadProps {
   images: string[];
   onImagesChange: (images: string[]) => void;
@@ -67,16 +69,12 @@ export function MultiImageUpload({
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await fetch('/api/admin/upload', {
-          method: 'POST',
-          body: formData,
-        });
+        const result = await uploadProductImage(formData);
 
-        const data = await response.json();
-        if (response.ok) {
-          return data.url;
+        if (result.success && result.url) {
+          return result.url;
         } else {
-          throw new Error(data.error || 'Upload failed');
+          throw new Error(result.error || 'Upload failed');
         }
       });
 

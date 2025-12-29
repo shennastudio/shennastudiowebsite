@@ -86,7 +86,7 @@ export async function GET(req: Request) {
     }, {});
 
     // Group by partner
-    const donationsByPartner = donations.reduce((acc: Record<string, { pledged: number; donated: number; total: number; count: number }>, donation) => {
+    const donationsByPartner = donations.reduce((acc: Record<string, { name: string; logo: string | null; website: string | null; pledged: number; donated: number; total: number; count: number }>, donation) => {
       if (!donation.partner) return acc;
 
       const partnerId = donation.partner.id;

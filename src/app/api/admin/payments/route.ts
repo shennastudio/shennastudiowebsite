@@ -16,9 +16,8 @@ export async function GET(req: Request) {
     const dateFrom = searchParams.get('dateFrom');
     const dateTo = searchParams.get('dateTo');
 
-    const where: Record<string, unknown> = {
-      stripePaymentId: { not: null },
-    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: any = {};
 
     if (status) {
       where.status = status;

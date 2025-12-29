@@ -95,8 +95,19 @@ export default function PackingSlipPage() {
         {/* Packing Slip Preview */}
         <Card>
           <CardContent className="p-0">
-            <PackingSlipTemplate ref={slipRef} order={order} />
-          </CardContent>
+            <PackingSlipTemplate ref={slipRef} order={{
+              ...order,
+                          createdAt: order.createdAt.toISOString(),
+                          items: order.items.map(item => ({
+                            ...item,
+                            variant: {
+                              ...item.variant,
+                              size: item.variant.size || undefined,
+                              color: item.variant.color || undefined,
+                              material: item.variant.material || undefined
+                            }
+                          }))
+                        }} />          </CardContent>
         </Card>
       </div>
     </div>

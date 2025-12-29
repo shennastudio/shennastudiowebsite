@@ -196,7 +196,8 @@ export default function OrderDetailPage() {
                 {/* Timeline events */}
                 <div className="space-y-6">
                   {timeline.map((event, index) => {
-                    const IconComponent = getIcon(event.icon);
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const IconComponent = getIcon(event.icon) as any;
                     return (
                       <div key={index} className="relative flex gap-4">
                         {/* Icon */}
@@ -255,7 +256,7 @@ export default function OrderDetailPage() {
                     <div key={note.id} className="bg-gray-50 p-3 rounded-lg">
                       <p className="text-sm text-gray-700">{note.content}</p>
                       <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
-                        <span>{note.user.name}</span>
+                        <span>{note.user?.name || 'Unknown'}</span>
                         <span>{new Date(note.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>

@@ -10,7 +10,10 @@ interface Payment {
   amount: number;
   status: string;
   customerName: string;
+  customerEmail: string;
   orderNumber: string;
+  total: number;
+  stripePaymentId?: string;
   createdAt: Date;
 }
 

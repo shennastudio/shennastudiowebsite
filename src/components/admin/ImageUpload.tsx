@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
+import { uploadProductImage } from '@/app/actions/upload';
 
 interface ImageUploadProps {
   onUploadComplete: (url: string) => void;
@@ -21,9 +22,31 @@ export function ImageUpload({
   helperText = 'Drag and drop an image or click to browse (max 5MB)',
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [statusText, setStatusText] = useState('');
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (uploading) {
+      setProgress(0);
+      setStatusText('Uploading...');
+      // Simulate progress
+      interval = setInterval(() => {
+        setProgress((prev) => {
+          if (prev >= 90) return prev;
+          if (prev > 60) setStatusText('Converting to WebP...');
+          return prev + 10;
+        });
+      }, 500);
+    } else {
+      setProgress(0);
+      setStatusText('');
+    }
+    return () => clearInterval(interval);
+  }, [uploading]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -60,17 +83,14 @@ export function ImageUpload({
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const result = await uploadProductImage(formData);
 
-      const data = await response.json();
-
-      if (response.ok) {
-        onUploadComplete(data.url);
+      if (result.success && result.url) {
+        setProgress(100);
+        setStatusText('Done!');
+        onUploadComplete(result.url);
       } else {
-        setError(data.error || 'Upload failed');
+        setError(result.error || 'Upload failed');
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Upload failed');
@@ -108,7 +128,7 @@ export function ImageUpload({
               {uploading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Uploading...
+                  {progress}%
                 </>
               ) : (
                 <>
@@ -146,7 +166,14 @@ export function ImageUpload({
           {uploading ? (
             <div className="space-y-2">
               <Loader2 className="h-12 w-12 mx-auto animate-spin text-blue-600" />
-              <p className="text-sm text-gray-600">Uploading...</p>
+              <p className="text-sm text-gray-600 font-medium">{statusText}</p>
+              {/* Progress Bar */}
+              <div className="w-full max-w-[200px] mx-auto h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-blue-600 transition-all duration-300 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
             </div>
           ) : (
             <div className="space-y-2">

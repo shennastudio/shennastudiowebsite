@@ -768,14 +768,14 @@ export default function CalendarPage() {
 
       {/* Journal View */}
       {viewMode === 'journal' && (
-        <Card className="border-slate-200/60 shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b border-slate-200/60">
-            <CardTitle className="flex items-center gap-2">
+        <Card className="border-slate-200/60 shadow-xl overflow-hidden">
+          <CardHeader className="bg-gradient-to-r from-slate-50 to-white border-b border-slate-200/60 p-4 sm:p-6">
+            <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
               <FileText className="w-5 h-5 text-cyan-600" />
-              Business Journal Entries
+              Business Journal
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-6">
+          <CardContent className="p-3 sm:p-6">
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
@@ -783,7 +783,7 @@ export default function CalendarPage() {
             ) : filteredEvents.filter(e => e.journalEntry || e.category === 'note').length === 0 ? (
               <div className="text-center py-12 text-slate-500">
                 <BookOpen className="w-12 h-12 mx-auto mb-4 text-slate-300" />
-                <p>No journal entries yet. Add entries with notes to see them here!</p>
+                <p>No journal entries yet.</p>
               </div>
             ) : (
               <div className="space-y-6">
@@ -793,55 +793,57 @@ export default function CalendarPage() {
                   .map(event => (
                     <div
                       key={event.id}
-                      className="p-6 bg-white border border-slate-200/60 rounded-xl hover:shadow-lg transition-shadow"
+                      className="p-4 sm:p-6 bg-white border border-slate-200/60 rounded-xl hover:shadow-lg transition-shadow"
                     >
-                      <div className="flex items-start justify-between mb-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-4">
                         <div>
-                          <h3 className="font-bold text-xl text-slate-900">{event.title}</h3>
-                          <p className="text-sm text-slate-500 mt-1">
+                          <h3 className="font-bold text-lg sm:text-xl text-slate-900">{event.title}</h3>
+                          <p className="text-xs sm:text-sm text-slate-500 mt-1">
                             {new Date(event.date).toLocaleDateString('en-US', {
-                              weekday: 'long',
+                              weekday: 'short',
                               year: 'numeric',
-                              month: 'long',
+                              month: 'short',
                               day: 'numeric'
                             })}
                           </p>
                         </div>
                         <div className="flex gap-2">
-                          <Button variant="outline" size="sm" onClick={() => handleEdit(event)}>
-                            <Edit className="w-4 h-4" />
+                          <Button variant="outline" size="sm" className="flex-1 sm:flex-none" onClick={() => handleEdit(event)}>
+                            <Edit className="w-4 h-4 sm:mr-1" />
+                            <span className="sm:inline">Edit</span>
                           </Button>
-                          <Button variant="outline" size="sm" onClick={() => handleDelete(event.id)} className="text-red-600 hover:bg-red-50">
-                            <Trash2 className="w-4 h-4" />
+                          <Button variant="outline" size="sm" className="flex-1 sm:flex-none text-red-600 hover:bg-red-50" onClick={() => handleDelete(event.id)}>
+                            <Trash2 className="w-4 h-4 sm:mr-1" />
+                            <span className="sm:inline">Delete</span>
                           </Button>
                         </div>
                       </div>
                       {event.journalEntry && (
-                        <div className="prose prose-slate max-w-none mb-4">
+                        <div className="prose prose-slate max-w-none mb-4 prose-sm sm:prose-base">
                           <p className="text-slate-700 whitespace-pre-wrap">{event.journalEntry}</p>
                         </div>
                       )}
-                      {event.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-4">
+                      <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex flex-wrap gap-1">
                           {event.tags.map(tag => (
-                            <span key={tag} className="px-2 py-0.5 bg-cyan-100 text-cyan-700 text-xs rounded-full">
+                            <span key={tag} className="px-2 py-0.5 bg-cyan-50 text-cyan-700 text-[10px] rounded-full">
                               #{tag}
                             </span>
                           ))}
                         </div>
-                      )}
-                      {(event.projectedRevenue || event.actualRevenue) && (
-                        <div className="flex gap-4 p-3 bg-slate-50 rounded-lg">
-                          <div>
-                            <p className="text-xs text-slate-500">Projected</p>
-                            <p className="font-semibold text-slate-900">${event.projectedRevenue?.toLocaleString() || 0}</p>
+                        {(event.projectedRevenue || event.actualRevenue) && (
+                          <div className="flex gap-4 p-2 sm:p-3 bg-slate-50 rounded-lg text-xs sm:text-sm">
+                            <div>
+                              <p className="text-[10px] text-slate-500">Projected</p>
+                              <p className="font-semibold text-slate-900">${event.projectedRevenue || 0}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] text-slate-500">Actual</p>
+                              <p className="font-semibold text-emerald-600">${event.actualRevenue || 0}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-xs text-slate-500">Actual</p>
-                            <p className="font-semibold text-emerald-600">${event.actualRevenue?.toLocaleString() || 0}</p>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   ))}
               </div>

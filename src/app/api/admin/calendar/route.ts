@@ -76,6 +76,7 @@ export async function POST(request: Request) {
         ...validated,
         date: new Date(validated.date),
         recurringEnd: validated.recurringEnd ? new Date(validated.recurringEnd) : null,
+        checklist: validated.checklist ?? undefined,
         userId: session.user.id,
       },
     });

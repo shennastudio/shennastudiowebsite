@@ -93,18 +93,18 @@ export function AdminSidebar({}: AdminSidebarProps) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 text-slate-600 hover:text-slate-900 transition-colors"
+        className="lg:hidden fixed top-4 left-4 z-50 text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
       >
         <Menu className="h-6 w-6" />
       </button>
 
       {/* Professional Sidebar */}
-      <aside className={`fixed left-0 top-0 z-40 h-screen w-72 transform bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+      <aside className={`fixed left-0 top-0 z-40 h-screen w-72 transform bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 dark:from-black dark:via-black dark:to-black border-r border-transparent dark:border-slate-800 transition-transform duration-300 ease-in-out lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex h-full flex-col">
           {/* Sidebar Header */}
-          <div className="flex h-16 items-center justify-between border-b border-slate-700/50 px-6">
+          <div className="flex h-16 items-center justify-between border-b border-slate-700/50 dark:border-slate-800 px-6">
             <Link href="/admin" className="flex items-center gap-3 group">
               <div className="relative h-12 w-36">
                 <Image
@@ -143,7 +143,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
                         className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative overflow-hidden ${
                           active
                             ? `bg-gradient-to-r ${item.color} text-white shadow-lg shadow-cyan-500/30`
-                            : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                            : 'text-slate-300 hover:text-white hover:bg-slate-800/50 dark:hover:bg-slate-900'
                         }`}
                       >
                         <Icon className={`h-5 w-5 transition-transform ${active ? '' : 'group-hover:scale-110'}`} />
@@ -163,7 +163,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
           </nav>
 
           {/* Sidebar Footer */}
-          <div className="border-t border-slate-700/50 p-4">
+          <div className="border-t border-slate-700/50 dark:border-slate-800 p-4">
             <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gradient-to-r from-teal-500/20 to-cyan-500/20 border border-teal-500/30">
               <Heart className="h-5 w-5 text-teal-400 animate-pulse" />
               <div className="flex-1">

@@ -111,8 +111,8 @@ export default async function AdminDashboard() {
       trend: 'up',
       icon: DollarSign,
       color: 'from-emerald-500 to-green-500',
-      bgColor: 'from-emerald-50 to-green-50',
-      iconBg: 'from-emerald-100 to-green-100'
+      bgColor: 'from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30',
+      iconBg: 'from-emerald-100 to-green-100 dark:from-emerald-900/50 dark:to-green-900/50'
     },
     {
       title: 'Total Orders',
@@ -121,8 +121,8 @@ export default async function AdminDashboard() {
       trend: 'up',
       icon: ShoppingCart,
       color: 'from-blue-500 to-cyan-500',
-      bgColor: 'from-blue-50 to-cyan-50',
-      iconBg: 'from-blue-100 to-cyan-100'
+      bgColor: 'from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30',
+      iconBg: 'from-blue-100 to-cyan-100 dark:from-blue-900/50 dark:to-cyan-900/50'
     },
     {
       title: 'Customers',
@@ -131,8 +131,8 @@ export default async function AdminDashboard() {
       trend: 'up',
       icon: Users,
       color: 'from-violet-500 to-purple-500',
-      bgColor: 'from-violet-50 to-purple-50',
-      iconBg: 'from-violet-100 to-purple-100'
+      bgColor: 'from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30',
+      iconBg: 'from-violet-100 to-purple-100 dark:from-violet-900/50 dark:to-purple-900/50'
     },
     {
       title: 'Products',
@@ -141,8 +141,8 @@ export default async function AdminDashboard() {
       trend: 'up',
       icon: Package,
       color: 'from-amber-500 to-orange-500',
-      bgColor: 'from-amber-50 to-orange-50',
-      iconBg: 'from-amber-100 to-orange-100'
+      bgColor: 'from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30',
+      iconBg: 'from-amber-100 to-orange-100 dark:from-amber-900/50 dark:to-orange-900/50'
     },
     {
       title: 'Conservation Impact',
@@ -151,19 +151,19 @@ export default async function AdminDashboard() {
       trend: 'neutral',
       icon: Heart,
       color: 'from-teal-500 to-cyan-500',
-      bgColor: 'from-teal-50 to-cyan-50',
-      iconBg: 'from-teal-100 to-cyan-100'
+      bgColor: 'from-teal-50 to-cyan-50 dark:from-teal-950/30 dark:to-cyan-950/30',
+      iconBg: 'from-teal-100 to-cyan-100 dark:from-teal-900/50 dark:to-cyan-900/50'
     }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'PENDING': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'PROCESSING': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'SHIPPED': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'DELIVERED': return 'bg-green-100 text-green-800 border-green-200';
-      case 'CANCELLED': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'PENDING': return 'bg-yellow-100 text-yellow-800 border-yellow-200 dark:bg-yellow-900/30 dark:text-yellow-400 dark:border-yellow-800';
+      case 'PROCESSING': return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800';
+      case 'SHIPPED': return 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-800';
+      case 'DELIVERED': return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800';
+      case 'CANCELLED': return 'bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700';
     }
   };
 
@@ -171,10 +171,10 @@ export default async function AdminDashboard() {
     <div className="space-y-4 sm:space-y-6 lg:space-y-8 animate-in fade-in duration-500">
       {/* Header */}
       <div className="space-y-1 sm:space-y-2">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 bg-clip-text text-transparent">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black bg-gradient-to-r from-slate-900 via-cyan-900 to-teal-900 dark:from-white dark:via-cyan-400 dark:to-teal-400 bg-clip-text text-transparent">
           Dashboard Overview
         </h1>
-        <p className="text-slate-600 text-sm sm:text-base lg:text-lg">Welcome back! Here&apos;s what&apos;s happening with your ocean conservation store.</p>
+        <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base lg:text-lg">Welcome back! Here&apos;s what&apos;s happening with your ocean conservation store.</p>
       </div>
 
       {/* Stats Grid */}
@@ -186,13 +186,13 @@ export default async function AdminDashboard() {
           return (
             <Card
               key={index}
-              className={`group relative overflow-hidden border-slate-200/60 hover:shadow-2xl transition-all duration-300 cursor-pointer bg-gradient-to-br ${stat.bgColor}`}
+              className={`group relative overflow-hidden border-slate-200/60 dark:border-slate-800 hover:shadow-2xl transition-all duration-300 cursor-pointer bg-gradient-to-br ${stat.bgColor}`}
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent dark:from-white/5 dark:to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1 sm:pb-2 p-3 sm:p-6 relative z-10">
-                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-700">{stat.title}</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-300">{stat.title}</CardTitle>
                 <div className={`p-1.5 sm:p-2.5 bg-gradient-to-br ${stat.iconBg} rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className={`h-4 w-4 sm:h-5 sm:w-5 text-transparent bg-gradient-to-r ${stat.color} bg-clip-text`} fill="currentColor" />
                 </div>
@@ -204,13 +204,13 @@ export default async function AdminDashboard() {
                 </div>
                 <div className="flex items-center gap-1 text-[10px] sm:text-xs flex-wrap">
                   {stat.trend !== 'neutral' && (
-                    <TrendIcon className={`h-3 w-3 ${stat.trend === 'up' ? 'text-green-600' : 'text-red-600'}`} />
+                    <TrendIcon className={`h-3 w-3 ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`} />
                   )}
-                  <span className={`font-semibold ${stat.trend === 'up' ? 'text-green-600' : stat.trend === 'down' ? 'text-red-600' : 'text-slate-600'}`}>
+                  <span className={`font-semibold ${stat.trend === 'up' ? 'text-green-600 dark:text-green-400' : stat.trend === 'down' ? 'text-red-600 dark:text-red-400' : 'text-slate-600 dark:text-slate-400'}`}>
                     {stat.change}
                   </span>
                   {stat.trend !== 'neutral' && (
-                    <span className="text-slate-500 hidden sm:inline">from last month</span>
+                    <span className="text-slate-500 dark:text-slate-500 hidden sm:inline">from last month</span>
                   )}
                 </div>
               </CardContent>
@@ -221,16 +221,16 @@ export default async function AdminDashboard() {
 
       <div className="grid gap-4 sm:gap-6 lg:grid-cols-2">
         {/* Recent Orders */}
-        <Card className="border-slate-200/60 shadow-xl hover:shadow-2xl transition-shadow">
-          <CardHeader className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white p-3 sm:p-6">
+        <Card className="border-slate-200/60 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-shadow bg-white dark:bg-black/50">
+          <CardHeader className="border-b border-slate-200/60 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-950 dark:to-black p-3 sm:p-6">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
-                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600" />
+              <CardTitle className="flex items-center gap-2 text-sm sm:text-base dark:text-slate-200">
+                <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-600 dark:text-cyan-400" />
                 Recent Orders
               </CardTitle>
               <Link
                 href="/admin/orders"
-                className="text-xs sm:text-sm font-semibold text-cyan-600 hover:text-cyan-700 flex items-center gap-1 group"
+                className="text-xs sm:text-sm font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 flex items-center gap-1 group"
               >
                 View All
                 <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -242,24 +242,24 @@ export default async function AdminDashboard() {
               {data.recentOrders.map((order, idx) => (
                 <div
                   key={order.id}
-                  className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-cyan-300/50 transition-all duration-200"
+                  className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900/50 dark:to-black rounded-xl border border-slate-200/60 dark:border-slate-800 hover:shadow-lg hover:border-cyan-300/50 dark:hover:border-cyan-700/50 transition-all duration-200"
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <p className="font-bold text-slate-900 text-sm sm:text-base">#{order.orderNumber}</p>
+                      <p className="font-bold text-slate-900 dark:text-slate-100 text-sm sm:text-base">#{order.orderNumber}</p>
                       <span className={`px-2 sm:px-3 py-0.5 rounded-full text-[10px] sm:text-xs font-bold border ${getStatusColor(order.status)}`}>
                         {order.status}
                       </span>
                     </div>
-                    <p className="text-xs sm:text-sm text-slate-600 truncate">{order.user?.name || 'Guest'}</p>
-                    <p className="text-[10px] sm:text-xs text-slate-500">{new Date(order.createdAt).toLocaleDateString()}</p>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 truncate">{order.user?.name || 'Guest'}</p>
+                    <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-500">{new Date(order.createdAt).toLocaleDateString()}</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-base sm:text-xl font-black bg-gradient-to-r from-cyan-700 to-teal-700 bg-clip-text text-transparent">
+                    <p className="text-base sm:text-xl font-black bg-gradient-to-r from-cyan-700 to-teal-700 dark:from-cyan-400 dark:to-teal-400 bg-clip-text text-transparent">
                       ${order.total.toFixed(2)}
                     </p>
-                    <p className="text-[10px] sm:text-xs text-slate-500">{order.items.length} items</p>
+                    <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-500">{order.items.length} items</p>
                   </div>
                 </div>
               ))}
@@ -268,16 +268,16 @@ export default async function AdminDashboard() {
         </Card>
 
         {/* Top Products */}
-        <Card className="border-slate-200/60 shadow-xl hover:shadow-2xl transition-shadow">
-          <CardHeader className="border-b border-slate-200/60 bg-gradient-to-r from-slate-50 to-white p-3 sm:p-6">
+        <Card className="border-slate-200/60 dark:border-slate-800 shadow-xl hover:shadow-2xl transition-shadow bg-white dark:bg-black/50">
+          <CardHeader className="border-b border-slate-200/60 dark:border-slate-800 bg-gradient-to-r from-slate-50 to-white dark:from-slate-950 dark:to-black p-3 sm:p-6">
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-sm sm:text-base">
-                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
+              <CardTitle className="flex items-center gap-2 text-sm sm:text-base dark:text-slate-200">
+                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400" />
                 Top Selling Products
               </CardTitle>
               <Link
                 href="/admin/products"
-                className="text-xs sm:text-sm font-semibold text-cyan-600 hover:text-cyan-700 flex items-center gap-1 group"
+                className="text-xs sm:text-sm font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300 flex items-center gap-1 group"
               >
                 View All
                 <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -289,28 +289,28 @@ export default async function AdminDashboard() {
               {data.topProducts.map((product, idx) => (
                 <div
                   key={idx}
-                  className="group flex items-center justify-between p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-amber-300/50 transition-all duration-200"
+                  className="group flex items-center justify-between p-3 sm:p-4 bg-gradient-to-br from-slate-50 to-white dark:from-slate-900/50 dark:to-black rounded-xl border border-slate-200/60 dark:border-slate-800 hover:shadow-lg hover:border-amber-300/50 dark:hover:border-amber-700/50 transition-all duration-200"
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
                   <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                     <div className={`flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br shrink-0 ${
-                      idx === 0 ? 'from-amber-100 to-yellow-100' :
-                      idx === 1 ? 'from-slate-100 to-gray-100' :
-                      idx === 2 ? 'from-orange-100 to-amber-100' :
-                      'from-slate-50 to-white'
-                    } font-bold text-xs sm:text-sm`}>
+                      idx === 0 ? 'from-amber-100 to-yellow-100 dark:from-amber-900/50 dark:to-yellow-900/50' :
+                      idx === 1 ? 'from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800' :
+                      idx === 2 ? 'from-orange-100 to-amber-100 dark:from-orange-900/50 dark:to-amber-900/50' :
+                      'from-slate-50 to-white dark:from-slate-900 dark:to-slate-900'
+                    } font-bold text-xs sm:text-sm dark:text-slate-200`}>
                       #{idx + 1}
                     </div>
-                    <p className="font-semibold text-slate-900 group-hover:text-cyan-700 transition-colors text-xs sm:text-sm truncate">
+                    <p className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors text-xs sm:text-sm truncate">
                       {product.name}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <div className="text-right">
-                      <p className="text-base sm:text-lg font-black bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+                      <p className="text-base sm:text-lg font-black bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
                         {product.quantity}
                       </p>
-                      <p className="text-[10px] sm:text-xs text-slate-500">sold</p>
+                      <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-500">sold</p>
                     </div>
                   </div>
                 </div>
@@ -321,61 +321,61 @@ export default async function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <Card className="border-slate-200/60 shadow-xl bg-gradient-to-br from-cyan-50/50 to-teal-50/50">
+      <Card className="border-slate-200/60 dark:border-slate-800 shadow-xl bg-gradient-to-br from-cyan-50/50 to-teal-50/50 dark:from-cyan-950/20 dark:to-teal-950/20">
         <CardHeader className="p-3 sm:p-6">
-          <CardTitle className="text-base sm:text-lg">Quick Actions</CardTitle>
+          <CardTitle className="text-base sm:text-lg dark:text-slate-200">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
           <div className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-4">
             <Link
               href="/admin/products/new"
-              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-cyan-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white dark:bg-black rounded-xl border border-slate-200/60 dark:border-slate-800 hover:shadow-lg hover:border-cyan-300/50 dark:hover:border-cyan-700/50 transition-all duration-200"
             >
-              <div className="p-2 sm:p-3 bg-gradient-to-br from-cyan-100 to-teal-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Package className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-cyan-100 to-teal-100 dark:from-cyan-900/50 dark:to-teal-900/50 rounded-lg group-hover:scale-110 transition-transform">
+                <Package className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-700 dark:text-cyan-400" />
               </div>
               <div className="text-center sm:text-left">
-                <p className="font-semibold text-slate-900 group-hover:text-cyan-700 transition-colors text-xs sm:text-sm">Add Product</p>
-                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Create new listing</p>
+                <p className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-cyan-700 dark:group-hover:text-cyan-400 transition-colors text-xs sm:text-sm">Add Product</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-500 hidden sm:block">Create new listing</p>
               </div>
             </Link>
 
             <Link
               href="/admin/email"
-              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-purple-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white dark:bg-black rounded-xl border border-slate-200/60 dark:border-slate-800 hover:shadow-lg hover:border-purple-300/50 dark:hover:border-purple-700/50 transition-all duration-200"
             >
-              <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-100 to-violet-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-purple-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-purple-100 to-violet-100 dark:from-purple-900/50 dark:to-violet-900/50 rounded-lg group-hover:scale-110 transition-transform">
+                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-purple-700 dark:text-purple-400" />
               </div>
               <div className="text-center sm:text-left">
-                <p className="font-semibold text-slate-900 group-hover:text-purple-700 transition-colors text-xs sm:text-sm">Send Email</p>
-                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Compose message</p>
+                <p className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors text-xs sm:text-sm">Send Email</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-500 hidden sm:block">Compose message</p>
               </div>
             </Link>
 
             <Link
               href="/admin/calendar"
-              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-pink-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white dark:bg-black rounded-xl border border-slate-200/60 dark:border-slate-800 hover:shadow-lg hover:border-pink-300/50 dark:hover:border-pink-700/50 transition-all duration-200"
             >
-              <div className="p-2 sm:p-3 bg-gradient-to-br from-pink-100 to-rose-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-pink-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/50 dark:to-rose-900/50 rounded-lg group-hover:scale-110 transition-transform">
+                <Star className="w-4 h-4 sm:w-5 sm:h-5 text-pink-700 dark:text-pink-400" />
               </div>
               <div className="text-center sm:text-left">
-                <p className="font-semibold text-slate-900 group-hover:text-pink-700 transition-colors text-xs sm:text-sm">Calendar</p>
-                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">View events</p>
+                <p className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-pink-700 dark:group-hover:text-pink-400 transition-colors text-xs sm:text-sm">Calendar</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-500 hidden sm:block">View events</p>
               </div>
             </Link>
 
             <Link
               href="/admin/conservation"
-              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white rounded-xl border border-slate-200/60 hover:shadow-lg hover:border-teal-300/50 transition-all duration-200"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-white dark:bg-black rounded-xl border border-slate-200/60 dark:border-slate-800 hover:shadow-lg hover:border-teal-300/50 dark:hover:border-teal-700/50 transition-all duration-200"
             >
-              <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-100 to-emerald-100 rounded-lg group-hover:scale-110 transition-transform">
-                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-teal-700" />
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-100 to-emerald-100 dark:from-teal-900/50 dark:to-emerald-900/50 rounded-lg group-hover:scale-110 transition-transform">
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-teal-700 dark:text-teal-400" />
               </div>
               <div className="text-center sm:text-left">
-                <p className="font-semibold text-slate-900 group-hover:text-teal-700 transition-colors text-xs sm:text-sm">Conservation</p>
-                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Track impact</p>
+                <p className="font-semibold text-slate-900 dark:text-slate-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors text-xs sm:text-sm">Conservation</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-500 hidden sm:block">Track impact</p>
               </div>
             </Link>
           </div>

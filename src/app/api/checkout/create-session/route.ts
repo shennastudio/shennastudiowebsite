@@ -60,7 +60,8 @@ export async function POST(request: NextRequest) {
     const rewardsPoints = 4;
 
     // Create Stripe line items from cart items
-    const lineItems = items.map((item) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const lineItems: any[] = items.map((item) => ({
       price_data: {
         currency: STRIPE_CONFIG.currency,
         product_data: {
