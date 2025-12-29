@@ -15,6 +15,7 @@ import {
   FileText,
   ShoppingBag
 } from 'lucide-react';
+import { ShippingLabelPanel } from '@/components/admin/ShippingLabelPanel';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import type { OrderDetail } from '@/types';
@@ -182,8 +183,10 @@ export default function OrderDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Timeline */}
-        <div className="lg:col-span-2">
+        {/* Timeline and Shipping */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Shipping Label Panel */}
+          <ShippingLabelPanel order={order} onLabelPurchased={fetchOrderDetails} />
           <Card>
             <CardHeader>
               <CardTitle>Order Timeline</CardTitle>

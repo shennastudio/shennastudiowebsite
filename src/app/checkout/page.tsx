@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Loader2, ShoppingBag, ArrowLeft, CheckCircle, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -24,6 +24,24 @@ export default function CheckoutPage() {
   const [selectedRate, setSelectedRate] = useState<any>(null);
   const [calculatingRates, setCalculatingRates] = useState(false);
 
+  // Address Validation State
+  const [addressValidation, setAddressValidation] = useState<{
+    isValid: boolean | null;
+    validating: boolean;
+    messages: Array<{ type: 'error' | 'warning' | 'info'; text: string }>;
+    suggestedAddress?: {
+      street1: string;
+      street2?: string;
+      city: string;
+      state: string;
+      zip: string;
+    };
+  }>({
+    isValid: null,
+    validating: false,
+    messages: [],
+  });
+
   const [formData, setFormData] = useState({
     email: session?.user?.email || '',
     name: session?.user?.name || '',
@@ -39,15 +57,80 @@ export default function CheckoutPage() {
     const { name, value } = e.target;
     setFormData(prev => {
       const newData = { ...prev, [name]: value };
-      
-      // Trigger rate fetch if address looks complete enough
+
+      // Reset validation when address fields change
+      if (['line1', 'line2', 'city', 'state', 'postalCode'].includes(name)) {
+        setAddressValidation({ isValid: null, validating: false, messages: [] });
+        setShippingRates([]);
+        setSelectedRate(null);
+      }
+
+      // Trigger address validation if address looks complete enough
       if (name === 'postalCode' || name === 'state' || name === 'city') {
         if (newData.line1 && newData.city && newData.state && newData.postalCode.length >= 5) {
-          fetchShippingRates(newData);
+          validateAndFetchRates(newData);
         }
       }
       return newData;
     });
+  };
+
+  const validateAndFetchRates = async (addressData: typeof formData) => {
+    // First validate the address
+    setAddressValidation({ isValid: null, validating: true, messages: [] });
+
+    try {
+      const validationRes = await fetch('/api/shipping/validate-address', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          address: {
+            name: addressData.name,
+            street1: addressData.line1,
+            street2: addressData.line2,
+            city: addressData.city,
+            state: addressData.state,
+            zip: addressData.postalCode,
+            country: addressData.country,
+          }
+        })
+      });
+
+      const validationData = await validationRes.json();
+
+      setAddressValidation({
+        isValid: validationData.isValid,
+        validating: false,
+        messages: validationData.messages || [],
+        suggestedAddress: validationData.validatedAddress,
+      });
+
+      // Only fetch rates if address is valid or has warnings (not errors)
+      const hasErrors = validationData.messages?.some((m: { type: string }) => m.type === 'error');
+      if (validationData.isValid || !hasErrors) {
+        fetchShippingRates(addressData);
+      }
+    } catch (err) {
+      console.error("Address validation failed", err);
+      // If validation fails, still try to fetch rates
+      setAddressValidation({ isValid: null, validating: false, messages: [] });
+      fetchShippingRates(addressData);
+    }
+  };
+
+  const applySuggestedAddress = () => {
+    if (addressValidation.suggestedAddress) {
+      const suggested = addressValidation.suggestedAddress;
+      setFormData(prev => ({
+        ...prev,
+        line1: suggested.street1,
+        line2: suggested.street2 || '',
+        city: suggested.city,
+        state: suggested.state,
+        postalCode: suggested.zip,
+      }));
+      setAddressValidation(prev => ({ ...prev, isValid: true, messages: [] }));
+    }
   };
 
   const fetchShippingRates = async (addressData: typeof formData) => {
@@ -287,6 +370,70 @@ export default function CheckoutPage() {
                       />
                     </div>
                   </div>
+
+                  {/* Address Validation Status */}
+                  {addressValidation.validating && (
+                    <div className="flex items-center text-sm text-gray-500 py-2">
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Validating address...
+                    </div>
+                  )}
+
+                  {addressValidation.isValid === true && addressValidation.messages.length === 0 && (
+                    <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 px-4 py-3 rounded">
+                      <CheckCircle className="h-4 w-4" />
+                      Address verified
+                    </div>
+                  )}
+
+                  {addressValidation.messages.length > 0 && (
+                    <div className="space-y-2">
+                      {addressValidation.messages.map((msg, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex items-start gap-2 text-sm px-4 py-3 rounded ${
+                            msg.type === 'error'
+                              ? 'text-red-700 bg-red-50 border border-red-200'
+                              : msg.type === 'warning'
+                              ? 'text-amber-700 bg-amber-50 border border-amber-200'
+                              : 'text-blue-700 bg-blue-50 border border-blue-200'
+                          }`}
+                        >
+                          <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
+                          <span>{msg.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {addressValidation.suggestedAddress &&
+                   addressValidation.isValid === true &&
+                   (addressValidation.suggestedAddress.street1 !== formData.line1 ||
+                    addressValidation.suggestedAddress.city !== formData.city ||
+                    addressValidation.suggestedAddress.state !== formData.state ||
+                    addressValidation.suggestedAddress.zip !== formData.postalCode) && (
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <p className="text-sm font-medium text-blue-900 mb-2">Suggested address correction:</p>
+                      <div className="text-sm text-blue-800 mb-3">
+                        <p>{addressValidation.suggestedAddress.street1}</p>
+                        {addressValidation.suggestedAddress.street2 && (
+                          <p>{addressValidation.suggestedAddress.street2}</p>
+                        )}
+                        <p>
+                          {addressValidation.suggestedAddress.city}, {addressValidation.suggestedAddress.state} {addressValidation.suggestedAddress.zip}
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={applySuggestedAddress}
+                        className="text-blue-700 border-blue-300 hover:bg-blue-100"
+                      >
+                        Use suggested address
+                      </Button>
+                    </div>
+                  )}
 
                   {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
