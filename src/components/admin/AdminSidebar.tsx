@@ -21,7 +21,8 @@ import {
   X,
   ChevronRight,
   Calendar,
-  FileText
+  FileText,
+  Sparkles
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -71,6 +72,12 @@ export function AdminSidebar({}: AdminSidebarProps) {
       title: 'Impact',
       items: [
         { href: '/admin/conservation', label: 'Conservation', icon: Heart, color: 'from-teal-400 to-emerald-500' },
+      ]
+    },
+    {
+      title: 'Intelligence',
+      items: [
+        { href: '/admin/ai-features', label: 'AI Tools', icon: Sparkles, color: 'from-amber-400 to-yellow-500' },
       ]
     },
     {
