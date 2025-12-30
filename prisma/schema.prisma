@@ -57,6 +57,8 @@ model User {
   inventoryTransactions InventoryTransaction[]
   calendarEvents  CalendarEvent[]
   blogPosts       BlogPost[] @relation("BlogAuthor")
+  subscriptions   Subscription[]
+  shippingAddresses ShippingAddress[]
 
   @@map("users")
 }
@@ -131,12 +133,21 @@ model Product {
   categoryId             String?
   category               Category? @relation(fields: [categoryId], references: [id])
 
+  // NFT Integration
+  hasNFT                 Boolean   @default(false)
+  nftCollectionId        String?
+
+  // Customization
+  isCustomizable         Boolean   @default(false)
+
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
   variants               ProductVariant[]
   images                 ProductImage[]
   reviews                ProductReview[]
+  nftTokens              NFTToken[]
+  customizationOptions   ProductCustomizationOption[]
 
   @@map("products")
 }
@@ -155,6 +166,11 @@ model ProductVariant {
   size         String?
   color        String?
   material     String?
+
+  // AR/3D Model Support
+  model3dGltf  String?  // GLTF/GLB URL for web AR
+  model3dUsdz  String?  // USDZ URL for iOS AR Quick Look
+  arEnabled    Boolean  @default(false)
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -241,6 +257,8 @@ model OrderItem {
   price          Float
 
   createdAt      DateTime       @default(now())
+
+  customizations OrderItemCustomization[]
 
   @@map("order_items")
 }
@@ -924,4 +942,319 @@ model BlogPost {
   @@index([featured, published])
   @@index([authorId])
   @@map("blog_posts")
+}
+
+// ============================================================================
+// SUBSCRIPTION MODEL - "Ocean Guardian" Box
+// ============================================================================
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  PAST_DUE
+  TRIALING
+}
+
+enum SubscriptionTier {
+  BASIC
+  PREMIUM
+  COLLECTOR
+}
+
+model SubscriptionPlan {
+  id                  String           @id @default(cuid())
+  name                String
+  tier                SubscriptionTier @unique
+  description         String           @db.Text
+  priceMonthly        Float
+  stripePriceId       String?          @unique
+
+  // Plan benefits
+  braceletsPerMonth   Int              @default(1)
+  exclusiveDiscounts  Boolean          @default(false)
+  earlyAccess         Boolean          @default(false)
+  limitedEditions     Boolean          @default(false)
+  vipPerks            Boolean          @default(false)
+
+  // Display
+  features            String[]         // List of features for display
+  badgeColor          String?          // Color for subscriber badge
+  isActive            Boolean          @default(true)
+
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  subscriptions       Subscription[]
+
+  @@map("subscription_plans")
+}
+
+model Subscription {
+  id                    String             @id @default(cuid())
+  userId                String
+  user                  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  planId                String
+  plan                  SubscriptionPlan   @relation(fields: [planId], references: [id])
+
+  status                SubscriptionStatus @default(ACTIVE)
+
+  // Stripe integration
+  stripeSubscriptionId  String?            @unique
+  stripeCustomerId      String?
+
+  // Billing period
+  currentPeriodStart    DateTime?
+  currentPeriodEnd      DateTime?
+  cancelAtPeriodEnd     Boolean            @default(false)
+  cancelledAt           DateTime?
+
+  // Shipping preferences
+  shippingAddressId     String?
+  shippingAddress       ShippingAddress?   @relation(fields: [shippingAddressId], references: [id])
+  preferredSize         String?            // S, M, L
+  preferredColors       String[]           // Preferred color palette
+  preferredMaterials    String[]           // Preferred materials
+
+  // Trial
+  trialEndsAt           DateTime?
+
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+
+  shipments             SubscriptionShipment[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("subscriptions")
+}
+
+model SubscriptionShipment {
+  id                String       @id @default(cuid())
+  subscriptionId    String
+  subscription      Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  // Period this shipment covers
+  periodStart       DateTime
+  periodEnd         DateTime
+
+  // Status
+  status            String       @default("pending") // pending, preparing, shipped, delivered
+
+  // Tracking
+  trackingNumber    String?
+  carrier           String?
+  labelUrl          String?
+
+  // Contents
+  items             Json         // Array of {productId, variantId, name, quantity}
+
+  // Dates
+  shippedAt         DateTime?
+  deliveredAt       DateTime?
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@index([subscriptionId])
+  @@index([status])
+  @@map("subscription_shipments")
+}
+
+model ShippingAddress {
+  id            String   @id @default(cuid())
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name          String
+  street1       String
+  street2       String?
+  city          String
+  state         String
+  zip           String
+  country       String   @default("US")
+  phone         String?
+
+  isDefault     Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscriptions Subscription[]
+
+  @@index([userId])
+  @@map("shipping_addresses")
+}
+
+// ============================================================================
+// NFT INTEGRATION - Polygon
+// ============================================================================
+
+model NFTCollection {
+  id                String    @id @default(cuid())
+  name              String
+  description       String?   @db.Text
+  contractAddress   String?   @unique
+  symbol            String?
+  baseUri           String?
+
+  // Supply
+  maxSupply         Int?
+  currentSupply     Int       @default(0)
+
+  // Royalties
+  royaltyPercent    Float     @default(5)
+  royaltyRecipient  String?   // Wallet address
+
+  // Metadata
+  coverImage        String?
+  bannerImage       String?
+
+  // Status
+  isActive          Boolean   @default(true)
+  deployedAt        DateTime?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  tokens            NFTToken[]
+
+  @@map("nft_collections")
+}
+
+model NFTToken {
+  id                String        @id @default(cuid())
+  collectionId      String
+  collection        NFTCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  tokenId           Int           // On-chain token ID
+  name              String
+  description       String?       @db.Text
+
+  // Media
+  imageUrl          String?
+  animationUrl      String?       // For animated NFTs
+  metadataUrl       String?       // IPFS metadata URL
+
+  // Product link
+  productId         String?
+  product           Product?      @relation(fields: [productId], references: [id])
+  orderId           String?       // Order that triggered mint
+
+  // Ownership
+  ownerAddress      String?       // Current owner wallet
+  originalOwner     String?       // First owner wallet
+
+  // Minting status
+  isMinted          Boolean       @default(false)
+  mintedAt          DateTime?
+  txHash            String?       // Mint transaction hash
+
+  // Attributes (for marketplace display)
+  attributes        Json?         // Array of {trait_type, value}
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@unique([collectionId, tokenId])
+  @@index([ownerAddress])
+  @@index([productId])
+  @@map("nft_tokens")
+}
+
+// ============================================================================
+// PERSONALIZATION / CUSTOMIZATION
+// ============================================================================
+
+enum CustomizationType {
+  ENGRAVING
+  CHARM
+  COLOR
+  MATERIAL
+  BEAD_SELECTION
+}
+
+model CustomizationOption {
+  id                String            @id @default(cuid())
+  name              String
+  type              CustomizationType
+  description       String?
+
+  // Pricing
+  priceModifier     Float             @default(0) // Additional cost
+
+  // Constraints (for engravings)
+  maxLength         Int?              // Max characters
+  allowedChars      String?           // Regex pattern for allowed characters
+
+  // Display
+  previewImage      String?
+  displayOrder      Int               @default(0)
+
+  isActive          Boolean           @default(true)
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  productOptions    ProductCustomizationOption[]
+  orderItemCustomizations OrderItemCustomization[]
+
+  @@map("customization_options")
+}
+
+model ProductCustomizationOption {
+  id                String              @id @default(cuid())
+  productId         String
+  product           Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  optionId          String
+  option            CustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  isRequired        Boolean             @default(false)
+  isEnabled         Boolean             @default(true)
+
+  createdAt         DateTime            @default(now())
+
+  @@unique([productId, optionId])
+  @@map("product_customization_options")
+}
+
+model OrderItemCustomization {
+  id                String              @id @default(cuid())
+  orderItemId       String
+  orderItem         OrderItem           @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+
+  optionId          String
+  option            CustomizationOption @relation(fields: [optionId], references: [id])
+
+  value             String              // The customization value (text, charm ID, color code, etc.)
+  priceAdded        Float               @default(0)
+
+  createdAt         DateTime            @default(now())
+
+  @@index([orderItemId])
+  @@map("order_item_customizations")
+}
+
+model CharmCatalog {
+  id                String   @id @default(cuid())
+  name              String
+  description       String?
+  imageUrl          String
+  price             Float    @default(0)
+
+  // Categorization
+  category          String?  // "ocean", "animals", "symbols", "letters"
+  tags              String[]
+
+  // Inventory
+  stock             Int      @default(0)
+  isActive          Boolean  @default(true)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([category])
+  @@map("charm_catalog")
 }

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, X } from 'lucide-react';
+import { ImageUpload } from '@/components/admin/ImageUpload';
 
 interface Category {
   id: string;
@@ -177,13 +178,12 @@ export default function CategoriesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="image">Image URL</Label>
-                <Input
-                  id="image"
-                  name="image"
-                  value={formData.image}
-                  onChange={handleInputChange}
-                  placeholder="https://images.unsplash.com/photo-..."
+                <ImageUpload
+                  label="Category Image"
+                  helperText="Drag and drop an image or click to browse (max 5MB)"
+                  currentImage={formData.image || undefined}
+                  onUploadComplete={(url) => setFormData(prev => ({ ...prev, image: url }))}
+                  onRemove={() => setFormData(prev => ({ ...prev, image: '' }))}
                 />
               </div>
 
