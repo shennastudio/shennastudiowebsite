@@ -60,8 +60,8 @@ export default function SearchBar() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search ocean bracelets..."
-            className="w-64 pl-10 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            placeholder="Search bracelets..."
+            className="w-56 xl:w-64 pl-10 pr-10 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
           />
           {query && (
             <button
@@ -93,7 +93,7 @@ export default function SearchBar() {
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search ocean bracelets..."
+                  placeholder="Search bracelets..."
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                   autoFocus
                 />
