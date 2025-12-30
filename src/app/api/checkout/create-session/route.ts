@@ -109,6 +109,15 @@ export async function POST(request: NextRequest) {
       quantity: 1,
     });
 
+    // Create compact item references for metadata (Stripe has 500 char limit per value)
+    // Format: "variantId:qty:price" for each item, separated by "|"
+    const itemsCompact = items.map(item =>
+      `${item.variantId || item.productId}:${item.quantity}:${item.price}`
+    ).join('|');
+
+    // Store item count for validation
+    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+
     // Create Stripe checkout session
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -127,6 +136,7 @@ export async function POST(request: NextRequest) {
         total: total.toFixed(2),
         conservationAmount: conservationAmount.toFixed(2),
         rewardsPoints: String(rewardsPoints),
+        itemCount: String(itemCount),
         shippingName: shippingAddress.name,
         shippingLine1: shippingAddress.line1,
         shippingLine2: shippingAddress.line2 || '',
@@ -134,15 +144,8 @@ export async function POST(request: NextRequest) {
         shippingState: shippingAddress.state,
         shippingPostalCode: shippingAddress.postalCode,
         shippingCountry: shippingAddress.country,
-        items: JSON.stringify(items.map(item => ({
-          productId: item.productId,
-          variantId: item.variantId,
-          quantity: item.quantity,
-          price: item.price,
-          name: item.productName,
-          variantName: item.variantName,
-          sku: item.variantSku || item.productSku,
-        }))),
+        // Compact format: "variantId:qty:price|variantId:qty:price|..."
+        items: itemsCompact,
       },
     });
 

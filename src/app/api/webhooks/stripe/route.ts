@@ -68,7 +68,30 @@ export async function POST(request: NextRequest) {
       const shipping = parseFloat(metadata.shipping);
       const tax = parseFloat(metadata.tax);
       const total = parseFloat(metadata.total);
-      const items: CartItem[] = JSON.parse(metadata.items);
+
+      // Parse compact items format: "variantId:qty:price|variantId:qty:price|..."
+      // And get full item details from Stripe line items
+      const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 100 });
+
+      const items: CartItem[] = lineItems.data
+        .filter(li => li.description !== 'Standard shipping' && li.description !== 'Sales tax (8.25%)')
+        .map((li) => {
+          // Parse product name which is in format "Product Name - Variant Name" or just "Product Name"
+          const fullName = li.description || 'Unknown Product';
+          const nameParts = fullName.split(' - ');
+          const productName = nameParts[0];
+          const variantName = nameParts.length > 1 ? nameParts.slice(1).join(' - ') : undefined;
+
+          return {
+            productId: li.price?.product as string || '',
+            variantId: li.price?.metadata?.variantId || '',
+            name: productName,
+            variantName,
+            quantity: li.quantity || 1,
+            price: (li.amount_total || 0) / 100 / (li.quantity || 1),
+            sku: li.price?.metadata?.sku || '',
+          };
+        });
 
       // Build shipping address
       const shippingAddress = {
