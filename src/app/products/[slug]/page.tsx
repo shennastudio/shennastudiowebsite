@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import ProductRecommendations from '@/components/ProductRecommendations';
 import ProductVariantSelector from '@/components/ProductVariantSelector';
 import ProductImageGallery from '@/components/ProductImageGallery';
+import ARProductSection from '@/components/ar/ARProductSection';
 
 export default async function ProductDetailPage({
   params,
@@ -82,6 +83,18 @@ export default async function ProductDetailPage({
                   )}
                 </div>
               )}
+
+              {/* AR Try-On Section - Shows on mobile devices */}
+              <ARProductSection
+                productName={product.name}
+                productImage={displayImages[0]?.url}
+                productPrice={product.basePrice}
+                modelUrls={{
+                  // Demo 3D models - replace with actual product models when available
+                  glb: 'https://modelviewer.dev/shared-assets/models/Astronaut.glb',
+                  usdz: 'https://developer.apple.com/augmented-reality/quick-look/models/retrotv/tv_retro.usdz',
+                }}
+              />
 
               <ProductVariantSelector 
                 product={product}
