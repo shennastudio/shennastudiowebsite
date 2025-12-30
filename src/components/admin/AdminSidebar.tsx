@@ -22,7 +22,10 @@ import {
   ChevronRight,
   Calendar,
   FileText,
-  Sparkles
+  Sparkles,
+  RotateCcw,
+  Truck,
+  UserCog,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -57,6 +60,8 @@ export function AdminSidebar({}: AdminSidebarProps) {
         { href: '/admin/customers', label: 'Customers', icon: Users, color: 'from-teal-400 to-cyan-500' },
         { href: '/admin/payments', label: 'Payments', icon: CreditCard, color: 'from-indigo-400 to-blue-500' },
         { href: '/admin/discounts', label: 'Discounts', icon: Ticket, color: 'from-fuchsia-400 to-pink-500' },
+        { href: '/admin/returns', label: 'Returns', icon: RotateCcw, color: 'from-orange-400 to-red-500' },
+        { href: '/admin/shipping', label: 'Shipping', icon: Truck, color: 'from-purple-400 to-violet-500' },
       ]
     },
     {
@@ -83,6 +88,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
     {
       title: 'System',
       items: [
+        { href: '/admin/staff', label: 'Staff', icon: UserCog, color: 'from-blue-400 to-indigo-500' },
         { href: '/admin/settings', label: 'Settings', icon: Settings, color: 'from-gray-400 to-slate-500' },
       ]
     }
