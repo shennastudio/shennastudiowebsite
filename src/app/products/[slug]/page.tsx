@@ -3,7 +3,6 @@ import { fetchProductBySlug } from '@/app/actions';
 import { notFound } from 'next/navigation';
 import ProductRecommendations from '@/components/ProductRecommendations';
 import ProductVariantSelector from '@/components/ProductVariantSelector';
-import AddToCartButton from '@/components/AddToCartButton';
 import ProductImageGallery from '@/components/ProductImageGallery';
 
 export default async function ProductDetailPage({
@@ -18,7 +17,7 @@ export default async function ProductDetailPage({
     notFound();
   }
 
-  const { product, variant, displayPrice, displayStock, displayImages } = productData;
+  const { product, variant, displayImages } = productData;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">

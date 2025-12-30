@@ -6,12 +6,9 @@ import {
   ENGRAVING_OPTIONS,
   BEAD_COLORS,
   calculateCustomizationPrice,
-  type CharmOption,
-  type BeadColor,
 } from '@/lib/customization-data';
 
 interface PersonalizationPanelProps {
-  productName: string;
   basePrice: number;
   onCustomizationChange?: (customization: CustomizationState) => void;
 }
@@ -25,7 +22,6 @@ export interface CustomizationState {
 }
 
 export default function PersonalizationPanel({
-  productName,
   basePrice,
   onCustomizationChange,
 }: PersonalizationPanelProps) {

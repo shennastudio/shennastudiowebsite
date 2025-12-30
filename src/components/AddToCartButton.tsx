@@ -132,9 +132,10 @@ export default function AddToCartButton({
           }}
         >
           {product.images?.[0]?.url ? (
-            <img 
-              src={product.images[0].url} 
-              alt="flying product" 
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={product.images[0].url}
+              alt="flying product"
               className="w-full h-full object-cover rounded-full border-2 border-teal-500 shadow-lg"
             />
           ) : (

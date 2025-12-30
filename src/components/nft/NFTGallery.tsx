@@ -129,6 +129,7 @@ export default function NFTGallery({
           >
             {/* Image */}
             <div className="relative aspect-square overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={nft.imageUrl}
                 alt={nft.name}
@@ -190,6 +191,7 @@ export default function NFTGallery({
               <div className="grid grid-cols-1 md:grid-cols-2">
                 {/* Image */}
                 <div className="aspect-square">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={selectedNFT.imageUrl}
                     alt={selectedNFT.name}

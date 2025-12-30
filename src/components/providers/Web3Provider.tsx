@@ -5,12 +5,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 import {
   RainbowKitProvider,
-  darkTheme,
   lightTheme,
   type Theme,
 } from '@rainbow-me/rainbowkit';
 import '@rainbow-me/rainbowkit/styles.css';
-import { wagmiConfig, chains } from '@/lib/web3/config';
+import { wagmiConfig } from '@/lib/web3/config';
 
 // Custom RainbowKit theme to match ShennaStudio branding
 const shennaTheme: Theme = {

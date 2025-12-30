@@ -5,6 +5,7 @@ import { BRACELET_AR_SETTINGS, type ARModelUrls } from '@/lib/ar-utils';
 
 // Extend JSX to include model-viewer custom element
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
       'model-viewer': React.DetailedHTMLProps<
@@ -225,6 +226,7 @@ export default function ARModelViewer({
           {/* Poster Image Slot */}
           {posterImage && (
             <div slot="poster" className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-xl">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={posterImage} alt={productName} className="max-w-full max-h-full object-contain" />
             </div>
           )}

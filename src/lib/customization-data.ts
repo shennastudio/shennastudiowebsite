@@ -93,11 +93,12 @@ export const BEAD_COLORS: BeadColor[] = [
   { id: 'silver', name: 'Silver', hex: '#c0c0c0', category: 'neutral' },
 ];
 
-// Calculate total customization price
+// Calculate total customization price (font parameter reserved for future pricing variations)
 export function calculateCustomizationPrice(
   engraving: string | null,
   charms: string[],
-  font?: string
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _font?: string
 ): number {
   let total = 0;
 
