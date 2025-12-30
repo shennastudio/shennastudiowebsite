@@ -91,12 +91,21 @@ export async function PATCH(
       return NextResponse.json({ error: 'Event not found' }, { status: 404 });
     }
 
+    // Parse date as local time by appending T12:00:00 to avoid timezone shift issues
+    // This ensures the date stays the same regardless of timezone
+    const parsedDate = validated.date
+      ? new Date(validated.date + 'T12:00:00')
+      : undefined;
+    const parsedRecurringEnd = validated.recurringEnd
+      ? new Date(validated.recurringEnd + 'T12:00:00')
+      : validated.recurringEnd === null ? null : undefined;
+
     const event = await prisma.calendarEvent.update({
       where: { id },
       data: {
         ...validated,
-        date: validated.date ? new Date(validated.date) : undefined,
-        recurringEnd: validated.recurringEnd ? new Date(validated.recurringEnd) : undefined,
+        date: parsedDate,
+        recurringEnd: parsedRecurringEnd,
         checklist: validated.checklist ?? undefined,
       },
     });

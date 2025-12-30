@@ -71,11 +71,18 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = calendarEventSchema.parse(body);
 
+    // Parse date as local time by appending T12:00:00 to avoid timezone shift issues
+    // This ensures the date stays the same regardless of timezone
+    const parsedDate = new Date(validated.date + 'T12:00:00');
+    const parsedRecurringEnd = validated.recurringEnd
+      ? new Date(validated.recurringEnd + 'T12:00:00')
+      : null;
+
     const event = await prisma.calendarEvent.create({
       data: {
         ...validated,
-        date: new Date(validated.date),
-        recurringEnd: validated.recurringEnd ? new Date(validated.recurringEnd) : null,
+        date: parsedDate,
+        recurringEnd: parsedRecurringEnd,
         checklist: validated.checklist ?? undefined,
         userId: session.user.id,
       },

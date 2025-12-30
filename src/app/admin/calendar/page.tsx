@@ -157,13 +157,18 @@ export default function CalendarPage() {
       if (!response.ok) throw new Error('Failed to load events');
 
       const data = await response.json();
-      setEvents(data.events.map((e: CalendarEvent) => ({
-        ...e,
-        date: new Date(e.date).toISOString().split('T')[0],
-        checklist: e.checklist || [],
-        tags: e.tags || [],
-        links: e.links || [],
-      })));
+      setEvents(data.events.map((e: CalendarEvent) => {
+        // Parse the date and format as local YYYY-MM-DD to avoid timezone issues
+        const dateObj = new Date(e.date);
+        const localDate = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
+        return {
+          ...e,
+          date: localDate,
+          checklist: e.checklist || [],
+          tags: e.tags || [],
+          links: e.links || [],
+        };
+      }));
     } catch (error) {
       console.error('Load events error:', error);
       toast.error('Failed to load calendar events');
