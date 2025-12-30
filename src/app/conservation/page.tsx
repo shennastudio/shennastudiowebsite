@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import DonationMapWrapper from '@/components/conservation/DonationMapWrapper'
 
 export default function ConservationPage() {
   return (
@@ -20,20 +21,35 @@ export default function ConservationPage() {
         </div>
       </section>
 
-      {/* Impact Stats */}
+      {/* Interactive Conservation Map */}
       <section className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Where Your Donations Go
+            </h2>
+            <p className="text-gray-600 max-w-3xl mx-auto">
+              Explore our interactive map to see exactly where your contributions are making a difference. Click on regions and partners to learn more.
+            </p>
+          </div>
+          <DonationMapWrapper />
+        </div>
+      </section>
+
+      {/* Impact Stats */}
+      <section className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Our Conservation Impact
             </h2>
             <p className="text-gray-600 max-w-3xl mx-auto">
-              Together, wewere making a real difference for marine ecosystems in the Gulf of Mexico.
+              Together, we&apos;re making a real difference for marine ecosystems in the Gulf of Mexico.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-xl border border-cyan-100">
+            <div className="text-center bg-white p-8 rounded-xl shadow-md border border-cyan-100">
               <div className="text-4xl font-bold text-teal-600 mb-2">10%</div>
               <div className="text-lg font-semibold text-gray-900 mb-1">
                 Donated to Conservation
@@ -43,7 +59,7 @@ export default function ConservationPage() {
               </p>
             </div>
 
-            <div className="text-center bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-xl border border-blue-100">
+            <div className="text-center bg-white p-8 rounded-xl shadow-md border border-blue-100">
               <div className="text-4xl font-bold text-teal-600 mb-2">RGV</div>
               <div className="text-lg font-semibold text-gray-900 mb-1">
                 Rio Grande Valley Focus
@@ -53,7 +69,7 @@ export default function ConservationPage() {
               </p>
             </div>
 
-            <div className="text-center bg-gradient-to-br from-teal-50 to-cyan-50 p-8 rounded-xl border border-teal-100">
+            <div className="text-center bg-white p-8 rounded-xl shadow-md border border-teal-100">
               <div className="text-4xl font-bold text-teal-600 mb-2">SPI</div>
               <div className="text-lg font-semibold text-gray-900 mb-1">
                 South Padre Island
@@ -67,7 +83,7 @@ export default function ConservationPage() {
       </section>
 
       {/* Conservation Partners */}
-      <section className="bg-gray-50 py-16">
+      <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
