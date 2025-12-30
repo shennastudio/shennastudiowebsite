@@ -1,50 +1,56 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useCart } from '@/context/CartContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, ShoppingBag, ArrowLeft, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Loader2, ShoppingBag, ArrowLeft, Truck } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+
+// Static USPS shipping rates
+const USPS_SHIPPING_RATES = [
+  {
+    id: 'usps-ground',
+    provider: 'USPS',
+    servicelevel: { name: 'Ground Advantage', token: 'ground' },
+    amount: '5.95',
+    estimated_days: 5,
+    duration_terms: '5-7 business days',
+  },
+  {
+    id: 'usps-priority',
+    provider: 'USPS',
+    servicelevel: { name: 'Priority Mail', token: 'priority' },
+    amount: '9.95',
+    estimated_days: 3,
+    duration_terms: '2-3 business days',
+  },
+  {
+    id: 'usps-express',
+    provider: 'USPS',
+    servicelevel: { name: 'Priority Mail Express', token: 'express' },
+    amount: '24.95',
+    estimated_days: 1,
+    duration_terms: '1-2 business days',
+  },
+];
 
 export default function CheckoutPage() {
   const { data: session } = useSession();
   const { state: cart } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
-  // Shipping State
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [shippingRates, setShippingRates] = useState<any[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [selectedRate, setSelectedRate] = useState<any>(null);
-  const [calculatingRates, setCalculatingRates] = useState(false);
 
-  // Address Validation State
-  const [addressValidation, setAddressValidation] = useState<{
-    isValid: boolean | null;
-    validating: boolean;
-    messages: Array<{ type: 'error' | 'warning' | 'info'; text: string }>;
-    suggestedAddress?: {
-      street1: string;
-      street2?: string;
-      city: string;
-      state: string;
-      zip: string;
-    };
-  }>({
-    isValid: null,
-    validating: false,
-    messages: [],
-  });
+  // Shipping State - pre-select first rate
+  const [selectedRate, setSelectedRate] = useState(USPS_SHIPPING_RATES[0]);
 
   const [formData, setFormData] = useState({
-    email: session?.user?.email || '',
-    name: session?.user?.name || '',
+    email: '',
+    name: '',
     line1: '',
     line2: '',
     city: '',
@@ -53,114 +59,23 @@ export default function CheckoutPage() {
     country: 'US',
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => {
-      const newData = { ...prev, [name]: value };
-
-      // Reset validation when address fields change
-      if (['line1', 'line2', 'city', 'state', 'postalCode'].includes(name)) {
-        setAddressValidation({ isValid: null, validating: false, messages: [] });
-        setShippingRates([]);
-        setSelectedRate(null);
-      }
-
-      // Trigger address validation if address looks complete enough
-      if (name === 'postalCode' || name === 'state' || name === 'city') {
-        if (newData.line1 && newData.city && newData.state && newData.postalCode.length >= 5) {
-          validateAndFetchRates(newData);
-        }
-      }
-      return newData;
-    });
-  };
-
-  const validateAndFetchRates = async (addressData: typeof formData) => {
-    // First validate the address
-    setAddressValidation({ isValid: null, validating: true, messages: [] });
-
-    try {
-      const validationRes = await fetch('/api/shipping/validate-address', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          address: {
-            name: addressData.name,
-            street1: addressData.line1,
-            street2: addressData.line2,
-            city: addressData.city,
-            state: addressData.state,
-            zip: addressData.postalCode,
-            country: addressData.country,
-          }
-        })
-      });
-
-      const validationData = await validationRes.json();
-
-      setAddressValidation({
-        isValid: validationData.isValid,
-        validating: false,
-        messages: validationData.messages || [],
-        suggestedAddress: validationData.validatedAddress,
-      });
-
-      // Only fetch rates if address is valid or has warnings (not errors)
-      const hasErrors = validationData.messages?.some((m: { type: string }) => m.type === 'error');
-      if (validationData.isValid || !hasErrors) {
-        fetchShippingRates(addressData);
-      }
-    } catch (err) {
-      console.error("Address validation failed", err);
-      // If validation fails, still try to fetch rates
-      setAddressValidation({ isValid: null, validating: false, messages: [] });
-      fetchShippingRates(addressData);
-    }
-  };
-
-  const applySuggestedAddress = () => {
-    if (addressValidation.suggestedAddress) {
-      const suggested = addressValidation.suggestedAddress;
+  // Update form with session data when available
+  useEffect(() => {
+    if (session?.user) {
       setFormData(prev => ({
         ...prev,
-        line1: suggested.street1,
-        line2: suggested.street2 || '',
-        city: suggested.city,
-        state: suggested.state,
-        postalCode: suggested.zip,
+        email: session.user?.email || prev.email,
+        name: session.user?.name || prev.name,
       }));
-      setAddressValidation(prev => ({ ...prev, isValid: true, messages: [] }));
     }
-  };
+  }, [session]);
 
-  const fetchShippingRates = async (addressData: typeof formData) => {
-    setCalculatingRates(true);
-    setShippingRates([]);
-    setSelectedRate(null);
-    
-    try {
-      const response = await fetch('/api/shipping/rates', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          address: addressData,
-          items: cart.items
-        })
-      });
-      
-      const data = await response.json();
-      if (response.ok && data.rates) {
-        setShippingRates(data.rates);
-        // Pre-select the first (cheapest) rate
-        if (data.rates.length > 0) {
-          setSelectedRate(data.rates[0]);
-        }
-      }
-    } catch (err) {
-      console.error("Failed to fetch rates", err);
-    } finally {
-      setCalculatingRates(false);
-    }
+  // Check for free shipping (orders $50+)
+  const qualifiesForFreeShipping = cart.subtotal >= 50;
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -168,17 +83,18 @@ export default function CheckoutPage() {
     setLoading(true);
     setError('');
 
-    if (!selectedRate && shippingRates.length > 0) {
-      setError('Please select a shipping method');
+    // Basic form validation
+    if (!formData.email || !formData.name || !formData.line1 || !formData.city || !formData.state || !formData.postalCode) {
+      setError('Please fill in all required fields');
       setLoading(false);
       return;
     }
 
     try {
-      // Use selected shipping cost or fallback to cart default if no rates found (e.g. error)
-      const shippingCost = selectedRate ? parseFloat(selectedRate.amount) : cart.shipping;
-      
-      // Recalculate total with new shipping
+      // Calculate shipping (free for orders $50+)
+      const shippingCost = qualifiesForFreeShipping ? 0 : parseFloat(selectedRate.amount);
+
+      // Recalculate total with shipping
       const finalTotal = cart.subtotal + shippingCost + cart.tax;
 
       // Create checkout session (works for both guest and logged-in users)
@@ -203,12 +119,12 @@ export default function CheckoutPage() {
             country: formData.country,
           },
           customerEmail: formData.email,
+          shippingMethod: qualifiesForFreeShipping ? 'Free Shipping' : `${selectedRate.provider} ${selectedRate.servicelevel.name}`,
         }),
       });
 
       if (!response.ok) {
         const data = await response.json();
-        // Special handling for Stripe not configured
         if (response.status === 503) {
           setError('Payment processing is temporarily unavailable. Please contact support or try again later.');
         } else {
@@ -247,6 +163,10 @@ export default function CheckoutPage() {
       </div>
     );
   }
+
+  // Calculate final shipping and total
+  const finalShipping = qualifiesForFreeShipping ? 0 : parseFloat(selectedRate.amount);
+  const finalTotal = cart.subtotal + finalShipping + cart.tax;
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -371,70 +291,6 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  {/* Address Validation Status */}
-                  {addressValidation.validating && (
-                    <div className="flex items-center text-sm text-gray-500 py-2">
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Validating address...
-                    </div>
-                  )}
-
-                  {addressValidation.isValid === true && addressValidation.messages.length === 0 && (
-                    <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 px-4 py-3 rounded">
-                      <CheckCircle className="h-4 w-4" />
-                      Address verified
-                    </div>
-                  )}
-
-                  {addressValidation.messages.length > 0 && (
-                    <div className="space-y-2">
-                      {addressValidation.messages.map((msg, idx) => (
-                        <div
-                          key={idx}
-                          className={`flex items-start gap-2 text-sm px-4 py-3 rounded ${
-                            msg.type === 'error'
-                              ? 'text-red-700 bg-red-50 border border-red-200'
-                              : msg.type === 'warning'
-                              ? 'text-amber-700 bg-amber-50 border border-amber-200'
-                              : 'text-blue-700 bg-blue-50 border border-blue-200'
-                          }`}
-                        >
-                          <AlertTriangle className="h-4 w-4 flex-shrink-0 mt-0.5" />
-                          <span>{msg.text}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  {addressValidation.suggestedAddress &&
-                   addressValidation.isValid === true &&
-                   (addressValidation.suggestedAddress.street1 !== formData.line1 ||
-                    addressValidation.suggestedAddress.city !== formData.city ||
-                    addressValidation.suggestedAddress.state !== formData.state ||
-                    addressValidation.suggestedAddress.zip !== formData.postalCode) && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                      <p className="text-sm font-medium text-blue-900 mb-2">Suggested address correction:</p>
-                      <div className="text-sm text-blue-800 mb-3">
-                        <p>{addressValidation.suggestedAddress.street1}</p>
-                        {addressValidation.suggestedAddress.street2 && (
-                          <p>{addressValidation.suggestedAddress.street2}</p>
-                        )}
-                        <p>
-                          {addressValidation.suggestedAddress.city}, {addressValidation.suggestedAddress.state} {addressValidation.suggestedAddress.zip}
-                        </p>
-                      </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={applySuggestedAddress}
-                        className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                      >
-                        Use suggested address
-                      </Button>
-                    </div>
-                  )}
-
                   {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                       {error}
@@ -443,16 +299,28 @@ export default function CheckoutPage() {
 
                   {/* Shipping Method Selection */}
                   <div className="pt-4 border-t">
-                    <h3 className="text-lg font-semibold mb-3">Shipping Method</h3>
-                    {calculatingRates ? (
-                      <div className="flex items-center text-sm text-gray-500">
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Calculating rates...
+                    <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                      <Truck className="h-5 w-5" />
+                      Shipping Method
+                    </h3>
+
+                    {qualifiesForFreeShipping ? (
+                      <div className="bg-green-50 border-2 border-green-500 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-bold text-green-800">FREE Shipping!</p>
+                            <p className="text-sm text-green-700">USPS Ground Advantage (5-7 business days)</p>
+                          </div>
+                          <span className="text-lg font-bold text-green-700">$0.00</span>
+                        </div>
+                        <p className="text-xs text-green-600 mt-2">
+                          Congratulations! Your order qualifies for free shipping.
+                        </p>
                       </div>
-                    ) : shippingRates.length > 0 ? (
+                    ) : (
                       <div className="space-y-2">
-                        {shippingRates.map((rate) => (
-                          <div 
+                        {USPS_SHIPPING_RATES.map((rate) => (
+                          <div
                             key={rate.id}
                             className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors ${
                               selectedRate?.id === rate.id ? 'border-teal-500 bg-teal-50' : 'hover:bg-gray-50'
@@ -460,43 +328,45 @@ export default function CheckoutPage() {
                             onClick={() => setSelectedRate(rate)}
                           >
                             <div className="flex items-center">
-                              <input 
-                                type="radio" 
-                                checked={selectedRate?.id === rate.id} 
+                              <input
+                                type="radio"
+                                checked={selectedRate?.id === rate.id}
                                 onChange={() => setSelectedRate(rate)}
                                 className="mr-3 text-teal-600 focus:ring-teal-500"
                               />
                               <div>
                                 <p className="font-medium text-sm">{rate.provider} {rate.servicelevel.name}</p>
-                                <p className="text-xs text-gray-500">{rate.estimated_days ? `${rate.estimated_days} days` : rate.duration_terms}</p>
+                                <p className="text-xs text-gray-500">{rate.duration_terms}</p>
                               </div>
                             </div>
                             <span className="font-semibold text-sm">${rate.amount}</span>
                           </div>
                         ))}
+                        <p className="text-xs text-gray-500 mt-2">
+                          Free shipping on orders $50+
+                        </p>
                       </div>
-                    ) : (
-                      <p className="text-sm text-gray-500 italic">Enter your full address to see shipping rates.</p>
                     )}
                   </div>
 
+                  {/* Guest checkout note - simplified */}
                   {!session?.user && (
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
-                      <p className="text-sm text-blue-900 font-medium mb-1">Want to track your order?</p>
-                      <p className="text-xs text-blue-700">
-                        You can checkout as a guest, or{' '}
-                        <Link href="/admin/login?callbackUrl=/checkout" className="underline font-semibold hover:text-blue-900">
-                          create an account
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mt-4">
+                      <p className="text-xs text-gray-600">
+                        Checking out as guest.{' '}
+                        <Link href="/auth/signin?callbackUrl=/checkout" className="text-teal-600 hover:underline">
+                          Sign in
                         </Link>
-                        {' '}to easily view your order history and tracking information.
+                        {' '}to track orders and earn rewards.
                       </p>
                     </div>
                   )}
 
                   <Button
                     type="submit"
-                    className="w-full"
+                    className="w-full bg-teal-600 hover:bg-teal-700"
                     disabled={loading}
+                    size="lg"
                   >
                     {loading ? (
                       <>
@@ -504,7 +374,7 @@ export default function CheckoutPage() {
                         Processing...
                       </>
                     ) : (
-                      `Proceed to Payment - $${cart.total.toFixed(2)}`
+                      `Proceed to Payment - $${finalTotal.toFixed(2)}`
                     )}
                   </Button>
                 </form>
@@ -553,21 +423,17 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Shipping</span>
-                    <span>
-                      {selectedRate 
-                        ? `$${selectedRate.amount}` 
-                        : (cart.shipping === 0 ? 'FREE' : `$${cart.shipping.toFixed(2)}`)}
+                    <span className={qualifiesForFreeShipping ? 'text-green-600 font-medium' : ''}>
+                      {qualifiesForFreeShipping ? 'FREE' : `$${selectedRate.amount}`}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span>Tax</span>
+                    <span>Tax (8.25%)</span>
                     <span>${cart.tax.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between font-bold text-lg border-t pt-2">
                     <span>Total</span>
-                    <span>
-                      ${(cart.subtotal + (selectedRate ? parseFloat(selectedRate.amount) : cart.shipping) + cart.tax).toFixed(2)}
-                    </span>
+                    <span>${finalTotal.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -587,7 +453,7 @@ export default function CheckoutPage() {
 
                     <div className="bg-white/70 rounded-lg p-3 mb-3">
                       <p className="text-sm text-blue-900 font-semibold mb-1">
-                        This Purchase: +4 Points 
+                        This Purchase: +4 Points
                       </p>
                       <p className="text-xs text-blue-700">
                         Every purchase earns you points toward free items!
