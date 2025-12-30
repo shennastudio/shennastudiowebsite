@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { fetchFeaturedProducts } from '@/app/actions'
 import { ProductReviews } from '@/components/ProductReviews'
+import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
 
 // Force dynamic rendering since we fetch personalized recommendations
 export const dynamic = 'force-dynamic'
@@ -226,6 +227,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Subscription Banner */}
+      <SubscriptionBanner />
 
       {/* Ocean Features Section */}
       <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-16">

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Upload, X, Image as ImageIcon, Loader2 } from 'lucide-react';
 import { uploadProductImage } from '@/app/actions/upload';
@@ -109,12 +108,16 @@ export function ImageUpload({
 
       {currentImage ? (
         <div className="relative">
-          <Image
+          {/* Using standard img tag for reliable admin preview with Vercel Blob URLs */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={currentImage}
             alt="Preview"
-            width={192}
-            height={192}
-            className="w-full h-48 object-cover rounded-lg border"
+            className="w-full h-48 object-cover rounded-lg border bg-gray-100"
+            onError={(e) => {
+              // Show placeholder on error
+              (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIGZpbGw9IiNFNUU3RUIiLz48cGF0aCBkPSJNODAgODBINjRWNjRIODBWODBaTTEyOCA4MEgxMTJWNjRIMTI4VjgwWk04MCAxMjhINjRWMTEySDgwVjEyOFpNMTI4IDEyOEgxMTJWMTEySDEyOFYxMjhaIiBmaWxsPSIjOUNBM0FGIi8+PC9zdmc+';
+            }}
           />
           <div className="absolute top-2 right-2 flex gap-2">
             <Button
