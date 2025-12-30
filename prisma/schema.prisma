@@ -182,6 +182,8 @@ model ProductVariant {
   orderItems   OrderItem[]
   transactions InventoryTransaction[]
   images       ProductImage[]
+  forecasts    InventoryForecast[]
+  alerts       InventoryAlert[]
 
   @@map("product_variants")
 }
@@ -1491,4 +1493,221 @@ model TicketMessage {
 
   @@index([ticketId])
   @@map("ticket_messages")
+}
+
+// Email Marketing Campaign System
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  PAUSED
+  CANCELLED
+}
+
+enum CampaignType {
+  NEWSLETTER
+  PROMOTIONAL
+  ABANDONED_CART
+  WELCOME
+  REENGAGEMENT
+  ANNOUNCEMENT
+  CUSTOM
+}
+
+model EmailCampaign {
+  id          String         @id @default(cuid())
+  name        String
+  subject     String
+  preheader   String?
+  content     String         @db.Text
+  type        CampaignType   @default(NEWSLETTER)
+  status      CampaignStatus @default(DRAFT)
+
+  // Targeting
+  targetAudience   String?   // JSON filter criteria
+  segmentName      String?   // Human-readable segment name
+  recipientCount   Int       @default(0)
+
+  // Scheduling
+  scheduledAt      DateTime?
+  sentAt           DateTime?
+  completedAt      DateTime?
+
+  // Stats
+  totalSent        Int       @default(0)
+  totalDelivered   Int       @default(0)
+  totalOpened      Int       @default(0)
+  totalClicked     Int       @default(0)
+  totalBounced     Int       @default(0)
+  totalUnsubscribed Int      @default(0)
+
+  // Metadata
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  recipients CampaignRecipient[]
+
+  @@index([status])
+  @@index([type])
+  @@index([scheduledAt])
+  @@map("email_campaigns")
+}
+
+model CampaignRecipient {
+  id         String        @id @default(cuid())
+  campaignId String
+  campaign   EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  email      String
+  name       String?
+  userId     String?
+
+  // Delivery status
+  sentAt        DateTime?
+  deliveredAt   DateTime?
+  openedAt      DateTime?
+  clickedAt     DateTime?
+  bouncedAt     DateTime?
+  unsubscribedAt DateTime?
+
+  // Error tracking
+  errorMessage  String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([campaignId, email])
+  @@index([campaignId])
+  @@index([email])
+  @@map("campaign_recipients")
+}
+
+// SEO Management System
+model SEOSettings {
+  id          String   @id @default(cuid())
+  pageType    String   // 'home', 'product', 'category', 'blog', 'custom'
+  pageId      String?  // Reference to specific product/category/blog id
+  slug        String?  // URL path for custom pages
+
+  // Meta tags
+  metaTitle       String?
+  metaDescription String?  @db.Text
+  metaKeywords    String?
+  canonicalUrl    String?
+
+  // Open Graph
+  ogTitle         String?
+  ogDescription   String?  @db.Text
+  ogImage         String?
+  ogType          String?  @default("website")
+
+  // Twitter Card
+  twitterCard     String?  @default("summary_large_image")
+  twitterTitle    String?
+  twitterDescription String? @db.Text
+  twitterImage    String?
+
+  // Schema.org structured data (JSON-LD)
+  structuredData  String?  @db.Text
+
+  // Robots
+  noIndex         Boolean  @default(false)
+  noFollow        Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([pageType, pageId])
+  @@index([pageType])
+  @@map("seo_settings")
+}
+
+model Redirect {
+  id          String   @id @default(cuid())
+  fromPath    String   @unique
+  toPath      String
+  statusCode  Int      @default(301) // 301 permanent, 302 temporary
+  isActive    Boolean  @default(true)
+  hitCount    Int      @default(0)
+  lastHitAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([fromPath])
+  @@index([isActive])
+  @@map("redirects")
+}
+
+model SitemapEntry {
+  id          String   @id @default(cuid())
+  url         String   @unique
+  changeFreq  String   @default("weekly") // always, hourly, daily, weekly, monthly, yearly, never
+  priority    Float    @default(0.5) // 0.0 to 1.0
+  lastMod     DateTime @default(now())
+  isActive    Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([isActive])
+  @@map("sitemap_entries")
+}
+
+// Inventory Forecasting System
+model InventoryForecast {
+  id          String   @id @default(cuid())
+  variantId   String
+  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  // Time period
+  periodStart DateTime
+  periodEnd   DateTime
+  periodType  String   // 'day', 'week', 'month'
+
+  // Forecasted data
+  forecastedDemand    Int
+  forecastedSales     Float
+  confidence          Float    @default(0.8)
+  seasonalityFactor   Float    @default(1.0)
+
+  // Recommendations
+  recommendedReorder  Int      @default(0)
+  reorderPoint        Int      @default(0)
+  safetyStock         Int      @default(0)
+
+  // Calculated at
+  calculatedAt DateTime @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([variantId, periodStart, periodType])
+  @@index([variantId])
+  @@index([periodStart])
+  @@map("inventory_forecasts")
+}
+
+model InventoryAlert {
+  id          String   @id @default(cuid())
+  variantId   String
+  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  alertType   String   // 'low_stock', 'out_of_stock', 'overstock', 'reorder'
+  severity    String   @default("medium") // 'low', 'medium', 'high', 'critical'
+  message     String
+  currentStock Int
+  threshold   Int?
+
+  isRead      Boolean  @default(false)
+  resolvedAt  DateTime?
+
+  createdAt DateTime @default(now())
+
+  @@index([variantId])
+  @@index([isRead])
+  @@index([alertType])
+  @@map("inventory_alerts")
 }

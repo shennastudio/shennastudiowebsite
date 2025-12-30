@@ -1,0 +1,375 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import {
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  ShoppingCart,
+  Users,
+  Package,
+  Heart,
+  RefreshCw,
+  AlertTriangle,
+  ArrowUpRight,
+  ArrowDownRight,
+} from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import toast from 'react-hot-toast';
+
+interface AnalyticsData {
+  overview: {
+    revenue: number;
+    revenueGrowth: number;
+    orders: number;
+    orderGrowth: number;
+    averageOrderValue: number;
+    totalCustomers: number;
+    newCustomers: number;
+    conversionRate: number;
+    cartToPurchaseRate: number;
+  };
+  conservation: {
+    totalDonated: number;
+    donationCount: number;
+  };
+  ordersByStatus: Record<string, number>;
+  topProducts: Array<{
+    variantId: string;
+    productName: string;
+    variantName: string;
+    slug: string;
+    _sum: { quantity: number; price: number };
+  }>;
+  lowStockProducts: Array<{
+    id: string;
+    name: string;
+    stock: number;
+    product: { name: string; slug: string };
+  }>;
+  dailyRevenue: Array<{
+    date: string;
+    revenue: number;
+    orders: number;
+  }>;
+  period: number;
+}
+
+export default function AnalyticsPage() {
+  const [data, setData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState('30');
+
+  const loadAnalytics = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/admin/analytics?period=${period}`);
+      if (!response.ok) throw new Error('Failed to load analytics');
+
+      const result = await response.json();
+      setData(result);
+    } catch (error) {
+      console.error('Load analytics error:', error);
+      toast.error('Failed to load analytics');
+    } finally {
+      setLoading(false);
+    }
+  }, [period]);
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [loadAnalytics]);
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
+  const formatPercent = (value: number) => {
+    const prefix = value >= 0 ? '+' : '';
+    return `${prefix}${value.toFixed(1)}%`;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="w-8 h-8 border-4 border-teal-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="text-center py-12">
+        <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+        <p className="text-gray-500">No analytics data available</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
+          <p className="text-gray-500 mt-1">Track your store performance and insights</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+            className="border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+          >
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="365">Last year</option>
+          </select>
+          <Button variant="outline" onClick={() => loadAnalytics()}>
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
+      </div>
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Revenue */}
+        <Card className="bg-gradient-to-br from-green-50 to-emerald-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-green-500 rounded-xl">
+                <DollarSign className="w-6 h-6 text-white" />
+              </div>
+              <div className={`flex items-center gap-1 text-sm font-medium ${data.overview.revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {data.overview.revenueGrowth >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                {formatPercent(data.overview.revenueGrowth)}
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(data.overview.revenue)}</h3>
+            <p className="text-sm text-gray-600">Total Revenue</p>
+          </CardContent>
+        </Card>
+
+        {/* Orders */}
+        <Card className="bg-gradient-to-br from-blue-50 to-cyan-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-blue-500 rounded-xl">
+                <ShoppingCart className="w-6 h-6 text-white" />
+              </div>
+              <div className={`flex items-center gap-1 text-sm font-medium ${data.overview.orderGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {data.overview.orderGrowth >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                {formatPercent(data.overview.orderGrowth)}
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">{data.overview.orders}</h3>
+            <p className="text-sm text-gray-600">Total Orders</p>
+          </CardContent>
+        </Card>
+
+        {/* Average Order Value */}
+        <Card className="bg-gradient-to-br from-purple-50 to-violet-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-purple-500 rounded-xl">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(data.overview.averageOrderValue)}</h3>
+            <p className="text-sm text-gray-600">Average Order Value</p>
+          </CardContent>
+        </Card>
+
+        {/* Customers */}
+        <Card className="bg-gradient-to-br from-orange-50 to-amber-100">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-3 bg-orange-500 rounded-xl">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+              <span className="text-sm font-medium text-green-600">+{data.overview.newCustomers} new</span>
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900">{data.overview.totalCustomers}</h3>
+            <p className="text-sm text-gray-600">Total Customers</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Second Row - Conversion & Conservation */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Conversion Rate */}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-indigo-100 rounded-lg">
+                <TrendingUp className="w-5 h-5 text-indigo-600" />
+              </div>
+              <h3 className="font-semibold">Conversion Metrics</h3>
+            </div>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-600">View to Cart</span>
+                <span className="font-semibold">{data.overview.conversionRate.toFixed(1)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-indigo-500 h-2 rounded-full"
+                  style={{ width: `${Math.min(data.overview.conversionRate, 100)}%` }}
+                />
+              </div>
+              <div className="flex justify-between items-center mt-4">
+                <span className="text-gray-600">Cart to Purchase</span>
+                <span className="font-semibold">{data.overview.cartToPurchaseRate.toFixed(1)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-green-500 h-2 rounded-full"
+                  style={{ width: `${Math.min(data.overview.cartToPurchaseRate, 100)}%` }}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Conservation Impact */}
+        <Card className="bg-gradient-to-br from-teal-50 to-cyan-100">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-teal-500 rounded-lg">
+                <Heart className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="font-semibold text-teal-800">Conservation Impact</h3>
+            </div>
+            <div className="space-y-2">
+              <div>
+                <p className="text-3xl font-bold text-teal-700">{formatCurrency(data.conservation.totalDonated)}</p>
+                <p className="text-sm text-teal-600">Total Donated</p>
+              </div>
+              <div className="pt-2 border-t border-teal-200">
+                <p className="text-lg font-semibold text-teal-700">{data.conservation.donationCount}</p>
+                <p className="text-sm text-teal-600">Orders with Donations</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Order Status Distribution */}
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Package className="w-5 h-5 text-blue-600" />
+              </div>
+              <h3 className="font-semibold">Order Status</h3>
+            </div>
+            <div className="space-y-2">
+              {Object.entries(data.ordersByStatus).map(([status, count]) => (
+                <div key={status} className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">{status}</span>
+                  <span className="font-medium">{count}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Third Row - Top Products & Low Stock */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Top Products */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-green-500" />
+              Top Selling Products
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {data.topProducts.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">No sales data yet</p>
+            ) : (
+              <div className="space-y-4">
+                {data.topProducts.slice(0, 5).map((product, index) => (
+                  <div key={product.variantId} className="flex items-center gap-4">
+                    <span className="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                      {index + 1}
+                    </span>
+                    <div className="flex-1">
+                      <p className="font-medium">{product.productName}</p>
+                      {product.variantName && (
+                        <p className="text-xs text-gray-500">{product.variantName}</p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold">{product._sum.quantity} sold</p>
+                      <p className="text-sm text-gray-500">{formatCurrency(product._sum.price)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Low Stock Alert */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-orange-500" />
+              Low Stock Alert
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {data.lowStockProducts.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">All products are well stocked!</p>
+            ) : (
+              <div className="space-y-3">
+                {data.lowStockProducts.map((item) => (
+                  <div key={item.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                    <div>
+                      <p className="font-medium">{item.product.name}</p>
+                      <p className="text-sm text-gray-500">{item.name}</p>
+                    </div>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      item.stock === 0
+                        ? 'bg-red-100 text-red-800'
+                        : item.stock <= 5
+                        ? 'bg-orange-100 text-orange-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {item.stock === 0 ? 'Out of Stock' : `${item.stock} left`}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Revenue Chart Placeholder */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Revenue Over Time</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
+            <div className="text-center">
+              <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+              <p className="text-gray-500">Revenue chart visualization</p>
+              <p className="text-sm text-gray-400 mt-1">
+                {data.dailyRevenue.length} data points for last {period} days
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

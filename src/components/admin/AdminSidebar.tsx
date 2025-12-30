@@ -26,6 +26,12 @@ import {
   RotateCcw,
   Truck,
   UserCog,
+  TrendingUp,
+  Send,
+  ShoppingBag,
+  Search,
+  LineChart,
+  Headphones,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -41,6 +47,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       title: 'Overview',
       items: [
         { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, color: 'from-cyan-400 to-blue-500' },
+        { href: '/admin/analytics', label: 'Analytics', icon: TrendingUp, color: 'from-emerald-400 to-teal-500' },
         { href: '/admin/reports', label: 'Reports', icon: BarChart3, color: 'from-violet-400 to-purple-500' },
         { href: '/admin/calendar', label: 'Calendar', icon: Calendar, color: 'from-pink-400 to-rose-500' },
       ]
@@ -50,6 +57,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       items: [
         { href: '/admin/products', label: 'Products', icon: Package, color: 'from-emerald-400 to-green-500' },
         { href: '/admin/inventory', label: 'Inventory', icon: Boxes, color: 'from-amber-400 to-orange-500' },
+        { href: '/admin/inventory-forecast', label: 'Forecasting', icon: LineChart, color: 'from-cyan-400 to-blue-500' },
         { href: '/admin/categories', label: 'Categories', icon: Boxes, color: 'from-lime-400 to-green-500' },
       ]
     },
@@ -58,6 +66,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       items: [
         { href: '/admin/orders', label: 'Orders', icon: ShoppingCart, color: 'from-blue-400 to-cyan-500' },
         { href: '/admin/customers', label: 'Customers', icon: Users, color: 'from-teal-400 to-cyan-500' },
+        { href: '/admin/abandoned-carts', label: 'Abandoned Carts', icon: ShoppingBag, color: 'from-orange-400 to-amber-500' },
         { href: '/admin/payments', label: 'Payments', icon: CreditCard, color: 'from-indigo-400 to-blue-500' },
         { href: '/admin/discounts', label: 'Discounts', icon: Ticket, color: 'from-fuchsia-400 to-pink-500' },
         { href: '/admin/returns', label: 'Returns', icon: RotateCcw, color: 'from-orange-400 to-red-500' },
@@ -67,6 +76,8 @@ export function AdminSidebar({}: AdminSidebarProps) {
     {
       title: 'Marketing',
       items: [
+        { href: '/admin/email-campaigns', label: 'Campaigns', icon: Send, color: 'from-rose-400 to-pink-500' },
+        { href: '/admin/seo', label: 'SEO', icon: Search, color: 'from-green-400 to-emerald-500' },
         { href: '/admin/blog', label: 'Blog Posts', icon: FileText, color: 'from-purple-400 to-pink-500' },
         { href: '/admin/reviews', label: 'Reviews', icon: MessageSquare, color: 'from-sky-400 to-blue-500' },
         { href: '/admin/email', label: 'Email Client', icon: Mail, color: 'from-cyan-400 to-teal-500' },
@@ -83,6 +94,12 @@ export function AdminSidebar({}: AdminSidebarProps) {
       title: 'Intelligence',
       items: [
         { href: '/admin/ai-features', label: 'AI Tools', icon: Sparkles, color: 'from-amber-400 to-yellow-500' },
+      ]
+    },
+    {
+      title: 'Support',
+      items: [
+        { href: '/admin/support-tickets', label: 'Tickets', icon: Headphones, color: 'from-indigo-400 to-purple-500' },
       ]
     },
     {
