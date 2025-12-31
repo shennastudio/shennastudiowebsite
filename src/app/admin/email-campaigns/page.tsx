@@ -18,10 +18,13 @@ import {
   MousePointerClick,
   BarChart3,
   Calendar,
+  Sparkles,
+  X
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface Campaign {
   id: string;
@@ -478,24 +481,24 @@ export default function EmailCampaignsPage() {
         </CardContent>
       </Card>
 
-      {/* Create Campaign Modal */}
-      {showCreateModal && (
-        <CreateCampaignModal
-          onClose={() => setShowCreateModal(false)}
-          onSuccess={() => {
-            setShowCreateModal(false);
-            loadCampaigns();
-          }}
-        />
-      )}
+      <AnimatePresence>
+        {showCreateModal && (
+          <CreateCampaignModal
+            onClose={() => setShowCreateModal(false)}
+            onSuccess={() => {
+              setShowCreateModal(false);
+              loadCampaigns();
+            }}
+          />
+        )}
 
-      {/* View Campaign Modal */}
-      {selectedCampaign && (
-        <ViewCampaignModal
-          campaign={selectedCampaign}
-          onClose={() => setSelectedCampaign(null)}
-        />
-      )}
+        {selectedCampaign && (
+          <ViewCampaignModal
+            campaign={selectedCampaign}
+            onClose={() => setSelectedCampaign(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -518,10 +521,23 @@ function CreateCampaignModal({
     scheduledAt: '',
   });
   const [saving, setSaving] = useState(false);
+  const [showAiPrompt, setShowAiPrompt] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [isGeneratingAi, setIsGeneratingAi] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
+
+    // Determine targetAudience JSON based on segmentName
+    let targetAudienceJson = '{}';
+    if (formData.segmentName === 'All Newsletter Subscribers') {
+      targetAudienceJson = JSON.stringify({ subscribedToNewsletter: true });
+    } else if (formData.segmentName === 'Customers Who Have Ordered') {
+      targetAudienceJson = JSON.stringify({ hasOrdered: true });
+    } else if (formData.segmentName === 'All Customers') {
+      targetAudienceJson = JSON.stringify({});
+    }
 
     try {
       const response = await fetch('/api/admin/email-campaigns', {
@@ -529,7 +545,7 @@ function CreateCampaignModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          targetAudience: JSON.stringify({ subscribedToNewsletter: true }),
+          targetAudience: targetAudienceJson,
         }),
       });
 
@@ -548,18 +564,105 @@ function CreateCampaignModal({
     }
   };
 
+  const handleAiGenerate = async () => {
+    if (!aiPrompt.trim()) return;
+    
+    setIsGeneratingAi(true);
+    try {
+      const response = await fetch('/api/ai/generate-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic: aiPrompt,
+          type: formData.type
+        }),
+      });
+
+      if (!response.ok) throw new Error('AI generation failed');
+
+      const data = await response.json();
+      setFormData(prev => ({
+        ...prev,
+        subject: data.subject || prev.subject,
+        preheader: data.preheader || prev.preheader,
+        content: data.content || prev.content
+      }));
+      
+      setShowAiPrompt(false);
+      toast.success('Generated content with AI!');
+    } catch (error) {
+      console.error('AI error:', error);
+      toast.error('Failed to generate content. Please try again.');
+    } finally {
+      setIsGeneratingAi(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4">
-        <form onSubmit={handleSubmit}>
-          <div className="p-6 border-b">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold">Create New Campaign</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+      >
+        <div className="p-6 border-b">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+              Create New Campaign
+            </h2>
+            <div className="flex gap-2">
+              <Button 
+                type="button" 
+                size="sm" 
+                className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white border-0"
+                onClick={() => setShowAiPrompt(!showAiPrompt)}
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Generate with AI
+              </Button>
               <Button type="button" variant="outline" size="sm" onClick={onClose}>
-                Close
+                <X className="w-4 h-4" />
               </Button>
             </div>
           </div>
+          
+          <AnimatePresence>
+            {showAiPrompt && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-4 p-4 bg-violet-50 rounded-lg border border-violet-100">
+                  <label className="block text-sm font-medium text-violet-900 mb-2">
+                    What should this email be about?
+                  </label>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text"
+                      value={aiPrompt}
+                      onChange={(e) => setAiPrompt(e.target.value)}
+                      placeholder="e.g. Summer sale announcement with 20% off all bracelets..."
+                      className="flex-1 px-3 py-2 border border-violet-200 rounded-lg focus:ring-2 focus:ring-violet-500"
+                      onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAiGenerate())}
+                    />
+                    <Button 
+                      onClick={handleAiGenerate}
+                      disabled={isGeneratingAi || !aiPrompt.trim()}
+                      className="bg-violet-600 hover:bg-violet-700 text-white"
+                    >
+                      {isGeneratingAi ? <RefreshCw className="w-4 h-4 animate-spin" /> : 'Generate'}
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <form onSubmit={handleSubmit}>
           <div className="p-6 space-y-4">
             <div>
               <label className="block text-sm font-medium mb-1">Campaign Name</label>
@@ -624,7 +727,10 @@ function CreateCampaignModal({
               <label className="block text-sm font-medium mb-1">Target Audience</label>
               <select
                 value={formData.segmentName}
-                onChange={(e) => setFormData({ ...formData, segmentName: e.target.value })}
+                onChange={(e) => {
+                  const selectedSegment = e.target.value;
+                  setFormData({ ...formData, segmentName: selectedSegment });
+                }}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500"
               >
                 <option value="All Newsletter Subscribers">All Newsletter Subscribers</option>
@@ -649,13 +755,13 @@ function CreateCampaignModal({
               </p>
             </div>
           </div>
-          <div className="p-6 border-t flex gap-3 justify-end">
+          <div className="p-6 border-t flex gap-3 justify-end bg-gray-50 rounded-b-xl">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button
               type="submit"
-              className="bg-teal-500 hover:bg-teal-600"
+              className="bg-teal-500 hover:bg-teal-600 text-white"
               disabled={saving}
             >
               {saving ? (
@@ -667,7 +773,7 @@ function CreateCampaignModal({
             </Button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 }
@@ -681,16 +787,20 @@ function ViewCampaignModal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto m-4">
-        <div className="p-6 border-b">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold">{campaign.name}</h2>
-            <Button variant="outline" size="sm" onClick={onClose}>
-              Close
-            </Button>
-          </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+      >
+        <div className="p-6 border-b flex justify-between items-center">
+          <h2 className="text-xl font-bold">{campaign.name}</h2>
+          <Button variant="ghost" size="sm" onClick={onClose}>
+            <X className="w-5 h-5" />
+          </Button>
         </div>
+        
         <div className="p-6 space-y-6">
           {/* Campaign Info */}
           <div className="grid grid-cols-2 gap-4">
@@ -764,7 +874,7 @@ function ViewCampaignModal({
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
