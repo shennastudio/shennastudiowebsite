@@ -7,6 +7,7 @@ import { SessionProvider } from "@/components/providers/SessionProvider";
 import SEOSchemas from "@/components/SEOSchemas";
 import { ThemeProvider } from "@/components/theme-provider";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
+import ScrollProgress from "@/components/ScrollProgress";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
+        <ScrollProgress />
         <AnalyticsProvider />
         <ThemeProvider
           attribute="class"
