@@ -4,6 +4,8 @@ import { usePathname } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import NewsletterPopup from '@/components/NewsletterPopup';
+import { AnimatePresence } from 'framer-motion';
+import PageTransition from '@/components/PageTransition';
 
 export default function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -16,8 +18,12 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   return (
     <>
       {!shouldHideHeaderFooter && <Header />}
-      <main className="flex-1">
-        {children}
+      <main className="flex-1 flex flex-col">
+        <AnimatePresence mode="wait" initial={false}>
+          <PageTransition key={pathname}>
+            {children}
+          </PageTransition>
+        </AnimatePresence>
       </main>
       {!shouldHideHeaderFooter && <Footer />}
       {!shouldHideHeaderFooter && <NewsletterPopup />}
