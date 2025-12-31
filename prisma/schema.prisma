@@ -1711,3 +1711,24 @@ model InventoryAlert {
   @@index([alertType])
   @@map("inventory_alerts")
 }
+
+// ============================================================================
+// BRACELET SIZE CONFIGURATION
+// ============================================================================
+
+model BraceletSize {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g., "S", "M", "L", "XL"
+  label       String  // e.g., "Small", "Medium", "Large", "Extra Large"
+  inches      String  // e.g., "6-7", "7-8", "8", "9"
+  numericSize Int?    // e.g., 6, 7, 8, 9 (for size 6, 7, 8, 9)
+  description String? // e.g., "Best for smaller wrists"
+  displayOrder Int    @default(0)
+  isActive    Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([displayOrder])
+  @@map("bracelet_sizes")
+}

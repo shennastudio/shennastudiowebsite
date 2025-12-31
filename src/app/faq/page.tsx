@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     question: 'How do I determine my bracelet size?',
-    answer: 'Use a flexible measuring tape to measure your wrist at its widest point. Add 0.5-1 inch for comfort. Our standard sizes are: Small (6-7 inches), Medium (7-8 inches), and Large (8-9 inches). You can also contact us for custom sizing.'
+    answer: 'Use a flexible measuring tape to measure your wrist at its widest point. Add 0.5-1 inch for comfort. Our standard sizes are: Small (6-6.5 inches), Medium (7-7.5 inches), Large/Size 8 (8 inches), and Extra Large/Size 9 (9 inches). You can also contact us for custom sizing.'
   },
   {
     question: 'Do you offer custom designs?',
