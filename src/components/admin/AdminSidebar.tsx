@@ -32,6 +32,8 @@ import {
   Search,
   LineChart,
   Headphones,
+  Repeat,
+  Ruler,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -66,6 +68,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       items: [
         { href: '/admin/orders', label: 'Orders', icon: ShoppingCart, color: 'from-blue-400 to-cyan-500' },
         { href: '/admin/customers', label: 'Customers', icon: Users, color: 'from-teal-400 to-cyan-500' },
+        { href: '/admin/subscriptions', label: 'Subscriptions', icon: Repeat, color: 'from-violet-400 to-purple-500' },
         { href: '/admin/abandoned-carts', label: 'Abandoned Carts', icon: ShoppingBag, color: 'from-orange-400 to-amber-500' },
         { href: '/admin/payments', label: 'Payments', icon: CreditCard, color: 'from-indigo-400 to-blue-500' },
         { href: '/admin/discounts', label: 'Discounts', icon: Ticket, color: 'from-fuchsia-400 to-pink-500' },
@@ -106,6 +109,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       title: 'System',
       items: [
         { href: '/admin/staff', label: 'Staff', icon: UserCog, color: 'from-blue-400 to-indigo-500' },
+        { href: '/admin/bracelet-sizes', label: 'Bracelet Sizes', icon: Ruler, color: 'from-amber-400 to-orange-500' },
         { href: '/admin/settings', label: 'Settings', icon: Settings, color: 'from-gray-400 to-slate-500' },
       ]
     }
