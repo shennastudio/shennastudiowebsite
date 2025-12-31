@@ -4,6 +4,7 @@ import { fetchFeaturedProducts } from '@/app/actions'
 import { ProductReviews } from '@/components/ProductReviews'
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
 import InstagramFeed from '@/components/InstagramFeed'
+import ParallaxBanner from '@/components/ParallaxBanner'
 
 // Force dynamic rendering since we fetch personalized recommendations
 export const dynamic = 'force-dynamic'
@@ -68,6 +69,13 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Reef Parallax Banner */}
+      <ParallaxBanner 
+        src="/images/reefparallaxscroll.jpg" 
+        alt="Vibrant Coral Reef" 
+        text="Discover the Reef" 
+      />
 
       {/* Personalized Recommendations Section */}
       {recommendations.length > 0 && (
@@ -289,6 +297,13 @@ export default async function Home() {
           <InstagramFeed username="shennastudio" />
         </div>
       </section>
+
+      {/* Turtle Parallax Banner */}
+      <ParallaxBanner 
+        src="/images/turtleparallax.jpg" 
+        alt="Sea Turtle Swimming" 
+        text="Protect Our Turtles" 
+      />
 
       {/* Ocean Conservation CTA Section */}
       <section className="bg-gradient-to-r from-teal-600 via-blue-600 to-cyan-700 py-16">
