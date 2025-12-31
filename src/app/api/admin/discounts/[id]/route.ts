@@ -99,13 +99,32 @@ export async function PATCH(
       }
     }
 
+    // Build update data explicitly to handle null values correctly
+    const updateData: Record<string, unknown> = {};
+
+    if (validatedData.code !== undefined) updateData.code = validatedData.code;
+    if (validatedData.type !== undefined) updateData.type = validatedData.type;
+    if (validatedData.value !== undefined) updateData.value = validatedData.value;
+    if (validatedData.description !== undefined) updateData.description = validatedData.description || null;
+    if (validatedData.internalNote !== undefined) updateData.internalNote = validatedData.internalNote || null;
+    if (validatedData.usageLimit !== undefined) updateData.usageLimit = validatedData.usageLimit;
+    if (validatedData.usageLimitPerCustomer !== undefined) updateData.usageLimitPerCustomer = validatedData.usageLimitPerCustomer;
+    if (validatedData.minPurchaseAmount !== undefined) updateData.minPurchaseAmount = validatedData.minPurchaseAmount;
+    if (validatedData.applicableProducts !== undefined) updateData.applicableProducts = validatedData.applicableProducts;
+    if (validatedData.applicableCategories !== undefined) updateData.applicableCategories = validatedData.applicableCategories;
+    if (validatedData.isActive !== undefined) updateData.isActive = validatedData.isActive;
+
+    // Handle dates - convert strings to Date or set to null
+    if (validatedData.startsAt !== undefined) {
+      updateData.startsAt = validatedData.startsAt ? new Date(validatedData.startsAt) : null;
+    }
+    if (validatedData.expiresAt !== undefined) {
+      updateData.expiresAt = validatedData.expiresAt ? new Date(validatedData.expiresAt) : null;
+    }
+
     const discount = await prisma.discountCode.update({
       where: { id },
-      data: {
-        ...validatedData,
-        startsAt: validatedData.startsAt ? new Date(validatedData.startsAt) : undefined,
-        expiresAt: validatedData.expiresAt ? new Date(validatedData.expiresAt) : undefined,
-      },
+      data: updateData,
     });
 
     return NextResponse.json(discount);
