@@ -121,26 +121,32 @@ export async function POST(request: Request) {
 
     // Calculate recipient count based on audience
     let recipientCount = 0;
-    if (validated.targetAudience) {
-      const audience = JSON.parse(validated.targetAudience);
+    let targetAudienceJson = '{}'; // Default to empty audience for broader targeting
 
-      // Build query based on audience criteria
-      const userWhere: Record<string, unknown> = { role: 'CUSTOMER' };
-
-      if (audience.hasOrdered) {
-        userWhere.orders = { some: {} };
-      }
-      if (audience.subscribedToNewsletter) {
-        // Check newsletter subscribers
-        const subscribers = await prisma.newsletterSubscriber.count({
-          where: { subscribed: true },
-        });
-        recipientCount = subscribers;
-      } else {
-        recipientCount = await prisma.user.count({ where: userWhere });
-      }
+    if (validated.segmentName === 'All Newsletter Subscribers') {
+      targetAudienceJson = JSON.stringify({ subscribedToNewsletter: true });
+      recipientCount = await prisma.newsletterSubscriber.count({
+        where: { subscribed: true },
+      });
+    } else if (validated.segmentName === 'Customers Who Have Ordered') {
+      targetAudienceJson = JSON.stringify({ hasOrdered: true });
+      // Fetch count for customers who have ordered
+      recipientCount = await prisma.user.count({
+        where: {
+          role: 'CUSTOMER',
+          orders: {
+            some: {}
+          }
+        }
+      });
+    } else if (validated.segmentName === 'All Customers') {
+      targetAudienceJson = JSON.stringify({}); // This should cover all users based on backend default logic
+      recipientCount = await prisma.user.count({
+        where: { role: 'CUSTOMER' }
+      });
     } else {
-      // Default to all newsletter subscribers
+      // Fallback to all newsletter subscribers if segment is unrecognized or default
+      targetAudienceJson = JSON.stringify({ subscribedToNewsletter: true });
       recipientCount = await prisma.newsletterSubscriber.count({
         where: { subscribed: true },
       });
@@ -153,9 +159,9 @@ export async function POST(request: Request) {
         preheader: validated.preheader,
         content: validated.content,
         type: validated.type,
-        targetAudience: validated.targetAudience,
+        targetAudience: targetAudienceJson, // Use the dynamically generated JSON
         segmentName: validated.segmentName,
-        recipientCount,
+        recipientCount, // Use the calculated recipient count
         scheduledAt: validated.scheduledAt ? new Date(validated.scheduledAt) : null,
         status: validated.scheduledAt ? 'SCHEDULED' : 'DRAFT',
         createdById: session.user.id,
