@@ -162,14 +162,14 @@ async function main() {
     console.log('   Creating demo products...')
 
     const productData = [
-      { name: 'Demo Ocean Wave Bracelet', slug: 'demo-ocean-wave-bracelet', basePrice: 29.99, categoryIndex: 0, image: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=800' },
-      { name: 'Demo Sea Turtle Guardian', slug: 'demo-sea-turtle-guardian', basePrice: 34.99, categoryIndex: 2, image: 'https://images.unsplash.com/photo-1437622645530-1e3b3b27918c?w=800' },
-      { name: 'Demo Coral Reef Bracelet', slug: 'demo-coral-reef-bracelet', basePrice: 27.99, categoryIndex: 1, image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800' },
-      { name: 'Demo Whale Song Bracelet', slug: 'demo-whale-song-bracelet', basePrice: 39.99, categoryIndex: 0, image: 'https://images.unsplash.com/photo-1573408301185-a1d310683e29?w=800' },
-      { name: 'Demo Pearl Lagoon Luxury', slug: 'demo-pearl-lagoon-luxury', basePrice: 149.99, categoryIndex: 3, image: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=800' },
-      { name: 'Demo Diamond Tide', slug: 'demo-diamond-tide', basePrice: 299.99, categoryIndex: 3, image: 'https://images.unsplash.com/photo-1599643478518-17488fbbcd75?w=800' },
-      { name: 'Demo Golden Sunset', slug: 'demo-golden-sunset', basePrice: 199.99, categoryIndex: 3, image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=800' },
-      { name: 'Demo Conservation Bundle', slug: 'demo-conservation-bundle', basePrice: 119.99, categoryIndex: 5, image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800' },
+      { name: 'Demo Ocean Wave Bracelet', slug: 'demo-ocean-wave-bracelet', basePrice: 29.99, categoryIndex: 0, image: 'https://images.unsplash.com/photo-1515562141207-7a88fb05253d?w=800' },
+      { name: 'Demo Sea Turtle Guardian', slug: 'demo-sea-turtle-guardian', basePrice: 34.99, categoryIndex: 2, image: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800' },
+      { name: 'Demo Coral Reef Bracelet', slug: 'demo-coral-reef-bracelet', basePrice: 27.99, categoryIndex: 1, image: 'https://images.unsplash.com/photo-1602173574767-37ac01994b2a?w=800' },
+      { name: 'Demo Whale Song Bracelet', slug: 'demo-whale-song-bracelet', basePrice: 39.99, categoryIndex: 0, image: 'https://images.unsplash.com/photo-1599643478518-17488fbbcd75?w=800' },
+      { name: 'Demo Pearl Lagoon Luxury', slug: 'demo-pearl-lagoon-luxury', basePrice: 149.99, categoryIndex: 3, image: 'https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=800' },
+      { name: 'Demo Diamond Tide', slug: 'demo-diamond-tide', basePrice: 299.99, categoryIndex: 3, image: 'https://images.unsplash.com/photo-1573408301185-a1d310683e29?w=800' },
+      { name: 'Demo Golden Sunset', slug: 'demo-golden-sunset', basePrice: 199.99, categoryIndex: 3, image: 'https://images.unsplash.com/photo-1606760227091-201713d0bf5c?w=800' },
+      { name: 'Demo Conservation Bundle', slug: 'demo-conservation-bundle', basePrice: 119.99, categoryIndex: 5, image: 'https://images.unsplash.com/photo-1589128773440-1e3b3b27918c?w=800' },
     ]
 
     const sizes = ['Small', 'Medium', 'Large']

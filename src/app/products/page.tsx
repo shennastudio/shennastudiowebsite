@@ -12,13 +12,9 @@ export default async function ProductsPage() {
       <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex justify-center items-center gap-3 mb-4">
-              <span className="text-4xl">🌊</span>
-              <h1 className="text-4xl md:text-5xl font-bold text-white">
-                All Ocean Bracelets
-              </h1>
-              <span className="text-4xl">🌊</span>
-            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Ocean Treasures
+            </h1>
             <p className="text-xl text-cyan-100 max-w-2xl mx-auto">
               {total} handcrafted pieces available
             </p>
@@ -30,7 +26,7 @@ export default async function ProductsPage() {
       <ParallaxBanner 
         src="/images/shennawhale.jpg" 
         alt="Majestic Whale" 
-        text="Majestic Whales" 
+        text="Majestic Whale Sharks" 
       />
 
       {/* Products Grid */}
