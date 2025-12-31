@@ -8,6 +8,9 @@ import { useCart } from '@/context/CartContext'
 import SearchBar from '@/components/SearchBar'
 import MiniCart from '@/components/MiniCart'
 import { ShoppingCart, Menu, X } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
 
 interface SiteSettings {
   siteName: string;
@@ -15,6 +18,7 @@ interface SiteSettings {
 }
 
 export default function Header() {
+  const pathname = usePathname();
   const { data: session } = useSession();
   const { state: cart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,8 +52,17 @@ export default function Header() {
     setIsMenuOpen(false);
   };
 
+  const navLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'Products', href: '/products' },
+    { name: 'Conservation', href: '/conservation' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+  ];
+
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-28">
           {/* Logo */}
@@ -75,24 +88,25 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              Home
-            </Link>
-            <Link href="/products" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              Products
-            </Link>
-            <Link href="/conservation" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              Conservation
-            </Link>
-            <Link href="/blog" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              Blog
-            </Link>
-            <Link href="/about" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              About
-            </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-teal-600 transition-colors font-medium">
-              Contact
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={cn(
+                  "relative py-2 text-gray-700 hover:text-teal-600 transition-colors font-medium group",
+                  pathname === link.href && "text-teal-600"
+                )}
+              >
+                {link.name}
+                {pathname === link.href && (
+                  <motion.div
+                    layoutId="nav-underline"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600"
+                  />
+                )}
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+              </Link>
+            ))}
           </nav>
 
           {/* Desktop Actions */}
@@ -119,34 +133,40 @@ export default function Header() {
 
             {/* User Actions */}
             {session && session.user.role === 'CUSTOMER' ? (
-              <Link
-                href="/account"
-                className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm"
-              >
-                My Account
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  href="/account"
+                  className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm block"
+                >
+                  My Account
+                </Link>
+              </motion.div>
             ) : session && session.user.role === 'ADMIN' ? (
-              <Link
-                href="/admin"
-                className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm"
-              >
-                Admin
-              </Link>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  href="/admin"
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm block"
+                >
+                  Admin
+                </Link>
+              </motion.div>
             ) : (
-              <>
+              <div className="flex items-center gap-3">
                 <Link
                   href="/login"
                   className="text-teal-600 hover:text-teal-700 font-semibold text-sm"
                 >
                   Sign In
                 </Link>
-                <Link
-                  href="/register"
-                  className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm"
-                >
-                  Register
-                </Link>
-              </>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    href="/register"
+                    className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm block"
+                  >
+                    Register
+                  </Link>
+                </motion.div>
+              </div>
             )}
           </div>
 
@@ -178,99 +198,77 @@ export default function Header() {
         </div>
 
         {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden border-t">
-            <nav className="py-4 space-y-1">
-              <Link
-                href="/"
-                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
-                onClick={closeMobileMenu}
-              >
-                Home
-              </Link>
-              <Link
-                href="/products"
-                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
-                onClick={closeMobileMenu}
-              >
-                Products
-              </Link>
-              <Link
-                href="/conservation"
-                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
-                onClick={closeMobileMenu}
-              >
-                Conservation
-              </Link>
-              <Link
-                href="/blog"
-                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
-                onClick={closeMobileMenu}
-              >
-                Blog
-              </Link>
-              <Link
-                href="/about"
-                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
-                onClick={closeMobileMenu}
-              >
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
-                onClick={closeMobileMenu}
-              >
-                Contact
-              </Link>
-              <Link
-                href="/cart"
-                className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
-                onClick={closeMobileMenu}
-              >
-                Cart {cart.items.length > 0 && `(${cart.items.length})`}
-              </Link>
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden border-t overflow-hidden"
+            >
+              <nav className="py-4 space-y-1">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={cn(
+                      "block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded",
+                      pathname === link.href && "text-teal-600 bg-teal-50"
+                    )}
+                    onClick={closeMobileMenu}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+                <Link
+                  href="/cart"
+                  className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
+                  onClick={closeMobileMenu}
+                >
+                  Cart {cart.items.length > 0 && `(${cart.items.length})`}
+                </Link>
 
-              {/* Mobile User Actions */}
-              <div className="pt-4 px-4 space-y-2 border-t mt-4">
-                {session && session.user.role === 'CUSTOMER' ? (
-                  <Link
-                    href="/account"
-                    className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
-                    onClick={closeMobileMenu}
-                  >
-                    My Account
-                  </Link>
-                ) : session && session.user.role === 'ADMIN' ? (
-                  <Link
-                    href="/admin"
-                    className="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
-                    onClick={closeMobileMenu}
-                  >
-                    Admin Panel
-                  </Link>
-                ) : (
-                  <>
+                {/* Mobile User Actions */}
+                <div className="pt-4 px-4 space-y-2 border-t mt-4">
+                  {session && session.user.role === 'CUSTOMER' ? (
                     <Link
-                      href="/login"
-                      className="block w-full text-center border-2 border-teal-600 text-teal-600 hover:bg-teal-50 px-4 py-3 rounded-lg transition-colors font-semibold"
-                      onClick={closeMobileMenu}
-                    >
-                      Sign In
-                    </Link>
-                    <Link
-                      href="/register"
+                      href="/account"
                       className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
                       onClick={closeMobileMenu}
                     >
-                      Register
+                      My Account
                     </Link>
-                  </>
-                )}
-              </div>
-            </nav>
-          </div>
-        )}
+                  ) : session && session.user.role === 'ADMIN' ? (
+                    <Link
+                      href="/admin"
+                      className="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
+                      onClick={closeMobileMenu}
+                    >
+                      Admin Panel
+                    </Link>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        className="block w-full text-center border-2 border-teal-600 text-teal-600 hover:bg-teal-50 px-4 py-3 rounded-lg transition-colors font-semibold"
+                        onClick={closeMobileMenu}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        href="/register"
+                        className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
+                        onClick={closeMobileMenu}
+                      >
+                        Register
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </header>
   );

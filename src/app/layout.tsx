@@ -8,6 +8,8 @@ import SEOSchemas from "@/components/SEOSchemas";
 import { ThemeProvider } from "@/components/theme-provider";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 import ScrollProgress from "@/components/ScrollProgress";
+import PageTransition from "@/components/PageTransition";
+import { AnimatePresence } from "framer-motion";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -50,7 +52,11 @@ export default function RootLayout({
           <SessionProvider>
             <CartProvider>
               <LayoutWrapper>
-                {children}
+                <AnimatePresence mode="wait" initial={false}>
+                  <PageTransition>
+                    {children}
+                  </PageTransition>
+                </AnimatePresence>
               </LayoutWrapper>
             </CartProvider>
           </SessionProvider>
