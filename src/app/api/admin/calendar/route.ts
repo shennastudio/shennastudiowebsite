@@ -89,6 +89,15 @@ export async function GET() {
   }
 }
 
+// Helper to safely parse date string
+function parseDateForStorage(dateStr: string): Date {
+  // If the date already contains 'T', extract just the date part
+  const dateOnly = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+  const cleanDate = dateOnly.trim();
+  // Parse as local time at noon to avoid timezone issues
+  return new Date(cleanDate + 'T12:00:00');
+}
+
 // POST - Create a new calendar event
 export async function POST(request: Request) {
   try {
@@ -101,26 +110,49 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validated = calendarEventSchema.parse(body);
 
-    // Parse date as local time by appending T12:00:00 to avoid timezone shift issues
-    // This ensures the date stays the same regardless of timezone
-    const parsedDate = new Date(validated.date + 'T12:00:00');
+    // Parse dates safely
+    const parsedDate = parseDateForStorage(validated.date);
     const parsedRecurringEnd = validated.recurringEnd
-      ? new Date(validated.recurringEnd + 'T12:00:00')
+      ? parseDateForStorage(validated.recurringEnd)
       : null;
 
+    // Build the data object explicitly to avoid spreading issues
+    const eventData = {
+      title: validated.title,
+      description: validated.description || null,
+      date: parsedDate,
+      time: validated.time || null,
+      endTime: validated.endTime || null,
+      allDay: validated.allDay,
+      category: validated.category,
+      color: validated.color,
+      location: validated.location || null,
+      attendees: validated.attendees || [],
+      recurring: validated.recurring,
+      recurringPattern: validated.recurringPattern || null,
+      recurringEnd: parsedRecurringEnd,
+      reminder: validated.reminder,
+      reminderTime: validated.reminderTime || null,
+      status: validated.status,
+      priority: validated.priority,
+      tags: validated.tags || [],
+      journalEntry: validated.journalEntry || null,
+      projectedRevenue: validated.projectedRevenue || null,
+      actualRevenue: validated.actualRevenue || null,
+      completionPercent: validated.completionPercent || 0,
+      checklist: validated.checklist || undefined,
+      links: validated.links || [],
+      userId: session.user.id,
+    };
+
     const event = await prisma.calendarEvent.create({
-      data: {
-        ...validated,
-        date: parsedDate,
-        recurringEnd: parsedRecurringEnd,
-        checklist: validated.checklist ?? undefined,
-        userId: session.user.id,
-      },
+      data: eventData,
     });
 
     return NextResponse.json({ event }, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
+      console.error('Calendar validation error:', error.issues);
       return NextResponse.json(
         { error: 'Invalid event data', details: error.issues },
         { status: 400 }
@@ -128,8 +160,9 @@ export async function POST(request: Request) {
     }
 
     console.error('Create calendar event error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to create calendar event' },
+      { error: 'Failed to create calendar event', details: errorMessage },
       { status: 500 }
     );
   }

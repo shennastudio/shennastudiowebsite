@@ -66,6 +66,13 @@ export async function GET(
   }
 }
 
+// Helper to safely parse date string
+function parseDateForStorage(dateStr: string): Date {
+  const dateOnly = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+  const cleanDate = dateOnly.trim();
+  return new Date(cleanDate + 'T12:00:00');
+}
+
 // PATCH - Update event
 export async function PATCH(
   req: Request,
@@ -91,28 +98,45 @@ export async function PATCH(
       return NextResponse.json({ error: 'Event not found' }, { status: 404 });
     }
 
-    // Parse date as local time by appending T12:00:00 to avoid timezone shift issues
-    // This ensures the date stays the same regardless of timezone
-    const parsedDate = validated.date
-      ? new Date(validated.date + 'T12:00:00')
-      : undefined;
-    const parsedRecurringEnd = validated.recurringEnd
-      ? new Date(validated.recurringEnd + 'T12:00:00')
-      : validated.recurringEnd === null ? null : undefined;
+    // Build update data explicitly
+    const updateData: Record<string, unknown> = {};
+
+    if (validated.title !== undefined) updateData.title = validated.title;
+    if (validated.description !== undefined) updateData.description = validated.description;
+    if (validated.date !== undefined) updateData.date = parseDateForStorage(validated.date);
+    if (validated.time !== undefined) updateData.time = validated.time;
+    if (validated.endTime !== undefined) updateData.endTime = validated.endTime;
+    if (validated.allDay !== undefined) updateData.allDay = validated.allDay;
+    if (validated.category !== undefined) updateData.category = validated.category;
+    if (validated.color !== undefined) updateData.color = validated.color;
+    if (validated.location !== undefined) updateData.location = validated.location;
+    if (validated.attendees !== undefined) updateData.attendees = validated.attendees;
+    if (validated.recurring !== undefined) updateData.recurring = validated.recurring;
+    if (validated.recurringPattern !== undefined) updateData.recurringPattern = validated.recurringPattern;
+    if (validated.recurringEnd !== undefined) {
+      updateData.recurringEnd = validated.recurringEnd ? parseDateForStorage(validated.recurringEnd) : null;
+    }
+    if (validated.reminder !== undefined) updateData.reminder = validated.reminder;
+    if (validated.reminderTime !== undefined) updateData.reminderTime = validated.reminderTime;
+    if (validated.status !== undefined) updateData.status = validated.status;
+    if (validated.priority !== undefined) updateData.priority = validated.priority;
+    if (validated.tags !== undefined) updateData.tags = validated.tags;
+    if (validated.journalEntry !== undefined) updateData.journalEntry = validated.journalEntry;
+    if (validated.projectedRevenue !== undefined) updateData.projectedRevenue = validated.projectedRevenue;
+    if (validated.actualRevenue !== undefined) updateData.actualRevenue = validated.actualRevenue;
+    if (validated.completionPercent !== undefined) updateData.completionPercent = validated.completionPercent;
+    if (validated.checklist !== undefined) updateData.checklist = validated.checklist;
+    if (validated.links !== undefined) updateData.links = validated.links;
 
     const event = await prisma.calendarEvent.update({
       where: { id },
-      data: {
-        ...validated,
-        date: parsedDate,
-        recurringEnd: parsedRecurringEnd,
-        checklist: validated.checklist ?? undefined,
-      },
+      data: updateData,
     });
 
     return NextResponse.json({ event });
   } catch (error) {
     if (error instanceof z.ZodError) {
+      console.error('Calendar update validation error:', error.issues);
       return NextResponse.json(
         { error: 'Invalid event data', details: error.issues },
         { status: 400 }
@@ -120,8 +144,9 @@ export async function PATCH(
     }
 
     console.error('Update event error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     return NextResponse.json(
-      { error: 'Failed to update event' },
+      { error: 'Failed to update event', details: errorMessage },
       { status: 500 }
     );
   }
