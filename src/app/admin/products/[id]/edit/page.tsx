@@ -26,12 +26,19 @@ interface Category {
   name: string;
 }
 
+interface BraceletSize {
+  id: string;
+  name: string;
+  label: string;
+}
+
 export default function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
+  const [availableSizes, setAvailableSizes] = useState<BraceletSize[]>([]);
   const [productId, setProductId] = useState<string>('');
 
   const [formData, setFormData] = useState({
@@ -55,6 +62,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       setProductId(id);
       fetchProduct(id);
       fetchCategories();
+      fetchSizes();
     };
     initPage();
   }, [params]);
@@ -68,6 +76,18 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
       }
     } catch (error) {
       console.error('Failed to fetch categories:', error);
+    }
+  };
+
+  const fetchSizes = async () => {
+    try {
+      const response = await fetch('/api/admin/bracelet-sizes');
+      if (response.ok) {
+        const data = await response.json();
+        setAvailableSizes(data.filter((s: any) => s.isActive));
+      }
+    } catch (error) {
+      console.error('Failed to fetch sizes:', error);
     }
   };
 
@@ -430,11 +450,18 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
                     <Label>Size</Label>
-                    <Input
+                    <select
                       value={variant.size || ''}
                       onChange={(e) => updateVariant(index, 'size', e.target.value)}
-                      placeholder="Small"
-                    />
+                      className="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-800"
+                    >
+                      <option value="">No size</option>
+                      {availableSizes.map((size) => (
+                        <option key={size.id} value={size.name}>
+                          {size.name} - {size.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="space-y-2">
                     <Label>Color</Label>

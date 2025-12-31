@@ -44,37 +44,32 @@ async function main() {
   // ===========================
   console.log('👤 Checking admin user...')
 
-  let admin = await prisma.user.findFirst({ where: { role: 'ADMIN' } })
-
-  if (!admin) {
-    const hashedAdminPassword = await bcrypt.hash('Sh3nn@R0ng3l!2025$Ocean#Admin', 10)
-    admin = await prisma.user.create({
-      data: {
-        email: 'shenna.rangel@yahoo.com',
-        password: hashedAdminPassword,
-        name: 'Shenna Rangel',
-        role: 'ADMIN',
-      },
-    })
-    console.log('✅ Created admin user')
-  } else {
-    console.log('✅ Admin user exists')
-  }
+  const hashedAdminPassword = await bcrypt.hash('Sh3nn@R0ng3l!2025$Ocean#Admin', 10)
+  const admin = await prisma.user.upsert({
+    where: { email: 'shenna.rangel@yahoo.com' },
+    update: {},
+    create: {
+      email: 'shenna.rangel@yahoo.com',
+      password: hashedAdminPassword,
+      name: 'Shenna Rangel',
+      role: 'ADMIN',
+    },
+  })
+  console.log('✅ Admin user ready')
 
   // Get or create staff user
-  let staff = await prisma.user.findFirst({ where: { role: 'STAFF' } })
-  if (!staff) {
-    const hashedStaffPassword = await bcrypt.hash('Staff2025!Ocean', 10)
-    staff = await prisma.user.create({
-      data: {
-        email: 'staff@shennastudio.com',
-        password: hashedStaffPassword,
-        name: 'Maria Santos',
-        role: 'STAFF',
-      },
-    })
-    console.log('✅ Created staff user')
-  }
+  const hashedStaffPassword = await bcrypt.hash('Staff2025!Ocean', 10)
+  const staff = await prisma.user.upsert({
+    where: { email: 'staff@shennastudio.com' },
+    update: {},
+    create: {
+      email: 'staff@shennastudio.com',
+      password: hashedStaffPassword,
+      name: 'Maria Santos',
+      role: 'STAFF',
+    },
+  })
+  console.log('✅ Staff user ready')
 
   // ===========================
   // CREATE DEMO CUSTOMERS (for orders/analytics)
@@ -151,6 +146,26 @@ async function main() {
   console.log(`✅ ${categories.length} categories ready\n`)
 
   // ===========================
+  // BRACELET SIZES
+  // ===========================
+  console.log('📏 Checking bracelet sizes...')
+  const defaultSizes = [
+    { name: 'S', label: 'Small', inches: '6-6.5', numericSize: 6, description: 'Best for smaller wrists', displayOrder: 1 },
+    { name: 'M', label: 'Medium', inches: '7-7.5', numericSize: 7, description: 'Most common size', displayOrder: 2 },
+    { name: 'L', label: 'Large (Size 8)', inches: '8', numericSize: 8, description: 'Size 8 - For larger wrists', displayOrder: 3 },
+    { name: 'XL', label: 'Extra Large (Size 9)', inches: '9', numericSize: 9, description: 'Size 9 - For extra large wrists', displayOrder: 4 },
+  ]
+
+  for (const sizeData of defaultSizes) {
+    await prisma.braceletSize.upsert({
+      where: { name: sizeData.name },
+      update: {},
+      create: { ...sizeData, isActive: true },
+    })
+  }
+  console.log('✅ Bracelet sizes ready\n')
+
+  // ===========================
   // GET EXISTING PRODUCTS AND VARIANTS
   // ===========================
   console.log('🛍️  Getting products and variants...')
@@ -172,7 +187,7 @@ async function main() {
       { name: 'Demo Conservation Bundle', slug: 'demo-conservation-bundle', basePrice: 119.99, categoryIndex: 5, image: 'https://images.unsplash.com/photo-1589128773440-1e3b3b27918c?w=800' },
     ]
 
-    const sizes = ['Small', 'Medium', 'Large']
+    const sizes = ['S', 'M', 'L']
 
     for (let i = 0; i < productData.length; i++) {
       const pd = productData[i]
@@ -197,7 +212,7 @@ async function main() {
           variants: {
             create: sizes.map((size, sizeIndex) => ({
               name: `${size} - Demo`,
-              sku: `DEMO-SKU-${String(i + 1).padStart(3, '0')}-${size[0]}`,
+              sku: `DEMO-SKU-${String(i + 1).padStart(3, '0')}-${size}`,
               price: pd.basePrice + (sizeIndex * 3),
               stock: 100,
               size,

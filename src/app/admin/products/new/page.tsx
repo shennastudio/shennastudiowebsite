@@ -25,11 +25,18 @@ interface Category {
   name: string;
 }
 
+interface BraceletSize {
+  id: string;
+  name: string;
+  label: string;
+}
+
 export default function NewProductPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [categories, setCategories] = useState<Category[]>([]);
+  const [availableSizes, setAvailableSizes] = useState<BraceletSize[]>([]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -45,6 +52,7 @@ export default function NewProductPage() {
 
   useEffect(() => {
     fetchCategories();
+    fetchSizes();
   }, []);
 
   const fetchCategories = async () => {
@@ -56,6 +64,18 @@ export default function NewProductPage() {
       }
     } catch (error) {
       console.error('Failed to fetch categories:', error);
+    }
+  };
+
+  const fetchSizes = async () => {
+    try {
+      const response = await fetch('/api/admin/bracelet-sizes');
+      if (response.ok) {
+        const data = await response.json();
+        setAvailableSizes(data.filter((s: any) => s.isActive));
+      }
+    } catch (error) {
+      console.error('Failed to fetch sizes:', error);
     }
   };
 
@@ -379,11 +399,18 @@ export default function NewProductPage() {
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
                     <Label>Size</Label>
-                    <Input
-                      value={variant.size}
+                    <select
+                      value={variant.size || ''}
                       onChange={(e) => updateVariant(index, 'size', e.target.value)}
-                      placeholder="Small"
-                    />
+                      className="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-800"
+                    >
+                      <option value="">No size</option>
+                      {availableSizes.map((size) => (
+                        <option key={size.id} value={size.name}>
+                          {size.name} - {size.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="space-y-2">
                     <Label>Color</Label>
