@@ -60,8 +60,6 @@ export async function GET(request: Request) {
         where,
         include: {
           customer: { select: { name: true, email: true } },
-          assignedTo: { select: { name: true, email: true } },
-          order: { select: { orderNumber: true, total: true } },
           _count: { select: { messages: true } },
         },
         orderBy: [
@@ -86,15 +84,11 @@ export async function GET(request: Request) {
     });
 
     const openCount = await prisma.supportTicket.count({
-      where: { status: { in: ['open', 'in_progress'] } },
+      where: { status: { in: ['OPEN', 'IN_PROGRESS'] } },
     });
 
-    const avgResponseTime = await prisma.$queryRaw<Array<{ avg: number }>>`
-      SELECT AVG(EXTRACT(EPOCH FROM ("firstResponseAt" - "createdAt"))) as avg
-      FROM support_tickets
-      WHERE "firstResponseAt" IS NOT NULL
-    `;
-
+    // avgResponseTime skipped as firstResponseAt is not in schema
+    
     return NextResponse.json({
       tickets,
       stats: {
@@ -108,7 +102,7 @@ export async function GET(request: Request) {
           acc[item.priority] = item._count;
           return acc;
         }, {} as Record<string, number>),
-        avgResponseTimeMinutes: avgResponseTime[0]?.avg ? Math.round(avgResponseTime[0].avg / 60) : null,
+        avgResponseTimeMinutes: null,
       },
       pagination: {
         page,
