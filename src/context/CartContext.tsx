@@ -1,6 +1,11 @@
 'use client';
 
-import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useReducer, ReactNode, useEffect, useCallback } from 'react';
+import {
+  trackAddToCart as trackGA4AddToCart,
+  trackRemoveFromCart as trackGA4RemoveFromCart,
+} from '@/components/providers/GoogleAnalytics';
+import { trackClarityEvent } from '@/components/providers/MicrosoftClarity';
 
 // Simple Product type (compatible with Prisma schema)
 interface Product {
@@ -241,6 +246,37 @@ const initialState: CartState = {
   guestName: null,
 };
 
+// Helper function to track add to cart in custom backend
+async function trackCustomAddToCart(product: Product, variant: PayloadProductVariant | null, quantity: number) {
+  try {
+    // Get or create session ID
+    let sessionId = typeof window !== 'undefined' ? sessionStorage.getItem('analytics_session_id') : null;
+    if (!sessionId && typeof window !== 'undefined') {
+      sessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+      sessionStorage.setItem('analytics_session_id', sessionId);
+    }
+
+    await fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventType: 'ADD_TO_CART',
+        sessionId,
+        productId: product.id,
+        variantId: variant?.id,
+        metadata: {
+          productName: product.name,
+          variantName: variant?.variantName,
+          price: variant?.price || product.basePrice,
+          quantity,
+        },
+      }),
+    });
+  } catch {
+    // Silent fail - don't break cart functionality if tracking fails
+  }
+}
+
 const CartContext = createContext<{
   state: CartState;
   dispatch: React.Dispatch<CartAction>;
@@ -272,13 +308,44 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const addItem = (product: Product, variant: PayloadProductVariant | null = null, quantity = 1) => {
+  const addItem = useCallback((product: Product, variant: PayloadProductVariant | null = null, quantity = 1) => {
     dispatch({ type: 'ADD_TO_CART', payload: { product, variant, quantity } });
-  };
 
-  const removeItem = (id: string) => {
+    // Track add to cart in GA4
+    trackGA4AddToCart({
+      id: variant?.id || String(product.id),
+      name: product.name,
+      price: variant?.price || product.basePrice,
+      quantity,
+      variant: variant?.variantName || undefined,
+    });
+
+    // Track in Clarity
+    trackClarityEvent('add_to_cart');
+
+    // Track in custom backend
+    trackCustomAddToCart(product, variant, quantity);
+  }, []);
+
+  const removeItem = useCallback((id: string) => {
+    // Find the item to get its details for tracking
+    const item = state.items.find(i => i.id === id);
+
     dispatch({ type: 'REMOVE_FROM_CART', payload: id });
-  };
+
+    if (item) {
+      // Track remove from cart in GA4
+      trackGA4RemoveFromCart({
+        id: item.id,
+        name: item.productName,
+        price: item.price,
+        quantity: item.quantity,
+      });
+
+      // Track in Clarity
+      trackClarityEvent('remove_from_cart');
+    }
+  }, [state.items]);
 
   const updateQuantity = (id: string, quantity: number) => {
     dispatch({ type: 'UPDATE_QUANTITY', payload: { id, quantity } });

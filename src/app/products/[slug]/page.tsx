@@ -5,6 +5,7 @@ import ProductRecommendations from '@/components/ProductRecommendations';
 import ProductVariantSelector from '@/components/ProductVariantSelector';
 import ProductImageGallery from '@/components/ProductImageGallery';
 import ARProductSection from '@/components/ar/ARProductSection';
+import ProductViewTracker from '@/components/analytics/ProductViewTracker';
 
 export default async function ProductDetailPage({
   params,
@@ -22,6 +23,9 @@ export default async function ProductDetailPage({
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black">
+      {/* Analytics Tracking */}
+      <ProductViewTracker product={product} variant={variant} />
+
       {/* Breadcrumb */}
       <div className="bg-white dark:bg-slate-900 border-b dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

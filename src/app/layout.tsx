@@ -6,6 +6,7 @@ import { CartProvider } from "@/context/CartContext";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import SEOSchemas from "@/components/SEOSchemas";
 import { ThemeProvider } from "@/components/theme-provider";
+import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
+        <AnalyticsProvider />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
