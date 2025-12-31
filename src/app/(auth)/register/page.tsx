@@ -71,11 +71,11 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left Side - Whale Shark Image */}
+      {/* Left Side - Coral Reef Image */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&q=80"
-          alt="Whale shark swimming in the ocean"
+          src="/images/reefparallaxscroll.jpg"
+          alt="Vibrant coral reef in the ocean"
           fill
           className="object-cover"
           priority
