@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     }
 
     const data = await req.json();
-    const { reportData, reportType } = data;
+    const { reportData, reportType: _reportType } = data;
 
     if (!reportData) {
       return NextResponse.json({ error: 'No report data provided' }, { status: 400 });

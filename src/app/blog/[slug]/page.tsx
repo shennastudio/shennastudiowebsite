@@ -6,18 +6,23 @@ import { prisma } from '@/lib/db'
 export const revalidate = 3600
 
 export async function generateStaticParams() {
-  const posts = await prisma.blogPost.findMany({
-    select: {
-      slug: true,
-    },
-    where: {
-      published: true,
-    },
-  })
+  try {
+    const posts = await prisma.blogPost.findMany({
+      select: {
+        slug: true,
+      },
+      where: {
+        published: true,
+      },
+    })
 
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
+    return posts.map((post) => ({
+      slug: post.slug,
+    }))
+  } catch {
+    // Return empty array if table doesn't exist yet (new database)
+    return []
+  }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

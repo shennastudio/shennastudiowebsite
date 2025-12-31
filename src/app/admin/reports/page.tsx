@@ -7,7 +7,6 @@ import {
   DollarSign,
   TrendingUp,
   TrendingDown,
-  Download,
   FileSpreadsheet,
   Brain,
   Calendar,

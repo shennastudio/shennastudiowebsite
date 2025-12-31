@@ -108,7 +108,7 @@ export default function InventoryForecastPage() {
   const [overviewData, setOverviewData] = useState<OverviewData | null>(null);
   const [forecasts, setForecasts] = useState<ForecastData[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, _setPage] = useState(1);
   const [generating, setGenerating] = useState(false);
 
   const loadData = useCallback(async () => {

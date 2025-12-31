@@ -21,9 +21,9 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
-    const status = searchParams.get('status') || 'all';
+    const _status = searchParams.get('status') || 'all';
 
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const _oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
 
     // Get sessions with ADD_TO_CART but no PURCHASE

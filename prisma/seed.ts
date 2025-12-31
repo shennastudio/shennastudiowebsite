@@ -155,7 +155,7 @@ async function main() {
   // ===========================
   console.log('🛍️  Getting products and variants...')
 
-  let products = await prisma.product.findMany({ include: { variants: true } })
+  const products = await prisma.product.findMany({ include: { variants: true } })
 
   // If no products exist, create demo products
   if (products.length === 0) {

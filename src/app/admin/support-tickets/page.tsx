@@ -90,7 +90,7 @@ export default function SupportTicketsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
-  const [page, setPage] = useState(1);
+  const [page, _setPage] = useState(1);
   const [selectedTicket, setSelectedTicket] = useState<TicketDetail | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [replyMessage, setReplyMessage] = useState('');
