@@ -285,11 +285,13 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
           {/* Step 2: Shipping */}
           {step === 2 && (
             <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Shipping Address</h2>
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-teal-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent mb-6">
+                Shipping Address
+              </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                     First Name *
                   </label>
                   <input
@@ -298,11 +300,12 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                     value={formData.firstName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="Enter your first name"
+                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                     Last Name *
                   </label>
                   <input
@@ -311,14 +314,15 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                     value={formData.lastName}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="Enter your last name"
+                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                     Email *
                   </label>
                   <input
@@ -327,11 +331,12 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="your@email.com"
+                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                     Phone
                   </label>
                   <input
@@ -339,13 +344,14 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="(555) 123-4567"
+                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                   />
                 </div>
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                   Street Address *
                 </label>
                 <input
@@ -354,12 +360,13 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                   value={formData.address1}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="123 Ocean Drive"
+                  className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                 />
               </div>
 
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                   Apartment, Suite, etc.
                 </label>
                 <input
@@ -367,13 +374,14 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                   name="address2"
                   value={formData.address2}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  placeholder="Apt 4B (optional)"
+                  className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                 />
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                     City *
                   </label>
                   <input
@@ -382,11 +390,12 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                     value={formData.city}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="Miami"
+                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                     State *
                   </label>
                   <select
@@ -394,9 +403,9 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                     value={formData.state}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                   >
-                    <option value="">Select</option>
+                    <option value="" className="text-gray-400">Select</option>
                     <option value="TX">Texas</option>
                     <option value="CA">California</option>
                     <option value="NY">New York</option>
@@ -405,7 +414,7 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium bg-gradient-to-r from-gray-700 to-gray-600 bg-clip-text text-transparent mb-2">
                     ZIP Code *
                   </label>
                   <input
@@ -415,7 +424,8 @@ export default function SubscribeTierPage({ params }: { params: Promise<{ tier: 
                     onChange={handleInputChange}
                     required
                     maxLength={5}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    placeholder="33101"
+                    className="w-full px-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:bg-white focus:border-teal-400 focus:ring-4 focus:ring-teal-100 transition-all duration-200"
                   />
                 </div>
               </div>
