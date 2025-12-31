@@ -5,6 +5,7 @@ import { ProductReviews } from '@/components/ProductReviews'
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
 import InstagramFeed from '@/components/InstagramFeed'
 import ParallaxBanner from '@/components/ParallaxBanner'
+import { TestimonialSection } from '@/components/TestimonialSection'
 
 // Force dynamic rendering since we fetch personalized recommendations
 export const dynamic = 'force-dynamic'
@@ -267,6 +268,9 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Testimonials */}
+      <TestimonialSection />
 
       {/* Product Reviews Section */}
       <ProductReviews productId="homepage" />
