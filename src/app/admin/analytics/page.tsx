@@ -17,6 +17,15 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 
 interface AnalyticsData {
   overview: {
@@ -35,6 +44,7 @@ interface AnalyticsData {
     donationCount: number;
   };
   ordersByStatus: Record<string, number>;
+  statusDistribution: Array<{ status: string; _count: number }>;
   topProducts: Array<{
     variantId: string;
     productName: string;
@@ -200,6 +210,64 @@ export default function AnalyticsPage() {
         </Card>
       </div>
 
+      {/* Revenue Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Revenue Over Time</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="h-80 w-full">
+            {data.dailyRevenue.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  data={data.dailyRevenue}
+                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                >
+                  <defs>
+                    <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#0d9488" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#0d9488" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis 
+                    dataKey="date" 
+                    tickFormatter={(date) => new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="#888888"
+                    fontSize={12}
+                    tickLine={false}
+                    axisLine={false}
+                    tickFormatter={(value) => `$${value}`}
+                  />
+                  <Tooltip 
+                    formatter={(value: number) => [`$${value.toFixed(2)}`, 'Revenue']}
+                    labelFormatter={(label) => new Date(label).toLocaleDateString()}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="revenue" 
+                    stroke="#0d9488" 
+                    fillOpacity={1} 
+                    fill="url(#colorRevenue)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex h-full items-center justify-center text-gray-500">
+                No revenue data for this period
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Second Row - Conversion & Conservation */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Conversion Rate */}
@@ -265,15 +333,27 @@ export default function AnalyticsPage() {
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Package className="w-5 h-5 text-blue-600" />
               </div>
-              <h3 className="font-semibold">Order Status</h3>
+              <h3 className="font-semibold">Order Status (Live)</h3>
             </div>
             <div className="space-y-2">
-              {Object.entries(data.ordersByStatus).map(([status, count]) => (
-                <div key={status} className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">{status}</span>
-                  <span className="font-medium">{count}</span>
-                </div>
-              ))}
+              {data.statusDistribution && data.statusDistribution.length > 0 ? (
+                data.statusDistribution.map((item) => (
+                  <div key={item.status} className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 capitalize">{item.status.toLowerCase().replace('_', ' ')}</span>
+                    <span className="font-medium bg-gray-100 px-2 py-0.5 rounded-full text-xs">{item._count}</span>
+                  </div>
+                ))
+              ) : (
+                Object.entries(data.ordersByStatus || {}).map(([status, count]) => (
+                  <div key={status} className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600 capitalize">{status.toLowerCase().replace('_', ' ')}</span>
+                    <span className="font-medium bg-gray-100 px-2 py-0.5 rounded-full text-xs">{count}</span>
+                  </div>
+                ))
+              )}
+              {(!data.statusDistribution?.length && !Object.keys(data.ordersByStatus || {}).length) && (
+                <p className="text-sm text-gray-500 text-center">No active orders</p>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -307,7 +387,7 @@ export default function AnalyticsPage() {
                     </div>
                     <div className="text-right">
                       <p className="font-semibold">{product._sum.quantity} sold</p>
-                      <p className="text-sm text-gray-500">{formatCurrency(product._sum.price)}</p>
+                      <p className="text-sm text-gray-500">{formatCurrency(product._sum.price || 0)}</p>
                     </div>
                   </div>
                 ))}
@@ -351,24 +431,6 @@ export default function AnalyticsPage() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Revenue Chart Placeholder */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Revenue Over Time</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-            <div className="text-center">
-              <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-2" />
-              <p className="text-gray-500">Revenue chart visualization</p>
-              <p className="text-sm text-gray-400 mt-1">
-                {data.dailyRevenue.length} data points for last {period} days
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

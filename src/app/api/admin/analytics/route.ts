@@ -17,125 +17,131 @@ export async function GET(request: Request) {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - parseInt(period));
 
-    // Get various analytics in parallel
-    const [
-      // Revenue metrics
-      revenueData,
-      previousPeriodRevenue,
-      // Order metrics
-      orderStats,
-      // Customer metrics
-      customerStats,
-      newCustomers,
-      // Product metrics
-      topProducts,
-      lowStockProducts,
-      // Conservation metrics
-      conservationStats,
-      // Daily revenue for chart
-      dailyRevenue,
-      // Order status distribution
-      orderStatusDistribution,
-      // Traffic/conversion data from analytics events
-      conversionData,
-    ] = await Promise.all([
-      // Current period revenue
-      prisma.order.aggregate({
-        where: {
-          createdAt: { gte: startDate },
-          status: { in: ['PROCESSING', 'SHIPPED', 'DELIVERED'] },
-        },
-        _sum: { total: true },
-        _count: true,
-        _avg: { total: true },
-      }),
-      // Previous period revenue for comparison
-      prisma.order.aggregate({
-        where: {
-          createdAt: {
-            gte: new Date(startDate.getTime() - parseInt(period) * 24 * 60 * 60 * 1000),
-            lt: startDate,
-          },
-          status: { in: ['PROCESSING', 'SHIPPED', 'DELIVERED'] },
-        },
-        _sum: { total: true },
-        _count: true,
-      }),
-      // Order statistics
-      prisma.order.groupBy({
-        by: ['status'],
-        where: { createdAt: { gte: startDate } },
-        _count: true,
-      }),
-      // Customer statistics
-      prisma.user.aggregate({
-        where: { role: 'CUSTOMER' },
-        _count: true,
-      }),
-      // New customers in period
-      prisma.user.count({
-        where: {
-          role: 'CUSTOMER',
-          createdAt: { gte: startDate },
-        },
-      }),
-      // Top selling products
-      prisma.orderItem.groupBy({
-        by: ['variantId'],
-        where: {
-          order: {
-            createdAt: { gte: startDate },
-            status: { in: ['PROCESSING', 'SHIPPED', 'DELIVERED'] },
-          },
-        },
-        _sum: { quantity: true, price: true },
-        orderBy: { _sum: { quantity: 'desc' } },
-        take: 10,
-      }),
-      // Low stock products
-      prisma.productVariant.findMany({
-        where: { stock: { lte: 10 } },
-        include: {
-          product: { select: { name: true, slug: true } },
-        },
-        orderBy: { stock: 'asc' },
-        take: 10,
-      }),
-      // Conservation donations
-      prisma.conservationDonation.aggregate({
-        where: {
-          createdAt: { gte: startDate },
-          status: 'DONATED',
-        },
-        _sum: { amount: true },
-        _count: true,
-      }),
-      // Daily revenue for chart
-      prisma.$queryRaw`
-        SELECT
-          DATE("createdAt") as date,
-          SUM(total) as revenue,
-          COUNT(*) as orders
-        FROM orders
-        WHERE "createdAt" >= ${startDate}
-          AND status IN ('PROCESSING', 'SHIPPED', 'DELIVERED')
-        GROUP BY DATE("createdAt")
-        ORDER BY date ASC
-      `,
-      // Order status distribution
-      prisma.order.groupBy({
-        by: ['status'],
-        _count: true,
-      }),
-      // Conversion data from analytics
-      prisma.productAnalytics.aggregate({
-        _avg: {
-          viewToCartRate: true,
-          cartToPurchaseRate: true,
-        },
-      }),
-    ]);
-
+        // Get various analytics in parallel
+        const [
+          // Revenue metrics
+          revenueData,
+          previousPeriodRevenue,
+          // Order metrics
+          orderStats,
+          // Customer metrics
+          customerStats,
+          newCustomers,
+          // Product metrics
+          topProducts,
+          lowStockProducts,
+          // Conservation metrics
+          conservationStats,
+          // Daily revenue for chart
+          rawDailyRevenue,
+          // Order status distribution
+          orderStatusDistribution,
+          // Traffic/conversion data from analytics events
+          conversionData,
+        ] = await Promise.all([
+          // Current period revenue
+          prisma.order.aggregate({
+            where: {
+              createdAt: { gte: startDate },
+              status: { in: ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED'] },
+            },
+            _sum: { total: true },
+            _count: true,
+            _avg: { total: true },
+          }),
+          // Previous period revenue for comparison
+          prisma.order.aggregate({
+            where: {
+              createdAt: {
+                gte: new Date(startDate.getTime() - parseInt(period) * 24 * 60 * 60 * 1000),
+                lt: startDate,
+              },
+              status: { in: ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED'] },
+            },
+            _sum: { total: true },
+            _count: true,
+          }),
+          // Order statistics (Filtered by period)
+          prisma.order.groupBy({
+            by: ['status'],
+            where: { createdAt: { gte: startDate } },
+            _count: true,
+          }),
+          // Customer statistics
+          prisma.user.aggregate({
+            where: { role: 'CUSTOMER' },
+            _count: true,
+          }),
+          // New customers in period
+          prisma.user.count({
+            where: {
+              role: 'CUSTOMER',
+              createdAt: { gte: startDate },
+            },
+          }),
+          // Top selling products
+          prisma.orderItem.groupBy({
+            by: ['variantId'],
+            where: {
+              order: {
+                createdAt: { gte: startDate },
+                status: { in: ['PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED'] },
+              },
+            },
+            _sum: { quantity: true, price: true },
+            orderBy: { _sum: { quantity: 'desc' } },
+            take: 10,
+          }),
+          // Low stock products
+          prisma.productVariant.findMany({
+            where: { stock: { lte: 10 } },
+            include: {
+              product: { select: { name: true, slug: true } },
+            },
+            orderBy: { stock: 'asc' },
+            take: 10,
+          }),
+          // Conservation donations
+          prisma.conservationDonation.aggregate({
+            where: {
+              createdAt: { gte: startDate },
+              status: 'DONATED',
+            },
+            _sum: { amount: true },
+            _count: true,
+          }),
+          // Daily revenue for chart
+          prisma.$queryRaw<Array<{ date: Date; revenue: number | null; orders: bigint }>>`
+            SELECT
+              DATE("createdAt") as date,
+              SUM(total) as revenue,
+              COUNT(*) as orders
+            FROM orders
+            WHERE "createdAt" >= ${startDate}
+              AND status IN ('PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED')
+            GROUP BY DATE("createdAt")
+            ORDER BY date ASC
+          `,
+          // Order status distribution (All Time - Real Time Snapshot)
+          prisma.order.groupBy({
+            by: ['status'],
+            _count: true,
+          }),
+          // Conversion data from analytics
+          prisma.productAnalytics.aggregate({
+            _avg: {
+              viewToCartRate: true,
+              cartToPurchaseRate: true,
+            },
+          }),
+        ]);
+    
+        // Format daily revenue
+        const dailyRevenue = rawDailyRevenue.map((item) => ({
+          date: new Date(item.date).toISOString(),
+          revenue: Number(item.revenue || 0),
+          orders: Number(item.orders || 0),
+        }));
     // Get product details for top products
     const topProductsWithDetails = await Promise.all(
       topProducts.map(async (item) => {
