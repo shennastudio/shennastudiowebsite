@@ -90,9 +90,9 @@ export async function GET(request: Request) {
     });
 
     const avgResponseTime = await prisma.$queryRaw<Array<{ avg: number }>>`
-      SELECT AVG(EXTRACT(EPOCH FROM (first_response_at - created_at))) as avg
+      SELECT AVG(EXTRACT(EPOCH FROM ("firstResponseAt" - "createdAt"))) as avg
       FROM support_tickets
-      WHERE first_response_at IS NOT NULL
+      WHERE "firstResponseAt" IS NOT NULL
     `;
 
     return NextResponse.json({

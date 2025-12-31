@@ -35,20 +35,20 @@ export async function GET(request: Request) {
       itemCount: number;
     }>>`
       SELECT
-        e.session_id as "sessionId",
-        e.user_id as "userId",
+        e."sessionId" as "sessionId",
+        e."userId" as "userId",
         MAX(e.timestamp) as "lastActivity",
-        COUNT(DISTINCT e.product_id) as "itemCount",
+        COUNT(DISTINCT e."productId") as "itemCount",
         COALESCE(SUM((e.metadata->>'price')::numeric * (e.metadata->>'quantity')::numeric), 0) as "cartValue"
       FROM analytics_events e
-      WHERE e.event_type = 'ADD_TO_CART'
+      WHERE e."eventType" = 'ADD_TO_CART'
         AND e.timestamp < ${oneHourAgo}
         AND NOT EXISTS (
           SELECT 1 FROM analytics_events p
-          WHERE p.session_id = e.session_id
-            AND p.event_type = 'PURCHASE'
+          WHERE p."sessionId" = e."sessionId"
+            AND p."eventType" = 'PURCHASE'
         )
-      GROUP BY e.session_id, e.user_id
+      GROUP BY e."sessionId", e."userId"
       ORDER BY MAX(e.timestamp) DESC
       LIMIT ${limit}
       OFFSET ${(page - 1) * limit}
@@ -56,14 +56,14 @@ export async function GET(request: Request) {
 
     // Get total count
     const totalCount = await prisma.$queryRaw<Array<{ count: bigint }>>`
-      SELECT COUNT(DISTINCT session_id) as count
+      SELECT COUNT(DISTINCT "sessionId") as count
       FROM analytics_events
-      WHERE event_type = 'ADD_TO_CART'
+      WHERE "eventType" = 'ADD_TO_CART'
         AND timestamp < ${oneHourAgo}
         AND NOT EXISTS (
           SELECT 1 FROM analytics_events p
-          WHERE p.session_id = analytics_events.session_id
-            AND p.event_type = 'PURCHASE'
+          WHERE p."sessionId" = analytics_events."sessionId"
+            AND p."eventType" = 'PURCHASE'
         )
     `;
 
@@ -91,13 +91,13 @@ export async function GET(request: Request) {
           price: number;
         }>>`
           SELECT DISTINCT
-            e.product_id as "productId",
-            e.variant_id as "variantId",
+            e."productId" as "productId",
+            e."variantId" as "variantId",
             (e.metadata->>'quantity')::int as "quantity",
             (e.metadata->>'price')::numeric as "price"
           FROM analytics_events e
-          WHERE e.session_id = ${cart.sessionId}
-            AND e.event_type = 'ADD_TO_CART'
+          WHERE e."sessionId" = ${cart.sessionId}
+            AND e."eventType" = 'ADD_TO_CART'
         `;
 
         // Get product details

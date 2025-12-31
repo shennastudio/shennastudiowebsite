@@ -113,13 +113,13 @@ export async function GET(request: Request) {
       // Daily revenue for chart
       prisma.$queryRaw`
         SELECT
-          DATE(created_at) as date,
+          DATE("createdAt") as date,
           SUM(total) as revenue,
           COUNT(*) as orders
         FROM orders
-        WHERE created_at >= ${startDate}
+        WHERE "createdAt" >= ${startDate}
           AND status IN ('PROCESSING', 'SHIPPED', 'DELIVERED')
-        GROUP BY DATE(created_at)
+        GROUP BY DATE("createdAt")
         ORDER BY date ASC
       `,
       // Order status distribution
