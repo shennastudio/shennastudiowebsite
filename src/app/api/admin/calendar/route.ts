@@ -4,10 +4,40 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
+// Helper to parse date string safely (handles both YYYY-MM-DD and ISO formats)
+function parseDateSafely(dateStr: string): Date {
+  // If the date already contains 'T', it's an ISO string - extract just the date part
+  const dateOnly = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
+  // Trim any whitespace
+  const cleanDate = dateOnly.trim();
+  // Validate format YYYY-MM-DD
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)) {
+    throw new Error(`Invalid date format: ${dateStr}. Expected YYYY-MM-DD`);
+  }
+  // Parse as local time at noon to avoid timezone issues
+  return new Date(cleanDate + 'T12:00:00');
+}
+
+// Helper to normalize time string (HH:MM format)
+function normalizeTime(time: string | null | undefined): string | null {
+  if (!time || time.trim() === '') return null;
+  const trimmed = time.trim();
+  // Validate HH:MM format
+  if (!/^\d{2}:\d{2}$/.test(trimmed)) {
+    // Try to fix common formats like H:MM
+    const match = trimmed.match(/^(\d{1,2}):(\d{2})$/);
+    if (match) {
+      return `${match[1].padStart(2, '0')}:${match[2]}`;
+    }
+    return null;
+  }
+  return trimmed;
+}
+
 const calendarEventSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   description: z.string().optional().nullable(),
-  date: z.string(), // ISO date string
+  date: z.string(), // YYYY-MM-DD or ISO date string
   time: z.string().optional().nullable(), // HH:MM format (optional for all-day events)
   endTime: z.string().optional().nullable(),
   allDay: z.boolean().optional().default(false),
@@ -17,7 +47,7 @@ const calendarEventSchema = z.object({
   attendees: z.array(z.string()).optional().default([]), // Names or emails
   recurring: z.boolean().optional().default(false),
   recurringPattern: z.enum(['daily', 'weekly', 'monthly', 'yearly']).optional().nullable(),
-  recurringEnd: z.string().optional().nullable(), // ISO date string
+  recurringEnd: z.string().optional().nullable(), // YYYY-MM-DD or ISO date string
   reminder: z.boolean().optional().default(false),
   reminderTime: z.number().int().positive().optional().nullable(),
   status: z.enum(['scheduled', 'completed', 'cancelled', 'in_progress']).optional().default('scheduled'),
