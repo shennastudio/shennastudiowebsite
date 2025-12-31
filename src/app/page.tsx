@@ -1,22 +1,15 @@
-'use client';
-
-import Link from 'next/link'
-import Image from 'next/image'
-import { fetchFeaturedProducts } from '@/app/actions'
-import { ProductReviews } from '@/components/ProductReviews'
-import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
-import InstagramFeed from '@/components/InstagramFeed'
-import ParallaxBanner from '@/components/ParallaxBanner'
 import { TestimonialSection } from '@/components/TestimonialSection'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { ArrowRight, Waves, Anchor, ShieldCheck } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { SplitText } from '@/components/SplitText'
+import ShimmerButton from '@/components/magicui/ShimmerButton'
 
 // Note: Removed force-dynamic to allow client-side features, but we fetch data.
 // In a real app, you might use a wrapper for the client parts or separate server/client components.
 
 export default function Home() {
+// ... (previous logic)
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -53,41 +46,37 @@ export default function Home() {
         </motion.div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <motion.h1 
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5 }}
-              className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter"
-            >
-              ShennaStudio <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-teal-400">
-                Ocean Collection
-              </span>
-            </motion.h1>
+          <div className="flex flex-col items-center">
+            <SplitText 
+              text="ShennaStudio Ocean Collection"
+              className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter justify-center text-center leading-tight"
+            />
+            
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
               className="text-xl md:text-2xl text-cyan-100 mb-10 max-w-3xl mx-auto leading-relaxed font-light"
             >
               Handcrafted bracelets inspired by the beauty of South Padre Island. 
               <span className="block mt-2 font-medium text-teal-300">Each purchase protects marine life.</span>
             </motion.p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/products"
-                  className="group flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white px-10 py-4 rounded-full font-bold text-lg transition-all shadow-lg shadow-teal-500/20"
-                >
-                  Shop Collection
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </motion.div>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
+              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            >
+              <Link href="/products">
+                <ShimmerButton className="shadow-2xl">
+                  <span className="group flex items-center gap-2 whitespace-pre-wrap text-center text-sm font-bold leading-none tracking-tighter text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
+                    Shop Collection
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </ShimmerButton>
+              </Link>
+              
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/conservation"
@@ -96,8 +85,8 @@ export default function Home() {
                 Our Mission
                 </Link>
               </motion.div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
 
         {/* Scroll Indicator */}
