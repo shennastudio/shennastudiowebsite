@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { fetchProducts } from '@/app/actions';
+import ParallaxBanner from '@/components/ParallaxBanner';
 
 export default async function ProductsPage() {
   const { data: products, total } = await fetchProducts({}, { page: 1, limit: 50 });
@@ -24,6 +25,13 @@ export default async function ProductsPage() {
           </div>
         </div>
       </section>
+
+      {/* Whale Parallax Banner */}
+      <ParallaxBanner 
+        src="/images/shennawhale.jpg" 
+        alt="Majestic Whale" 
+        text="Majestic Whales" 
+      />
 
       {/* Products Grid */}
       <section className="py-12">
@@ -136,6 +144,13 @@ export default async function ProductsPage() {
           )}
         </div>
       </section>
+
+      {/* Whale Shark Parallax Banner */}
+      <ParallaxBanner 
+        src="/images/whaleshark.jpg" 
+        alt="Gentle Whale Shark" 
+        text="Gentle Giants" 
+      />
 
       {/* Conservation Info Section */}
       <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-12">
