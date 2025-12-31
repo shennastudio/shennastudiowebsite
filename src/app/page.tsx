@@ -298,13 +298,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Turtle Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/turtleparallax.jpg" 
-        alt="Sea Turtle Swimming" 
-        text="Protect Our Turtles" 
-      />
-
       {/* Ocean Conservation CTA Section */}
       <section className="bg-gradient-to-r from-teal-600 via-blue-600 to-cyan-700 py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -346,6 +339,13 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* Turtle Parallax Banner */}
+      <ParallaxBanner 
+        src="/images/turtleparallax.jpg" 
+        alt="Sea Turtle Swimming" 
+        text="Protect Our Turtles" 
+      />
     </div>
   );
 }
