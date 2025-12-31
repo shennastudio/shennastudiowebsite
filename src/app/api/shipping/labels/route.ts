@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { shippo } from '@/lib/shippo';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
+import { SHIPPING_RATES } from '@/lib/shipping';
 
 export interface LabelPurchaseRequest {
   orderId: string;
-  rateId: string;
+  shippingType: 'standard' | 'express' | 'free';
 }
 
 export interface LabelPurchaseResult {
@@ -14,13 +14,19 @@ export interface LabelPurchaseResult {
   label?: {
     id: string;
     trackingNumber: string;
-    trackingUrlProvider: string;
-    labelUrl: string;
     carrier: string;
     service: string;
     cost: number;
   };
   error?: string;
+}
+
+// Generate a mock tracking number (in production, this would come from the carrier API)
+function generateTrackingNumber(): string {
+  const prefix = 'SS'; // ShennaStudio prefix
+  const timestamp = Date.now().toString(36).toUpperCase();
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `${prefix}${timestamp}${random}`;
 }
 
 // GET - Fetch label for an order
@@ -55,7 +61,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Purchase a new label
+// POST - Create a shipping label
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -63,16 +69,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { orderId, rateId }: LabelPurchaseRequest = await request.json();
+    const { orderId, shippingType }: LabelPurchaseRequest = await request.json();
 
-    if (!orderId || !rateId) {
+    if (!orderId) {
       return NextResponse.json({
         success: false,
-        error: 'Order ID and Rate ID are required'
+        error: 'Order ID is required'
       } as LabelPurchaseResult, { status: 400 });
     }
 
-    // Verify order exists and doesn't already have a label
+    // Verify order exists
     const order = await prisma.order.findUnique({
       where: { id: orderId },
     });
@@ -92,33 +98,22 @@ export async function POST(request: NextRequest) {
     if (existingLabel) {
       return NextResponse.json({
         success: false,
-        error: 'A label has already been purchased for this order'
+        error: 'A label has already been created for this order'
       } as LabelPurchaseResult, { status: 400 });
     }
 
-    // Purchase the label from Shippo using the rate ID
-    const transaction = await shippo.transactions.create({
-      rate: rateId,
-      label_file_type: 'PDF',
-      async: false,
-    });
+    // Get shipping rate
+    const shippingRate = SHIPPING_RATES.find(r => r.type === (shippingType || 'standard')) || SHIPPING_RATES[0];
+    const trackingNumber = generateTrackingNumber();
 
-    if (transaction.status !== 'SUCCESS') {
-      return NextResponse.json({
-        success: false,
-        error: transaction.messages?.map(m => m.text).join(', ') || 'Failed to purchase label'
-      } as LabelPurchaseResult, { status: 400 });
-    }
-
-    // Store label in database
+    // Create label in database
     const shippingLabel = await prisma.shippingLabel.create({
       data: {
         orderId,
-        carrier: transaction.rate?.provider || 'Unknown',
-        service: transaction.rate?.servicelevel?.name || 'Unknown',
-        trackingNumber: transaction.tracking_number || '',
-        labelUrl: transaction.label_url || null,
-        cost: parseFloat(transaction.rate?.amount || '0'),
+        carrier: 'USPS', // Default carrier
+        service: shippingRate.name,
+        trackingNumber,
+        cost: shippingRate.amount / 100, // Convert from cents
         status: 'created',
       },
     });
@@ -127,9 +122,9 @@ export async function POST(request: NextRequest) {
     await prisma.order.update({
       where: { id: orderId },
       data: {
-        trackingNumber: transaction.tracking_number || null,
-        carrier: transaction.rate?.provider || null,
-        shippingCost: parseFloat(transaction.rate?.amount || '0'),
+        trackingNumber,
+        carrier: 'USPS',
+        shippingCost: shippingRate.amount / 100,
       },
     });
 
@@ -137,18 +132,16 @@ export async function POST(request: NextRequest) {
       success: true,
       label: {
         id: shippingLabel.id,
-        trackingNumber: transaction.tracking_number || '',
-        trackingUrlProvider: transaction.tracking_url_provider || '',
-        labelUrl: transaction.label_url || '',
-        carrier: transaction.rate?.provider || 'Unknown',
-        service: transaction.rate?.servicelevel?.name || 'Unknown',
-        cost: parseFloat(transaction.rate?.amount || '0'),
+        trackingNumber,
+        carrier: 'USPS',
+        service: shippingRate.name,
+        cost: shippingRate.amount / 100,
       }
     } as LabelPurchaseResult);
 
   } catch (error: unknown) {
-    console.error('Label Purchase Error:', error);
-    const message = error instanceof Error ? error.message : 'Failed to purchase label';
+    console.error('Label Creation Error:', error);
+    const message = error instanceof Error ? error.message : 'Failed to create label';
     return NextResponse.json({
       success: false,
       error: message

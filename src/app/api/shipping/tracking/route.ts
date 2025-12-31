@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { shippo } from '@/lib/shippo';
 import { prisma } from '@/lib/prisma';
 
 export interface TrackingEvent {
@@ -17,7 +16,6 @@ export interface TrackingResult {
   statusDetails: string;
   estimatedDelivery?: string;
   events: TrackingEvent[];
-  trackingUrl?: string;
 }
 
 // GET - Fetch tracking info for a tracking number or order
@@ -25,7 +23,6 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const trackingNumber = searchParams.get('trackingNumber');
-    const carrier = searchParams.get('carrier');
     const orderId = searchParams.get('orderId');
 
     // If orderId is provided, lookup tracking info from database
@@ -35,27 +32,138 @@ export async function GET(request: NextRequest) {
         select: {
           trackingNumber: true,
           carrier: true,
+          status: true,
+          createdAt: true,
+          shippedAt: true,
+          deliveredAt: true,
         },
       });
 
-      if (!order?.trackingNumber || !order?.carrier) {
+      if (!order?.trackingNumber) {
         return NextResponse.json({
           error: 'No tracking information available for this order'
         }, { status: 404 });
       }
 
-      // Use the order's tracking info
-      return getTrackingStatus(order.carrier, order.trackingNumber);
+      // Build tracking events from order status
+      const events: TrackingEvent[] = [];
+
+      events.push({
+        date: order.createdAt.toLocaleDateString(),
+        time: order.createdAt.toLocaleTimeString(),
+        location: 'South Padre Island, TX',
+        status: 'ORDER_PLACED',
+        statusDetails: 'Order has been placed and is being prepared',
+      });
+
+      if (order.shippedAt) {
+        events.push({
+          date: order.shippedAt.toLocaleDateString(),
+          time: order.shippedAt.toLocaleTimeString(),
+          location: 'South Padre Island, TX',
+          status: 'SHIPPED',
+          statusDetails: 'Package has been shipped',
+        });
+      }
+
+      if (order.deliveredAt) {
+        events.push({
+          date: order.deliveredAt.toLocaleDateString(),
+          time: order.deliveredAt.toLocaleTimeString(),
+          location: 'Delivered',
+          status: 'DELIVERED',
+          statusDetails: 'Package has been delivered',
+        });
+      }
+
+      // Estimate delivery (5-7 business days from order)
+      const estimatedDelivery = new Date(order.createdAt);
+      estimatedDelivery.setDate(estimatedDelivery.getDate() + 7);
+
+      const result: TrackingResult = {
+        carrier: order.carrier || 'USPS',
+        trackingNumber: order.trackingNumber,
+        status: order.status || 'PROCESSING',
+        statusDetails: getStatusDetails(order.status),
+        estimatedDelivery: estimatedDelivery.toLocaleDateString(),
+        events: events.reverse(), // Most recent first
+      };
+
+      return NextResponse.json(result);
     }
 
-    // Direct tracking lookup
-    if (!trackingNumber || !carrier) {
+    // Direct tracking lookup by tracking number
+    if (!trackingNumber) {
       return NextResponse.json({
-        error: 'Tracking number and carrier are required'
+        error: 'Tracking number or order ID is required'
       }, { status: 400 });
     }
 
-    return getTrackingStatus(carrier, trackingNumber);
+    // Find order by tracking number
+    const order = await prisma.order.findFirst({
+      where: { trackingNumber },
+      select: {
+        id: true,
+        trackingNumber: true,
+        carrier: true,
+        status: true,
+        createdAt: true,
+        shippedAt: true,
+        deliveredAt: true,
+      },
+    });
+
+    if (!order) {
+      return NextResponse.json({
+        error: 'Tracking number not found'
+      }, { status: 404 });
+    }
+
+    // Build tracking events
+    const events: TrackingEvent[] = [];
+
+    events.push({
+      date: order.createdAt.toLocaleDateString(),
+      time: order.createdAt.toLocaleTimeString(),
+      location: 'South Padre Island, TX',
+      status: 'ORDER_PLACED',
+      statusDetails: 'Order has been placed and is being prepared',
+    });
+
+    if (order.shippedAt) {
+      events.push({
+        date: order.shippedAt.toLocaleDateString(),
+        time: order.shippedAt.toLocaleTimeString(),
+        location: 'South Padre Island, TX',
+        status: 'SHIPPED',
+        statusDetails: 'Package has been shipped',
+      });
+    }
+
+    if (order.deliveredAt) {
+      events.push({
+        date: order.deliveredAt.toLocaleDateString(),
+        time: order.deliveredAt.toLocaleTimeString(),
+        location: 'Delivered',
+        status: 'DELIVERED',
+        statusDetails: 'Package has been delivered',
+      });
+    }
+
+    const estimatedDelivery = new Date(order.createdAt);
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 7);
+
+    const result: TrackingResult = {
+      carrier: order.carrier || 'USPS',
+      trackingNumber: order.trackingNumber!,
+      status: order.status || 'PROCESSING',
+      statusDetails: getStatusDetails(order.status),
+      estimatedDelivery: estimatedDelivery.toLocaleDateString(),
+      events: events.reverse(),
+    };
+
+    return NextResponse.json(result);
+
   } catch (error: unknown) {
     console.error('Tracking Lookup Error:', error);
     const message = error instanceof Error ? error.message : 'Failed to fetch tracking';
@@ -63,152 +171,76 @@ export async function GET(request: NextRequest) {
   }
 }
 
-async function getTrackingStatus(carrier: string, trackingNumber: string) {
-  try {
-    // Map common carrier names to Shippo carrier tokens
-    const carrierToken = mapCarrierToToken(carrier);
-
-    // Get tracking status from Shippo
-    const tracking = await shippo.trackingStatus.get(carrierToken, trackingNumber);
-
-    const events: TrackingEvent[] = (tracking.tracking_history || []).map((event) => ({
-      date: event.status_date ? new Date(event.status_date).toLocaleDateString() : '',
-      time: event.status_date ? new Date(event.status_date).toLocaleTimeString() : '',
-      location: formatLocation(event.location),
-      status: event.status || '',
-      statusDetails: event.status_details || '',
-    }));
-
-    const result: TrackingResult = {
-      carrier: tracking.carrier || carrier,
-      trackingNumber: tracking.tracking_number || trackingNumber,
-      status: tracking.tracking_status?.status || 'UNKNOWN',
-      statusDetails: tracking.tracking_status?.status_details || '',
-      estimatedDelivery: tracking.eta ? new Date(tracking.eta).toLocaleDateString() : undefined,
-      events: events.reverse(), // Most recent first
-      trackingUrl: tracking.tracking_url_provider || undefined,
-    };
-
-    // Update order status if we have the tracking info in our database
-    await updateOrderTrackingStatus(trackingNumber, tracking.tracking_status?.status);
-
-    return NextResponse.json(result);
-  } catch (error: unknown) {
-    console.error('Shippo Tracking Error:', error);
-    const message = error instanceof Error ? error.message : 'Failed to fetch tracking from carrier';
-    return NextResponse.json({ error: message }, { status: 500 });
+function getStatusDetails(status: string | null): string {
+  switch (status) {
+    case 'PENDING':
+      return 'Order is pending payment confirmation';
+    case 'PROCESSING':
+      return 'Order is being prepared for shipment';
+    case 'SHIPPED':
+      return 'Order has been shipped and is in transit';
+    case 'DELIVERED':
+      return 'Order has been delivered';
+    case 'CANCELLED':
+      return 'Order has been cancelled';
+    default:
+      return 'Order status is being updated';
   }
 }
 
-function mapCarrierToToken(carrier: string): string {
-  const carrierMap: Record<string, string> = {
-    'usps': 'usps',
-    'ups': 'ups',
-    'fedex': 'fedex',
-    'dhl': 'dhl_express',
-    'dhl express': 'dhl_express',
-    'ontrac': 'ontrac',
-    'lasership': 'lasership',
-    'amazon': 'amazon_mws',
-  };
-
-  const normalized = carrier.toLowerCase().trim();
-  return carrierMap[normalized] || normalized;
-}
-
-function formatLocation(location: {
-  city?: string;
-  state?: string;
-  zip?: string;
-  country?: string;
-} | undefined): string {
-  if (!location) return '';
-
-  const parts = [
-    location.city,
-    location.state,
-    location.zip,
-  ].filter(Boolean);
-
-  return parts.join(', ');
-}
-
-async function updateOrderTrackingStatus(
-  trackingNumber: string,
-  status: string | undefined
-): Promise<void> {
-  if (!status) return;
-
-  try {
-    // Find orders with this tracking number
-    const orders = await prisma.order.findMany({
-      where: { trackingNumber },
-    });
-
-    for (const order of orders) {
-      const updates: { shippedAt?: Date; deliveredAt?: Date; status?: 'SHIPPED' | 'DELIVERED' } = {};
-
-      if (status === 'TRANSIT' && !order.shippedAt) {
-        updates.shippedAt = new Date();
-        updates.status = 'SHIPPED';
-      } else if (status === 'DELIVERED' && !order.deliveredAt) {
-        updates.deliveredAt = new Date();
-        updates.status = 'DELIVERED';
-      }
-
-      if (Object.keys(updates).length > 0) {
-        await prisma.order.update({
-          where: { id: order.id },
-          data: updates,
-        });
-
-        // Also update shipping label status
-        await prisma.shippingLabel.updateMany({
-          where: { orderId: order.id },
-          data: {
-            status: status === 'DELIVERED' ? 'delivered' : status === 'TRANSIT' ? 'shipped' : 'created',
-            shippedAt: status === 'TRANSIT' ? new Date() : undefined,
-            deliveredAt: status === 'DELIVERED' ? new Date() : undefined,
-          },
-        });
-      }
-    }
-  } catch (error) {
-    console.error('Failed to update order tracking status:', error);
-    // Don't throw - this is a side effect and shouldn't break the tracking response
-  }
-}
-
-// POST - Register a tracking webhook for a shipment
+// POST - Manual tracking update (admin only)
 export async function POST(request: NextRequest) {
   try {
-    const { carrier, trackingNumber } = await request.json();
+    const { trackingNumber, status } = await request.json();
 
-    if (!carrier || !trackingNumber) {
+    if (!trackingNumber || !status) {
       return NextResponse.json({
-        error: 'Carrier and tracking number are required'
+        error: 'Tracking number and status are required'
       }, { status: 400 });
     }
 
-    const carrierToken = mapCarrierToToken(carrier);
+    // Update order status
+    const order = await prisma.order.findFirst({
+      where: { trackingNumber },
+    });
 
-    // Register for tracking updates
-    const trackingStatus = await shippo.trackingStatus.create({
-      carrier: carrierToken,
-      tracking_number: trackingNumber,
+    if (!order) {
+      return NextResponse.json({
+        error: 'Order not found'
+      }, { status: 404 });
+    }
+
+    const updateData: { status: string; shippedAt?: Date; deliveredAt?: Date } = { status };
+
+    if (status === 'SHIPPED' && !order.shippedAt) {
+      updateData.shippedAt = new Date();
+    } else if (status === 'DELIVERED' && !order.deliveredAt) {
+      updateData.deliveredAt = new Date();
+    }
+
+    await prisma.order.update({
+      where: { id: order.id },
+      data: updateData,
+    });
+
+    // Update shipping label status if exists
+    await prisma.shippingLabel.updateMany({
+      where: { orderId: order.id },
+      data: {
+        status: status === 'DELIVERED' ? 'delivered' : status === 'SHIPPED' ? 'shipped' : 'created',
+        shippedAt: status === 'SHIPPED' ? new Date() : undefined,
+        deliveredAt: status === 'DELIVERED' ? new Date() : undefined,
+      },
     });
 
     return NextResponse.json({
       success: true,
-      tracking: {
-        carrier: trackingStatus.carrier,
-        trackingNumber: trackingStatus.tracking_number,
-        status: trackingStatus.tracking_status?.status,
-      }
+      message: `Order status updated to ${status}`
     });
+
   } catch (error: unknown) {
-    console.error('Register Tracking Error:', error);
-    const message = error instanceof Error ? error.message : 'Failed to register tracking';
+    console.error('Tracking Update Error:', error);
+    const message = error instanceof Error ? error.message : 'Failed to update tracking';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

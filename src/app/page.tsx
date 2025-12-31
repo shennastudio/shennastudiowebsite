@@ -11,6 +11,7 @@ import { TestimonialSection } from '@/components/TestimonialSection'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { ArrowRight, Waves, Anchor, ShieldCheck } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 // Note: Removed force-dynamic to allow client-side features, but we fetch data.
 // In a real app, you might use a wrapper for the client parts or separate server/client components.

@@ -28,6 +28,25 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   serverExternalPackages: ['sharp'],
+  // Fix for web3 optional dependencies that aren't available in browser
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+      // Ignore optional React Native dependencies from MetaMask SDK
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@react-native-async-storage/async-storage': false,
+      };
+    }
+    // Ignore optional dependencies that cause warnings
+    config.externals.push('pino-pretty', 'lokijs', 'encoding');
+    return config;
+  },
 };
 
 // Temporarily disabled for testing shadcn/ui: export default withPayload(nextConfig);
