@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { fetchProducts } from '@/app/actions';
 import ParallaxBanner from '@/components/ParallaxBanner';
+import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection';
 
 export default async function ProductsPage() {
   const { data: products, total } = await fetchProducts({}, { page: 1, limit: 50 });
@@ -9,16 +10,20 @@ export default async function ProductsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+      <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-12 relative overflow-hidden">
+        {/* Animated wave background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%23ffffff%22 d=%22M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E')] bg-cover bg-bottom animate-pulse" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <AnimatedSection animation="fadeInDown" className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">
               Ocean Treasures
             </h1>
             <p className="text-xl text-cyan-100 max-w-2xl mx-auto">
               {total} handcrafted pieces available
             </p>
-          </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -33,21 +38,21 @@ export default async function ProductsPage() {
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {products.length === 0 ? (
-            <div className="text-center py-20">
-              <div className="text-6xl mb-4">🌊</div>
+            <AnimatedSection animation="fadeInUp" className="text-center py-20">
+              <div className="text-6xl mb-4 animate-bounce">🌊</div>
               <h2 className="text-2xl font-semibold text-gray-700 mb-2">
                 No products available yet
               </h2>
               <p className="text-gray-600">
                 Check back soon for our beautiful ocean-inspired bracelets!
               </p>
-            </div>
+            </AnimatedSection>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <StaggeredChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" staggerDelay={100}>
               {products.map((productDisplay) => (
                 <div
                   key={productDisplay.product.id}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all border border-teal-100 group"
+                  className="stagger-child bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-teal-100 group hover:-translate-y-2"
                 >
                   {/* Product Image */}
                   <div className="relative h-64 bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
@@ -136,7 +141,7 @@ export default async function ProductsPage() {
                   </div>
                 </div>
               ))}
-            </div>
+            </StaggeredChildren>
           )}
         </div>
       </section>
@@ -149,25 +154,35 @@ export default async function ProductsPage() {
       />
 
       {/* Conservation Info Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="flex justify-center items-center gap-3 mb-4">
-            <span className="text-3xl">🐚🪼</span>
-            <h2 className="text-3xl font-bold text-teal-700">
-              Every Purchase Protects Ocean Life
-            </h2>
-            <span className="text-3xl">🐙🐡</span>
-          </div>
-          <p className="text-lg text-gray-700 mb-6">
-            10% of every bracelet sale supports sea turtle conservation, whale protection,
-            and marine ecosystem restoration in South Padre Island and Rio Grande Valley.
-          </p>
-          <Link
-            href="/conservation"
-            className="inline-block border-2 border-teal-600 text-teal-600 px-8 py-3 rounded-full font-semibold hover:bg-teal-50 transition-colors"
-          >
-            Learn About Our Conservation Mission
-          </Link>
+      <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-12 relative overflow-hidden">
+        {/* Floating particles */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-16 h-16 rounded-full bg-teal-500 animate-ping" style={{ animationDuration: '4s' }} />
+          <div className="absolute top-1/2 right-20 w-12 h-12 rounded-full bg-cyan-500 animate-ping" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+          <div className="absolute bottom-20 left-1/3 w-8 h-8 rounded-full bg-blue-500 animate-ping" style={{ animationDuration: '6s', animationDelay: '2s' }} />
+        </div>
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <AnimatedSection animation="fadeInUp">
+            <div className="flex justify-center items-center gap-3 mb-4">
+              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.1s' }}>🐚</span>
+              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.2s' }}>🪼</span>
+              <h2 className="text-3xl font-bold text-teal-700">
+                Every Purchase Protects Ocean Life
+              </h2>
+              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.3s' }}>🐙</span>
+              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.4s' }}>🐡</span>
+            </div>
+            <p className="text-lg text-gray-700 mb-6">
+              10% of every bracelet sale supports sea turtle conservation, whale protection,
+              and marine ecosystem restoration in South Padre Island and Rio Grande Valley.
+            </p>
+            <Link
+              href="/conservation"
+              className="inline-block border-2 border-teal-600 text-teal-600 px-8 py-3 rounded-full font-semibold hover:bg-teal-600 hover:text-white transition-all transform hover:scale-105"
+            >
+              Learn About Our Conservation Mission
+            </Link>
+          </AnimatedSection>
         </div>
       </section>
     </div>

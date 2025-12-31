@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -26,44 +27,52 @@ export default function ContactPage() {
   if (submitted) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-10 text-center">
-          <div className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <span className="text-4xl text-teal-600">🌊</span>
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Message Sent!</h1>
+        <AnimatedSection animation="scaleIn" className="max-w-md w-full">
+          <div className="bg-white rounded-2xl shadow-xl p-10 text-center">
+            <div className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
+              <span className="text-4xl text-teal-600">🌊</span>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Message Sent!</h1>
           <p className="text-gray-600 mb-8 leading-relaxed">
             Your message has been received. We&apos;ll get back to you within 24 hours to discuss ocean conservation and custom bracelets.
           </p>
-          <button
-            onClick={() => {
-              setSubmitted(false);
-              setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
-            }}
-            className="w-full bg-teal-600 text-white font-bold py-4 rounded-xl hover:bg-teal-700 transition-all shadow-lg"
-          >
-            Send Another Message
-          </button>
-        </div>
+            <button
+              onClick={() => {
+                setSubmitted(false);
+                setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+              }}
+              className="w-full bg-teal-600 text-white font-bold py-4 rounded-xl hover:bg-teal-700 transition-all shadow-lg hover:scale-105 transform"
+            >
+              Send Another Message
+            </button>
+          </div>
+        </AnimatedSection>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <section className="bg-gradient-to-br from-teal-600 to-blue-600 py-16 text-white text-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl text-cyan-100">
-            Have questions about our ocean conservation mission or custom handmade bracelets? We&apos;d love to hear from you!
-          </p>
+      <section className="bg-gradient-to-br from-teal-600 to-blue-600 py-16 text-white text-center relative overflow-hidden">
+        {/* Animated wave background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%23ffffff%22 d=%22M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E')] bg-cover bg-bottom animate-pulse" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <AnimatedSection animation="fadeInDown">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">Contact Us</h1>
+            <p className="text-xl text-cyan-100">
+              Have questions about our ocean conservation mission or custom handmade bracelets? We&apos;d love to hear from you!
+            </p>
+          </AnimatedSection>
         </div>
       </section>
 
       <section className="py-16 -mt-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-1 space-y-8">
-              <div className="bg-white rounded-2xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
+            <StaggeredChildren className="lg:col-span-1 space-y-8" staggerDelay={150}>
+              <div className="stagger-child bg-white rounded-2xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300 hover:shadow-xl">
                 <div className="flex items-center gap-4 mb-4 text-teal-600">
                   <span className="text-2xl">🪼</span>
                   <h3 className="text-xl font-bold text-gray-900">Conservation Mission</h3>
@@ -74,18 +83,18 @@ export default function ContactPage() {
                 </p>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
+              <div className="stagger-child bg-white rounded-2xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300 hover:shadow-xl">
                 <div className="flex items-center gap-4 mb-4 text-blue-600">
                   <span className="text-2xl">🐚</span>
                   <h3 className="text-xl font-bold text-gray-900">Custom Designs</h3>
                 </div>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  Looking for a unique ocean-inspired design? We love creating custom pieces 
+                  Looking for a unique ocean-inspired design? We love creating custom pieces
                   that capture your personal connection to the sea.
                 </p>
               </div>
 
-              <div className="bg-white rounded-2xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300">
+              <div className="stagger-child bg-white rounded-2xl shadow-lg p-8 transform hover:scale-105 transition-transform duration-300 hover:shadow-xl">
                 <div className="flex items-center gap-4 mb-4 text-cyan-600">
                   <span className="text-2xl">📍</span>
                   <h3 className="text-xl font-bold text-gray-900">Our Studio</h3>
@@ -109,10 +118,10 @@ export default function ContactPage() {
                   info@shennastudio.com
                 </a>
               </div>
-            </div>
+            </StaggeredChildren>
 
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <AnimatedSection animation="fadeInRight" delay={200} className="lg:col-span-2">
+              <div className="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow">
                 <div className="p-8 md:p-12">
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -183,14 +192,14 @@ export default function ContactPage() {
 
                     <button
                       type="submit"
-                      className="w-full bg-teal-600 text-white font-bold py-4 rounded-xl hover:bg-teal-700 transition-all shadow-lg flex items-center justify-center gap-2"
+                      className="w-full bg-teal-600 text-white font-bold py-4 rounded-xl hover:bg-teal-700 transition-all shadow-lg flex items-center justify-center gap-2 hover:scale-105 transform"
                     >
                       <span>Send Message</span>
                     </button>
                   </form>
                 </div>
               </div>
-            </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>

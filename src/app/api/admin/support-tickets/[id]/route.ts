@@ -34,16 +34,6 @@ export async function GET(
       where: { id },
       include: {
         customer: { select: { id: true, name: true, email: true } },
-        assignedTo: { select: { id: true, name: true, email: true } },
-        order: {
-          select: {
-            id: true,
-            orderNumber: true,
-            total: true,
-            status: true,
-            createdAt: true,
-          },
-        },
         messages: {
           orderBy: { createdAt: 'asc' },
           include: {
@@ -60,7 +50,36 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ ticket });
+    // Manually fetch related data since relations aren't defined in schema
+    let assignedToObj = null;
+    if (ticket.assignedTo) {
+      assignedToObj = await prisma.user.findUnique({
+        where: { id: ticket.assignedTo },
+        select: { id: true, name: true, email: true },
+      });
+    }
+
+    let orderObj = null;
+    if (ticket.orderId) {
+      orderObj = await prisma.order.findUnique({
+        where: { id: ticket.orderId },
+        select: {
+          id: true,
+          orderNumber: true,
+          total: true,
+          status: true,
+          createdAt: true,
+        },
+      });
+    }
+
+    return NextResponse.json({
+      ticket: {
+        ...ticket,
+        assignedTo: assignedToObj,
+        order: orderObj,
+      },
+    });
   } catch (error) {
     console.error('Fetch ticket error:', error);
     return NextResponse.json(
@@ -139,7 +158,7 @@ export async function PATCH(
       updateData.priority = validated.priority;
     }
     if (validated.assignedToId !== undefined) {
-      updateData.assignedToId = validated.assignedToId;
+      updateData.assignedTo = validated.assignedToId;
     }
     if (validated.category !== undefined) {
       updateData.category = validated.category;
@@ -148,9 +167,6 @@ export async function PATCH(
     const ticket = await prisma.supportTicket.update({
       where: { id },
       data: updateData,
-      include: {
-        assignedTo: { select: { name: true, email: true } },
-      },
     });
 
     return NextResponse.json({ success: true, ticket });

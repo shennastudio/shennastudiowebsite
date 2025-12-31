@@ -2,12 +2,24 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Unique ocean/conservation images for blog posts
+const blogImages = {
+  seaTurtle: 'https://images.unsplash.com/photo-1591025207163-942350e47db2?w=800&h=600&fit=crop', // Sea turtle swimming
+  dolphin: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=800&h=600&fit=crop', // Dolphins jumping
+  pelican: 'https://images.unsplash.com/photo-1601247387326-f8bcb5a234d4?w=800&h=600&fit=crop', // Brown pelican
+  laguna: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&h=600&fit=crop', // Coastal lagoon
+  mantaRay: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop', // Manta ray
+  coralReef: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800&h=600&fit=crop', // Coral reef
+  coastalBirds: 'https://images.unsplash.com/photo-1555169062-013468b47731?w=800&h=600&fit=crop', // Coastal birds
+  whoopingCrane: 'https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?w=800&h=600&fit=crop', // White crane
+}
+
 const blogPosts = [
   {
     title: 'Protecting Sea Turtles: Our Partnership with Sea Turtle Inc.',
     slug: 'sea-turtle-inc-partnership',
     excerpt: 'Discover how ShennaStudio supports Sea Turtle Inc., a world-renowned sea turtle rescue and rehabilitation center in South Padre Island, Texas, and learn about the critical conservation work protecting five endangered species.',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop',
+    image: blogImages.seaTurtle,
     category: 'Conservation',
     featured: true,
     published: true,
@@ -61,7 +73,7 @@ const blogPosts = [
     title: 'Atlantic Bottlenose Dolphins: Guardians of the Gulf',
     slug: 'atlantic-bottlenose-dolphins',
     excerpt: 'Explore the fascinating world of Atlantic Bottlenose Dolphins in the Gulf of Mexico and Laguna Madre, their complex social structures, threats from pollution and habitat loss, and conservation efforts protecting these intelligent marine mammals.',
-    image: 'https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=800&h=600&fit=crop',
+    image: blogImages.dolphin,
     category: 'Marine Life',
     featured: true,
     published: true,
@@ -138,7 +150,7 @@ const blogPosts = [
     title: 'Brown Pelicans: A Conservation Success Story',
     slug: 'brown-pelicans-conservation',
     excerpt: 'From the brink of extinction to thriving populations—discover the remarkable recovery of Brown Pelicans along the Texas Gulf Coast, the role of DDT bans, and ongoing conservation efforts protecting these iconic coastal birds.',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop',
+    image: blogImages.pelican,
     category: 'Conservation',
     featured: false,
     published: true,
@@ -229,7 +241,7 @@ const blogPosts = [
     title: 'Laguna Madre: A Rare Hypersaline Treasure',
     slug: 'laguna-madre-ecosystem',
     excerpt: 'Discover the Laguna Madre, one of only six hypersaline lagoons in the world, and explore its unique ecosystem that supports an incredible diversity of marine life, seagrass meadows, and migratory birds along the Texas coast.',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop',
+    image: blogImages.laguna,
     category: 'Ecosystems',
     featured: true,
     published: true,
@@ -323,7 +335,7 @@ const blogPosts = [
     title: 'Manta Rays of the Gulf: Gentle Giants in Need',
     slug: 'manta-rays-gulf-mexico',
     excerpt: 'Meet the magnificent manta rays that grace the Gulf of Mexico waters near South Padre Island. Learn about these intelligent filter-feeders, the threats they face from fishing and pollution, and conservation efforts to protect these gentle giants.',
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop',
+    image: blogImages.mantaRay,
     category: 'Marine Life',
     featured: false,
     published: true,
@@ -427,7 +439,7 @@ const blogPosts = [
     title: 'Flower Garden Banks: Coral Reef Oasis of the Gulf',
     slug: 'flower-garden-banks-coral-reefs',
     excerpt: 'Explore the Flower Garden Banks National Marine Sanctuary, the northernmost coral reef system in the continental United States, and discover how these remarkable coral gardens thrive in the Gulf of Mexico despite numerous threats.',
-    image: 'https://images.unsplash.com/photo-1546026423-cc4642628d2b?w=800&h=600&fit=crop',
+    image: blogImages.coralReef,
     category: 'Ecosystems',
     featured: false,
     published: true,
@@ -518,7 +530,7 @@ const blogPosts = [
     title: 'Coastal Bird Nesting Habitats: Protecting Island Sanctuaries',
     slug: 'coastal-bird-nesting-habitats',
     excerpt: 'Discover the critical importance of South Padre Island and surrounding areas as nesting habitats for coastal birds including Least Terns, Black Skimmers, Wilson\'s Plovers, and more. Learn about threats and conservation efforts.',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop',
+    image: blogImages.coastalBirds,
     category: 'Conservation',
     featured: false,
     published: true,
@@ -629,7 +641,7 @@ const blogPosts = [
     title: 'Whooping Crane Conservation: Saving North America\'s Tallest Bird',
     slug: 'whooping-crane-conservation',
     excerpt: 'Follow the remarkable recovery story of the Whooping Crane, North America\'s tallest bird, and discover how Aransas National Wildlife Refuge near the Rio Grande Valley provides critical winter habitat for the last wild flock.',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&h=600&fit=crop',
+    image: blogImages.whoopingCrane,
     category: 'Conservation',
     featured: true,
     published: true,
@@ -773,7 +785,16 @@ async function main() {
       });
       console.log(`✅ Created post: ${post.title}`);
     } else {
-      console.log(`⏭️ Post already exists: ${post.title}`);
+      // Update existing post with new image if different
+      if (existingPost.featuredImage !== post.image) {
+        await prisma.blogPost.update({
+          where: { slug: post.slug },
+          data: { featuredImage: post.image }
+        });
+        console.log(`🔄 Updated image for: ${post.title}`);
+      } else {
+        console.log(`⏭️ Post already exists with correct image: ${post.title}`);
+      }
     }
   }
 
