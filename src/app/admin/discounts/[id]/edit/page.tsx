@@ -236,12 +236,12 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Discount Code Card */}
-        <div className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-gray-100 dark:border-slate-700 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
           <div className={`h-2 bg-gradient-to-r ${currentType.gradient}`} />
           <div className="p-6 space-y-6">
             {/* Code Input */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 mb-3">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white mb-3">
                 <Hash className="w-4 h-4 text-purple-500" />
                 Discount Code
                 <span className="text-red-500">*</span>
@@ -252,7 +252,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
                   name="code"
                   value={formData.code}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 text-lg font-mono font-bold uppercase tracking-wider border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all"
+                  className="w-full px-4 py-3 text-lg font-mono font-bold uppercase tracking-wider border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all"
                   placeholder="SUMMER2025"
                   required
                 />
@@ -265,7 +265,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
 
             {/* Discount Type Selector */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 mb-3">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white mb-3">
                 <Ticket className="w-4 h-4 text-purple-500" />
                 Discount Type
                 <span className="text-red-500">*</span>
@@ -302,7 +302,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
 
             {/* Value Input */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 mb-3">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white mb-3">
                 {formData.type === 'PERCENTAGE' ? (
                   <Percent className="w-4 h-4 text-violet-500" />
                 ) : (
@@ -320,7 +320,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
                   name="value"
                   value={formData.value}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 text-2xl font-bold border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all ${
+                  className={`w-full px-4 py-3 text-2xl font-bold border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all ${
                     formData.type === 'FIXED_AMOUNT' ? 'pl-10' : ''
                   }`}
                   placeholder="0"
@@ -338,15 +338,15 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
         </div>
 
         {/* Details Card */}
-        <div className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 space-y-6 hover:shadow-md transition-shadow">
-          <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-gray-100 dark:border-slate-700 shadow-sm p-6 space-y-6 hover:shadow-md transition-shadow">
+          <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
             <FileText className="w-5 h-5 text-blue-500" />
             Details
           </h3>
 
           {/* Description */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
               <Info className="w-4 h-4 text-blue-400" />
               Public Description
             </label>
@@ -355,15 +355,15 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
               value={formData.description}
               onChange={handleChange}
               rows={2}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all resize-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all resize-none"
               placeholder="Summer sale - Get 20% off all ocean-themed bracelets!"
             />
-            <p className="text-xs text-gray-500 mt-1">Shown to customers when the code is applied</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Shown to customers when the code is applied</p>
           </div>
 
           {/* Internal Note */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
               <Lock className="w-4 h-4 text-gray-400" />
               Internal Note
             </label>
@@ -372,47 +372,47 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
               value={formData.internalNote}
               onChange={handleChange}
               rows={2}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-gray-100 focus:border-gray-400 transition-all resize-none bg-gray-50"
+              className="w-full px-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-gray-100 focus:border-gray-400 transition-all resize-none bg-gray-50"
               placeholder="For email campaign #42 - targeting repeat customers"
             />
-            <p className="text-xs text-gray-500 mt-1">Only visible to admins</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Only visible to admins</p>
           </div>
         </div>
 
         {/* Usage Limits Card */}
-        <div className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 space-y-6 hover:shadow-md transition-shadow">
-          <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-gray-100 dark:border-slate-700 shadow-sm p-6 space-y-6 hover:shadow-md transition-shadow">
+          <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
             <Users className="w-5 h-5 text-green-500" />
             Usage Limits
           </h3>
 
           <div className="grid sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">Total Uses</label>
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 block">Total Uses</label>
               <input
                 type="number"
                 name="usageLimit"
                 value={formData.usageLimit}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all"
+                className="w-full px-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all"
                 placeholder="Unlimited"
                 min="1"
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">Per Customer</label>
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 block">Per Customer</label>
               <input
                 type="number"
                 name="usageLimitPerCustomer"
                 value={formData.usageLimitPerCustomer}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all"
+                className="w-full px-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all"
                 placeholder="Unlimited"
                 min="1"
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">Min. Purchase</label>
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 block">Min. Purchase</label>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
                 <input
@@ -420,7 +420,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
                   name="minPurchaseAmount"
                   value={formData.minPurchaseAmount}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 pl-8 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all"
+                  className="w-full px-4 py-3 pl-8 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-green-100 focus:border-green-500 transition-all"
                   placeholder="None"
                   min="0"
                   step="0.01"
@@ -431,38 +431,38 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
         </div>
 
         {/* Schedule Card */}
-        <div className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 space-y-6 hover:shadow-md transition-shadow">
-          <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-gray-100 dark:border-slate-700 shadow-sm p-6 space-y-6 hover:shadow-md transition-shadow">
+          <h3 className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
             <Calendar className="w-5 h-5 text-orange-500" />
             Schedule
           </h3>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">Start Date & Time</label>
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 block">Start Date & Time</label>
               <input
                 type="datetime-local"
                 name="startsAt"
                 value={formData.startsAt}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all"
+                className="w-full px-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all"
               />
             </div>
             <div>
-              <label className="text-sm font-semibold text-gray-700 mb-2 block">End Date & Time</label>
+              <label className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 block">End Date & Time</label>
               <input
                 type="datetime-local"
                 name="expiresAt"
                 value={formData.expiresAt}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all"
+                className="w-full px-4 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 focus:ring-4 focus:ring-orange-100 focus:border-orange-500 transition-all"
               />
             </div>
           </div>
         </div>
 
         {/* Status & Actions */}
-        <div className="bg-white rounded-2xl border-2 border-gray-100 shadow-sm p-6 hover:shadow-md transition-shadow">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border-2 border-gray-100 dark:border-slate-700 shadow-sm p-6 hover:shadow-md transition-shadow">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             {/* Active Toggle */}
             <label className="flex items-center gap-3 cursor-pointer group">
@@ -474,13 +474,13 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
                   onChange={handleChange}
                   className="sr-only peer"
                 />
-                <div className="w-14 h-8 bg-gray-200 peer-focus:ring-4 peer-focus:ring-green-100 rounded-full peer peer-checked:after:translate-x-6 peer-checked:bg-gradient-to-r peer-checked:from-green-400 peer-checked:to-emerald-500 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-6 after:w-6 after:shadow-md after:transition-all transition-all" />
+                <div className="w-14 h-8 bg-gray-200 dark:bg-slate-600 peer-focus:ring-4 peer-focus:ring-green-100 dark:peer-focus:ring-green-900 rounded-full peer peer-checked:after:translate-x-6 peer-checked:bg-gradient-to-r peer-checked:from-green-400 peer-checked:to-emerald-500 after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:rounded-full after:h-6 after:w-6 after:shadow-md after:transition-all transition-all" />
               </div>
               <div>
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-gray-900 dark:text-white">
                   {formData.isActive ? 'Active' : 'Inactive'}
                 </span>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
                   {formData.isActive ? 'Customers can use this code' : 'Code is paused'}
                 </p>
               </div>
@@ -491,7 +491,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
               <button
                 type="button"
                 onClick={() => router.push('/admin/discounts')}
-                className="flex-1 sm:flex-none px-6 py-3 border-2 border-gray-200 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
+                className="flex-1 sm:flex-none px-6 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
               >
                 Cancel
               </button>

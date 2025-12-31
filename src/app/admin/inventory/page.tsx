@@ -117,7 +117,7 @@ export default function InventoryPage() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-gray-100 rounded-lg h-32 animate-pulse" />
+            <div key={i} className="bg-gray-100 dark:bg-slate-700 rounded-lg h-32 animate-pulse" />
           ))}
         </div>
       </div>
@@ -128,61 +128,61 @@ export default function InventoryPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Inventory Management</h1>
-        <p className="text-gray-600 mt-1">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Inventory Management</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-1">
           Track stock levels, adjust inventory, and view transaction history
         </p>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-1">Total Variants</p>
-              <p className="text-2xl font-bold text-gray-900">{data.summary.totalVariants}</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Variants</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.summary.totalVariants}</p>
             </div>
-            <div className="p-3 rounded-full bg-blue-50 text-blue-600">
+            <div className="p-3 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
               <Package className="w-6 h-6" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-1">Total Stock</p>
-              <p className="text-2xl font-bold text-gray-900">{data.summary.totalStock}</p>
-              <p className="text-xs text-gray-500 mt-1">units</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Stock</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.summary.totalStock}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">units</p>
             </div>
-            <div className="p-3 rounded-full bg-green-50 text-green-600">
+            <div className="p-3 rounded-full bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400">
               <TrendingUp className="w-6 h-6" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-1">Low Stock</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Low Stock</p>
               <p className="text-2xl font-bold text-yellow-600">{data.summary.lowStockCount}</p>
-              <p className="text-xs text-gray-500 mt-1">≤ 10 units</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">≤ 10 units</p>
             </div>
-            <div className="p-3 rounded-full bg-yellow-50 text-yellow-600">
+            <div className="p-3 rounded-full bg-yellow-50 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400">
               <AlertTriangle className="w-6 h-6" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
           <div className="flex items-center justify-between">
             <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 mb-1">Stock Value</p>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Stock Value</p>
               <p className="text-2xl font-bold text-teal-600">
                 ${data.summary.stockValue.toFixed(2)}
               </p>
             </div>
-            <div className="p-3 rounded-full bg-teal-50 text-teal-600">
+            <div className="p-3 rounded-full bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400">
               <DollarSign className="w-6 h-6" />
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function InventoryPage() {
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
               filter === f
                 ? 'bg-teal-600 text-white'
-                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
             }`}
           >
             {f === 'all' ? 'All' : f === 'low_stock' ? 'Low Stock' : 'Out of Stock'}
@@ -209,13 +209,13 @@ export default function InventoryPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Inventory List */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg border border-gray-200">
-            <div className="p-4 border-b">
-              <h2 className="font-semibold text-gray-900">Stock Levels</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700">
+            <div className="p-4 border-b dark:border-slate-700">
+              <h2 className="font-semibold text-gray-900 dark:text-white">Stock Levels</h2>
             </div>
-            <div className="divide-y max-h-[600px] overflow-y-auto">
+            <div className="divide-y dark:divide-slate-700 max-h-[600px] overflow-y-auto">
               {data.variants.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">No variants found</div>
+                <div className="p-8 text-center text-gray-500 dark:text-gray-400">No variants found</div>
               ) : (
                 data.variants.map((variant) => (
                   <div key={variant.id} className="p-4">
@@ -230,10 +230,10 @@ export default function InventoryPage() {
                         />
                       )}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-900 truncate">
+                        <h3 className="font-medium text-gray-900 dark:text-white truncate">
                           {variant.product.name}
                         </h3>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                           {variant.name} • SKU: {variant.sku}
                         </p>
                         <div className="flex items-center gap-4 mt-2">
@@ -248,7 +248,7 @@ export default function InventoryPage() {
                           >
                             {variant.stock} in stock
                           </span>
-                          <span className="text-sm text-gray-500">
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
                             ${variant.price.toFixed(2)}
                           </span>
                         </div>
@@ -258,50 +258,50 @@ export default function InventoryPage() {
                           setAdjusting(variant.id);
                           setAdjustmentQty(0);
                         }}
-                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                       >
-                        <Edit className="w-5 h-5 text-gray-600" />
+                        <Edit className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                       </button>
                     </div>
 
                     {/* Adjustment Form */}
                     {adjusting === variant.id && (
-                      <div className="mt-4 p-4 bg-gray-50 rounded-lg space-y-3">
+                      <div className="mt-4 p-4 bg-gray-50 dark:bg-slate-700 rounded-lg space-y-3">
                         <div className="grid grid-cols-2 gap-3">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                               Type
                             </label>
                             <select
                               value={adjustmentType}
                               onChange={(e) => setAdjustmentType(e.target.value as 'RESTOCK' | 'ADJUSTMENT')}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                             >
                               <option value="RESTOCK">Add Stock</option>
                               <option value="ADJUSTMENT">Set Stock</option>
                             </select>
                           </div>
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                               Quantity
                             </label>
                             <input
                               type="number"
                               value={adjustmentQty}
                               onChange={(e) => setAdjustmentQty(Number(e.target.value))}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                              className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                             />
                           </div>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Reason (Optional)
                           </label>
                           <input
                             type="text"
                             value={adjustmentReason}
                             onChange={(e) => setAdjustmentReason(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                             placeholder="e.g., Damaged items, new shipment"
                           />
                         </div>
@@ -314,7 +314,7 @@ export default function InventoryPage() {
                           </button>
                           <button
                             onClick={() => setAdjusting(null)}
-                            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50"
+                            className="px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-slate-600"
                           >
                             Cancel
                           </button>
@@ -330,13 +330,13 @@ export default function InventoryPage() {
 
         {/* Recent Transactions */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg border border-gray-200 sticky top-6">
-            <div className="p-4 border-b">
-              <h2 className="font-semibold text-gray-900">Recent Activity</h2>
+          <div className="bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-slate-700 sticky top-6">
+            <div className="p-4 border-b dark:border-slate-700">
+              <h2 className="font-semibold text-gray-900 dark:text-white">Recent Activity</h2>
             </div>
-            <div className="divide-y max-h-[600px] overflow-y-auto">
+            <div className="divide-y dark:divide-slate-700 max-h-[600px] overflow-y-auto">
               {data.recentTransactions.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">No activity yet</div>
+                <div className="p-8 text-center text-gray-500 dark:text-gray-400">No activity yet</div>
               ) : (
                 data.recentTransactions.map((transaction) => (
                   <div key={transaction.id} className="p-4">
@@ -356,18 +356,18 @@ export default function InventoryPage() {
                         {format(new Date(transaction.createdAt), 'MMM dd, HH:mm')}
                       </span>
                     </div>
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {transaction.variant.product.name}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {transaction.variant.name} • {transaction.variant.sku}
                     </p>
-                    <p className="text-sm text-gray-700 mt-1">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 mt-1">
                       {transaction.type === 'RESTOCK' ? '+' : '-'}
                       {transaction.quantity} units
                     </p>
                     {transaction.notes && (
-                      <p className="text-xs text-gray-500 mt-1">{transaction.notes}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{transaction.notes}</p>
                     )}
                     {transaction.user && (
                       <p className="text-xs text-gray-400 mt-2">

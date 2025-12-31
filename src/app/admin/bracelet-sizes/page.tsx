@@ -231,7 +231,7 @@ export default function BraceletSizesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex items-center gap-3 text-gray-600">
+        <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
           <Loader2 className="w-6 h-6 animate-spin" />
           <span>Loading bracelet sizes...</span>
         </div>
@@ -245,7 +245,7 @@ export default function BraceletSizesPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Bracelet Sizes</h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
             Configure size options for your bracelets
           </p>
         </div>
@@ -275,9 +275,9 @@ export default function BraceletSizesPage() {
       </div>
 
       {/* Size Guide Info */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h3 className="font-medium text-blue-900 mb-2">Size Configuration</h3>
-        <p className="text-sm text-blue-800">
+      <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        <h3 className="font-medium text-blue-900 dark:text-blue-200 mb-2">Size Configuration</h3>
+        <p className="text-sm text-blue-800 dark:text-blue-300">
           Configure your bracelet sizes here. The &quot;Numeric Size&quot; field represents the actual size number
           (e.g., Size 8 = 8 inches). Customers will see the label and inch measurement when selecting sizes.
         </p>
@@ -285,79 +285,79 @@ export default function BraceletSizesPage() {
 
       {/* Add New Size Form */}
       {showAddForm && (
-        <div className="bg-white rounded-lg border-2 border-blue-200 p-6">
-          <h3 className="text-lg font-semibold mb-4">Add New Size</h3>
+        <div className="bg-white dark:bg-slate-900 rounded-lg border-2 border-blue-200 dark:border-blue-800 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Add New Size</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Size Name *
               </label>
               <input
                 type="text"
                 value={newSize.name}
                 onChange={(e) => setNewSize({ ...newSize, name: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 placeholder="e.g., XS, S, M, L, XL"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Display Label *
               </label>
               <input
                 type="text"
                 value={newSize.label}
                 onChange={(e) => setNewSize({ ...newSize, label: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 placeholder="e.g., Large (Size 8)"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Inches *
               </label>
               <input
                 type="text"
                 value={newSize.inches}
                 onChange={(e) => setNewSize({ ...newSize, inches: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 placeholder="e.g., 8, 7-7.5"
               />
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Numeric Size
               </label>
               <input
                 type="number"
                 value={newSize.numericSize}
                 onChange={(e) => setNewSize({ ...newSize, numericSize: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 placeholder="e.g., 8"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Display Order
               </label>
               <input
                 type="number"
                 value={newSize.displayOrder}
                 onChange={(e) => setNewSize({ ...newSize, displayOrder: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Description
               </label>
               <input
                 type="text"
                 value={newSize.description}
                 onChange={(e) => setNewSize({ ...newSize, description: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 placeholder="e.g., Best for larger wrists"
               />
             </div>
@@ -368,14 +368,14 @@ export default function BraceletSizesPage() {
                 type="checkbox"
                 checked={newSize.isActive}
                 onChange={(e) => setNewSize({ ...newSize, isActive: e.target.checked })}
-                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                className="w-4 h-4 text-blue-600 border-gray-300 dark:border-slate-600 rounded focus:ring-blue-500"
               />
-              <span className="text-sm text-gray-700">Active</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">Active</span>
             </label>
             <div className="flex-1" />
             <button
               onClick={() => setShowAddForm(false)}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
             >
               Cancel
             </button>
@@ -393,9 +393,9 @@ export default function BraceletSizesPage() {
 
       {/* Sizes List */}
       {sizes.length === 0 && !showAddForm ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+        <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700">
           <Ruler className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500 mb-4">No bracelet sizes configured yet</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">No bracelet sizes configured yet</p>
           <button
             onClick={seedDefaultSizes}
             disabled={seeding}
@@ -405,26 +405,26 @@ export default function BraceletSizesPage() {
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 overflow-hidden">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-gray-50 dark:bg-slate-800 border-b">
               <tr>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900">Order</th>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900">Size</th>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900">Label</th>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900">Inches</th>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900">Numeric</th>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900">Description</th>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900">Status</th>
-                <th className="text-right px-6 py-3 text-sm font-semibold text-gray-900">Actions</th>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Order</th>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Size</th>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Label</th>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Inches</th>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Numeric</th>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Description</th>
+                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Status</th>
+                <th className="text-right px-6 py-3 text-sm font-semibold text-gray-900 dark:text-white">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-gray-200 dark:divide-slate-700">
               {sizes.map((size) => {
                 const isEditing = editingId === size.id;
 
                 return (
-                  <tr key={size.id} className="hover:bg-gray-50">
+                  <tr key={size.id} className="hover:bg-gray-50 dark:hover:bg-slate-800">
                     {isEditing && editingData ? (
                       <>
                         <td className="px-6 py-4">
@@ -432,7 +432,7 @@ export default function BraceletSizesPage() {
                             type="number"
                             value={editingData.displayOrder}
                             onChange={(e) => updateEditingData('displayOrder', e.target.value)}
-                            className="w-16 px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
+                            className="w-16 px-2 py-1 border border-gray-300 dark:border-slate-600 rounded focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -440,7 +440,7 @@ export default function BraceletSizesPage() {
                             type="text"
                             value={editingData.name}
                             onChange={(e) => updateEditingData('name', e.target.value)}
-                            className="w-20 px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-teal-500 uppercase"
+                            className="w-20 px-2 py-1 border border-gray-300 dark:border-slate-600 rounded focus:ring-2 focus:ring-teal-500 uppercase bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -448,7 +448,7 @@ export default function BraceletSizesPage() {
                             type="text"
                             value={editingData.label}
                             onChange={(e) => updateEditingData('label', e.target.value)}
-                            className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
+                            className="w-full px-2 py-1 border border-gray-300 dark:border-slate-600 rounded focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -456,7 +456,7 @@ export default function BraceletSizesPage() {
                             type="text"
                             value={editingData.inches}
                             onChange={(e) => updateEditingData('inches', e.target.value)}
-                            className="w-20 px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
+                            className="w-20 px-2 py-1 border border-gray-300 dark:border-slate-600 rounded focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -464,7 +464,7 @@ export default function BraceletSizesPage() {
                             type="number"
                             value={editingData.numericSize}
                             onChange={(e) => updateEditingData('numericSize', e.target.value)}
-                            className="w-16 px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
+                            className="w-16 px-2 py-1 border border-gray-300 dark:border-slate-600 rounded focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -472,7 +472,7 @@ export default function BraceletSizesPage() {
                             type="text"
                             value={editingData.description}
                             onChange={(e) => updateEditingData('description', e.target.value)}
-                            className="w-full px-2 py-1 border border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
+                            className="w-full px-2 py-1 border border-gray-300 dark:border-slate-600 rounded focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                           />
                         </td>
                         <td className="px-6 py-4">
@@ -481,9 +481,9 @@ export default function BraceletSizesPage() {
                               type="checkbox"
                               checked={editingData.isActive}
                               onChange={(e) => updateEditingData('isActive', e.target.checked)}
-                              className="w-4 h-4 text-teal-600 border-gray-300 rounded"
+                              className="w-4 h-4 text-teal-600 border-gray-300 dark:border-slate-600 rounded"
                             />
-                            <span className="text-sm">Active</span>
+                            <span className="text-sm text-gray-900 dark:text-white">Active</span>
                           </label>
                         </td>
                         <td className="px-6 py-4">
@@ -491,13 +491,13 @@ export default function BraceletSizesPage() {
                             <button
                               onClick={saveChanges}
                               disabled={saving}
-                              className="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:bg-gray-300"
+                              className="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:bg-gray-300 dark:disabled:bg-slate-600"
                             >
                               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                             </button>
                             <button
                               onClick={cancelEditing}
-                              className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50"
+                              className="p-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700"
                             >
                               <X className="w-4 h-4" />
                             </button>
@@ -506,23 +506,23 @@ export default function BraceletSizesPage() {
                       </>
                     ) : (
                       <>
-                        <td className="px-6 py-4 text-gray-500">
+                        <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                           <div className="flex items-center gap-2">
                             <GripVertical className="w-4 h-4 text-gray-400" />
                             {size.displayOrder}
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <span className="px-3 py-1 bg-gray-100 text-gray-800 rounded-full font-bold">
+                          <span className="px-3 py-1 bg-gray-100 dark:bg-slate-700 text-gray-800 dark:text-gray-200 rounded-full font-bold">
                             {size.name}
                           </span>
                         </td>
-                        <td className="px-6 py-4 font-medium">{size.label}</td>
-                        <td className="px-6 py-4 text-gray-600">{size.inches}&quot;</td>
-                        <td className="px-6 py-4 text-gray-600">
+                        <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">{size.label}</td>
+                        <td className="px-6 py-4 text-gray-600 dark:text-gray-300">{size.inches}&quot;</td>
+                        <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
                           {size.numericSize ? `Size ${size.numericSize}` : '-'}
                         </td>
-                        <td className="px-6 py-4 text-gray-500 text-sm">{size.description || '-'}</td>
+                        <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-sm">{size.description || '-'}</td>
                         <td className="px-6 py-4">
                           {size.isActive ? (
                             <span className="flex items-center gap-1 text-green-600 text-sm">
@@ -537,14 +537,14 @@ export default function BraceletSizesPage() {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => startEditing(size)}
-                              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg transition-colors"
                               title="Edit"
                             >
-                              <Edit className="w-4 h-4 text-gray-600" />
+                              <Edit className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                             </button>
                             <button
                               onClick={() => deleteSize(size.id)}
-                              className="p-2 hover:bg-red-50 rounded-lg transition-colors"
+                              className="p-2 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
                               title="Delete"
                             >
                               <Trash2 className="w-4 h-4 text-red-600" />
@@ -562,9 +562,9 @@ export default function BraceletSizesPage() {
       )}
 
       {/* Help Text */}
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-        <h3 className="font-medium text-gray-900 mb-2">Size Guide Reference</h3>
-        <div className="text-sm text-gray-600 space-y-1">
+      <div className="bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4">
+        <h3 className="font-medium text-gray-900 dark:text-white mb-2">Size Guide Reference</h3>
+        <div className="text-sm text-gray-600 dark:text-gray-300 space-y-1">
           <p><strong>S (Small):</strong> 6-6.5 inches - For smaller wrists</p>
           <p><strong>M (Medium):</strong> 7-7.5 inches - Most common size</p>
           <p><strong>L (Large/Size 8):</strong> 8 inches - For larger wrists</p>

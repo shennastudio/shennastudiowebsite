@@ -207,7 +207,7 @@ export default function SubscriptionsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="flex items-center gap-3 text-gray-600">
+        <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
           <Loader2 className="w-6 h-6 animate-spin" />
           <span>Loading subscription plans...</span>
         </div>
@@ -221,7 +221,7 @@ export default function SubscriptionsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Subscription Plans</h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
             Manage your monthly subscription box pricing and features
           </p>
         </div>
@@ -229,39 +229,39 @@ export default function SubscriptionsPage() {
 
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-600 dark:border-slate-700 p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-teal-50 rounded-lg">
               <Users className="w-5 h-5 text-teal-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Total Subscribers</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Total Subscribers</p>
               <p className="text-2xl font-bold">
                 {plans.reduce((sum, p) => sum + p._count.subscriptions, 0)}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-600 dark:border-slate-700 p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-green-50 rounded-lg">
               <DollarSign className="w-5 h-5 text-green-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Monthly Revenue</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Monthly Revenue</p>
               <p className="text-2xl font-bold">
                 ${plans.reduce((sum, p) => sum + (p.priceMonthly * p._count.subscriptions), 0).toFixed(2)}
               </p>
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg border border-gray-200 p-4">
+        <div className="bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-600 dark:border-slate-700 p-4">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-purple-50 rounded-lg">
               <Zap className="w-5 h-5 text-purple-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-500">Active Plans</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Active Plans</p>
               <p className="text-2xl font-bold">
                 {plans.filter(p => p.isActive).length} / {plans.length}
               </p>
@@ -272,9 +272,9 @@ export default function SubscriptionsPage() {
 
       {/* Subscription Plans */}
       {plans.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-lg border border-gray-200">
+        <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-600 dark:border-slate-700">
           <Package className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500 mb-4">No subscription plans found</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">No subscription plans found</p>
           <p className="text-sm text-gray-400">
             Subscription plans need to be created in the database first.
           </p>
@@ -289,7 +289,7 @@ export default function SubscriptionsPage() {
               <div
                 key={plan.id}
                 className={`bg-white rounded-lg border-2 ${
-                  plan.isActive ? 'border-gray-200' : 'border-gray-100 opacity-75'
+                  plan.isActive ? 'border-gray-200 dark:border-slate-600' : 'border-gray-100 opacity-75'
                 } overflow-hidden`}
               >
                 {/* Plan Header */}
@@ -306,7 +306,7 @@ export default function SubscriptionsPage() {
                       {plan._count.subscriptions} subscriber{plan._count.subscriptions !== 1 ? 's' : ''}
                     </span>
                     {!plan.isActive && (
-                      <span className="px-2 py-1 bg-gray-200 text-gray-600 rounded text-xs font-medium">
+                      <span className="px-2 py-1 bg-gray-200 text-gray-600 dark:text-gray-300 rounded text-xs font-medium">
                         Inactive
                       </span>
                     )}
@@ -485,12 +485,12 @@ export default function SubscriptionsPage() {
                       <div className="flex items-start justify-between">
                         <div>
                           <div className="flex items-baseline gap-2 mb-2">
-                            <span className="text-4xl font-bold text-gray-900">
+                            <span className="text-4xl font-bold text-gray-900 dark:text-white">
                               ${plan.priceMonthly}
                             </span>
-                            <span className="text-gray-500">/month</span>
+                            <span className="text-gray-500 dark:text-gray-400">/month</span>
                           </div>
-                          <p className="text-gray-600">{plan.description}</p>
+                          <p className="text-gray-600 dark:text-gray-300">{plan.description}</p>
                         </div>
                         <button
                           onClick={() => startEditing(plan)}
@@ -504,7 +504,7 @@ export default function SubscriptionsPage() {
                       {/* Features List */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
                         {plan.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
+                          <div key={idx} className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                             <Check className="w-4 h-4 text-teal-500 flex-shrink-0" />
                             <span>{feature}</span>
                           </div>
@@ -513,7 +513,7 @@ export default function SubscriptionsPage() {
 
                       {/* Perks Summary */}
                       <div className="flex flex-wrap gap-2 pt-4 border-t">
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
                           {plan.braceletsPerMonth} bracelet{plan.braceletsPerMonth !== 1 ? 's' : ''}/month
                         </span>
                         {plan.exclusiveDiscounts && (

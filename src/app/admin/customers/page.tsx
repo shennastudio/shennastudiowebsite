@@ -68,8 +68,8 @@ export default function CustomersPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Customers</h1>
-        <p className="text-gray-600 mt-1">Manage your customer database</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Customers</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-1">Manage your customer database</p>
       </div>
 
       {/* Stats Cards */}
@@ -115,7 +115,7 @@ export default function CustomersPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by name or email..."
-              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
+              className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
             />
           </div>
         </CardContent>
@@ -129,11 +129,11 @@ export default function CustomersPage() {
         <CardContent>
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Loading customers...</p>
+              <p className="text-gray-500 dark:text-gray-400">Loading customers...</p>
             </div>
           ) : customers.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">No customers found</p>
+              <p className="text-gray-500 dark:text-gray-400">No customers found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -151,22 +151,22 @@ export default function CustomersPage() {
                 </thead>
                 <tbody>
                   {customers.map((customer) => (
-                    <tr key={customer.id} className="border-b last:border-0 hover:bg-gray-50">
+                    <tr key={customer.id} className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700">
                       <td className="py-4">
                         <div>
-                          <div className="font-medium">{customer.name || 'Anonymous'}</div>
-                          <div className="text-sm text-gray-600">{customer.email}</div>
+                          <div className="font-medium text-gray-900 dark:text-white">{customer.name || 'Anonymous'}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">{customer.email}</div>
                         </div>
                       </td>
-                      <td className="py-4 font-medium">{customer.orderCount}</td>
-                      <td className="py-4 font-medium">${customer.totalSpent.toFixed(2)}</td>
-                      <td className="py-4">${customer.avgOrderValue.toFixed(2)}</td>
+                      <td className="py-4 font-medium text-gray-900 dark:text-white">{customer.orderCount}</td>
+                      <td className="py-4 font-medium text-gray-900 dark:text-white">${customer.totalSpent.toFixed(2)}</td>
+                      <td className="py-4 text-gray-900 dark:text-white">${customer.avgOrderValue.toFixed(2)}</td>
                       <td className="py-4">
                         <span className={`inline-block px-2 py-1 text-xs rounded-full ${getTierColor(customer.tier)}`}>
                           {customer.tier}
                         </span>
                       </td>
-                      <td className="py-4 text-sm text-gray-600">
+                      <td className="py-4 text-sm text-gray-600 dark:text-gray-400">
                         {customer.lastOrderDate
                           ? new Date(customer.lastOrderDate).toLocaleDateString()
                           : 'Never'}

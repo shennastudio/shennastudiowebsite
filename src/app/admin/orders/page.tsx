@@ -205,8 +205,8 @@ export default function OrdersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold">Orders Management</h1>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base">Advanced filtering and bulk actions</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Orders Management</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">Advanced filtering and bulk actions</p>
         </div>
         <Button
           onClick={() => setShowFilters(!showFilters)}
@@ -229,7 +229,7 @@ export default function OrdersPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {/* Search */}
               <div>
-                <label className="block text-sm font-medium mb-1">Search</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search</label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <input
@@ -237,56 +237,56 @@ export default function OrdersPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Order #, email, or name..."
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                   />
                 </div>
               </div>
 
               {/* Date From */}
               <div>
-                <label className="block text-sm font-medium mb-1">Date From</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date From</label>
                 <input
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 />
               </div>
 
               {/* Date To */}
               <div>
-                <label className="block text-sm font-medium mb-1">Date To</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date To</label>
                 <input
                   type="date"
                   value={dateTo}
                   onChange={(e) => setDateTo(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 />
               </div>
 
               {/* Min Amount */}
               <div>
-                <label className="block text-sm font-medium mb-1">Min Amount ($)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Min Amount ($)</label>
                 <input
                   type="number"
                   value={minAmount}
                   onChange={(e) => setMinAmount(e.target.value)}
                   placeholder="0.00"
                   step="0.01"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 />
               </div>
 
               {/* Max Amount */}
               <div>
-                <label className="block text-sm font-medium mb-1">Max Amount ($)</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Max Amount ($)</label>
                 <input
                   type="number"
                   value={maxAmount}
                   onChange={(e) => setMaxAmount(e.target.value)}
                   placeholder="1000.00"
                   step="0.01"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                 />
               </div>
             </div>
@@ -343,7 +343,7 @@ export default function OrdersPage() {
               className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                 statusFilter === status
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  : 'bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-600'
               }`}
             >
               {status === 'all' ? 'All' : status} ({statusCounts[status]})
@@ -354,11 +354,11 @@ export default function OrdersPage() {
 
       {/* Bulk Actions */}
       {selectedOrders.size > 0 && (
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/30">
           <CardContent className="p-4">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-medium">
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
                   {selectedOrders.size} order{selectedOrders.size !== 1 ? 's' : ''} selected
                 </p>
                 <Button
@@ -374,11 +374,11 @@ export default function OrdersPage() {
               <div className={`space-y-3 sm:space-y-0 sm:flex sm:items-end sm:gap-4 ${showBulkOptions ? 'block' : 'hidden sm:flex'}`}>
                 <div className="flex-1 grid grid-cols-1 sm:grid-cols-4 gap-3">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Action</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Action</label>
                     <select
                       value={bulkAction}
                       onChange={(e) => setBulkAction(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                     >
                       <option value="">Select action...</option>
                       <option value="mark_processing">Mark Processing</option>
@@ -391,21 +391,21 @@ export default function OrdersPage() {
                   {bulkAction === 'mark_shipped' && (
                     <>
                       <div>
-                        <label className="block text-sm font-medium mb-1">Tracking Number</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tracking Number</label>
                         <input
                           type="text"
                           value={trackingNumber}
                           onChange={(e) => setTrackingNumber(e.target.value)}
                           placeholder="1Z999AA10123456784"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium mb-1">Carrier</label>
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Carrier</label>
                         <select
                           value={carrier}
                           onChange={(e) => setCarrier(e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                          className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md text-sm bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                         >
                           <option value="">Select carrier...</option>
                           <option value="USPS">USPS</option>
@@ -448,11 +448,11 @@ export default function OrdersPage() {
         <CardContent className="p-4 sm:p-6 pt-0">
           {loading ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">Loading orders...</p>
+              <p className="text-gray-500 dark:text-gray-400">Loading orders...</p>
             </div>
           ) : orders.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500">No orders found</p>
+              <p className="text-gray-500 dark:text-gray-400">No orders found</p>
             </div>
           ) : (
             <>
@@ -461,8 +461,8 @@ export default function OrdersPage() {
                 {orders.map((order) => (
                   <div
                     key={order.id}
-                    className={`bg-white border rounded-lg p-4 space-y-3 ${
-                      selectedOrders.has(order.id) ? 'border-blue-400 bg-blue-50/50' : 'border-gray-200'
+                    className={`bg-white dark:bg-slate-800 border rounded-lg p-4 space-y-3 ${
+                      selectedOrders.has(order.id) ? 'border-blue-400 bg-blue-50/50 dark:bg-blue-900/30' : 'border-gray-200 dark:border-slate-700'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
@@ -474,9 +474,9 @@ export default function OrdersPage() {
                           className="rounded mt-1"
                         />
                         <div>
-                          <p className="font-mono text-sm font-medium">#{order.orderNumber.slice(0, 8)}</p>
-                          <p className="text-sm text-gray-900">{order.customerName}</p>
-                          <p className="text-xs text-gray-500">{order.customerEmail}</p>
+                          <p className="font-mono text-sm font-medium text-gray-900 dark:text-white">#{order.orderNumber.slice(0, 8)}</p>
+                          <p className="text-sm text-gray-900 dark:text-white">{order.customerName}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{order.customerEmail}</p>
                         </div>
                       </div>
                       <span className={`px-2 py-1 text-xs rounded-full shrink-0 ${getStatusColor(order.status)}`}>
@@ -484,28 +484,28 @@ export default function OrdersPage() {
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="grid grid-cols-2 gap-2 text-sm text-gray-900 dark:text-gray-100">
                       <div>
-                        <span className="text-gray-500">Total:</span>
+                        <span className="text-gray-500 dark:text-gray-400">Total:</span>
                         <span className="font-semibold ml-1">${order.total.toFixed(2)}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">Items:</span>
+                        <span className="text-gray-500 dark:text-gray-400">Items:</span>
                         <span className="font-medium ml-1">{order.items.length}</span>
                       </div>
                       <div>
-                        <span className="text-gray-500">Date:</span>
+                        <span className="text-gray-500 dark:text-gray-400">Date:</span>
                         <span className="ml-1">{new Date(order.createdAt).toLocaleDateString()}</span>
                       </div>
                       {order.trackingNumber && (
                         <div>
-                          <span className="text-gray-500">Tracking:</span>
+                          <span className="text-gray-500 dark:text-gray-400">Tracking:</span>
                           <span className="font-mono text-xs ml-1">{order.trackingNumber}</span>
                         </div>
                       )}
                     </div>
 
-                    <div className="pt-2 border-t border-gray-100">
+                    <div className="pt-2 border-t border-gray-100 dark:border-slate-700">
                       <Link href={`/admin/orders/${order.id}/invoice`}>
                         <Button size="sm" variant="outline" className="w-full flex items-center justify-center gap-1">
                           <FileText className="h-3 w-3" />
@@ -542,7 +542,7 @@ export default function OrdersPage() {
                   </thead>
                   <tbody>
                     {orders.map((order) => (
-                      <tr key={order.id} className="border-b last:border-0 hover:bg-gray-50">
+                      <tr key={order.id} className="border-b last:border-0 hover:bg-gray-50 dark:hover:bg-slate-800 dark:border-slate-700">
                         <td className="py-4">
                           <input
                             type="checkbox"
@@ -551,28 +551,28 @@ export default function OrdersPage() {
                             className="rounded"
                           />
                         </td>
-                        <td className="py-4 font-mono text-sm">
+                        <td className="py-4 font-mono text-sm text-gray-900 dark:text-white">
                           #{order.orderNumber.slice(0, 8)}
                         </td>
                         <td className="py-4">
                           <div>
-                            <div className="font-medium">{order.customerName}</div>
-                            <div className="text-sm text-gray-600">{order.customerEmail}</div>
+                            <div className="font-medium text-gray-900 dark:text-white">{order.customerName}</div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">{order.customerEmail}</div>
                           </div>
                         </td>
                         <td className="py-4">
-                          <div className="text-sm">
+                          <div className="text-sm text-gray-900 dark:text-white">
                             {order.items.slice(0, 2).map((item, idx: number) => (
                               <div key={idx}>
                                 {item.variant?.product?.name || 'Unknown'} x{item.quantity}
                               </div>
                             ))}
                             {order.items.length > 2 && (
-                              <div className="text-gray-500">+{order.items.length - 2} more</div>
+                              <div className="text-gray-500 dark:text-gray-400">+{order.items.length - 2} more</div>
                             )}
                           </div>
                         </td>
-                        <td className="py-4 font-medium">${order.total.toFixed(2)}</td>
+                        <td className="py-4 font-medium text-gray-900 dark:text-white">${order.total.toFixed(2)}</td>
                         <td className="py-4">
                           <span
                             className={`inline-block px-2 py-1 text-xs rounded-full ${getStatusColor(order.status)}`}
@@ -582,17 +582,17 @@ export default function OrdersPage() {
                         </td>
                         <td className="py-4">
                           {order.trackingNumber ? (
-                            <div className="text-sm">
+                            <div className="text-sm text-gray-900 dark:text-white">
                               <div className="font-mono">{order.trackingNumber}</div>
                               {order.carrier && (
-                                <div className="text-gray-600">{order.carrier}</div>
+                                <div className="text-gray-600 dark:text-gray-400">{order.carrier}</div>
                               )}
                             </div>
                           ) : (
                             <span className="text-gray-400">-</span>
                           )}
                         </td>
-                        <td className="py-4 text-sm text-gray-600">
+                        <td className="py-4 text-sm text-gray-600 dark:text-gray-400">
                           {new Date(order.createdAt).toLocaleDateString()}
                         </td>
                         <td className="py-4">
