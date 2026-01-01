@@ -27,20 +27,21 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  serverExternalPackages: ['sharp'],
+  serverExternalPackages: ['sharp', 'pino', 'pino-pretty'],
   // Fix for web3 optional dependencies that aren't available in browser
   webpack: (config, { isServer }) => {
+    // Ignore optional React Native dependencies from MetaMask SDK
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@react-native-async-storage/async-storage': false,
+    };
+
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
         net: false,
         tls: false,
-      };
-      // Ignore optional React Native dependencies from MetaMask SDK
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        '@react-native-async-storage/async-storage': false,
       };
     }
     // Ignore optional dependencies that cause warnings
