@@ -25,11 +25,20 @@ export async function generateStaticParams() {
   }
 }
 
+async function getBlogPost(slug: string) {
+  try {
+    return await prisma.blogPost.findUnique({
+      where: { slug },
+    })
+  } catch {
+    // Return null if table doesn't exist yet (new database)
+    return null
+  }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = await prisma.blogPost.findUnique({
-    where: { slug },
-  })
+  const post = await getBlogPost(slug)
 
   if (!post) {
     return {
@@ -50,9 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = await prisma.blogPost.findUnique({
-    where: { slug },
-  })
+  const post = await getBlogPost(slug)
 
   if (!post || !post.published) {
     notFound()

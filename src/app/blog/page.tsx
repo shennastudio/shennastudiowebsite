@@ -10,15 +10,24 @@ export const metadata = {
 
 export const revalidate = 3600 // Revalidate every hour
 
+async function getBlogPosts() {
+  try {
+    return await prisma.blogPost.findMany({
+      where: {
+        published: true,
+      },
+      orderBy: {
+        publishedAt: 'desc',
+      },
+    })
+  } catch {
+    // Return empty array if table doesn't exist yet (new database)
+    return []
+  }
+}
+
 export default async function BlogPage() {
-  const posts = await prisma.blogPost.findMany({
-    where: {
-      published: true,
-    },
-    orderBy: {
-      publishedAt: 'desc',
-    },
-  })
+  const posts = await getBlogPosts()
 
   const featuredPosts = posts.filter(post => post.featured)
   const recentPosts = posts.filter(post => !post.featured)

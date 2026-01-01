@@ -10,50 +10,60 @@ import { DeleteBlogPostButton } from '@/components/admin/DeleteBlogPostButton';
 import { Prisma } from '@prisma/client';
 
 async function getBlogPosts(searchQuery?: string, status?: string, category?: string) {
-  const where: Prisma.BlogPostWhereInput = {};
+  try {
+    const where: Prisma.BlogPostWhereInput = {};
 
-  if (searchQuery) {
-    where.OR = [
-      { title: { contains: searchQuery, mode: 'insensitive' } },
-      { excerpt: { contains: searchQuery, mode: 'insensitive' } },
-    ];
-  }
+    if (searchQuery) {
+      where.OR = [
+        { title: { contains: searchQuery, mode: 'insensitive' } },
+        { excerpt: { contains: searchQuery, mode: 'insensitive' } },
+      ];
+    }
 
-  if (status === 'published') {
-    where.published = true;
-  } else if (status === 'draft') {
-    where.published = false;
-  }
+    if (status === 'published') {
+      where.published = true;
+    } else if (status === 'draft') {
+      where.published = false;
+    }
 
-  if (category) {
-    where.category = category;
-  }
+    if (category) {
+      where.category = category;
+    }
 
-  return await prisma.blogPost.findMany({
-    where,
-    include: {
-      author: {
-        select: {
-          name: true,
-          email: true,
+    return await prisma.blogPost.findMany({
+      where,
+      include: {
+        author: {
+          select: {
+            name: true,
+            email: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  } catch {
+    // Return empty array if table doesn't exist yet (new database)
+    return [];
+  }
 }
 
 async function getCategories() {
-  const posts = await prisma.blogPost.findMany({
-    select: {
-      category: true,
-    },
-  });
+  try {
+    const posts = await prisma.blogPost.findMany({
+      select: {
+        category: true,
+      },
+    });
 
-  const categories = [...new Set(posts.map(p => p.category).filter(Boolean))];
-  return categories;
+    const categories = [...new Set(posts.map(p => p.category).filter(Boolean))];
+    return categories;
+  } catch {
+    // Return empty array if table doesn't exist yet (new database)
+    return [];
+  }
 }
 
 export default async function BlogManagementPage({
