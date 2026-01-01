@@ -1,11 +1,20 @@
 import Stripe from 'stripe';
 
-// Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-05-28.acacia',
-});
+// Lazy initialize Stripe to avoid build-time errors when env var is missing
+let _stripe: Stripe | null = null;
 
-export { stripe };
+export function getStripe(): Stripe {
+  if (!_stripe) {
+    const apiKey = process.env.STRIPE_SECRET_KEY;
+    if (!apiKey) {
+      throw new Error('STRIPE_SECRET_KEY environment variable is required');
+    }
+    _stripe = new Stripe(apiKey, {
+      apiVersion: '2025-05-28.acacia',
+    });
+  }
+  return _stripe;
+}
 
 // Shipping rate configurations
 export interface ShippingRate {

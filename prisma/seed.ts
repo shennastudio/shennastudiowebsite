@@ -150,10 +150,13 @@ async function main() {
   // ===========================
   console.log('📏 Checking bracelet sizes...')
   const defaultSizes = [
-    { name: 'S', label: 'Small', inches: '6-6.5', numericSize: 6, description: 'Best for smaller wrists', displayOrder: 1 },
-    { name: 'M', label: 'Medium', inches: '7-7.5', numericSize: 7, description: 'Most common size', displayOrder: 2 },
-    { name: 'L', label: 'Large (Size 8)', inches: '8', numericSize: 8, description: 'Size 8 - For larger wrists', displayOrder: 3 },
-    { name: 'XL', label: 'Extra Large (Size 9)', inches: '9', numericSize: 9, description: 'Size 9 - For extra large wrists', displayOrder: 4 },
+    { name: 'XS', label: 'Extra Small (6")', inches: '6', numericSize: 6, description: 'Size 6 - For petite wrists', displayOrder: 1 },
+    { name: 'S', label: 'Small (6.5")', inches: '6.5', numericSize: 6, description: 'Size 6.5 - For smaller wrists', displayOrder: 2 },
+    { name: 'M', label: 'Medium (7")', inches: '7', numericSize: 7, description: 'Size 7 - Standard women\'s size', displayOrder: 3 },
+    { name: 'M+', label: 'Medium Plus (7.5")', inches: '7.5', numericSize: 7, description: 'Size 7.5 - Between medium and large', displayOrder: 4 },
+    { name: 'L', label: 'Large (8")', inches: '8', numericSize: 8, description: 'Size 8 - Standard men\'s size', displayOrder: 5 },
+    { name: 'L+', label: 'Large Plus (8.5")', inches: '8.5', numericSize: 8, description: 'Size 8.5 - Between large and extra large', displayOrder: 6 },
+    { name: 'XL', label: 'Extra Large (9")', inches: '9', numericSize: 9, description: 'Size 9 - For larger men\'s wrists', displayOrder: 7 },
   ]
 
   for (const sizeData of defaultSizes) {

@@ -470,8 +470,8 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
             <div className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50 p-3 rounded-lg">
               <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
               <p>
-                Purchasing a label will charge your Shippo account. This action cannot be undone.
                 Make sure the shipping address is correct before proceeding.
+                Label purchases cannot be undone.
               </p>
             </div>
           </div>

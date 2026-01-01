@@ -10,6 +10,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        slide: {
+          "0%": { transform: "rotate(0deg) translateY(-50%)" },
+          "100%": { transform: "rotate(360deg) translateY(-50%)" },
+        },
+      },
+      animation: {
+        slide: "slide var(--speed) linear infinite",
+      },
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",

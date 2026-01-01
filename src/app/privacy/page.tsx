@@ -65,7 +65,7 @@ export default function PrivacyPage() {
               <p>
                 We do not sell, trade, or rent your personal information to third parties for marketing purposes.
                 We may share information with trusted third-party service providers who assist us in operating our website,
-                conducting our business, or serving our users (e.g., payment processors like Stripe, shipping partners like Shippo),
+                conducting our business, or serving our users (e.g., payment processors like Stripe, shipping carriers like USPS),
                 so long as those parties agree to keep this information confidential.
               </p>
             </div>
