@@ -43,7 +43,7 @@ export default function Home() {
         >
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/80 z-10" />
           <Image
-            src="/images/reefparallaxscroll.jpg"
+            src="/images/aboutpageparallax.jpg"
             alt="Ocean background"
             fill
             className="object-cover opacity-60"
@@ -106,13 +106,6 @@ export default function Home() {
           <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent" />
         </motion.div>
       </section>
-
-      {/* Reef Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/aboutpageparallax.jpg" 
-        alt="Vibrant Coral Reef" 
-        text="Discover the Reef" 
-      />
 
       {/* Featured Products */}
       <section className="py-24 bg-white relative">
