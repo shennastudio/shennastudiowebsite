@@ -45,8 +45,8 @@ export default function RootLayout({
         <AnalyticsProvider />
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <SessionProvider>

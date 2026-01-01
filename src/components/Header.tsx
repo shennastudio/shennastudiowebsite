@@ -62,7 +62,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-cyan-50/95 via-white/95 to-teal-50/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-teal-100/50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-28">
           {/* Logo */}
@@ -204,7 +204,7 @@ export default function Header() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t overflow-hidden"
+              className="md:hidden border-t border-teal-100/50 overflow-hidden bg-gradient-to-b from-white/95 to-cyan-50/95"
             >
               <nav className="py-4 space-y-1">
                 {navLinks.map((link) => (

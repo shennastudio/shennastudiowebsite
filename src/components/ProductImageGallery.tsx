@@ -24,10 +24,10 @@ export default function ProductImageGallery({
   return (
     <div className="space-y-4">
       {/* Main Image with Bioluminescence Effect */}
-      <div 
+      <div
         className={cn(
-          "relative aspect-square bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 rounded-lg overflow-hidden group transition-all duration-500",
-          "hover:shadow-[0_0_30px_rgba(56,189,248,0.4)] dark:hover:shadow-[0_0_40px_rgba(34,211,238,0.2)]", // Glow effect
+          "relative aspect-square bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg overflow-hidden group transition-all duration-500",
+          "hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]", // Glow effect
         )}
       >
         {selectedImage ? (
@@ -66,10 +66,10 @@ export default function ProductImageGallery({
               key={idx}
               onClick={() => setSelectedIndex(idx)}
               className={cn(
-                "relative aspect-square bg-gray-100 dark:bg-slate-800 rounded-lg overflow-hidden border-2 transition-all duration-300",
-                selectedIndex === idx 
-                  ? "border-teal-500 ring-2 ring-teal-500/20 shadow-md scale-105 z-10" 
-                  : "border-transparent hover:border-teal-300 dark:hover:border-teal-700 opacity-70 hover:opacity-100"
+                "relative aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 transition-all duration-300",
+                selectedIndex === idx
+                  ? "border-teal-500 ring-2 ring-teal-500/20 shadow-md scale-105 z-10"
+                  : "border-transparent hover:border-teal-300 opacity-70 hover:opacity-100"
               )}
             >
               <Image

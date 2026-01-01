@@ -81,15 +81,15 @@ export default function ProductVariantSelector({
   return (
     <div className="space-y-6">
        {/* Price and Stock Status */}
-       <div className="border-t dark:border-slate-800 border-b py-6">
+       <div className="border-t border-b border-gray-200 py-6">
         <div className="flex items-baseline gap-4">
-            <span className="text-4xl font-bold text-teal-600 dark:text-teal-400">
+            <span className="text-4xl font-bold text-teal-600">
             ${currentPrice.toFixed(2)}
             </span>
             <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
             currentStock > 0
-                ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300'
-                : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300'
+                ? 'bg-green-100 text-green-800'
+                : 'bg-red-100 text-red-800'
             }`}>
             {currentStock > 0 ? `${currentStock} in stock` : 'Out of Stock'}
             </span>
@@ -100,7 +100,7 @@ export default function ProductVariantSelector({
         <div className="space-y-4">
             {sizes.length > 0 && (
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Size</label>
+                    <label className="text-sm font-medium text-gray-900">Size</label>
                     <div className="flex flex-wrap gap-2">
                         {sizes.map((size) => (
                             <button
@@ -108,9 +108,9 @@ export default function ProductVariantSelector({
                                 onClick={() => handleVariantChange('size', size as string)}
                                 className={cn(
                                     "px-4 py-2 border rounded-md text-sm transition-all",
-                                    selectedVariant?.size === size 
-                                        ? "border-teal-600 bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 dark:border-teal-500 ring-1 ring-teal-600 dark:ring-teal-500" 
-                                        : "border-gray-200 hover:border-teal-600 dark:border-gray-700 dark:hover:border-teal-500 text-gray-700 dark:text-gray-300"
+                                    selectedVariant?.size === size
+                                        ? "border-teal-600 bg-teal-50 text-teal-700 ring-1 ring-teal-600"
+                                        : "border-gray-200 hover:border-teal-600 text-gray-700"
                                 )}
                             >
                                 {size}
@@ -122,7 +122,7 @@ export default function ProductVariantSelector({
 
             {colors.length > 0 && (
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Color</label>
+                    <label className="text-sm font-medium text-gray-900">Color</label>
                     <div className="flex flex-wrap gap-2">
                         {colors.map((color) => (
                             <button
@@ -131,8 +131,8 @@ export default function ProductVariantSelector({
                                 className={cn(
                                     "px-4 py-2 border rounded-md text-sm transition-all",
                                     selectedVariant?.color === color
-                                        ? "border-teal-600 bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 dark:border-teal-500 ring-1 ring-teal-600 dark:ring-teal-500" 
-                                        : "border-gray-200 hover:border-teal-600 dark:border-gray-700 dark:hover:border-teal-500 text-gray-700 dark:text-gray-300"
+                                        ? "border-teal-600 bg-teal-50 text-teal-700 ring-1 ring-teal-600"
+                                        : "border-gray-200 hover:border-teal-600 text-gray-700"
                                 )}
                             >
                                 {color}
@@ -144,7 +144,7 @@ export default function ProductVariantSelector({
 
             {materials.length > 0 && (
                 <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Material</label>
+                    <label className="text-sm font-medium text-gray-900">Material</label>
                     <div className="flex flex-wrap gap-2">
                         {materials.map((material) => (
                             <button
@@ -153,8 +153,8 @@ export default function ProductVariantSelector({
                                 className={cn(
                                     "px-4 py-2 border rounded-md text-sm transition-all",
                                     selectedVariant?.material === material
-                                        ? "border-teal-600 bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300 dark:border-teal-500 ring-1 ring-teal-600 dark:ring-teal-500" 
-                                        : "border-gray-200 hover:border-teal-600 dark:border-gray-700 dark:hover:border-teal-500 text-gray-700 dark:text-gray-300"
+                                        ? "border-teal-600 bg-teal-50 text-teal-700 ring-1 ring-teal-600"
+                                        : "border-gray-200 hover:border-teal-600 text-gray-700"
                                 )}
                             >
                                 {material}
@@ -167,28 +167,28 @@ export default function ProductVariantSelector({
 
         {/* Product Details (Dynamic) */}
         <div className="space-y-3">
-            <h3 className="font-semibold text-gray-900 dark:text-gray-200 text-lg">Product Details</h3>
+            <h3 className="font-semibold text-gray-900 text-lg">Product Details</h3>
             <dl className="space-y-2">
                 <div className="flex gap-3">
-                <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">SKU:</dt>
-                <dd className="text-gray-900 dark:text-gray-300 font-medium">{selectedVariant?.sku || product.slug}</dd>
+                <dt className="text-gray-600 min-w-[100px]">SKU:</dt>
+                <dd className="text-gray-900 font-medium">{selectedVariant?.sku || product.slug}</dd>
                 </div>
                 {selectedVariant?.size && (
                 <div className="flex gap-3">
-                    <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Size:</dt>
-                    <dd className="text-gray-900 dark:text-gray-300">{selectedVariant.size}</dd>
+                    <dt className="text-gray-600 min-w-[100px]">Size:</dt>
+                    <dd className="text-gray-900">{selectedVariant.size}</dd>
                 </div>
                 )}
                 {selectedVariant?.color && (
                 <div className="flex gap-3">
-                    <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Color:</dt>
-                    <dd className="text-gray-900 dark:text-gray-300">{selectedVariant.color}</dd>
+                    <dt className="text-gray-600 min-w-[100px]">Color:</dt>
+                    <dd className="text-gray-900">{selectedVariant.color}</dd>
                 </div>
                 )}
                 {selectedVariant?.material && (
                 <div className="flex gap-3">
-                    <dt className="text-gray-600 dark:text-gray-400 min-w-[100px]">Material:</dt>
-                    <dd className="text-gray-900 dark:text-gray-300">{selectedVariant.material}</dd>
+                    <dt className="text-gray-600 min-w-[100px]">Material:</dt>
+                    <dd className="text-gray-900">{selectedVariant.material}</dd>
                 </div>
                 )}
             </dl>
