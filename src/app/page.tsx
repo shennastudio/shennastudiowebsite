@@ -109,7 +109,7 @@ export default function Home() {
 
       {/* Reef Parallax Banner */}
       <ParallaxBanner 
-        src="/images/reefparallaxscroll.jpg" 
+        src="/images/aboutpageparallax.jpg" 
         alt="Vibrant Coral Reef" 
         text="Discover the Reef" 
       />
