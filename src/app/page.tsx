@@ -1,9 +1,18 @@
+'use client'
+
 import { TestimonialSection } from '@/components/TestimonialSection'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import { ArrowRight, Waves, Anchor, ShieldCheck } from 'lucide-react'
 import { SplitText } from '@/components/SplitText'
 import ShimmerButton from '@/components/magicui/ShimmerButton'
+import Image from 'next/image'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import ParallaxBanner from '@/components/ParallaxBanner'
+import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
+import InstagramFeed from '@/components/InstagramFeed'
+import { fetchFeaturedProducts } from './actions'
 
 // Note: Removed force-dynamic to allow client-side features, but we fetch data.
 // In a real app, you might use a wrapper for the client parts or separate server/client components.
@@ -23,9 +32,6 @@ export default function Home() {
   useEffect(() => {
     fetchFeaturedProducts(6).then(setFeaturedProducts);
   }, []);
-
-  const recommendations: any[] = [];
-  const personalized = false;
 
   return (
     <div className="min-h-screen">
