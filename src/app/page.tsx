@@ -199,6 +199,13 @@ export default function Home() {
       {/* Subscription Banner */}
       <SubscriptionBanner />
 
+      {/* Octopus Parallax Banner */}
+      <ParallaxBanner 
+        src="/images/octopus.jpg" 
+        alt="Giant Octopus" 
+        text="Protect Our Depths" 
+      />
+
       {/* Ocean Features Section */}
       <section className="bg-slate-50 py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -282,9 +289,6 @@ export default function Home() {
 
       {/* Ocean Conservation CTA Section */}
       <section className="bg-slate-900 py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <Image src="/images/turtleparallax.jpg" alt="Water" fill className="object-cover" />
-        </div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
