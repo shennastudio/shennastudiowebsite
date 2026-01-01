@@ -199,11 +199,11 @@ export default function Home() {
       {/* Subscription Banner */}
       <SubscriptionBanner />
 
-      {/* Octopus Parallax Banner */}
+      {/* Mission Parallax Banner */}
       <ParallaxBanner 
-        src="/images/octopus.jpg" 
-        alt="Giant Octopus" 
-        text="Protect Our Depths" 
+        src="/images/plug.jpg" 
+        alt="Support Our Mission" 
+        text="Support Our Mission" 
       />
 
       {/* Ocean Features Section */}
