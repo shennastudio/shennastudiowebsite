@@ -1,7 +1,15 @@
 'use client'
 
-import { useEffect, useRef, ReactNode, CSSProperties } from 'react'
-import { animate, stagger } from 'animejs'
+import { ReactNode, CSSProperties, useRef, useEffect, useState } from 'react'
+import { 
+  motion, 
+  useScroll, 
+  useTransform, 
+  useInView, 
+  useSpring, 
+  useMotionValue, 
+  Variants 
+} from 'framer-motion'
 
 interface AnimatedSectionProps {
   children: ReactNode
@@ -21,34 +29,38 @@ interface AnimatedSectionProps {
   threshold?: number
 }
 
-const animationConfigs = {
+const animationVariants: Record<string, Variants> = {
   fadeInUp: {
-    opacity: [0, 1],
-    translateY: [40, 0],
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0 },
   },
   fadeInDown: {
-    opacity: [0, 1],
-    translateY: [-40, 0],
+    hidden: { opacity: 0, y: -40 },
+    visible: { opacity: 1, y: 0 },
   },
   fadeInLeft: {
-    opacity: [0, 1],
-    translateX: [-40, 0],
+    hidden: { opacity: 0, x: -40 },
+    visible: { opacity: 1, x: 0 },
   },
   fadeInRight: {
-    opacity: [0, 1],
-    translateX: [40, 0],
+    hidden: { opacity: 0, x: 40 },
+    visible: { opacity: 1, x: 0 },
   },
   scaleIn: {
-    opacity: [0, 1],
-    scale: [0.9, 1],
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
   },
   slideInFromBottom: {
-    opacity: [0, 1],
-    translateY: [100, 0],
+    hidden: { opacity: 0, y: 100 },
+    visible: { opacity: 1, y: 0 },
   },
   bounce: {
-    opacity: [0, 1],
-    translateY: [40, 0],
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { type: "spring", bounce: 0.6 }
+    },
   },
 }
 
@@ -62,43 +74,26 @@ export default function AnimatedSection({
   once = true,
   threshold = 0.1,
 }: AnimatedSectionProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const hasAnimated = useRef(false)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    // Set initial state
-    element.style.opacity = '0'
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          if (once && hasAnimated.current) return
-          hasAnimated.current = true
-
-          const config = animationConfigs[animation]
-
-          animate(element, {
-            ...config,
-            duration,
-            delay,
-            ease: animation === 'bounce' ? 'outBounce' : 'outQuad',
-          })
-        }
-      },
-      { threshold }
-    )
-
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [animation, delay, duration, once, threshold])
+  // Convert duration from ms to seconds for framer-motion
+  const durationInSeconds = duration / 1000
+  const delayInSeconds = delay / 1000
 
   return (
-    <div ref={ref} className={className} style={style}>
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, amount: threshold }}
+      variants={animationVariants[animation]}
+      transition={{ 
+        duration: durationInSeconds, 
+        delay: delayInSeconds,
+        ease: "easeOut" 
+      }}
+      className={className}
+      style={style}
+    >
       {children}
-    </div>
+    </motion.div>
   )
 }
 
@@ -116,56 +111,73 @@ interface StaggeredChildrenProps {
 export function StaggeredChildren({
   children,
   className = '',
-  childClassName = 'stagger-child',
+  // childClassName is not strictly needed with framer-motion if using direct children,
+  // but kept for API compatibility. We'll wrap children in motion.div instead.
+  childClassName = 'stagger-child', 
   staggerDelay = 100,
   duration = 600,
   once = true,
   threshold = 0.1,
 }: StaggeredChildrenProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const hasAnimated = useRef(false)
-
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-
-    const childElements = container.querySelectorAll(`.${childClassName}`)
-    if (childElements.length === 0) return
-
-    // Set initial state
-    childElements.forEach((child) => {
-      if (child instanceof HTMLElement) {
-        child.style.opacity = '0'
-        child.style.transform = 'translateY(30px)'
-      }
-    })
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          if (once && hasAnimated.current) return
-          hasAnimated.current = true
-
-          animate(childElements, {
-            opacity: [0, 1],
-            translateY: [30, 0],
-            duration,
-            delay: stagger(staggerDelay),
-            ease: 'outQuad',
-          })
-        }
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: staggerDelay / 1000,
+        delayChildren: 0.1,
       },
-      { threshold }
-    )
+    },
+  }
 
-    observer.observe(container)
-    return () => observer.disconnect()
-  }, [childClassName, staggerDelay, duration, once, threshold])
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: duration / 1000,
+        ease: "easeOut"
+      }
+    },
+  }
 
+  // To make this work with arbitrary children without requiring them to be motion components,
+  // we use a motion.div wrapper that handles the orchestration.
+  // Note: For 'staggerChildren' to work effectively, direct children should be motion components.
+  // However, since we can't easily change all children in the usage code, 
+  // the `AnimatedSection` usage in the codebase implies `stagger-child` class is used.
+  // With framer-motion, the best way to stagger arbitrary children is to stagger the container
+  // and have children variants. 
+  // Since we can't inject variants into children automatically if they are plain HTML/React components,
+  // we might need to rely on the fact that this component is likely wrapping a map loop.
+  
+  // A robust way to handle "arbitrary children" staggering without changing children code
+  // is to use `AnimatePresence` or just `whileInView` on the container.
+  // But standard StaggeredChildren usually implies the parent controls the timing.
+  
   return (
-    <div ref={containerRef} className={className}>
-      {children}
-    </div>
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once, amount: threshold }}
+      variants={containerVariants}
+    >
+      {/* 
+        We map children to wrap them in motion.div to ensure they can be staggered.
+        This changes the DOM structure slightly (adds a div wrapper), but usually safe.
+      */}
+      {Array.isArray(children) ? children.map((child, i) => (
+        <motion.div key={i} variants={itemVariants} className={childClassName}>
+          {child}
+        </motion.div>
+      )) : (
+        <motion.div variants={itemVariants} className={childClassName}>
+          {children}
+        </motion.div>
+      )}
+    </motion.div>
   )
 }
 
@@ -183,27 +195,19 @@ export function FloatingElement({
   amplitude = 10,
   duration = 3000,
 }: FloatingElementProps) {
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const animation = animate(element, {
-      translateY: [amplitude, -amplitude],
-      duration,
-      loop: true,
-      alternate: true,
-      ease: 'inOutSine',
-    })
-
-    return () => animation.pause()
-  }, [amplitude, duration])
-
   return (
-    <div ref={ref} className={className}>
+    <motion.div
+      className={className}
+      animate={{ y: [amplitude, -amplitude] }}
+      transition={{
+        duration: duration / 1000,
+        repeat: Infinity,
+        repeatType: "reverse",
+        ease: "easeInOut",
+      }}
+    >
       {children}
-    </div>
+    </motion.div>
   )
 }
 
@@ -220,27 +224,19 @@ export function ParallaxElement({
   speed = 0.5,
 }: ParallaxElementProps) {
   const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const handleScroll = () => {
-      const rect = element.getBoundingClientRect()
-      const scrolled = window.scrollY
-      const offsetY = (scrolled - rect.top) * speed
-
-      element.style.transform = `translateY(${offsetY}px)`
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [speed])
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  })
+  
+  // Map scroll progress (0 to 1) to transform values
+  // We use a simple approximation: -100px to 100px scaled by speed
+  const y = useTransform(scrollYProgress, [0, 1], [100 * speed, -100 * speed])
 
   return (
-    <div ref={ref} className={className}>
+    <motion.div ref={ref} className={className} style={{ y }}>
       {children}
-    </div>
+    </motion.div>
   )
 }
 
@@ -261,39 +257,33 @@ export function AnimatedCounter({
   className = '',
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
-  const hasAnimated = useRef(false)
+  const inView = useInView(ref, { once: true, margin: "-100px" })
+  
+  const springValue = useSpring(0, {
+    duration: duration, 
+    bounce: 0
+  })
+  
+  // Trigger animation when in view
+  useEffect(() => {
+    if (inView) {
+      springValue.set(end)
+    }
+  }, [inView, end, springValue])
+
+  // Update text content directly for performance
+  const [displayValue, setDisplayValue] = useState(0)
 
   useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !hasAnimated.current) {
-          hasAnimated.current = true
-
-          const obj = { value: 0 }
-          animate(obj, {
-            value: end,
-            duration,
-            modifier: (v: number) => Math.round(v),
-            ease: 'outExpo',
-            onUpdate: () => {
-              element.textContent = `${prefix}${obj.value}${suffix}`
-            },
-          })
-        }
-      },
-      { threshold: 0.5 }
-    )
-
-    observer.observe(element)
-    return () => observer.disconnect()
-  }, [end, duration, suffix, prefix])
+    const unsubscribe = springValue.on("change", (latest) => {
+      setDisplayValue(Math.round(latest))
+    })
+    return () => unsubscribe()
+  }, [springValue])
 
   return (
     <span ref={ref} className={className}>
-      {prefix}0{suffix}
+      {prefix}{displayValue}{suffix}
     </span>
   )
 }
