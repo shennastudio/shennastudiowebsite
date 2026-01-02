@@ -37,6 +37,21 @@ export default function NewProductPage() {
   const [availableSizes, setAvailableSizes] = useState<BraceletSize[]>([]);
   const [hasVariants, setHasVariants] = useState(false);
 
+  // Predefined options for dropdowns
+  const colorOptions = [
+    'Blue', 'Ocean Blue', 'Turquoise', 'Teal', 'Aqua',
+    'Green', 'Sea Green', 'Coral', 'Pink', 'Purple',
+    'White', 'Black', 'Gold', 'Silver', 'Natural',
+    'Multi-color', 'Rainbow'
+  ];
+
+  const materialOptions = [
+    'Glass Beads', 'Crystal Beads', 'Natural Stone', 'Sea Glass',
+    'Pearl', 'Shell', 'Wood', 'Lava Stone', 'Howlite',
+    'Amazonite', 'Turquoise Stone', 'Jade', 'Agate',
+    'Stretch Cord', 'Nylon Thread', 'Sterling Silver', 'Gold-filled'
+  ];
+
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -44,6 +59,9 @@ export default function NewProductPage() {
     sku: '',
     price: '',
     stock: '',
+    size: '',
+    color: '',
+    material: '',
     featured: false,
     conservationPercentage: '10',
     conservationFocus: '',
@@ -159,15 +177,21 @@ export default function NewProductPage() {
           material: v.material || null,
         }));
       } else {
-        // Single default variant using product-level price/stock
+        // Single default variant using product-level price/stock and attributes
+        const variantNameParts = [];
+        if (formData.size) variantNameParts.push(formData.size);
+        if (formData.color) variantNameParts.push(formData.color);
+        if (formData.material) variantNameParts.push(formData.material);
+        const variantName = variantNameParts.length > 0 ? variantNameParts.join(' - ') : 'Default';
+
         productVariants = [{
-          name: 'Default',
+          name: variantName,
           sku: formData.sku,
           price: parseFloat(formData.price),
           stock: parseInt(formData.stock),
-          size: null,
-          color: null,
-          material: null,
+          size: formData.size || null,
+          color: formData.color || null,
+          material: formData.material || null,
         }];
       }
 
@@ -289,6 +313,61 @@ export default function NewProductPage() {
                   placeholder="25"
                   className="text-lg h-12"
                 />
+              </div>
+            </div>
+
+            {/* Size, Color, Material - Product Attributes */}
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="space-y-2">
+                <Label htmlFor="size">Size</Label>
+                <select
+                  id="size"
+                  name="size"
+                  value={formData.size}
+                  onChange={(e) => setFormData(prev => ({ ...prev, size: e.target.value }))}
+                  className="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-800"
+                >
+                  <option value="">Select size</option>
+                  {availableSizes.map((size) => (
+                    <option key={size.id} value={size.name}>
+                      {size.name} - {size.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="color">Color</Label>
+                <select
+                  id="color"
+                  name="color"
+                  value={formData.color}
+                  onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                  className="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-800"
+                >
+                  <option value="">Select color</option>
+                  {colorOptions.map((color) => (
+                    <option key={color} value={color}>
+                      {color}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="material">Material</Label>
+                <select
+                  id="material"
+                  name="material"
+                  value={formData.material}
+                  onChange={(e) => setFormData(prev => ({ ...prev, material: e.target.value }))}
+                  className="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-800"
+                >
+                  <option value="">Select material</option>
+                  {materialOptions.map((material) => (
+                    <option key={material} value={material}>
+                      {material}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
