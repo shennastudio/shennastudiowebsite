@@ -41,21 +41,6 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
   const [productId, setProductId] = useState<string>('');
   const [hasVariants, setHasVariants] = useState(false);
 
-  // Predefined options for dropdowns
-  const colorOptions = [
-    'Blue', 'Ocean Blue', 'Turquoise', 'Teal', 'Aqua',
-    'Green', 'Sea Green', 'Coral', 'Pink', 'Purple',
-    'White', 'Black', 'Gold', 'Silver', 'Natural',
-    'Multi-color', 'Rainbow'
-  ];
-
-  const materialOptions = [
-    'Glass Beads', 'Crystal Beads', 'Natural Stone', 'Sea Glass',
-    'Pearl', 'Shell', 'Wood', 'Lava Stone', 'Howlite',
-    'Amazonite', 'Turquoise Stone', 'Jade', 'Agate',
-    'Stretch Cord', 'Nylon Thread', 'Sterling Silver', 'Gold-filled'
-  ];
-
   const [formData, setFormData] = useState({
     name: '',
     slug: '',
@@ -408,37 +393,23 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
               </div>
               <div className="space-y-2">
                 <Label htmlFor="color">Color</Label>
-                <select
+                <Input
                   id="color"
                   name="color"
                   value={formData.color}
-                  onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
-                  className="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-800"
-                >
-                  <option value="">Select color</option>
-                  {colorOptions.map((color) => (
-                    <option key={color} value={color}>
-                      {color}
-                    </option>
-                  ))}
-                </select>
+                  onChange={handleInputChange}
+                  placeholder="Blue, Turquoise, Multi-color"
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="material">Material</Label>
-                <select
+                <Input
                   id="material"
                   name="material"
                   value={formData.material}
-                  onChange={(e) => setFormData(prev => ({ ...prev, material: e.target.value }))}
-                  className="w-full px-3 py-2 border rounded-md bg-white dark:bg-slate-800"
-                >
-                  <option value="">Select material</option>
-                  {materialOptions.map((material) => (
-                    <option key={material} value={material}>
-                      {material}
-                    </option>
-                  ))}
-                </select>
+                  onChange={handleInputChange}
+                  placeholder="Glass Beads, Natural Stone"
+                />
               </div>
             </div>
 
