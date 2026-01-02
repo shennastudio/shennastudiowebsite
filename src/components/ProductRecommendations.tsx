@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 
 // Product type from recommendation engine
@@ -223,12 +222,10 @@ export default function ProductRecommendations({
                   <Link href={`/products/${product.slug}`}>
                     <div className="relative h-48 bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
                       {imageUrl ? (
-                        <Image
+                        <img
                           src={imageUrl}
                           alt={product.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-300"
-                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface ProductImageGalleryProps {
@@ -32,12 +31,10 @@ export default function ProductImageGallery({
       >
         {selectedImage ? (
           <>
-            <Image
+            <img
               src={selectedImage}
               alt={productName}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-105"
-              priority
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             {/* Bioluminescence Overlay */}
             <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
@@ -72,11 +69,10 @@ export default function ProductImageGallery({
                   : "border-transparent hover:border-teal-300 opacity-70 hover:opacity-100"
               )}
             >
-              <Image
+              <img
                 src={img}
                 alt={`${productName} - View ${idx + 1}`}
-                fill
-                className="object-cover"
+                className="absolute inset-0 w-full h-full object-cover"
               />
               {selectedIndex === idx && (
                  <div className="absolute inset-0 bg-teal-500/10 pointer-events-none" />
