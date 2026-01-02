@@ -215,6 +215,8 @@ export function MultiImageUpload({
 
       <p className="text-xs text-gray-500">
         Tip: Drag images to reorder them. The first image will be the main product image.
+        <br />
+        Max 50MB per image. All images are auto-converted to WebP for optimal SEO.
       </p>
     </div>
   );

@@ -18,7 +18,7 @@ export function ImageUpload({
   currentImage,
   onRemove,
   label = 'Upload Image',
-  helperText = 'Drag and drop an image or click to browse (max 5MB)',
+  helperText = 'Drag and drop an image or click to browse (max 50MB, auto-converted to WebP)',
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);

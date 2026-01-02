@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { put } from '@vercel/blob';
+import sharp from 'sharp';
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,31 +28,44 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (max 5MB)
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    // Validate file size (max 50MB for 4K photos)
+    const maxSize = 50 * 1024 * 1024; // 50MB
     if (file.size > maxSize) {
       return NextResponse.json(
-        { error: 'File too large. Maximum size is 5MB.' },
+        { error: 'File too large. Maximum size is 50MB.' },
         { status: 400 }
       );
     }
 
-    // Generate unique filename
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    // Convert to WebP and compress for SEO optimization
+    // Quality 80 is the sweet spot for e-commerce
+    // 2400x2400 max preserves detail for 4K source images
+    const compressedBuffer = await sharp(buffer)
+      .webp({ quality: 80 })
+      .resize(2400, 2400, {
+        fit: 'inside',
+        withoutEnlargement: true
+      })
+      .toBuffer();
+
+    // Generate unique filename with .webp extension
     const timestamp = Date.now();
-    const originalName = file.name.replace(/\s+/g, '-').toLowerCase();
-    const filename = `${timestamp}-${originalName}`;
+    const filename = `${timestamp}-${Math.random().toString(36).substring(7)}.webp`;
 
     // Upload to Vercel Blob
-    const blob = await put(filename, file, {
+    const blob = await put(filename, compressedBuffer, {
       access: 'public',
       addRandomSuffix: true,
+      contentType: 'image/webp',
     });
 
     return NextResponse.json({
       url: blob.url,
       filename: filename,
-      size: file.size,
-      type: file.type,
+      originalSize: file.size,
+      type: 'image/webp',
     });
   } catch (error: unknown) {
     console.error('Error uploading file:', error);
@@ -66,7 +80,7 @@ export async function POST(request: NextRequest) {
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '5mb',
+      sizeLimit: '50mb',
     },
   },
 };
