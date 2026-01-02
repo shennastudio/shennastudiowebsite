@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from 'react';
 import { Package, AlertTriangle, TrendingUp, DollarSign, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
-import Image from 'next/image';
 
 interface InventoryData {
   variants: Array<{
@@ -221,11 +220,9 @@ export default function InventoryPage() {
                   <div key={variant.id} className="p-4">
                     <div className="flex items-start gap-4">
                       {variant.product.images.length > 0 && variant.product.images[0]?.url && (
-                        <Image
+                        <img
                           src={variant.product.images[0].url}
                           alt={variant.product.images[0].alt || variant.product.name}
-                          width={64}
-                          height={64}
                           className="w-16 h-16 object-cover rounded-lg"
                         />
                       )}

@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -115,11 +114,9 @@ export default async function ProductsPage() {
                   >
                     <div className="flex items-start gap-3">
                       {product.images[0] ? (
-                        <Image
+                        <img
                           src={product.images[0].url}
                           alt={product.name}
-                          width={64}
-                          height={64}
                           className="w-16 h-16 object-cover rounded-lg shrink-0"
                         />
                       ) : (
@@ -192,11 +189,9 @@ export default async function ProductsPage() {
                       <tr key={product.id} className="border-b last:border-0 dark:border-slate-700">
                         <td className="py-4">
                           {product.images[0] ? (
-                            <Image
+                            <img
                               src={product.images[0].url}
                               alt={product.name}
-                              width={48}
-                              height={48}
                               className="w-12 h-12 object-cover rounded"
                             />
                           ) : (
