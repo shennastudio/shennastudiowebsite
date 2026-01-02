@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import { Plus, Edit, Upload, Edit3, Package } from 'lucide-react';
 import { DeleteProductButton } from '@/components/admin/DeleteProductButton';
+import { ProductThumbnail } from '@/components/admin/ProductThumbnail';
 
 async function getProducts() {
   return await prisma.product.findMany({
@@ -113,17 +114,11 @@ export default async function ProductsPage() {
                     className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-lg p-4 space-y-3"
                   >
                     <div className="flex items-start gap-3">
-                      {product.images[0] ? (
-                        <img
-                          src={product.images[0].url}
-                          alt={product.name}
-                          className="w-16 h-16 object-cover rounded-lg shrink-0"
-                        />
-                      ) : (
-                        <div className="w-16 h-16 bg-gray-200 dark:bg-slate-700 rounded-lg flex items-center justify-center text-xs text-gray-500 dark:text-gray-400 shrink-0">
-                          No image
-                        </div>
-                      )}
+                      <ProductThumbnail
+                        src={product.images[0]?.url}
+                        alt={product.name}
+                        size="lg"
+                      />
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium text-gray-900 dark:text-white truncate">{product.name}</h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400">{product.sku}</p>
@@ -188,17 +183,11 @@ export default async function ProductsPage() {
                     {products.map((product) => (
                       <tr key={product.id} className="border-b last:border-0 dark:border-slate-700">
                         <td className="py-4">
-                          {product.images[0] ? (
-                            <img
-                              src={product.images[0].url}
-                              alt={product.name}
-                              className="w-12 h-12 object-cover rounded"
-                            />
-                          ) : (
-                            <div className="w-12 h-12 bg-gray-200 dark:bg-slate-700 rounded flex items-center justify-center text-xs text-gray-500 dark:text-gray-400">
-                              No image
-                            </div>
-                          )}
+                          <ProductThumbnail
+                            src={product.images[0]?.url}
+                            alt={product.name}
+                            size="md"
+                          />
                         </td>
                         <td className="py-4">
                           <div>

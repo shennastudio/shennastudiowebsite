@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Loader2, ShoppingBag, ArrowLeft, Truck } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
+import CartItemImage from '@/components/CartItemImage';
 
 // Static USPS shipping rates
 const USPS_SHIPPING_RATES = [
@@ -393,12 +393,10 @@ export default function CheckoutPage() {
                   {cart.items.map((item) => (
                     <div key={item.id} className="flex gap-3">
                       {item.imageUrl && (
-                        <div className="relative w-16 h-16 flex-shrink-0">
-                          <Image
+                        <div className="w-16 h-16 flex-shrink-0 rounded overflow-hidden">
+                          <CartItemImage
                             src={item.imageUrl}
                             alt={item.productName}
-                            fill
-                            className="object-cover rounded"
                           />
                         </div>
                       )}

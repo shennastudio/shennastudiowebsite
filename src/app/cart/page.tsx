@@ -3,9 +3,9 @@
 import { useCart, PayloadCartItem } from '@/context/CartContext'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import Image from 'next/image'
 import Link from 'next/link'
 import CartUpsells from '@/components/CartUpsells'
+import CartItemImage from '@/components/CartItemImage'
 
 export default function CartPage() {
   const { state, clearCart, updateQuantity, removeItem } = useCart();
@@ -77,18 +77,10 @@ export default function CartPage() {
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                   {/* Product Image */}
                   <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg overflow-hidden flex-shrink-0 mx-auto sm:mx-0">
-                    {item.imageUrl ? (
-                      <Image
-                        src={item.imageUrl}
-                        alt={item.productName}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="w-12 h-12 bg-cyan-200 rounded-full"></div>
-                      </div>
-                    )}
+                    <CartItemImage
+                      src={item.imageUrl}
+                      alt={item.productName}
+                    />
                   </div>
 
                   {/* Product Details */}

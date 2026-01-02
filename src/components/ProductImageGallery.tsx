@@ -15,6 +15,15 @@ export default function ProductImageGallery({
   featured = false,
 }: ProductImageGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
+
+  const handleImageError = (url: string) => {
+    setFailedImages(prev => {
+      const next = new Set(prev);
+      next.add(url);
+      return next;
+    });
+  };
 
   // If no images, show placeholder
   const displayImages = images.length > 0 ? images : [];
@@ -29,12 +38,13 @@ export default function ProductImageGallery({
           "hover:shadow-[0_0_30px_rgba(56,189,248,0.4)]", // Glow effect
         )}
       >
-        {selectedImage ? (
+        {selectedImage && !failedImages.has(selectedImage) ? (
           <>
             <img
               src={selectedImage}
               alt={productName}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              onError={() => handleImageError(selectedImage)}
             />
             {/* Bioluminescence Overlay */}
             <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
@@ -69,11 +79,16 @@ export default function ProductImageGallery({
                   : "border-transparent hover:border-teal-300 opacity-70 hover:opacity-100"
               )}
             >
-              <img
-                src={img}
-                alt={`${productName} - View ${idx + 1}`}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
+              {!failedImages.has(img) ? (
+                <img
+                  src={img}
+                  alt={`${productName} - View ${idx + 1}`}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  onError={() => handleImageError(img)}
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-2xl opacity-50">🌊</div>
+              )}
               {selectedIndex === idx && (
                  <div className="absolute inset-0 bg-teal-500/10 pointer-events-none" />
               )}

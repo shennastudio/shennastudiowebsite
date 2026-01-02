@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Package, AlertTriangle, TrendingUp, DollarSign, Edit } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
+import { ProductThumbnail } from '@/components/admin/ProductThumbnail';
 
 interface InventoryData {
   variants: Array<{
@@ -219,13 +220,11 @@ export default function InventoryPage() {
                 data.variants.map((variant) => (
                   <div key={variant.id} className="p-4">
                     <div className="flex items-start gap-4">
-                      {variant.product.images.length > 0 && variant.product.images[0]?.url && (
-                        <img
-                          src={variant.product.images[0].url}
-                          alt={variant.product.images[0].alt || variant.product.name}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
-                      )}
+                      <ProductThumbnail
+                        src={variant.product.images[0]?.url}
+                        alt={variant.product.images[0]?.alt || variant.product.name}
+                        size="lg"
+                      />
                       <div className="flex-1 min-w-0">
                         <h3 className="font-medium text-gray-900 dark:text-white truncate">
                           {variant.product.name}
