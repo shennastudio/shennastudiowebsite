@@ -128,7 +128,7 @@ interface ReportData {
 export default function ComprehensiveReportsPage() {
   const [report, setReport] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState(2025);
   const [quarter, setQuarter] = useState<string>('');
   const [activeTab, setActiveTab] = useState<'summary' | 'pnl' | 'tax' | 'products'>('summary');
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
@@ -300,7 +300,7 @@ export default function ComprehensiveReportsPage() {
                 onChange={(e) => setYear(parseInt(e.target.value))}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
               >
-                {[2024, 2023, 2022].map((y) => (
+                {Array.from({ length: 21 }, (_, i) => 2025 + i).map((y) => (
                   <option key={y} value={y}>{y}</option>
                 ))}
               </select>
