@@ -9,10 +9,10 @@ export async function uploadProductImage(formData: FormData) {
       throw new Error('No file provided');
     }
 
-    // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+    // Validate file type (including HEIC/HEIF for iPhone photos)
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif'];
     if (!validTypes.includes(file.type)) {
-      return { success: false, error: 'Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed.' };
+      return { success: false, error: 'Invalid file type. Only JPEG, PNG, WebP, GIF, and HEIC are allowed.' };
     }
 
     // Validate file size (max 50MB for 4K photos)
@@ -24,11 +24,12 @@ export async function uploadProductImage(formData: FormData) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     // Convert to WebP and compress for SEO optimization
-    // Quality 80 is the sweet spot for e-commerce
-    // 2400x2400 max preserves detail for 4K source images
+    // Quality 90 preserves detail for high-res iPhone photos
+    // 5000x5000 max supports iPhone 17 Pro Max resolution
     const compressedBuffer = await sharp(buffer)
-      .webp({ quality: 80 })
-      .resize(2400, 2400, {
+      .rotate() // Auto-rotate based on EXIF orientation
+      .webp({ quality: 90 })
+      .resize(5000, 5000, {
         fit: 'inside',
         withoutEnlargement: true
       })

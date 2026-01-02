@@ -205,7 +205,7 @@ export function MultiImageUpload({
         ref={fileInputRef}
         type="file"
         className="hidden"
-        accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+        accept="image/jpeg,image/jpg,image/png,image/webp,image/gif,image/heic,image/heif,.heic,.heif"
         multiple
         onChange={handleChange}
         disabled={uploading}
