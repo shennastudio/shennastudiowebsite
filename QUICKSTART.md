@@ -229,7 +229,6 @@ bead-bracelet-store/
 
 ## Resources
 
-- **Demo Mode Guide:** See DEMO_MODE.md
 - **Deployment Guide:** See DEPLOYMENT.md
 - **Project Info:** See CLAUDE.md
 - **Payload CMS Docs:** https://payloadcms.com/docs
@@ -239,8 +238,8 @@ bead-bracelet-store/
 
 Having issues? Check:
 1. This guide (QUICKSTART.md)
-2. Demo mode guide (DEMO_MODE.md)
-3. Deployment guide (DEPLOYMENT.md)
+2. Deployment guide (DEPLOYMENT.md)
+3. Browser console for errors
 4. Browser console for errors
 5. Server logs in terminal
 
