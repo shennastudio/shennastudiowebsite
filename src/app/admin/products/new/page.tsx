@@ -285,10 +285,9 @@ export default function NewProductPage() {
               </div>
             </div>
 
-            {/* Price and Stock - PROMINENT */}
-            <div className="grid gap-4 md:grid-cols-2 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+            <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="price" className="text-lg font-semibold">Price ($) *</Label>
+                <Label htmlFor="price">Price ($) *</Label>
                 <Input
                   id="price"
                   name="price"
@@ -298,11 +297,10 @@ export default function NewProductPage() {
                   onChange={handleInputChange}
                   required
                   placeholder="29.99"
-                  className="text-lg h-12"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="stock" className="text-lg font-semibold">Stock Quantity *</Label>
+                <Label htmlFor="stock">Stock Quantity *</Label>
                 <Input
                   id="stock"
                   name="stock"
@@ -311,7 +309,6 @@ export default function NewProductPage() {
                   onChange={handleInputChange}
                   required
                   placeholder="25"
-                  className="text-lg h-12"
                 />
               </div>
             </div>
