@@ -108,9 +108,10 @@ NEXTAUTH_SECRET=your-nextauth-secret-here
 # Vercel Blob Storage
 BLOB_READ_WRITE_TOKEN=vercel_blob_rw_your_token_here
 
-# Stripe (optional)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_key
-STRIPE_SECRET_KEY=sk_test_your_key
+# Stripe (PRODUCTION)
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_your_key
+STRIPE_SECRET_KEY=sk_live_your_key
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
 ```
 
 ### 4. Database Setup
