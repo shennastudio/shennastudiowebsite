@@ -6,6 +6,7 @@ import ProductVariantSelector from '@/components/ProductVariantSelector';
 import ProductImageGallery from '@/components/ProductImageGallery';
 import ARProductSection from '@/components/ar/ARProductSection';
 import ProductViewTracker from '@/components/analytics/ProductViewTracker';
+import ProductInventoryAdjuster from '@/components/admin/ProductInventoryAdjuster';
 
 export default async function ProductDetailPage({
   params,
@@ -100,11 +101,18 @@ export default async function ProductDetailPage({
                 }}
               />
 
-              <ProductVariantSelector 
+              <ProductVariantSelector
                 product={product}
                 variants={productData.variants}
                 initialVariant={variant}
                 displayImages={displayImages}
+              />
+
+              {/* Admin Inventory Adjustment - Only visible to admin users */}
+              <ProductInventoryAdjuster
+                productId={product.id}
+                productName={product.name}
+                variants={productData.variants}
               />
 
               <div className="space-y-4 pt-4">
