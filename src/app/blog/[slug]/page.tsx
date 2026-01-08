@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
-import { ContentRenderer } from '@/components/blog/ContentRenderer'
+import { BlogContentEnhancer } from '@/components/blog/BlogContentEnhancer'
 
 export const revalidate = 3600
 
@@ -105,10 +105,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* Article Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Convert content to proper HTML with formatting */}
-        {post.content && (
-          <ContentRenderer content={post.content} />
-        )}
+              {/* Enhanced Content Display */}
+          {post.content && (
+            <BlogContentEnhancer 
+              content={post.content}
+              title={post.title}
+              featuredImage={post.featuredImage}
+              category={post.category || undefined}
+            />
+          )}
 
         {/* Back to Blog */}
         <div className="mt-16 pt-8 border-t border-gray-200">
