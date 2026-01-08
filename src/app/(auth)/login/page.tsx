@@ -121,16 +121,11 @@ function LoginForm() {
             </Button>
           </form>
 
-          <div className="mt-6 text-center space-y-3">
+          <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Don&apos;t have an account?{' '}
               <Link href="/register" className="text-teal-600 hover:text-teal-700 font-semibold">
                 Create one now
-              </Link>
-            </p>
-            <p className="text-sm text-gray-600">
-              <Link href="/admin/login" className="text-gray-500 hover:text-gray-700">
-                Admin Login →
               </Link>
             </p>
           </div>
