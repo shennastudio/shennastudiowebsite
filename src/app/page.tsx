@@ -18,8 +18,8 @@ import { fetchFeaturedProducts } from './actions'
 // In a real app, you might use a wrapper for the client parts or separate server/client components.
 
 export default function Home() {
-// ... (previous logic)
   const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -30,7 +30,30 @@ export default function Home() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   useEffect(() => {
-    fetchFeaturedProducts(6).then(setFeaturedProducts);
+    // Try to load from cache first for instant display
+    const cached = localStorage.getItem('featured-products-cache');
+    const cacheTime = localStorage.getItem('featured-products-cache-time');
+    const fiveMinutes = 5 * 60 * 1000;
+
+    if (cached && cacheTime && Date.now() - parseInt(cacheTime) < fiveMinutes) {
+      try {
+        setFeaturedProducts(JSON.parse(cached));
+        setIsLoading(false);
+      } catch {
+        // Invalid cache, will fetch fresh
+      }
+    }
+
+    // Always fetch fresh data in background
+    fetchFeaturedProducts(6).then((products) => {
+      setFeaturedProducts(products);
+      setIsLoading(false);
+      // Cache the results
+      localStorage.setItem('featured-products-cache', JSON.stringify(products));
+      localStorage.setItem('featured-products-cache-time', Date.now().toString());
+    }).catch(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   return (
@@ -124,10 +147,28 @@ export default function Home() {
             </p>
           </div>
 
-          {featuredProducts.length === 0 ? (
+          {isLoading && featuredProducts.length === 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden animate-pulse">
+                  <div className="h-80 bg-slate-200" />
+                  <div className="p-8 space-y-4">
+                    <div className="h-6 bg-slate-200 rounded w-3/4" />
+                    <div className="h-4 bg-slate-100 rounded w-full" />
+                    <div className="h-4 bg-slate-100 rounded w-2/3" />
+                    <div className="flex justify-between items-center">
+                      <div className="h-8 bg-slate-200 rounded w-20" />
+                      <div className="h-6 bg-slate-100 rounded w-16" />
+                    </div>
+                    <div className="h-12 bg-slate-200 rounded-2xl" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : featuredProducts.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🌊</div>
-              <p className="text-slate-500 text-lg">Loading ocean treasures...</p>
+              <p className="text-slate-500 text-lg">No featured products yet</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

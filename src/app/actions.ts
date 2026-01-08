@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/db';
 import type { Prisma } from '@prisma/client';
+import { unstable_cache } from 'next/cache';
 
 interface ProductFilters {
   search?: string;
@@ -184,8 +185,9 @@ export async function fetchCategories() {
   }
 }
 
-export async function fetchFeaturedProducts(limit: number = 6) {
-  try {
+// Cached version of featured products fetch - revalidates every 60 seconds
+const getCachedFeaturedProducts = unstable_cache(
+  async (limit: number) => {
     const products = await prisma.product.findMany({
       where: {
         featured: true,
@@ -204,8 +206,15 @@ export async function fetchFeaturedProducts(limit: number = 6) {
       },
       take: limit,
     });
-
     return products.map(transformProduct);
+  },
+  ['featured-products'],
+  { revalidate: 60, tags: ['products'] }
+);
+
+export async function fetchFeaturedProducts(limit: number = 6) {
+  try {
+    return await getCachedFeaturedProducts(limit);
   } catch (error) {
     console.error('Error fetching featured products:', error);
     return [];

@@ -59,9 +59,9 @@ export default async function CustomerAccountLayout({
               </Link>
               <Link href="/">
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
-                  className="border-white/40 hover:bg-white/20 text-white font-semibold text-xs sm:text-sm"
+                  className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold border-0 text-xs sm:text-sm"
                 >
                   <Home className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                   Home
