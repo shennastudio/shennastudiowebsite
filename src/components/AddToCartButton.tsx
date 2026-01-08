@@ -32,6 +32,7 @@ interface AddToCartButtonProps {
   product: Product;
   variant?: Variant | null;
   stock: number;
+  quantity?: number;
   className?: string;
 }
 
@@ -39,6 +40,7 @@ export default function AddToCartButton({
   product,
   variant,
   stock,
+  quantity = 1,
   className = ''
 }: AddToCartButtonProps) {
   const { addItem } = useCart();
@@ -80,14 +82,14 @@ export default function AddToCartButton({
       } : null;
 
       // Add to cart
-      addItem(cartProduct, cartVariant, 1);
+      addItem(cartProduct, cartVariant, quantity);
 
       // Show success feedback
       setJustAdded(true);
       toast.success(
         <div>
           <div className="font-semibold">Added to cart!</div>
-          <div className="text-sm">{product.name}</div>
+          <div className="text-sm">{product.name} × {quantity}</div>
         </div>,
         {
           duration: 3000,

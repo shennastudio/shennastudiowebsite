@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import AddToCartButton from '@/components/AddToCartButton';
 import { cn } from '@/lib/utils';
+import { Minus, Plus } from 'lucide-react';
 
 interface Variant {
   id: string;
@@ -40,6 +41,7 @@ export default function ProductVariantSelector({
   displayImages,
 }: ProductVariantSelectorProps) {
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(initialVariant);
+  const [quantity, setQuantity] = useState(1);
   
   // Extract unique options
   const sizes = Array.from(new Set(variants.map(v => v.size).filter(Boolean))).sort();
@@ -194,6 +196,47 @@ export default function ProductVariantSelector({
             </dl>
         </div>
 
+        {/* Quantity Selector */}
+        <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-900">Quantity</label>
+            <div className="flex items-center gap-3">
+                <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+                    <button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        disabled={quantity <= 1}
+                        className="p-3 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        aria-label="Decrease quantity"
+                    >
+                        <Minus className="w-5 h-5 text-gray-600" />
+                    </button>
+                    <input
+                        type="number"
+                        min="1"
+                        max={currentStock}
+                        value={quantity}
+                        onChange={(e) => {
+                            const val = parseInt(e.target.value) || 1;
+                            setQuantity(Math.min(Math.max(1, val), currentStock));
+                        }}
+                        className="w-16 text-center text-lg font-semibold border-x border-gray-200 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    />
+                    <button
+                        onClick={() => setQuantity(Math.min(currentStock, quantity + 1))}
+                        disabled={quantity >= currentStock}
+                        className="p-3 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        aria-label="Increase quantity"
+                    >
+                        <Plus className="w-5 h-5 text-gray-600" />
+                    </button>
+                </div>
+                {currentStock > 0 && currentStock <= 10 && (
+                    <span className="text-sm text-amber-600 font-medium">
+                        Only {currentStock} left!
+                    </span>
+                )}
+            </div>
+        </div>
+
         {/* Add To Cart */}
         <div className="space-y-4">
             <AddToCartButton
@@ -219,7 +262,13 @@ export default function ProductVariantSelector({
                     images: displayImages.map(url => ({ url })),
                 } : null}
                 stock={currentStock}
+                quantity={quantity}
             />
+            {quantity > 1 && (
+                <p className="text-center text-sm text-gray-600">
+                    Subtotal: <span className="font-semibold text-teal-600">${(currentPrice * quantity).toFixed(2)}</span>
+                </p>
+            )}
         </div>
     </div>
   );
