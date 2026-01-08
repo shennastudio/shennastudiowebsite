@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
+import { ContentRenderer } from '@/components/blog/ContentRenderer'
 
 export const revalidate = 3600
 
@@ -104,33 +105,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* Article Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div 
-          className="prose prose-lg max-w-none
-            prose-headings:text-teal-700
-            prose-h1:text-4xl prose-h1:font-bold prose-h1:mt-12 prose-h1:mb-6 prose-h1:first:mt-0
-            prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6
-            prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4
-            prose-h4:text-xl prose-h4:font-semibold prose-h4:mt-6 prose-h4:mb-4
-            prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
-            prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium prose-a:underline-offset-4
-            prose-ul:my-6 prose-ul:space-y-2 prose-ul:list-disc
-            prose-ol:my-6 prose-ol:space-y-2 prose-ol:list-decimal
-            prose-li:text-gray-700 prose-li:leading-relaxed
-            prose-blockquote:border-l-4 prose-blockquote:border-teal-500 prose-blockquote:bg-teal-50 prose-blockquote:pl-6 prose-blockquote:py-4 prose-blockquote:my-6 prose-blockquote:italic
-            prose-code:bg-gray-100 prose-code:text-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono
-            prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-6 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:my-6
-            prose-hr:border-gray-300 prose-hr:my-8
-            prose-strong:text-teal-700 prose-strong:font-semibold
-            prose-em:italic prose-em:text-gray-700
-            prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
-            prose-table:overflow-x-auto prose-table:my-6
-            prose-thead:bg-gray-50
-            prose-tbody:bg-white prose-tbody:divide-y prose-tbody:divide-gray-200
-            prose-tr:border-b prose-tr:border-gray-200
-            prose-th:px-6 prose-th:py-3 prose-th:text-left prose-th:text-xs prose-th:font-medium prose-th:text-gray-500 prose-th:uppercase prose-th:tracking-wider
-            prose-td:px-6 prose-td:py-4 prose-td:whitespace-nowrap prose-td:text-sm prose-td:text-gray-700"
-          dangerouslySetInnerHTML={{ __html: post.content || '' }} 
-        />
+        {/* Convert content to proper HTML with formatting */}
+        {post.content && (
+          <ContentRenderer content={post.content} />
+        )}
 
         {/* Back to Blog */}
         <div className="mt-16 pt-8 border-t border-gray-200">
