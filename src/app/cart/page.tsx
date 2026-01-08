@@ -24,14 +24,7 @@ export default function CartPage() {
   };
 
   const handleCheckout = () => {
-    // Check if user is logged in
-    if (!session?.user) {
-      // Redirect to login with callback to checkout
-      router.push('/login?callbackUrl=/checkout');
-      return;
-    }
-
-    // Redirect to checkout page
+    // Allow guest checkout - no login required
     router.push('/checkout');
   };
 

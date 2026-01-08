@@ -86,26 +86,26 @@ export default async function AccountPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-cyan-50/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Welcome Section with Animation */}
-        <div className="mb-8 group">
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-700 via-teal-700 to-blue-700 bg-clip-text text-transparent animate-gradient">
+        <div className="mb-4 sm:mb-8 group">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+            <div className="space-y-1 sm:space-y-2">
+              <h1 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-700 via-teal-700 to-blue-700 bg-clip-text text-transparent animate-gradient">
                 Welcome back, {user?.name}!
               </h1>
-              <p className="text-slate-600 text-lg">Here&apos;s your ocean conservation journey</p>
+              <p className="text-slate-600 text-sm sm:text-lg">Here&apos;s your ocean conservation journey</p>
             </div>
-            <div className="hidden sm:flex items-center gap-3">
-              <span className="text-sm text-slate-500">Member since {new Date(user?.createdAt || '').getFullYear()}</span>
+            <div className="flex items-center gap-3">
+              <span className="text-xs sm:text-sm text-slate-500">Member since {new Date(user?.createdAt || '').getFullYear()}</span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           {/* Rewards Card - Enhanced */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="group bg-gradient-to-br from-white to-cyan-50/50 rounded-2xl shadow-xl shadow-cyan-200/30 border border-cyan-200/60 p-6 hover:shadow-2xl hover:shadow-cyan-300/40 transition-all duration-300 relative overflow-hidden">
+          <div className="lg:col-span-1 space-y-4 sm:space-y-6">
+            <div className="group bg-gradient-to-br from-white to-cyan-50/50 rounded-xl sm:rounded-2xl shadow-xl shadow-cyan-200/30 border border-cyan-200/60 p-4 sm:p-6 hover:shadow-2xl hover:shadow-cyan-300/40 transition-all duration-300 relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
               <div className="relative z-10">

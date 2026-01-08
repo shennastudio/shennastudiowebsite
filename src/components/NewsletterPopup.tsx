@@ -1,10 +1,12 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { X } from 'lucide-react'
 import Image from 'next/image'
 
 export default function NewsletterPopup() {
+  const { data: session } = useSession()
   const [isOpen, setIsOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
@@ -13,6 +15,11 @@ export default function NewsletterPopup() {
   const [isSuccess, setIsSuccess] = useState(false)
 
   useEffect(() => {
+    // Don't show popup for logged-in users
+    if (session?.user) {
+      return
+    }
+
     // Check if user has already seen the popup
     const hasSeenPopup = localStorage.getItem('newsletter-popup-seen')
     const lastShown = localStorage.getItem('newsletter-popup-last-shown')
@@ -30,7 +37,7 @@ export default function NewsletterPopup() {
 
       return () => clearTimeout(timer)
     }
-  }, [])
+  }, [session])
 
   const handleClose = () => {
     setIsOpen(false)
