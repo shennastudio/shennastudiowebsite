@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { fetchProducts } from '@/app/actions';
 import ParallaxBanner from '@/components/ParallaxBanner';
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection';
@@ -56,10 +57,12 @@ export default async function ProductsPage() {
                   {/* Product Image */}
                   <div className="relative h-64 bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
                     {productDisplay.displayImages?.[0] ? (
-                      <img
+                      <Image
                         src={productDisplay.displayImages[0]}
                         alt={productDisplay.product.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">

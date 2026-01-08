@@ -1,10 +1,11 @@
 'use client';
 import { useRef } from 'react';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 function ParallaxBanner({ src, alt, text }: { src: string; alt: string, text?: string }) {
   const containerRef = useRef(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -14,13 +15,17 @@ function ParallaxBanner({ src, alt, text }: { src: string; alt: string, text?: s
 
   return (
     <div ref={containerRef} className="relative w-full h-[60vh] overflow-hidden bg-black">
-      
+
       {/* 1. Moving Image Layer */}
       <motion.div style={{ y: yImage }} className="absolute inset-0 h-[140%] w-full">
-        <img
+        <Image
           src={src}
           alt={alt}
-          className="absolute inset-0 w-full h-full object-cover opacity-90"
+          fill
+          sizes="100vw"
+          quality={75}
+          className="object-cover opacity-90"
+          priority={false}
         />
         {/* Dark overlay to ensure the glowing text is readable */}
         <div className="absolute inset-0 bg-black/60" />

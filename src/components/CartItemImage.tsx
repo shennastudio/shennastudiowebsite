@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface CartItemImageProps {
@@ -21,10 +22,12 @@ export default function CartItemImage({ src, alt, className }: CartItemImageProp
   }
 
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
-      className={cn("w-full h-full object-cover", className)}
+      fill
+      sizes="96px"
+      className={cn("object-cover", className)}
       onError={() => setError(true)}
     />
   );
