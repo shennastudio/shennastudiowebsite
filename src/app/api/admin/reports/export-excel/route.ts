@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 export async function POST(req: Request) {
   try {
@@ -12,14 +12,17 @@ export async function POST(req: Request) {
     }
 
     const data = await req.json();
-    const { reportData, reportType: _reportType } = data;
+    const { reportData } = data;
 
     if (!reportData) {
       return NextResponse.json({ error: 'No report data provided' }, { status: 400 });
     }
 
     // Create workbook
-    const workbook = XLSX.utils.book_new();
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'ShennaStudio';
+    workbook.created = new Date();
+    workbook.modified = new Date();
 
     // ============================================
     // Sheet 1: Executive Summary
@@ -43,9 +46,9 @@ export async function POST(req: Request) {
       ['Return Rate', `${reportData.metrics.returnRate.toFixed(1)}%`],
     ];
 
-    const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
-    summarySheet['!cols'] = [{ wch: 25 }, { wch: 20 }];
-    XLSX.utils.book_append_sheet(workbook, summarySheet, 'Executive Summary');
+    const summarySheet = workbook.addWorksheet('Executive Summary');
+    summarySheet.addRows(summaryData);
+    summarySheet.columns = [{ width: 25 }, { width: 20 }];
 
     // ============================================
     // Sheet 2: Profit & Loss Statement
@@ -89,9 +92,9 @@ export async function POST(req: Request) {
       ['NET INCOME', '', formatCurrency(pnl.netIncome)],
     ];
 
-    const pnlSheet = XLSX.utils.aoa_to_sheet(pnlData);
-    pnlSheet['!cols'] = [{ wch: 35 }, { wch: 15 }, { wch: 18 }];
-    XLSX.utils.book_append_sheet(workbook, pnlSheet, 'Profit & Loss');
+    const pnlSheet = workbook.addWorksheet('Profit & Loss');
+    pnlSheet.addRows(pnlData);
+    pnlSheet.columns = [{ width: 35 }, { width: 15 }, { width: 18 }];
 
     // ============================================
     // Sheet 3: Monthly Breakdown
@@ -119,12 +122,12 @@ export async function POST(req: Request) {
       ]),
     ];
 
-    const monthlySheet = XLSX.utils.aoa_to_sheet(monthlyData);
-    monthlySheet['!cols'] = [
-      { wch: 12 }, { wch: 15 }, { wch: 10 },
-      { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 },
+    const monthlySheet = workbook.addWorksheet('Monthly Breakdown');
+    monthlySheet.addRows(monthlyData);
+    monthlySheet.columns = [
+      { width: 12 }, { width: 15 }, { width: 10 },
+      { width: 15 }, { width: 15 }, { width: 15 }, { width: 15 },
     ];
-    XLSX.utils.book_append_sheet(workbook, monthlySheet, 'Monthly Breakdown');
 
     // ============================================
     // Sheet 4: Quarterly Summary
@@ -148,9 +151,9 @@ export async function POST(req: Request) {
       ]),
     ];
 
-    const quarterlySheet = XLSX.utils.aoa_to_sheet(quarterlyDataArr);
-    quarterlySheet['!cols'] = [{ wch: 12 }, { wch: 15 }, { wch: 10 }, { wch: 15 }, { wch: 15 }];
-    XLSX.utils.book_append_sheet(workbook, quarterlySheet, 'Quarterly Summary');
+    const quarterlySheet = workbook.addWorksheet('Quarterly Summary');
+    quarterlySheet.addRows(quarterlyDataArr);
+    quarterlySheet.columns = [{ width: 12 }, { width: 15 }, { width: 10 }, { width: 15 }, { width: 15 }];
 
     // ============================================
     // Sheet 5: Top Products
@@ -173,9 +176,9 @@ export async function POST(req: Request) {
       ]),
     ];
 
-    const productsSheet = XLSX.utils.aoa_to_sheet(productsData);
-    productsSheet['!cols'] = [{ wch: 40 }, { wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 15 }];
-    XLSX.utils.book_append_sheet(workbook, productsSheet, 'Top Products');
+    const productsSheet = workbook.addWorksheet('Top Products');
+    productsSheet.addRows(productsData);
+    productsSheet.columns = [{ width: 40 }, { width: 12 }, { width: 15 }, { width: 15 }, { width: 15 }];
 
     // ============================================
     // Sheet 6: Tax Summary (Schedule C)
@@ -213,9 +216,9 @@ export async function POST(req: Request) {
       ['Conservation Donations', formatCurrency(tax.charitableContributions)],
     ];
 
-    const taxSheet = XLSX.utils.aoa_to_sheet(taxData);
-    taxSheet['!cols'] = [{ wch: 45 }, { wch: 18 }];
-    XLSX.utils.book_append_sheet(workbook, taxSheet, 'Tax Summary');
+    const taxSheet = workbook.addWorksheet('Tax Summary');
+    taxSheet.addRows(taxData);
+    taxSheet.columns = [{ width: 45 }, { width: 18 }];
 
     // ============================================
     // Sheet 7: Sales Tax by State
@@ -234,9 +237,9 @@ export async function POST(req: Request) {
       ['TOTAL', formatCurrency(reportData.salesTaxByState.reduce((sum: number, s: { amount: number }) => sum + s.amount, 0))],
     ];
 
-    const salesTaxSheet = XLSX.utils.aoa_to_sheet(salesTaxData);
-    salesTaxSheet['!cols'] = [{ wch: 20 }, { wch: 18 }];
-    XLSX.utils.book_append_sheet(workbook, salesTaxSheet, 'Sales Tax by State');
+    const salesTaxSheet = workbook.addWorksheet('Sales Tax by State');
+    salesTaxSheet.addRows(salesTaxData);
+    salesTaxSheet.columns = [{ width: 20 }, { width: 18 }];
 
     // ============================================
     // Sheet 8: Conservation Impact
@@ -255,17 +258,17 @@ export async function POST(req: Request) {
       ['Consult your tax advisor for proper classification.'],
     ];
 
-    const conservationSheet = XLSX.utils.aoa_to_sheet(conservationData);
-    conservationSheet['!cols'] = [{ wch: 30 }, { wch: 20 }];
-    XLSX.utils.book_append_sheet(workbook, conservationSheet, 'Conservation Impact');
+    const conservationSheet = workbook.addWorksheet('Conservation Impact');
+    conservationSheet.addRows(conservationData);
+    conservationSheet.columns = [{ width: 30 }, { width: 20 }];
 
     // Generate Excel file
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const buffer = await workbook.xlsx.writeBuffer();
 
     // Return file
     const filename = `ShennaStudio-Financial-Report-${reportData.reportPeriod.year}-${reportData.reportPeriod.quarter.replace(' ', '-')}.xlsx`;
 
-    return new NextResponse(excelBuffer, {
+    return new NextResponse(buffer as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

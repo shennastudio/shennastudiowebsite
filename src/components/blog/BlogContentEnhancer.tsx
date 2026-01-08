@@ -5,14 +5,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 interface BlogContentEnhancerProps {
-  content: string
+  children: React.ReactNode
   title: string
   featuredImage?: string
   category?: string | null | undefined
 }
 
 export function BlogContentEnhancer({ 
-  content, 
+  children, 
   title, 
   featuredImage, 
   category 
@@ -23,27 +23,6 @@ export function BlogContentEnhancer({
   useEffect(() => {
     setIsVisible(true)
   }, [])
-
-  // Process content with enhanced formatting
-  const processContent = (rawContent: string) => {
-    if (!rawContent) return ''
-    
-    // Check if content is already HTML
-    if (/<[a-z][\s\S]*>/i.test(rawContent)) {
-      return rawContent
-    }
-    
-    // Enhanced content processing with better formatting
-    return rawContent
-      .replace(/\s+/g, ' ')
-      .replace(/([.!?])\s*([A-Z])/g, '$1</p><p class="fade-in-up animation-delay-200 text-gray-700 leading-relaxed mb-6">$2')
-      .replace(/\n\n/g, '</p><p class="fade-in-up animation-delay-300 text-gray-700 leading-relaxed mb-6">')
-      .replace(/\n/g, '<br class="inline-block">')
-      .replace(/^/, '<p class="fade-in-up animation-delay-100 text-gray-700 leading-relaxed mb-6">')
-      .replace(/$/, '</p>')
-  }
-
-  const processedContent = processContent(content)
 
   return (
     <div className="min-h-screen">
@@ -138,8 +117,9 @@ export function BlogContentEnhancer({
               className={`prose prose-lg max-w-none transition-all duration-1000 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
               }`}
-              dangerouslySetInnerHTML={{ __html: processedContent }} 
-            />
+            >
+              {children}
+            </div>
             
             {/* Interactive Sidebar */}
             <div className="mt-8 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl">
