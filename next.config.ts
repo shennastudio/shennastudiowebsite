@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import withMDX from '@next/mdx';
 // Temporarily disabled: import { withPayload } from "@payloadcms/next/withPayload";
 
 const nextConfig: NextConfig = {
@@ -50,5 +51,12 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Temporarily disabled for testing shadcn/ui: export default withPayload(nextConfig);
-export default nextConfig;
+const withMDXConfig = withMDX({
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
+// Temporarily disabled for testing shadcn/ui: export default withPayload(withMDXConfig(nextConfig));
+export default withMDXConfig(nextConfig);

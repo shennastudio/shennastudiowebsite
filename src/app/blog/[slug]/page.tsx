@@ -20,7 +20,6 @@ export async function generateStaticParams() {
       slug: post.slug,
     }))
   } catch {
-    // Return empty array if table doesn't exist yet (new database)
     return []
   }
 }
@@ -31,7 +30,6 @@ async function getBlogPost(slug: string) {
       where: { slug },
     })
   } catch {
-    // Return null if table doesn't exist yet (new database)
     return null
   }
 }
@@ -68,7 +66,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Image */}
-      <div className="relative h-96 bg-gradient-to-br from-teal-600 to-blue-600 bg-slate-200">
+      <div className="relative h-96 bg-gradient-to-br from-teal-600 to-blue-600">
         {post.featuredImage && (
           <Image
             src={post.featuredImage}
@@ -85,7 +83,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="max-w-4xl mx-auto">
             <div className="flex items-center gap-4 mb-4">
               {post.category && (
-                <span className="bg-teal-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                <span className="bg-teal-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
                   {post.category}
                 </span>
               )}
@@ -106,16 +104,32 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       {/* Article Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div
+        <div 
           className="prose prose-lg max-w-none
             prose-headings:text-teal-700
+            prose-h1:text-4xl prose-h1:font-bold prose-h1:mt-12 prose-h1:mb-6 prose-h1:first:mt-0
             prose-h2:text-3xl prose-h2:font-bold prose-h2:mt-12 prose-h2:mb-6
             prose-h3:text-2xl prose-h3:font-semibold prose-h3:mt-8 prose-h3:mb-4
+            prose-h4:text-xl prose-h4:font-semibold prose-h4:mt-6 prose-h4:mb-4
             prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-6
-            prose-ul:my-6 prose-ul:space-y-2
-            prose-li:text-gray-700
-            prose-strong:text-teal-700 prose-strong:font-semibold"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+            prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium prose-a:underline-offset-4
+            prose-ul:my-6 prose-ul:space-y-2 prose-ul:list-disc
+            prose-ol:my-6 prose-ol:space-y-2 prose-ol:list-decimal
+            prose-li:text-gray-700 prose-li:leading-relaxed
+            prose-blockquote:border-l-4 prose-blockquote:border-teal-500 prose-blockquote:bg-teal-50 prose-blockquote:pl-6 prose-blockquote:py-4 prose-blockquote:my-6 prose-blockquote:italic
+            prose-code:bg-gray-100 prose-code:text-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:font-mono
+            prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-6 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:my-6
+            prose-hr:border-gray-300 prose-hr:my-8
+            prose-strong:text-teal-700 prose-strong:font-semibold
+            prose-em:italic prose-em:text-gray-700
+            prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
+            prose-table:overflow-x-auto prose-table:my-6
+            prose-thead:bg-gray-50
+            prose-tbody:bg-white prose-tbody:divide-y prose-tbody:divide-gray-200
+            prose-tr:border-b prose-tr:border-gray-200
+            prose-th:px-6 prose-th:py-3 prose-th:text-left prose-th:text-xs prose-th:font-medium prose-th:text-gray-500 prose-th:uppercase prose-th:tracking-wider
+            prose-td:px-6 prose-td:py-4 prose-td:whitespace-nowrap prose-td:text-sm prose-td:text-gray-700"
+          dangerouslySetInnerHTML={{ __html: post.content || '' }} 
         />
 
         {/* Back to Blog */}
