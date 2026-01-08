@@ -8,7 +8,7 @@ interface BlogContentEnhancerProps {
   content: string
   title: string
   featuredImage?: string
-  category?: string | null
+  category?: string | null | undefined
 }
 
 export function BlogContentEnhancer({ 
