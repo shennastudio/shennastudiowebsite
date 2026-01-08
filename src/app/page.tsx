@@ -124,10 +124,16 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {featuredProducts.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <div className="text-6xl mb-4">🌊</div>
+              <p className="text-slate-500 text-lg">Loading ocean treasures...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {featuredProducts.map((productDisplay, index) => (
-              <motion.div 
-                key={index}
+              <motion.div
+                key={productDisplay.product?.id || index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
@@ -141,6 +147,7 @@ export default function Home() {
                       src={productDisplay.displayImages[0]}
                       alt={productDisplay.product?.name || 'Product'}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   ) : (
@@ -184,6 +191,7 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+          )}
 
           <div className="text-center mt-20">
             <Link
