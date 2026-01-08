@@ -2,6 +2,34 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+async function seedBlogPosts() {
+  try {
+    console.log('🌊 Checking if blog posts need to be seeded...');
+
+    // Check if blog posts already exist
+    const existingPosts = await prisma.blogPost.count();
+    
+    if (existingPosts > 0) {
+      console.log(`✅ Found ${existingPosts} blog posts already in database. Skipping seeding.`);
+      return;
+    }
+
+    console.log('📝 No blog posts found. Starting to seed blog posts...');
+
+async function seedBlogPosts() {
+  try {
+    console.log('🌊 Checking if blog posts need to be seeded...');
+
+    // Check if blog posts already exist
+    const existingPosts = await prisma.blogPost.count();
+    
+    if (existingPosts > 0) {
+      console.log(`✅ Found ${existingPosts} blog posts already in database. Skipping seeding.`);
+      return;
+    }
+
+    console.log('📝 No blog posts found. Starting to seed blog posts...');
+
 // Unique ocean/conservation images for blog posts
 const blogImages = {
   seaTurtle: 'https://images.unsplash.com/photo-1591025207163-942350e47db2?w=800&h=600&fit=crop', // Sea turtle swimming

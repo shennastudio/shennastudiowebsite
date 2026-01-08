@@ -16,49 +16,64 @@ export function ContentRenderer({ content }: ContentRendererProps) {
       return content
     }
     
-    // Convert plain text to proper HTML with paragraphs and line breaks
-    return content
-      .split('\n\n') // Split by double newlines to identify paragraphs
-      .filter(paragraph => paragraph.trim()) // Remove empty paragraphs
-      .map(paragraph => {
-        // Check if it's a heading (starts with #)
-        if (paragraph.trim().startsWith('#')) {
-          const match = paragraph.match(/^(#{1,6})\s+(.+)$/)
-          if (match) {
-            const level = match[1].length
-            const text = match[2].trim()
-            return `<h${Math.min(level, 6)}>${text}</h${Math.min(level, 6)}>`
-          }
+    // Clean up the content first
+    let cleanContent = content
+      .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+      .replace(/([.!?])\s*([A-Z])/g, '$1</p><p>$2') // Split sentences into paragraphs
+      .trim()
+    
+    // Split by periods and question marks to create paragraphs
+    const sentences = cleanContent.split(/[.!?]/).filter(s => s.trim().length > 0)
+    
+    if (sentences.length === 0) return ''
+    
+    // Group sentences into paragraphs (3-5 sentences per paragraph)
+    const paragraphs: string[] = []
+    let currentParagraph = ''
+    let sentenceCount = 0
+    
+    for (const sentence of sentences) {
+      const trimmedSentence = sentence.trim()
+      
+      // Check for heading patterns (short, specific keywords)
+      if (trimmedSentence.length < 80 && 
+          (trimmedSentence.toLowerCase().includes('about') ||
+           trimmedSentence.toLowerCase().includes('how') ||
+           trimmedSentence.toLowerCase().includes('why') ||
+           trimmedSentence.toLowerCase().includes('join') ||
+           trimmedSentence.toLowerCase().includes('five') ||
+           trimmedSentence.toLowerCase().startsWith('the '))) {
+        
+        // Save current paragraph if it has content
+        if (currentParagraph.trim()) {
+          paragraphs.push(`<p class="text-gray-700 leading-relaxed mb-6">${currentParagraph.trim()}.</p>`)
         }
         
-        // Check if it's a list item (starts with - or * or number)
-        if (paragraph.trim().match(/^[-*]\s+/) || paragraph.trim().match(/^\d+\.\s+/)) {
-          const lines = paragraph.trim().split('\n')
-          const listItems = lines.map(line => {
-            const cleanLine = line.replace(/^[-*]\s+|^\d+\.\s+/, '').trim()
-            return `<li>${cleanLine}</li>`
-          })
-          
-          const isOrdered = lines.some(line => line.trim().match(/^\d+\.\s+/))
-          const listTag = isOrdered ? 'ol' : 'ul'
-          return `<${listTag}>${listItems.join('')}</${listTag}>`
-        }
+        // Add as heading
+        paragraphs.push(`<h2 class="text-2xl font-semibold text-teal-700 mt-8 mb-4">${trimmedSentence}.</h2>`)
+        currentParagraph = ''
+        sentenceCount = 0
+      } else {
+        // Add to current paragraph
+        currentParagraph += (currentParagraph ? ' ' : '') + trimmedSentence
+        sentenceCount++
         
-        // Regular paragraph
-        return `<p>${paragraph.replace(/\n/g, '<br>')}</p>`
-      })
-      .join('\n\n')
-  }
-
-  // Apply syntax highlighting to code blocks
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Import and apply highlight.js if needed
-      import('highlight.js').then((hljs) => {
-        hljs.default.highlightAll()
-      })
+        // Create new paragraph after 3-4 sentences or if it gets long
+        if (sentenceCount >= 4 || currentParagraph.length > 300) {
+          paragraphs.push(`<p class="text-gray-700 leading-relaxed mb-6">${currentParagraph}.</p>`)
+          currentParagraph = ''
+          sentenceCount = 0
+        }
+      }
     }
-  }, [content])
+    
+    // Add any remaining content
+    if (currentParagraph.trim()) {
+      paragraphs.push(`<p class="text-gray-700 leading-relaxed mb-6">${currentParagraph}.</p>`)
+    }
+    
+    return paragraphs.join('\n\n')
+  }
 
   const formattedContent = formatBlogContent(content)
   

@@ -188,84 +188,86 @@ export default function CartUpsells({ productId, productName }: CartUpsellsProps
                 </div>
               )}
 
-              {/* Upsell Products */}
-              <div className="space-y-3">
-                {upsells.map((product) => {
-                  const variant = product.variants?.[0];
-                  if (!variant) return null;
+              {/* Upsell Products - Horizontal Scrolling on Mobile */}
+              <div className="overflow-x-auto pb-2">
+                <div className="flex gap-3 min-w-max sm:flex-col sm:space-y-3 sm:min-w-0">
+                  {upsells.map((product) => {
+                    const variant = product.variants?.[0];
+                    if (!variant) return null;
 
-                  const imageUrl = variant.images?.[0]?.url || null;
-                  const isAdding = addingToCart === product.id;
+                    const imageUrl = variant.images?.[0]?.url || null;
+                    const isAdding = addingToCart === product.id;
 
-                  return (
-                    <div
-                      key={product.id}
-                      className="bg-white rounded-lg p-4 hover:shadow-md transition-shadow border border-gray-100"
-                    >
-                      <div className="flex gap-4">
-                        {/* Product Image */}
-                        <div className="relative w-20 h-20 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg overflow-hidden flex-shrink-0">
-                          {imageUrl ? (
-                            <Image
-                              src={imageUrl}
-                              alt={product.name}
-                              fill
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <div className="w-10 h-10 bg-cyan-200 rounded-full"></div>
+                    return (
+                      <div
+                        key={product.id}
+                        className="bg-white rounded-lg p-4 hover:shadow-md transition-shadow border border-gray-100 w-72 sm:w-full flex-shrink-0"
+                      >
+                        <div className="flex gap-4">
+                          {/* Product Image */}
+                          <div className="relative w-20 h-20 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg overflow-hidden flex-shrink-0">
+                            {imageUrl ? (
+                              <Image
+                                src={imageUrl}
+                                alt={product.name}
+                                fill
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <div className="w-10 h-10 bg-cyan-200 rounded-full"></div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Product Details */}
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold text-gray-900 truncate">
+                              {product.name}
+                            </h4>
+
+                            {product.reason && (
+                              <p className="text-xs text-teal-600 mt-1">
+                                {product.reason}
+                              </p>
+                            )}
+
+                            <div className="flex items-center justify-between mt-2">
+                              <div className="font-bold text-teal-700">
+                                {formatPrice(variant.price)}
+                              </div>
+
+                              <button
+                                onClick={() => handleAddToCart(product)}
+                                disabled={isAdding || variant.stock === 0}
+                                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                                  isAdding
+                                    ? 'bg-green-500 text-white'
+                                    : variant.stock === 0
+                                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                    : 'bg-teal-600 hover:bg-teal-700 text-white hover:shadow-md'
+                                }`}
+                              >
+                                {isAdding ? (
+                                  <span className="flex items-center gap-1">
+                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Added
+                                  </span>
+                                ) : variant.stock === 0 ? (
+                                  'Out of Stock'
+                                ) : (
+                                  '+ Add to Cart'
+                                )}
+                              </button>
                             </div>
-                          )}
-                        </div>
-
-                        {/* Product Details */}
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold text-gray-900 truncate">
-                            {product.name}
-                          </h4>
-
-                          {product.reason && (
-                            <p className="text-xs text-teal-600 mt-1">
-                              {product.reason}
-                            </p>
-                          )}
-
-                          <div className="flex items-center justify-between mt-2">
-                            <div className="font-bold text-teal-700">
-                              {formatPrice(variant.price)}
-                            </div>
-
-                            <button
-                              onClick={() => handleAddToCart(product)}
-                              disabled={isAdding || variant.stock === 0}
-                              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                                isAdding
-                                  ? 'bg-green-500 text-white'
-                                  : variant.stock === 0
-                                  ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                  : 'bg-teal-600 hover:bg-teal-700 text-white hover:shadow-md'
-                              }`}
-                            >
-                              {isAdding ? (
-                                <span className="flex items-center gap-1">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                  </svg>
-                                  Added
-                                </span>
-                              ) : variant.stock === 0 ? (
-                                'Out of Stock'
-                              ) : (
-                                '+ Add to Cart'
-                              )}
-                            </button>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Conservation Message */}
@@ -274,7 +276,7 @@ export default function CartUpsells({ productId, productName }: CartUpsellsProps
                   <div className="flex items-center gap-2 text-xs text-gray-700">
                     <span>🐢</span>
                     <span>
-                      Each product supports ocean conservation efforts in the Rio Grande Valley
+                      Each product supports ocean conservation efforts in Rio Grande Valley
                     </span>
                   </div>
                 </div>
