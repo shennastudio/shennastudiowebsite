@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { X, GripVertical, Loader2, Image as ImageIcon } from 'lucide-react';
 
@@ -23,7 +24,16 @@ export function MultiImageUpload({
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState('');
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageError = (url: string) => {
+    setFailedImages((prev) => {
+      const next = new Set(prev);
+      next.add(url);
+      return next;
+    });
+  };
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -138,18 +148,23 @@ export function MultiImageUpload({
               onDragEnd={handleDragEnd}
               className="relative group cursor-move"
             >
-              {/* Using standard img tag for reliable admin preview with Vercel Blob URLs */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={url}
-                alt={`Product image ${index + 1}`}
-                className="w-full h-32 object-cover rounded-lg border bg-gray-100"
-                onError={(e) => {
-                  // Show placeholder on error
-                  (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyOCIgaGVpZ2h0PSIxMjgiIGZpbGw9IiNFNUU3RUIiLz48cGF0aCBkPSJNNTIgNTJINDBWNDBINTJWNTJaTTg4IDUySDc2VjQwSDg4VjUyWk01MiA4OEg0MFY3Nkg1MlY4OFpNODggODhINzZWNzZIODhWODhaIiBmaWxsPSIjOUNBM0FGIi8+PC9zdmc+';
-                }}
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all rounded-lg flex items-center justify-center">
+              <div className="relative w-full h-32 bg-gray-100 rounded-lg overflow-hidden border">
+                {!failedImages.has(url) ? (
+                  <Image
+                    src={url}
+                    alt={`Product image ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                    onError={() => handleImageError(url)}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full text-gray-400">
+                    <ImageIcon className="w-8 h-8" />
+                  </div>
+                )}
+              </div>
+              <div className="absolute inset-0 hover:bg-black/40 transition-colors duration-200 rounded-lg flex items-center justify-center">
                 <GripVertical className="h-5 w-5 text-white opacity-0 group-hover:opacity-100" />
               </div>
               <div className="absolute top-1 left-1 bg-blue-600 text-white text-xs px-2 py-0.5 rounded">
