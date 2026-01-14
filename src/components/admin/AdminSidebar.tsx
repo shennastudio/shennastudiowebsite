@@ -34,6 +34,7 @@ import {
   Headphones,
   Repeat,
   Ruler,
+  Megaphone,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -79,6 +80,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
     {
       title: 'Marketing',
       items: [
+        { href: '/admin/marketing', label: 'Marketing Hub', icon: Megaphone, color: 'from-purple-400 to-pink-500' },
         { href: '/admin/email-campaigns', label: 'Campaigns', icon: Send, color: 'from-rose-400 to-pink-500' },
         { href: '/admin/seo', label: 'SEO', icon: Search, color: 'from-green-400 to-emerald-500' },
         { href: '/admin/blog', label: 'Blog Posts', icon: FileText, color: 'from-purple-400 to-pink-500' },

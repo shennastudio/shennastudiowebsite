@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, ShoppingBag, ArrowLeft, Truck, Tag, X, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import CartItemImage from '@/components/CartItemImage';
-import CheckoutRecommendations from '@/components/CheckoutRecommendations';
+import CheckoutFeaturedProducts from '@/components/CheckoutFeaturedProducts';
 
 // Static USPS shipping rates
 const USPS_SHIPPING_RATES = [
@@ -471,10 +471,10 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
-                {/* You Might Also Like - One-click add to cart */}
-                <CheckoutRecommendations 
+                {/* You Might Also Like - Featured Products with One-click add */}
+                <CheckoutFeaturedProducts 
                   cartProductIds={cart.items.map(item => String(item.productId))}
-                  limit={3}
+                  limit={4}
                 />
 
                 {/* Discount Code Section */}
