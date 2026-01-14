@@ -38,7 +38,7 @@ export function SplitText({ text, className, delay = 0 }: SplitTextProps) {
         stiffness: 100,
       },
     },
-  };
+  } as const;
 
   return (
     <motion.div
