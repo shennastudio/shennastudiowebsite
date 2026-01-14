@@ -201,7 +201,7 @@ export default function CartUpsells({ productId, productName }: CartUpsellsProps
                     return (
                       <div
                         key={product.id}
-                        className="bg-white rounded-lg p-4 hover:shadow-md transition-shadow border border-gray-100 w-72 sm:w-full flex-shrink-0"
+                        className="bg-white rounded-lg p-4 hover:shadow-md transition-shadow border border-gray-100 w-80 sm:w-full flex-shrink-0"
                       >
                         <div className="flex gap-4">
                           {/* Product Image */}
@@ -232,7 +232,7 @@ export default function CartUpsells({ productId, productName }: CartUpsellsProps
                               </p>
                             )}
 
-                            <div className="flex items-center justify-between mt-2">
+                            <div className="flex flex-wrap items-center justify-between gap-y-2 mt-2">
                               <div className="font-bold text-teal-700">
                                 {formatPrice(variant.price)}
                               </div>

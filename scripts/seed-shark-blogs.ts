@@ -4,14 +4,14 @@ const prisma = new PrismaClient();
 
 // SEO-optimized shark blog images
 const sharkImages = {
-  whaleShark: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=1200&h=630&fit=crop',
-  hammerhead: 'https://images.unsplash.com/photo-1559291001-693fb9166cba?w=1200&h=630&fit=crop',
-  tigerShark: 'https://images.unsplash.com/photo-1564731071754-001b53a902fb?w=1200&h=630&fit=crop',
-  nurseShark: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?w=1200&h=630&fit=crop',
-  bullShark: 'https://images.unsplash.com/photo-1559291001-693fb9166cba?w=1200&h=630&fit=crop',
-  blacktip: 'https://images.unsplash.com/photo-1546500840-ae38253aba9b?w=1200&h=630&fit=crop',
-  greatWhite: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=1200&h=630&fit=crop',
-  sharkConservation: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=630&fit=crop',
+  whaleShark: 'https://images.unsplash.com/photo-1598336332675-9e665d95fe0f?w=1200&h=630&fit=crop', // Whale shark by Ryan Stone
+  hammerhead: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=630&fit=crop', // Hammerhead by Gerald Schömbs
+  tigerShark: 'https://images.unsplash.com/photo-1563810111584-63806dfce3f6?w=1200&h=630&fit=crop', // Tiger shark by Maahid Photos
+  nurseShark: 'https://images.unsplash.com/photo-1518921200446-23136c34091a?w=1200&h=630&fit=crop', // Nurse shark (generic marine life as direct nurse shark match not confirmed, using high quality shark/reef image)
+  bullShark: 'https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=1200&h=630&fit=crop', // Bull shark (using high quality shark image)
+  blacktip: 'https://images.unsplash.com/photo-1570701046271-78923a5c7f8e?w=1200&h=630&fit=crop', // Blacktip reef shark by Corentin Largeron
+  greatWhite: 'https://images.unsplash.com/photo-1596484552834-8a4e3dfbc76e?w=1200&h=630&fit=crop', // Great white shark
+  sharkConservation: 'https://images.unsplash.com/photo-1614088033282-38d6fc57803a?w=1200&h=630&fit=crop', // Shark conservation (diver with shark)
 };
 
 const sharkBlogPosts = [

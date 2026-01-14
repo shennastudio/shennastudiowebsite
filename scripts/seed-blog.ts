@@ -19,7 +19,7 @@ async function seedBlogPosts() {
     // Unique ocean/conservation images for blog posts
     const blogImages = {
       seaTurtle: 'https://images.unsplash.com/photo-1591025207163-942350e47db2?w=800&h=600&fit=crop', // Sea turtle swimming
-      dolphin: 'https://images.unsplash.com/photo-1570481662006-a3a1374699e8?w=800&h=600&fit=crop', // Dolphins jumping
+      dolphin: 'https://images.unsplash.com/photo-1575550959106-5a7defe28b56?w=800&h=600&fit=crop', // Dolphins jumping (Pagie Page)
       pelican: 'https://images.unsplash.com/photo-1601247387326-f8bcb5a234d4?w=800&h=600&fit=crop', // Brown pelican
       laguna: 'https://images.unsplash.com/photo-1507525428034-b723df0612b?w=800&h=600&fit=crop', // Coastal lagoon
       mantaRay: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=600&fit=crop', // Manta ray
