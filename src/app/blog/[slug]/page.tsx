@@ -6,6 +6,8 @@ import { BlogContentEnhancer } from '@/components/blog/BlogContentEnhancer'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import rehypeSlug from 'rehype-slug'
 import rehypeHighlight from 'rehype-highlight'
+import remarkBreaks from 'remark-breaks'
+import remarkGfm from 'remark-gfm'
 
 export const revalidate = 3600
 
@@ -78,10 +80,16 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           source={post.content || ''} 
           options={{
             mdxOptions: {
+              remarkPlugins: [
+                // @ts-expect-error - types for remark plugins
+                remarkGfm,
+                // @ts-expect-error - types for remark plugins
+                remarkBreaks
+              ],
               rehypePlugins: [
-                // @ts-expect-error - types for rehype plugins can be tricky with next-mdx-remote
+                // @ts-expect-error - types for rehype plugins
                 rehypeSlug,
-                // @ts-expect-error - types for rehype plugins can be tricky with next-mdx-remote
+                // @ts-expect-error - types for rehype plugins
                 rehypeHighlight
               ]
             }

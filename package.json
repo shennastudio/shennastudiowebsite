@@ -104,6 +104,8 @@
     "recharts": "^3.6.0",
     "rehype-highlight": "^7.0.2",
     "rehype-slug": "^6.0.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1",
     "resend": "^6.6.0",
     "schema-dts": "^1.1.5",
     "sharp": "^0.34.5",
