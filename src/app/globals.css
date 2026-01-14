@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 @import "../styles/blog.css";
 
@@ -193,7 +194,7 @@
   background-color: #f1f5f9;
   padding: 0.2em 0.4em;
   border-radius: 0.25em;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-size: 0.9em;
   color: #0891b2;
 }
