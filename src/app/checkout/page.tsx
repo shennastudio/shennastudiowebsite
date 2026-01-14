@@ -51,7 +51,7 @@ interface AppliedDiscount {
 
 export default function CheckoutPage() {
   const { data: session } = useSession();
-  const { state: cart } = useCart();
+  const { state: cart, applyDiscount, removeDiscount } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -59,7 +59,12 @@ export default function CheckoutPage() {
   const [discountCode, setDiscountCode] = useState('');
   const [discountLoading, setDiscountLoading] = useState(false);
   const [discountError, setDiscountError] = useState('');
-  const [appliedDiscount, setAppliedDiscount] = useState<AppliedDiscount | null>(null);
+  
+  // Use discount from context
+  const appliedDiscount = cart.discount ? {
+    ...cart.discount,
+    discountAmount: cart.discount.amount
+  } : null;
 
   // Shipping State - pre-select first rate
   const [selectedRate, setSelectedRate] = useState(USPS_SHIPPING_RATES[0]);
@@ -110,9 +115,14 @@ export default function CheckoutPage() {
 
       if (!response.ok) {
         setDiscountError(data.error || 'Invalid discount code');
-        setAppliedDiscount(null);
       } else {
-        setAppliedDiscount(data.discount);
+        // Apply to global cart state
+        applyDiscount(
+          data.discount.code,
+          data.discount.type,
+          data.discount.value,
+          data.discount.description
+        );
         setDiscountError('');
       }
     } catch {
@@ -124,7 +134,7 @@ export default function CheckoutPage() {
 
   // Remove applied discount
   const handleRemoveDiscount = () => {
-    setAppliedDiscount(null);
+    removeDiscount();
     setDiscountCode('');
     setDiscountError('');
   };
@@ -149,9 +159,10 @@ export default function CheckoutPage() {
     try {
       // Calculate shipping (free for orders $50+)
       const shippingCost = qualifiesForFreeShipping ? 0 : parseFloat(selectedRate.amount);
+      const discountAmount = appliedDiscount?.discountAmount || 0;
 
-      // Recalculate total with shipping
-      const finalTotal = cart.subtotal + shippingCost + cart.tax;
+      // Recalculate total with shipping and discount
+      const finalTotal = Math.max(0, cart.subtotal - discountAmount + shippingCost + cart.tax);
 
       // Create checkout session (works for both guest and logged-in users)
       const response = await fetch('/api/checkout/create-session', {

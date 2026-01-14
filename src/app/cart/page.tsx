@@ -4,13 +4,59 @@ import { useCart, PayloadCartItem } from '@/context/CartContext'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
+import { useState } from 'react'
 import CartUpsells from '@/components/CartUpsells'
 import CartItemImage from '@/components/CartItemImage'
+import { Tag, CheckCircle, X, Loader2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 export default function CartPage() {
-  const { state, clearCart, updateQuantity, removeItem } = useCart();
+  const { state, clearCart, updateQuantity, removeItem, applyDiscount, removeDiscount } = useCart();
   const router = useRouter();
   const { data: session } = useSession();
+  
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountLoading, setDiscountLoading] = useState(false);
+  const [discountError, setDiscountError] = useState('');
+
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) return;
+    
+    setDiscountLoading(true);
+    setDiscountError('');
+
+    try {
+      const response = await fetch('/api/discounts/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: discountCode, subtotal: state.subtotal }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setDiscountError(data.error || 'Invalid discount code');
+      } else {
+        applyDiscount(
+          data.discount.code,
+          data.discount.type,
+          data.discount.value,
+          data.discount.description
+        );
+        setDiscountCode('');
+      }
+    } catch {
+      setDiscountError('Failed to validate discount code');
+    } finally {
+      setDiscountLoading(false);
+    }
+  };
+
+  const handleRemoveDiscount = () => {
+    removeDiscount();
+    setDiscountError('');
+  };
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -192,6 +238,51 @@ export default function CartPage() {
                 <div className="flex justify-between text-sm sm:text-base">
                   <span className="text-gray-600">Tax</span>
                   <span className="font-semibold">{formatPrice(state.tax)}</span>
+                </div>
+
+                {state.discount && (
+                  <div className="flex justify-between text-sm sm:text-base text-green-600">
+                    <span>Discount ({state.discount.code})</span>
+                    <span>-{formatPrice(state.discount.amount)}</span>
+                  </div>
+                )}
+
+                {/* Discount Code Input */}
+                <div className="pt-2">
+                  {!state.discount ? (
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Discount code"
+                          value={discountCode}
+                          onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                          className="h-9 text-sm"
+                        />
+                        <Button 
+                          onClick={handleApplyDiscount}
+                          disabled={discountLoading || !discountCode}
+                          variant="outline"
+                          size="sm"
+                          className="h-9 px-3"
+                        >
+                          {discountLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Apply'}
+                        </Button>
+                      </div>
+                      {discountError && (
+                        <p className="text-xs text-red-500">{discountError}</p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="bg-green-50 border border-green-200 rounded p-2 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Tag className="w-3 h-3 text-green-600" />
+                        <span className="text-xs font-medium text-green-700">{state.discount.code} applied</span>
+                      </div>
+                      <button onClick={handleRemoveDiscount} className="text-gray-400 hover:text-red-500">
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <hr className="border-gray-200" />
