@@ -471,12 +471,6 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
-                {/* You Might Also Like - Featured Products with One-click add */}
-                <CheckoutFeaturedProducts 
-                  cartProductIds={cart.items.map(item => String(item.productId))}
-                  limit={4}
-                />
-
                 {/* Discount Code Section */}
                 <div className="border-t pt-4">
                   <div className="flex items-center gap-2 mb-3">
@@ -523,6 +517,12 @@ export default function CheckoutPage() {
                     <p className="text-xs text-red-600 mt-2">{discountError}</p>
                   )}
                 </div>
+
+                {/* You Might Also Like - Featured Products with One-click add */}
+                <CheckoutFeaturedProducts 
+                  cartProductIds={cart.items.map(item => String(item.productId))}
+                  limit={4}
+                />
 
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">

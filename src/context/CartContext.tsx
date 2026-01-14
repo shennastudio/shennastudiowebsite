@@ -63,6 +63,14 @@ interface CartState {
   // Guest checkout info (optional, for non-logged-in users)
   guestEmail?: string | null;
   guestName?: string | null;
+  // Discount info
+  discount?: {
+    code: string;
+    type: string;
+    value: number;
+    amount: number;
+    description?: string;
+  } | null;
 }
 
 // Cart actions
@@ -73,6 +81,8 @@ type CartAction =
   | { type: 'CLEAR_CART' }
   | { type: 'TOGGLE_CART' }
   | { type: 'SET_GUEST_INFO'; payload: { email?: string; name?: string } }
+  | { type: 'APPLY_DISCOUNT'; payload: { code: string; type: string; value: number; description?: string } }
+  | { type: 'REMOVE_DISCOUNT' }
   | { type: 'LOAD_CART'; payload: CartState }
   | { type: 'RECALCULATE_TOTALS' };
 
@@ -94,13 +104,36 @@ function getImageUrl(product: Product, variant?: PayloadProductVariant | null): 
 }
 
 // Helper function to calculate totals
-function calculateTotals(items: PayloadCartItem[]): { subtotal: number; shipping: number; tax: number; total: number } {
+function calculateTotals(items: PayloadCartItem[], discount?: CartState['discount']): { subtotal: number; shipping: number; tax: number; total: number; discountAmount: number } {
   const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const shipping = subtotal > 50 ? 0 : 5.95; // Free shipping over $50
-  const tax = subtotal * 0.0825; // 8.25% tax
-  const total = subtotal + shipping + tax;
+  
+  // Calculate discount amount
+  let discountAmount = 0;
+  if (discount) {
+    if (discount.type === 'PERCENTAGE') {
+      discountAmount = subtotal * (discount.value / 100);
+    } else if (discount.type === 'FIXED_AMOUNT') {
+      discountAmount = discount.value;
+    }
+  }
 
-  return { subtotal, shipping, tax, total };
+  const discountedSubtotal = Math.max(0, subtotal - discountAmount);
+  
+  // Free shipping check - applied AFTER discount? Usually depends on policy.
+  // Assuming free shipping based on PRE-discount subtotal is common for "Spend X to get free shipping", 
+  // but let's stick to simple logic or what was there.
+  // Previous logic: const shipping = subtotal > 50 ? 0 : 5.95;
+  // If discount is FREE_SHIPPING type, then 0.
+  
+  let shipping = subtotal > 50 ? 0 : 5.95;
+  if (discount?.type === 'FREE_SHIPPING') {
+    shipping = 0;
+  }
+
+  const tax = discountedSubtotal * 0.0825; // 8.25% tax
+  const total = discountedSubtotal + shipping + tax;
+
+  return { subtotal, shipping, tax, total, discountAmount };
 }
 
 // Cart reducer
@@ -149,24 +182,33 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         newItems = [...state.items, newItem];
       }
 
-      const totals = calculateTotals(newItems);
+      const totals = calculateTotals(newItems, state.discount);
 
       newState = {
         ...state,
         items: newItems,
-        ...totals,
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        total: totals.total,
+        // Update discount amount if percentage based
+        discount: state.discount ? { ...state.discount, amount: totals.discountAmount } : null,
       };
       break;
     }
 
     case 'REMOVE_FROM_CART': {
       const newItems = state.items.filter(item => item.id !== action.payload);
-      const totals = calculateTotals(newItems);
+      const totals = calculateTotals(newItems, state.discount);
 
       newState = {
         ...state,
         items: newItems,
-        ...totals,
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        total: totals.total,
+        discount: state.discount ? { ...state.discount, amount: totals.discountAmount } : null,
       };
       break;
     }
@@ -178,12 +220,16 @@ function cartReducer(state: CartState, action: CartAction): CartState {
           : item
       ).filter(item => item.quantity > 0); // Remove items with 0 quantity
 
-      const totals = calculateTotals(newItems);
+      const totals = calculateTotals(newItems, state.discount);
 
       newState = {
         ...state,
         items: newItems,
-        ...totals,
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        total: totals.total,
+        discount: state.discount ? { ...state.discount, amount: totals.discountAmount } : null,
       };
       break;
     }
@@ -196,6 +242,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         shipping: 0,
         tax: 0,
         total: 0,
+        discount: null,
       };
       break;
 
@@ -210,14 +257,54 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       };
       break;
 
+    case 'APPLY_DISCOUNT': {
+      const discount = {
+        code: action.payload.code,
+        type: action.payload.type,
+        value: action.payload.value,
+        description: action.payload.description,
+        amount: 0, // Calculated below
+      };
+      
+      const totals = calculateTotals(state.items, discount);
+      
+      newState = {
+        ...state,
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        total: totals.total,
+        discount: { ...discount, amount: totals.discountAmount },
+      };
+      break;
+    }
+
+    case 'REMOVE_DISCOUNT': {
+      const totals = calculateTotals(state.items, undefined);
+      
+      newState = {
+        ...state,
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        total: totals.total,
+        discount: null,
+      };
+      break;
+    }
+
     case 'LOAD_CART':
       return action.payload;
 
     case 'RECALCULATE_TOTALS': {
-      const totals = calculateTotals(state.items);
+      const totals = calculateTotals(state.items, state.discount);
       newState = {
         ...state,
-        ...totals,
+        subtotal: totals.subtotal,
+        shipping: totals.shipping,
+        tax: totals.tax,
+        total: totals.total,
+        discount: state.discount ? { ...state.discount, amount: totals.discountAmount } : null,
       };
       break;
     }
@@ -244,6 +331,7 @@ const initialState: CartState = {
   isOpen: false,
   guestEmail: null,
   guestName: null,
+  discount: null,
 };
 
 // Helper function to track add to cart in custom backend
@@ -288,6 +376,8 @@ const CartContext = createContext<{
   setGuestInfo: (email?: string, name?: string) => void;
   syncWithPayload: (userId?: number) => Promise<void>;
   recalculateTotals: () => void;
+  applyDiscount: (code: string, type: string, value: number, description?: string) => void;
+  removeDiscount: () => void;
 } | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -419,6 +509,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     */
   };
 
+  const applyDiscount = (code: string, type: string, value: number, description?: string) => {
+    dispatch({ type: 'APPLY_DISCOUNT', payload: { code, type, value, description } });
+  };
+
+  const removeDiscount = () => {
+    dispatch({ type: 'REMOVE_DISCOUNT' });
+  };
+
   const value = {
     state,
     dispatch,
@@ -430,6 +528,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setGuestInfo,
     syncWithPayload,
     recalculateTotals,
+    applyDiscount,
+    removeDiscount,
   };
 
   return (
