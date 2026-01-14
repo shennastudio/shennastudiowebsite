@@ -37,7 +37,7 @@ export function ReviewCard({ author, text, rating, location, date }: ReviewCardP
         ))}
       </div>
       
-      <p className="text-gray-600 mb-6 italic leading-relaxed">"{text}"</p>
+      <p className="text-gray-600 mb-6 italic leading-relaxed">&quot;{text}&quot;</p>
       
       <div className="flex items-center justify-between mt-auto border-t border-gray-100 pt-4">
         <div>

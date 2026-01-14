@@ -7,17 +7,13 @@ import {
   Edit,
   Save,
   X,
-  Plus,
-  Trash2,
   Package,
   Star,
   Zap,
   Crown,
   Check,
   Loader2,
-  User as UserIcon,
-  Calendar,
-  AlertCircle
+  User as UserIcon
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -800,7 +796,7 @@ export default function SubscriptionsPage() {
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <h3 className="font-medium text-blue-900 mb-2">Managing Subscription Plans</h3>
         <ul className="text-sm text-blue-800 space-y-1">
-          <li>Click "Edit Plan" to modify pricing, features, and settings</li>
+          <li>Click &quot;Edit Plan&quot; to modify pricing, features, and settings</li>
           <li>Changes take effect immediately for new subscribers</li>
           <li>Existing subscribers will keep their current rate until renewal</li>
           <li>Deactivate plans to hide them from new signups without affecting current subscribers</li>

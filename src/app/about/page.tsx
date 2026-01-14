@@ -38,13 +38,13 @@ export default function AboutPage() {
                   the impact of plastic pollution and climate change on our local marine ecosystems.
                 </p>
                 <p>
-                  Living near South Padre Island, we've seen the beauty of sea turtle nesting grounds, the majesty of 
+                  Living near South Padre Island, we&apos;ve seen the beauty of sea turtle nesting grounds, the majesty of 
                   dolphins playing in the Gulf, and the vital importance of coral reef preservation. Each bracelet we create 
                   tells a story of these ocean treasures we&apos;re fighting to protect.
                 </p>
                 <p>
                   <strong className="text-teal-600">10% of every purchase</strong> goes directly to marine conservation 
-                  organizations working in Rio Grande Valley and South Padre Island. We've partnered with local groups 
+                  organizations working in Rio Grande Valley and South Padre Island. We&apos;ve partnered with local groups 
                   protecting nesting sea turtles, researching whale migration patterns, and restoring coral reefs.
                 </p>
               </div>
@@ -81,7 +81,7 @@ export default function AboutPage() {
               Our Conservation Impact
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Together with our customers, we're making real difference for marine life in Texas Gulf Coast.
+              Together with our customers, we&apos;re making real difference for marine life in Texas Gulf Coast.
             </p>
           </AnimatedSection>
 

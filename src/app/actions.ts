@@ -214,7 +214,29 @@ const getCachedFeaturedProducts = unstable_cache(
 
 export async function fetchFeaturedProducts(limit: number = 6) {
   try {
-    return await getCachedFeaturedProducts(limit);
+    const featured = await getCachedFeaturedProducts(limit);
+    
+    // If no featured products, fallback to latest products
+    if (featured.length === 0) {
+      const latestProducts = await prisma.product.findMany({
+        include: {
+          category: true,
+          variants: true,
+          images: {
+            orderBy: {
+              position: 'asc',
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        take: limit,
+      });
+      return latestProducts.map(transformProduct);
+    }
+    
+    return featured;
   } catch (error) {
     console.error('Error fetching featured products:', error);
     return [];

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, ShoppingBag, ArrowLeft, Truck } from 'lucide-react';
+import { Loader2, ShoppingBag, ArrowLeft, Truck, Tag, X, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import CartItemImage from '@/components/CartItemImage';
 
@@ -39,11 +39,26 @@ const USPS_SHIPPING_RATES = [
   },
 ];
 
+interface AppliedDiscount {
+  id: string;
+  code: string;
+  type: string;
+  value: number;
+  description: string;
+  discountAmount: number;
+}
+
 export default function CheckoutPage() {
   const { data: session } = useSession();
   const { state: cart } = useCart();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Discount code state
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountLoading, setDiscountLoading] = useState(false);
+  const [discountError, setDiscountError] = useState('');
+  const [appliedDiscount, setAppliedDiscount] = useState<AppliedDiscount | null>(null);
 
   // Shipping State - pre-select first rate
   const [selectedRate, setSelectedRate] = useState(USPS_SHIPPING_RATES[0]);
@@ -70,8 +85,48 @@ export default function CheckoutPage() {
     }
   }, [session]);
 
-  // Check for free shipping (orders $50+)
-  const qualifiesForFreeShipping = cart.subtotal >= 50;
+  // Check for free shipping (orders $50+ or discount includes free shipping)
+  const qualifiesForFreeShipping = cart.subtotal >= 50 || appliedDiscount?.type === 'FREE_SHIPPING';
+
+  // Apply discount code
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) {
+      setDiscountError('Please enter a discount code');
+      return;
+    }
+
+    setDiscountLoading(true);
+    setDiscountError('');
+
+    try {
+      const response = await fetch('/api/discounts/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: discountCode, subtotal: cart.subtotal }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setDiscountError(data.error || 'Invalid discount code');
+        setAppliedDiscount(null);
+      } else {
+        setAppliedDiscount(data.discount);
+        setDiscountError('');
+      }
+    } catch {
+      setDiscountError('Failed to validate discount code');
+    } finally {
+      setDiscountLoading(false);
+    }
+  };
+
+  // Remove applied discount
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null);
+    setDiscountCode('');
+    setDiscountError('');
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -166,7 +221,8 @@ export default function CheckoutPage() {
 
   // Calculate final shipping and total
   const finalShipping = qualifiesForFreeShipping ? 0 : parseFloat(selectedRate.amount);
-  const finalTotal = cart.subtotal + finalShipping + cart.tax;
+  const discountAmount = appliedDiscount?.discountAmount || 0;
+  const finalTotal = Math.max(0, cart.subtotal - discountAmount + finalShipping + cart.tax);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -414,11 +470,64 @@ export default function CheckoutPage() {
                   ))}
                 </div>
 
+                {/* Discount Code Section */}
+                <div className="border-t pt-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Tag className="h-4 w-4 text-slate-600" />
+                    <span className="text-sm font-medium">Discount Code</span>
+                  </div>
+                  
+                  {appliedDiscount ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-green-600" />
+                        <div>
+                          <p className="text-sm font-medium text-green-800">{appliedDiscount.code}</p>
+                          <p className="text-xs text-green-600">{appliedDiscount.description}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={handleRemoveDiscount}
+                        className="text-gray-400 hover:text-red-500 transition-colors"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Input
+                        value={discountCode}
+                        onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                        placeholder="Enter code"
+                        className="flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleApplyDiscount}
+                        disabled={discountLoading}
+                      >
+                        {discountLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Apply'}
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {discountError && (
+                    <p className="text-xs text-red-600 mt-2">{discountError}</p>
+                  )}
+                </div>
+
                 <div className="border-t pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Subtotal</span>
                     <span>${cart.subtotal.toFixed(2)}</span>
                   </div>
+                  {appliedDiscount && appliedDiscount.discountAmount > 0 && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span>Discount ({appliedDiscount.code})</span>
+                      <span>-${appliedDiscount.discountAmount.toFixed(2)}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between text-sm">
                     <span>Shipping</span>
                     <span className={qualifiesForFreeShipping ? 'text-green-600 font-medium' : ''}>

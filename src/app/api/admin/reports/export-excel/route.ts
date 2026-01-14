@@ -268,7 +268,7 @@ export async function POST(req: Request) {
     // Return file
     const filename = `ShennaStudio-Financial-Report-${reportData.reportPeriod.year}-${reportData.reportPeriod.quarter.replace(' ', '-')}.xlsx`;
 
-    return new NextResponse(buffer as any, {
+    return new NextResponse(buffer as ArrayBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

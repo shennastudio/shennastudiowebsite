@@ -128,6 +128,7 @@ export default function InstagramFeed({
             fill
             className="object-cover"
             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
+            priority={parseInt(post.id) <= 2}
           />
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-3">

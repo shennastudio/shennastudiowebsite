@@ -18,7 +18,19 @@ import { fetchFeaturedProducts } from './actions'
 // In a real app, you might use a wrapper for the client parts or separate server/client components.
 
 export default function Home() {
-  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<{
+    product: {
+      id: string;
+      name: string;
+      description: string | null;
+      slug: string;
+      basePrice: number;
+      featured: boolean;
+    };
+    displayPrice: number;
+    displayStock: number;
+    displayImages: string[];
+  }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -30,30 +42,23 @@ export default function Home() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   useEffect(() => {
-    // Try to load from cache first for instant display
-    const cached = localStorage.getItem('featured-products-cache');
-    const cacheTime = localStorage.getItem('featured-products-cache-time');
-    const fiveMinutes = 5 * 60 * 1000;
-
-    if (cached && cacheTime && Date.now() - parseInt(cacheTime) < fiveMinutes) {
-      try {
-        setFeaturedProducts(JSON.parse(cached));
-        setIsLoading(false);
-      } catch {
-        // Invalid cache, will fetch fresh
-      }
-    }
-
-    // Always fetch fresh data in background
+    // Fetch products immediately - server will handle caching
+    let isMounted = true;
+    
     fetchFeaturedProducts(6).then((products) => {
-      setFeaturedProducts(products);
-      setIsLoading(false);
-      // Cache the results
-      localStorage.setItem('featured-products-cache', JSON.stringify(products));
-      localStorage.setItem('featured-products-cache-time', Date.now().toString());
+      if (isMounted) {
+        setFeaturedProducts(products);
+        setIsLoading(false);
+      }
     }).catch(() => {
-      setIsLoading(false);
+      if (isMounted) {
+        setIsLoading(false);
+      }
     });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

@@ -1,7 +1,5 @@
 'use client'
 
-import { useEffect } from 'react'
-
 interface ContentRendererProps {
   content: string
 }
@@ -17,7 +15,7 @@ export function ContentRenderer({ content }: ContentRendererProps) {
     }
     
     // Clean up and format the content
-    let processedContent = content
+    const processedContent = content
       .replace(/\s+/g, ' ') // Replace multiple spaces with single space
       .replace(/([.!?])\s+/g, '$1 ') // Clean up spacing after punctuation
       .trim()
