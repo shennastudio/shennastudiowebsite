@@ -7,7 +7,6 @@ import {
   useTransform, 
   useInView, 
   useSpring, 
-  useMotionValue, 
   Variants 
 } from 'framer-motion'
 

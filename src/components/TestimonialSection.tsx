@@ -15,7 +15,6 @@ interface Review {
 
 export function TestimonialSection() {
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchReviews() {
@@ -36,8 +35,6 @@ export function TestimonialSection() {
         }
       } catch (error) {
         console.error('Failed to fetch reviews', error);
-      } finally {
-        setLoading(false);
       }
     }
     fetchReviews();
@@ -62,7 +59,7 @@ export function TestimonialSection() {
             Love from Across Texas
           </motion.h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Join thousands of happy customers supporting marine conservation.
+            Join Us
           </p>
         </div>
 
