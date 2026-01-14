@@ -115,15 +115,17 @@ function SuccessPageContent() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
-              <Link href="/account/orders" className="flex-1">
-                <Button variant="outline" className="w-full">
-                  View Order History
-                </Button>
+              <Link 
+                href="/account/orders" 
+                className="flex-1 inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+              >
+                View Order History
               </Link>
-              <Link href="/products" className="flex-1">
-                <Button className="w-full">
-                  Continue Shopping
-                </Button>
+              <Link 
+                href="/products" 
+                className="flex-1 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-medium text-white bg-teal-600 hover:bg-teal-700 transition-colors"
+              >
+                Continue Shopping
               </Link>
             </div>
           </CardContent>

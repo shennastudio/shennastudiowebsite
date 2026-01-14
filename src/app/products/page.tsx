@@ -1,13 +1,101 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { fetchProducts, fetchFeaturedProducts } from '@/app/actions';
+import { fetchProducts } from '@/app/actions';
 import ParallaxBanner from '@/components/ParallaxBanner';
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection';
+import { prisma } from '@/lib/prisma';
+import { Tag, Clock, Percent } from 'lucide-react';
+
+interface DiscountCode {
+  code: string;
+  type: string;
+  value: number;
+  description: string | null;
+  expiresAt: Date | null;
+  minPurchaseAmount: number | null;
+}
+
+async function getActiveDiscounts(): Promise<DiscountCode[]> {
+  try {
+    const now = new Date();
+    const discounts = await prisma.discountCode.findMany({
+      where: {
+        isActive: true,
+        OR: [
+          { startsAt: null },
+          { startsAt: { lte: now } },
+        ],
+        AND: [
+          {
+            OR: [
+              { expiresAt: null },
+              { expiresAt: { gte: now } },
+            ],
+          },
+        ],
+      },
+      select: {
+        code: true,
+        type: true,
+        value: true,
+        description: true,
+        expiresAt: true,
+        minPurchaseAmount: true,
+      },
+      orderBy: {
+        value: 'desc',
+      },
+      take: 3,
+    });
+    return discounts;
+  } catch {
+    return [];
+  }
+}
+
+function DiscountBanner({ discounts }: { discounts: DiscountCode[] }) {
+  if (discounts.length === 0) return null;
+
+  return (
+    <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 py-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center justify-center gap-4 text-white">
+          <div className="flex items-center gap-2">
+            <Tag className="w-5 h-5" />
+            <span className="font-bold text-sm sm:text-base">Active Discounts:</span>
+          </div>
+          {discounts.map((discount) => (
+            <div
+              key={discount.code}
+              className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
+            >
+              <Percent className="w-4 h-4" />
+              <span className="font-mono font-bold text-sm">{discount.code}</span>
+              <span className="text-xs opacity-90">
+                {discount.type === 'PERCENTAGE'
+                  ? `${discount.value}% OFF`
+                  : discount.type === 'FIXED_AMOUNT'
+                  ? `$${discount.value} OFF`
+                  : 'FREE SHIPPING'}
+              </span>
+              {discount.expiresAt && (
+                <span className="flex items-center gap-1 text-xs opacity-75">
+                  <Clock className="w-3 h-3" />
+                  Ends {new Date(discount.expiresAt).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default async function ProductsPage() {
-  const [{ data: products, total }, featuredProducts] = await Promise.all([
+  const [{ data: products, total }, discounts] = await Promise.all([
     fetchProducts({}, { page: 1, limit: 50 }),
-    fetchFeaturedProducts(4),
+    getActiveDiscounts(),
   ]);
 
   return (
@@ -30,62 +118,8 @@ export default async function ProductsPage() {
         </div>
       </section>
 
-      {/* Featured Products Section */}
-      {featuredProducts.length > 0 && (
-        <section className="py-12 bg-gradient-to-b from-white to-cyan-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection animation="fadeInUp" className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2 flex items-center justify-center gap-3">
-                <span className="text-2xl">✨</span>
-                You Might Also Like
-                <span className="text-2xl">✨</span>
-              </h2>
-              <p className="text-gray-600">Our most popular ocean treasures</p>
-            </AnimatedSection>
-            <StaggeredChildren className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={100}>
-              {featuredProducts.map((featured) => (
-                <Link
-                  key={featured.product.id}
-                  href={`/products/${featured.product.slug}`}
-                  className="stagger-child group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-teal-400"
-                >
-                  <div className="relative h-48 bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
-                    {featured.displayImages?.[0] ? (
-                      <Image
-                        src={featured.displayImages[0]}
-                        alt={featured.product.name}
-                        fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <div className="text-5xl opacity-50">🌊</div>
-                      </div>
-                    )}
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                      Featured
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors line-clamp-1">
-                      {featured.product.name}
-                    </h3>
-                    <div className="flex items-center justify-between mt-2">
-                      <span className="text-lg font-bold text-teal-600">
-                        ${featured.displayPrice.toFixed(2)}
-                      </span>
-                      <span className="text-sm text-gray-500">
-                        {featured.displayStock > 0 ? `${featured.displayStock} left` : 'Sold out'}
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </StaggeredChildren>
-          </div>
-        </section>
-      )}
+      {/* Discount Codes Banner */}
+      <DiscountBanner discounts={discounts} />
 
       {/* Whale Parallax Banner */}
       <ParallaxBanner
