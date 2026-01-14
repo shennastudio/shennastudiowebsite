@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Package, Truck, Users, Award, CheckCircle, ArrowRight, Store, Heart } from 'lucide-react';
+import { FaireLogo } from '@/components/FaireLogo';
 
 export const metadata: Metadata = {
   title: 'Wholesale | ShennaStudio - Ocean-Themed Bracelets for Retailers',
@@ -111,16 +111,7 @@ export default function WholesalePage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-cyan-50 transition-all shadow-xl"
               >
-                <Image
-                  src="/images/faire-logo.png"
-                  alt="Faire"
-                  width={24}
-                  height={24}
-                  className="object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                <FaireLogo />
                 Shop on Faire
                 <ArrowRight className="w-5 h-5" />
               </a>
