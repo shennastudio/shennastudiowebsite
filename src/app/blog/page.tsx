@@ -33,20 +33,26 @@ export default async function BlogPage() {
   const recentPosts = posts.filter(post => !post.featured)
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-50 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-teal-500/10 to-transparent" />
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-cyan-400/20 rounded-full blur-[100px]" />
+        <div className="absolute top-[20%] left-[-10%] w-[400px] h-[400px] bg-blue-400/20 rounded-full blur-[100px]" />
+      </div>
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-teal-600 via-blue-600 to-cyan-700 py-20 text-white relative overflow-hidden">
-        {/* Animated background waves */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%23ffffff%22 d=%22M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E')] bg-cover bg-bottom animate-pulse" />
-        </div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <AnimatedSection animation="fadeInDown" className="text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">
-              Conservation Blog
+      <section className="relative z-10 pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <AnimatedSection animation="fadeInDown" className="text-center max-w-4xl mx-auto">
+            <span className="inline-block py-1 px-3 rounded-full bg-teal-100/80 text-teal-700 text-sm font-semibold mb-6 backdrop-blur-sm border border-teal-200">
+              ShennaStudio Journal
+            </span>
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-teal-800 via-blue-700 to-cyan-700 tracking-tight">
+              Stories from the Ocean
             </h1>
-            <p className="text-xl md:text-2xl text-cyan-100 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Stories from the ocean: sea turtle rescue, marine conservation, and our mission to protect South Padre Island&apos;s coastal ecosystems
+            <p className="text-xl md:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+              Exploring sea turtle rescue, marine conservation, and the handcrafted artistry behind every piece.
             </p>
           </AnimatedSection>
         </div>
@@ -54,60 +60,70 @@ export default async function BlogPage() {
 
       {/* Featured Posts */}
       {featuredPosts.length > 0 && (
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-cyan-50">
+        <section className="relative z-10 py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <AnimatedSection animation="fadeInUp">
-              <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-12">
-                Featured Stories
-              </h2>
+            <AnimatedSection animation="fadeInUp" className="mb-12">
+              <div className="flex items-center gap-4 mb-2">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
+                <h2 className="text-2xl font-bold text-slate-800 uppercase tracking-wider">Featured Stories</h2>
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
+              </div>
             </AnimatedSection>
 
             <StaggeredChildren className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {featuredPosts.map((post, index) => (
+              {featuredPosts.map((post) => (
                 <article
                   key={post.id}
-                  className="stagger-child bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all border border-teal-100 group"
+                  className="group relative h-[500px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:shadow-3xl hover:-translate-y-1"
                 >
-                  <div className="relative h-64 overflow-hidden bg-gradient-to-br from-teal-100 to-cyan-100">
+                  <div className="absolute inset-0">
                     {post.featuredImage ? (
                       <Image
                         src={post.featuredImage}
                         alt={post.title}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex items-center justify-center h-full text-slate-400">
-                        <span className="text-6xl animate-bounce">🌊</span>
+                      <div className="w-full h-full bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
+                        <span className="text-6xl">🌊</span>
                       </div>
                     )}
-                    {post.category && (
-                      <div className="absolute top-4 right-4 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-4 py-1.5 rounded-full text-sm font-semibold shadow-lg">
-                        {post.category}
-                      </div>
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                   </div>
-                  <div className="p-8">
-                    <div className="text-sm text-teal-600 font-medium mb-2">
-                      {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
+
+                  <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end text-white">
+                    <div className="transform transition-transform duration-300 translate-y-4 group-hover:translate-y-0">
+                      {post.category && (
+                        <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-sm font-medium border border-white/30 mb-4">
+                          {post.category}
+                        </span>
+                      )}
+                      
+                      <h3 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+                        <Link href={`/blog/${post.slug}`} className="hover:underline decoration-teal-400 decoration-2 underline-offset-4">
+                          {post.title}
+                        </Link>
+                      </h3>
+                      
+                      <p className="text-slate-200 mb-6 line-clamp-2 md:line-clamp-3 text-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                        {post.excerpt}
+                      </p>
+
+                      <div className="flex items-center gap-4 text-sm font-medium text-slate-300">
+                        <time>
+                          {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </time>
+                        <span>•</span>
+                        <Link href={`/blog/${post.slug}`} className="text-white hover:text-teal-300 transition-colors flex items-center gap-2">
+                          Read Story <span className="text-xl">→</span>
+                        </Link>
+                      </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-teal-700 transition-colors">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-600 mb-6 leading-relaxed line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="inline-block bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white px-6 py-3 rounded-full font-semibold transition-all transform hover:scale-105 hover:shadow-lg"
-                    >
-                      Read Full Story
-                    </Link>
                   </div>
                 </article>
               ))}
@@ -116,103 +132,115 @@ export default async function BlogPage() {
         </section>
       )}
 
-      {/* Recent Posts */}
-      <section className="py-16 bg-white">
+      {/* Recent Posts Grid */}
+      <section className="relative z-10 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <AnimatedSection animation="fadeInUp">
-            <h2 className="text-3xl md:text-4xl font-bold text-teal-700 mb-12">
-              {featuredPosts.length > 0 ? 'Recent Updates' : 'All Stories'}
-            </h2>
+          <AnimatedSection animation="fadeInUp" className="mb-12">
+             <h2 className="text-3xl font-bold text-slate-900 mb-2">
+               {featuredPosts.length > 0 ? 'Recent Updates' : 'All Stories'}
+             </h2>
+             <div className="h-1 w-20 bg-teal-500 rounded-full" />
           </AnimatedSection>
 
           {recentPosts.length > 0 ? (
-            <StaggeredChildren className="grid grid-cols-1 md:grid-cols-2 gap-8" staggerDelay={150}>
+            <StaggeredChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" staggerDelay={100}>
               {recentPosts.map((post) => (
                 <article
                   key={post.id}
-                  className="stagger-child bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all border border-gray-200 group hover:-translate-y-1"
+                  className="group bg-white/60 backdrop-blur-md rounded-2xl overflow-hidden border border-white/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
-                  <div className="relative h-48 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-100">
+                  <div className="relative h-64 overflow-hidden">
                     {post.featuredImage ? (
                       <Image
                         src={post.featuredImage}
                         alt={post.title}
                         fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex items-center justify-center h-full text-slate-400">
-                        <span className="text-5xl animate-pulse">🌊</span>
+                      <div className="w-full h-full bg-slate-100 flex items-center justify-center text-4xl">
+                        🌊
                       </div>
                     )}
                     {post.category && (
-                      <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-md">
-                        {post.category}
+                      <div className="absolute top-4 left-4">
+                        <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur text-xs font-bold text-teal-700 shadow-sm">
+                          {post.category}
+                        </span>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
+
                   <div className="p-6">
-                    <div className="text-sm text-blue-600 font-medium mb-2">
-                      {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
+                    <div className="text-sm text-slate-500 mb-3 flex items-center gap-2">
+                      <time>
+                        {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric'
+                        })}
+                      </time>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-teal-700 transition-colors">
-                      {post.title}
+
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text group-hover:text-teal-600 transition-colors">
+                      <Link href={`/blog/${post.slug}`}>
+                        {post.title}
+                      </Link>
                     </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-2">
+
+                    <p className="text-slate-600 mb-4 line-clamp-3 text-sm leading-relaxed">
                       {post.excerpt}
                     </p>
+
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="inline-flex items-center text-teal-600 hover:text-teal-700 font-semibold transition-colors group/link"
+                      className="inline-flex items-center text-teal-600 font-semibold text-sm hover:text-teal-800 transition-colors group/link"
                     >
-                      Read More
-                      <span className="ml-1 group-hover/link:translate-x-1 transition-transform">→</span>
+                      Read more 
+                      <svg className="w-4 h-4 ml-1 transform transition-transform group-hover/link:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
                     </Link>
                   </div>
                 </article>
               ))}
             </StaggeredChildren>
           ) : (
-            <div className="text-center py-12 text-slate-500">
-              <p>No recent posts found. Check back soon!</p>
-            </div>
+             <div className="col-span-full text-center py-20 bg-white/50 backdrop-blur-sm rounded-3xl border border-dashed border-slate-300">
+               <span className="text-4xl mb-4 block">📝</span>
+               <h3 className="text-lg font-medium text-slate-900">No recent stories yet</h3>
+               <p className="text-slate-500">Check back soon for new updates from the studio.</p>
+             </div>
           )}
         </div>
       </section>
 
       {/* Conservation CTA */}
-      <section className="bg-gradient-to-r from-teal-600 via-blue-600 to-cyan-700 py-16 relative overflow-hidden">
-        {/* Animated background particles */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-20 h-20 rounded-full bg-white animate-ping" style={{ animationDuration: '3s' }} />
-          <div className="absolute top-1/2 right-20 w-16 h-16 rounded-full bg-white animate-ping" style={{ animationDuration: '4s', animationDelay: '1s' }} />
-          <div className="absolute bottom-20 left-1/3 w-12 h-12 rounded-full bg-white animate-ping" style={{ animationDuration: '5s', animationDelay: '2s' }} />
-        </div>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <section className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-teal-900 via-blue-900 to-slate-900" />
+        <div className="absolute inset-0 opacity-20 bg-[url('/noise.png')] mix-blend-overlay" />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection animation="fadeInUp">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-              Support Ocean Conservation
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 tracking-tight">
+              Wear Your Impact
             </h2>
-            <p className="text-xl text-cyan-100 mb-8 max-w-3xl mx-auto">
-              Every ShennaStudio bracelet purchase donates 10% to Sea Turtle Inc. and marine conservation efforts in South Padre Island and the Rio Grande Valley.
+            <p className="text-xl text-teal-100 mb-10 max-w-2xl mx-auto leading-relaxed font-light">
+              Every bracelet purchased directly supports our conservation partners at Sea Turtle Inc. and local marine life protection efforts.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Link
                 href="/products"
-                className="inline-block bg-white text-teal-700 px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-110 shadow-lg hover:shadow-xl"
+                className="bg-white text-teal-900 px-8 py-4 rounded-full font-bold hover:bg-teal-50 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]"
               >
                 Shop Ocean Collection
               </Link>
               <Link
                 href="/conservation"
-                className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all hover:scale-105"
+                className="group flex items-center justify-center px-8 py-4 rounded-full border border-white/30 text-white font-medium hover:bg-white/10 transition-all backdrop-blur-sm"
               >
-                Learn More About Our Mission
+                Our Mission 
+                <span className="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
               </Link>
             </div>
           </AnimatedSection>
@@ -220,4 +248,5 @@ export default async function BlogPage() {
       </section>
     </div>
   )
+}
 }

@@ -18,205 +18,160 @@ export function BlogContentEnhancer({
   category 
 }: BlogContentEnhancerProps) {
   const [isVisible, setIsVisible] = useState(false)
-  const [activeImageIndex, setActiveImageIndex] = useState(0)
 
   useEffect(() => {
     setIsVisible(true)
   }, [])
 
   return (
-    <div className="min-h-screen">
-      {/* Animated Hero Section */}
-      <div className="relative h-96 overflow-hidden">
-        {/* Parallax Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-600 via-blue-600 to-cyan-700">
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%23ffffff%22 d=%22M0,160L48,192l408,128l0,128L0,192L0,320L1440,320L1440,0L0,0L0,192L408,320l-96,64l192,128l0,128L0,192L0,320l96,128L0,128L0,192L-96,64L-192,0L0,0L0,192L-408,320z%22/%3E%3C/svg%3E')] bg-cover bg-center opacity-30 animate-pulse-slow"></div>
-          </div>
-          
-          {/* Animated Waves */}
-          <div className="absolute bottom-0 left-0 right-0 h-32">
-            <svg className="w-full h-20 animate-bounce" viewBox="0 0 1440 320" preserveAspectRatio="none">
-              <path 
-                fill="rgba(255,255,255,0.3)" 
-                d="M0,160L48,192l408,128l0,128L0,192L0,320L1440,320L1440,0L0,0L0,192L408,320l-96,64l192,128l0,128L0,192L0,320l96,128L0,128L0,192L-96,64L-192,0L0,0L0,192L408,320z"
-              />
-            </svg>
-          </div>
-        </div>
-
-        {/* Featured Image with Ken Burns Effect */}
-        <div className="relative h-full">
-          {featuredImage && (
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero Section */}
+      <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
+        {/* Background Image/Gradient */}
+        <div className="absolute inset-0 bg-slate-900">
+          {featuredImage ? (
             <>
-              <div className="absolute inset-0 bg-black/40 z-10"></div>
               <Image
                 src={featuredImage}
                 alt={title}
                 fill
-                className="object-cover opacity-90 hover:opacity-100 transition-opacity duration-1000"
+                className="object-cover opacity-60"
                 priority
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
             </>
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-teal-900 via-blue-900 to-slate-900" />
           )}
-          
-          {/* Floating Particles */}
-          <div className="absolute inset-0 pointer-events-none">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-1 h-1 bg-white rounded-full opacity-60 animate-ping"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${i * 0.5}s`,
-                  animationDuration: '3s'
-                }}
-              />
-            ))}
-          </div>
+        </div>
 
-          {/* Content Overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-            <div className={`max-w-4xl mx-auto text-center transition-all duration-1000 transform ${
-              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-            }`}>
-              <div className="flex items-center gap-4 mb-4 justify-center">
-                {category && (
-                  <span className="bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg animate-pulse">
-                    {category}
-                  </span>
-                )}
-                <span className="text-white text-sm">
-                  {new Date().toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric', 
-                    year: 'numeric'
-                  })}
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center p-4">
+          <div className={`max-w-4xl w-full text-center transition-all duration-1000 transform ${
+            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`}>
+            <div className="flex items-center gap-3 mb-6 justify-center flex-wrap">
+              {category && (
+                <span className="bg-teal-500/20 backdrop-blur-md border border-teal-500/30 text-teal-100 px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide uppercase">
+                  {category}
                 </span>
-              </div>
-              
-              <h1 className="text-4xl md:text-5xl font-black text-white mb-4 drop-shadow-lg">
-                {title}
-              </h1>
+              )}
+              <span className="text-slate-300 text-sm font-medium tracking-wide">
+                {new Date().toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric', 
+                  year: 'numeric'
+                })}
+              </span>
             </div>
+            
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight tracking-tight drop-shadow-lg">
+              {title}
+            </h1>
           </div>
         </div>
       </div>
 
-      {/* Interactive Content Section */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 -mt-32">
-        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden backdrop-blur-lg">
+      {/* Main Content Area */}
+      <div className="relative z-10 -mt-32 px-4 sm:px-6 lg:px-8 pb-20">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
           
-          {/* Decorative Top Border */}
-          <div className="h-1 bg-gradient-to-r from-teal-500 via-cyan-500 to-blue-500 animate-pulse"></div>
-          
-          <div className="p-8 lg:p-12">
-            {/* Enhanced Content with Interactive Elements */}
-            <div 
-              className={`prose prose-lg max-w-none transition-all duration-1000 ${
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-              }`}
-            >
-              {children}
-            </div>
-            
-            {/* Interactive Sidebar */}
-            <div className="mt-8 p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl">
-              <h3 className="text-xl font-bold text-teal-700 mb-4">🌊 Interactive Ocean Explorer</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-800 mb-2">📚 Quick Navigation</h4>
-                  <nav className="space-y-2">
-                    <Link href="#conservation" className="block text-teal-600 hover:text-teal-800 transition-colors p-2 rounded hover:bg-teal-100">
-                      🐢 Conservation Focus
-                    </Link>
-                    <Link href="#research" className="block text-teal-600 hover:text-teal-800 transition-colors p-2 rounded hover:bg-teal-100">
-                      🔬 Research & Science
-                    </Link>
-                    <Link href="#impact" className="block text-teal-600 hover:text-teal-800 transition-colors p-2 rounded hover:bg-teal-100">
-                      💡 Impact Stories
-                    </Link>
-                  </nav>
-                </div>
+          {/* Article Content */}
+          <div className="lg:col-span-8">
+            <article className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-12 border border-white/40">
+              <div 
+                className={`prose prose-lg prose-slate max-w-none prose-headings:text-slate-900 prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl transition-all duration-1000 delay-300 ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                }`}
+              >
+                {children}
+              </div>
+            </article>
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="sticky top-24 space-y-6">
+              
+              {/* Navigation Card */}
+              <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-white/40">
+                <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="text-xl">🧭</span> Explore
+                </h3>
+                <nav className="space-y-1">
+                  <Link href="#conservation" className="block px-3 py-2 rounded-lg text-slate-600 hover:text-teal-700 hover:bg-teal-50 transition-all font-medium">
+                    Conservation Focus
+                  </Link>
+                  <Link href="#research" className="block px-3 py-2 rounded-lg text-slate-600 hover:text-teal-700 hover:bg-teal-50 transition-all font-medium">
+                    Research & Science
+                  </Link>
+                  <Link href="#impact" className="block px-3 py-2 rounded-lg text-slate-600 hover:text-teal-700 hover:bg-teal-50 transition-all font-medium">
+                    Impact Stories
+                  </Link>
+                </nav>
+              </div>
+
+              {/* Impact Card */}
+              <div className="bg-gradient-to-br from-teal-600 to-blue-700 rounded-3xl shadow-xl p-6 text-white overflow-hidden relative">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10 bg-[url('/noise.png')] mix-blend-overlay" />
                 
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-800 mb-2">🎯 Conservation Meter</h4>
-                  <div className="bg-white rounded-lg p-4 shadow-inner">
-                    <div className="text-sm text-gray-600 mb-2">Your Support Impact</div>
-                    <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                <h3 className="text-lg font-bold mb-4 flex items-center gap-2 relative z-10">
+                  <span className="text-xl">🌊</span> Conservation Impact
+                </h3>
+                
+                <div className="relative z-10 space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm mb-2 text-teal-100">
+                      <span>Funded by Purchases</span>
+                      <span className="font-bold">75%</span>
+                    </div>
+                    <div className="w-full bg-black/20 rounded-full h-2 overflow-hidden backdrop-blur-sm">
                       <div 
-                        className="h-full bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full transition-all duration-2000 ease-out"
+                        className="h-full bg-teal-300 rounded-full transition-all duration-1000 ease-out"
                         style={{ width: '75%' }}
                       />
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">75% funded through ShennaStudio</div>
                   </div>
-                </div>
-                
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-800 mb-2">📊 Related Topics</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {['Marine Conservation', 'Ocean Research', 'Wildlife Protection', 'Climate Action'].map((topic) => (
-                      <span 
-                        key={topic}
-                        className="px-3 py-1 bg-white rounded-full text-xs font-medium text-gray-700 border border-gray-300 hover:border-teal-400 hover:text-teal-700 transition-all cursor-pointer hover:shadow-md"
-                      >
-                        {topic}
-                      </span>
-                    ))}
-                  </div>
+                  
+                  <p className="text-sm text-teal-100 leading-relaxed">
+                    Your bracelet purchase directly supports Sea Turtle Inc. rehabilitation programs.
+                  </p>
+
+                  <Link 
+                    href="/products" 
+                    className="block w-full text-center bg-white text-teal-700 py-3 rounded-xl font-bold hover:bg-teal-50 transition-colors shadow-lg"
+                  >
+                    Shop to Support
+                  </Link>
                 </div>
               </div>
-            </div>
-            
-            {/* Call to Action */}
-            <div className="mt-8 p-6 bg-gradient-to-r from-teal-600 to-blue-600 rounded-xl text-white text-center">
-              <h3 className="text-2xl font-bold mb-4">🌊 Join the Ocean Movement</h3>
-              <p className="text-lg mb-6">Your support helps protect marine life and ocean ecosystems</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link 
-                  href="/products" 
-                  className="bg-white text-teal-700 px-8 py-3 rounded-full font-bold hover:bg-gray-100 hover:text-teal-800 transition-all transform hover:scale-105 shadow-lg"
-                >
-                  🛍️ Shop Ocean Collection
-                </Link>
-                <Link 
-                  href="/conservation" 
-                  className="border-2 border-white text-white px-8 py-3 rounded-full font-bold hover:bg-white hover:text-teal-700 transition-all"
-                >
-                  🌿 Learn About Our Mission
-                </Link>
-              </div>
+
             </div>
           </div>
-        </div>
-      </article>
 
-      {/* Enhanced Footer */}
-      <div className="bg-gradient-to-br from-teal-600 via-blue-600 to-cyan-700 py-16 mt-8">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="text-white">
-            <h2 className="text-3xl font-bold mb-8 animate-pulse">Support Ocean Conservation</h2>
-            <p className="text-xl mb-8 max-w-3xl mx-auto">
-              Every ShennaStudio bracelet donation supports sea turtles, whales, and marine ecosystems
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <div className="space-y-4">
-                <div className="text-6xl mb-2 animate-bounce">🐢</div>
-                <div className="font-semibold">Sea Turtle Protection</div>
-                <div className="text-sm opacity-80">Rescue & Rehabilitation</div>
-              </div>
-              <div className="space-y-4">
-                <div className="text-6xl mb-2 animate-bounce delay-200">🐋</div>
-                <div className="font-semibold">Whale Conservation</div>
-                <div className="text-sm opacity-80">Research & Protection</div>
-              </div>
-              <div className="space-y-4">
-                <div className="text-6xl mb-2 animate-bounce delay-400">🦈</div>
-                <div className="font-semibold">Ocean Research</div>
-                <div className="text-sm opacity-80">Science & Education</div>
-              </div>
+        </div>
+      </div>
+
+      {/* Footer CTA */}
+      <div className="bg-slate-900 border-t border-slate-800 py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold text-white mb-8">Conservation Impact Areas</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-slate-300">
+            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="text-4xl mb-3">🐢</div>
+              <div className="font-semibold text-white">Sea Turtles</div>
+              <div className="text-sm mt-1 text-slate-400">Rescue & Rehab</div>
+            </div>
+            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="text-4xl mb-3">🐋</div>
+              <div className="font-semibold text-white">Marine Life</div>
+              <div className="text-sm mt-1 text-slate-400">Research Programs</div>
+            </div>
+            <div className="p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+              <div className="text-4xl mb-3">🌏</div>
+              <div className="font-semibold text-white">Ecosystems</div>
+              <div className="text-sm mt-1 text-slate-400">Habitat Protection</div>
             </div>
           </div>
         </div>
