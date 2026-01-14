@@ -1,14 +1,10 @@
 import { Resend } from 'resend';
 
-// Use a placeholder API key during build time to prevent errors
-// The actual API key will be used at runtime
-const RESEND_API_KEY = process.env.RESEND_API_KEY || 're_placeholder_key_for_build';
+// Resend API key must be set in environment variables
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 
-if (!process.env.RESEND_API_KEY && process.env.NODE_ENV !== 'production') {
-  console.warn('RESEND_API_KEY is not defined in environment variables');
-}
-
-export const resend = new Resend(RESEND_API_KEY);
+// Initialize Resend client - will be null if no API key is configured
+export const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 export const EMAIL_CONFIG = {
   from: process.env.FROM_EMAIL || 'ShennaStudio <orders@shennastudio.com>',
@@ -30,6 +26,9 @@ export async function sendEmail({ to, subject, react, replyTo }: SendEmailParams
   }
 
   try {
+    if (!resend) {
+      throw new Error('Email service not configured');
+    }
     const { data, error } = await resend.emails.send({
       from: EMAIL_CONFIG.from,
       to: Array.isArray(to) ? to : [to],

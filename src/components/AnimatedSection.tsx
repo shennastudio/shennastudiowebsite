@@ -136,7 +136,7 @@ export function StaggeredChildren({
       y: 0,
       transition: {
         duration: duration / 1000,
-        ease: "easeOut"
+        ease: "easeOut" as const
       }
     },
   }
