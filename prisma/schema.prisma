@@ -63,6 +63,7 @@ model User {
   activityLogs          ActivityLog[]
   supportTickets        SupportTicket[]
   ticketMessages        TicketMessage[]
+  socialMediaPosts      SocialMediaPost[]      @relation("SocialMediaPosts")
 
   @@map("users")
 }
@@ -777,6 +778,36 @@ model EmailLog {
   @@index([template])
   @@index([archived])
   @@map("email_logs")
+}
+
+// === SOCIAL MEDIA AUTOMATION ===
+
+model SocialMediaPost {
+  id            String   @id @default(cuid())
+  platform      String   // instagram, facebook, twitter, pinterest
+  content       String   @db.Text
+  hashtags      String[]
+  imageUrl      String?
+  scheduledAt   DateTime
+  postedAt      DateTime?
+  status        String   @default("scheduled") // scheduled, posting, posted, failed
+  errorMessage  String?  @db.Text
+  
+  // Relationship to user who created it
+  createdById   String
+  createdBy     User     @relation("SocialMediaPosts", fields: [createdById], references: [id], onDelete: Cascade)
+  
+  // Analytics
+  postUrl       String?  // URL after posting
+  engagement    Json?    // likes, comments, shares
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([scheduledAt])
+  @@index([status])
+  @@index([createdById])
+  @@index([platform])
 }
 
 // ============================================================================
