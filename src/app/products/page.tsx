@@ -201,13 +201,49 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {products.length === 0 ? (
             <AnimatedSection animation="fadeInUp" className="text-center py-20">
-              <div className="text-6xl mb-4 animate-bounce">🌊</div>
-              <h2 className="text-2xl font-semibold text-gray-700 mb-2">
-                No products available yet
-              </h2>
-              <p className="text-gray-600">
-                Check back soon for our beautiful ocean-inspired bracelets!
-              </p>
+              {category && ['t-shirts', 'necklaces', 'pets', 'holidays'].includes(category.slug) ? (
+                /* Coming Soon for New Categories */
+                <div className="max-w-2xl mx-auto">
+                  <div className="bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 border-2 border-cyan-200 rounded-3xl p-12 shadow-lg">
+                    <div className="text-7xl mb-6 animate-bounce">
+                      {category.slug === 't-shirts' && '👕'}
+                      {category.slug === 'necklaces' && '💎'}
+                      {category.slug === 'pets' && '🐾'}
+                      {category.slug === 'holidays' && '🎄'}
+                    </div>
+                    <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-teal-600 mb-4">
+                      Coming Soon!
+                    </h2>
+                    <p className="text-xl text-gray-700 mb-6">
+                      {category.name} are on the way! 
+                    </p>
+                    <p className="text-gray-600 mb-8">
+                      We're working on bringing you beautiful ocean-inspired {category.name.toLowerCase()} that support marine conservation. 
+                      <span className="block mt-2 font-semibold text-teal-600">
+                        Check back soon or explore our bracelet collection!
+                      </span>
+                    </p>
+                    <Link
+                      href="/products"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-teal-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-cyan-600 hover:to-teal-600 transition-all transform hover:scale-105 shadow-lg"
+                    >
+                      <span>🌊</span>
+                      Shop Bracelets Now
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                /* Generic No Products */
+                <>
+                  <div className="text-6xl mb-4 animate-bounce">🌊</div>
+                  <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+                    No products available yet
+                  </h2>
+                  <p className="text-gray-600">
+                    Check back soon for our beautiful ocean-inspired bracelets!
+                  </p>
+                </>
+              )}
             </AnimatedSection>
           ) : (
             <StaggeredChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" staggerDelay={100}>
