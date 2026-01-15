@@ -2,18 +2,27 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
 /**
- * GET /api/products/[slug]
- * Get public product details including variants and images
+ * GET /api/products/[id]
+ * Get public product details.
+ * The path parameter is named 'id' to match the folder structure `api/products/[id]`,
+ * but we support looking up by either Slug or ID to be flexible.
+ * The Checkout "Quick Add" feature specifically passes a slug here.
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { slug } = await params;
+    const { id } = await params;
 
-    const product = await prisma.product.findUnique({
-      where: { slug },
+    // Try to find by Slug first (primary use case for "Quick Add"), then by ID
+    const product = await prisma.product.findFirst({
+      where: {
+        OR: [
+          { slug: id },
+          { id: id }
+        ]
+      },
       include: {
         category: true,
         variants: {
@@ -41,7 +50,7 @@ export async function GET(
       product,
     });
   } catch (error) {
-    console.error('Fetch product by slug error:', error);
+    console.error('Fetch product detail error:', error);
     return NextResponse.json(
       { error: 'Failed to fetch product details', success: false },
       { status: 500 }
