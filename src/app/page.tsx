@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import ParallaxBanner from '@/components/ParallaxBanner'
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
+import { SaleBanner } from '@/components/SaleBanner'
 import { fetchFeaturedProducts } from './actions'
 
 // Note: Removed force-dynamic to allow client-side features, but we fetch data.
@@ -62,6 +63,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      {/* Sale Banner - Ocean Treasures 25% OFF */}
+      <SaleBanner />
+      
       {/* Ocean Hero Section */}
       <section ref={heroRef} className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-slate-900">
         <motion.div 
