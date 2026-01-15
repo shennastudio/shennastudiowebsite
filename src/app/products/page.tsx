@@ -15,6 +15,10 @@ interface DiscountCode {
   minPurchaseAmount: number | null;
 }
 
+interface ProductsPageProps {
+  searchParams: Promise<{ category?: string }>;
+}
+
 async function getActiveDiscounts(): Promise<DiscountCode[]> {
   try {
     const now = new Date();
@@ -92,28 +96,92 @@ function DiscountBanner({ discounts }: { discounts: DiscountCode[] }) {
   );
 }
 
-export default async function ProductsPage() {
+export default async function ProductsPage({ searchParams }: ProductsPageProps) {
+  const params = await searchParams;
+  const categorySlug = params.category;
+
+  // Fetch category if specified
+  let category = null;
+  if (categorySlug) {
+    category = await prisma.category.findUnique({
+      where: { slug: categorySlug },
+    });
+  }
+
+  // Build filter object for products (use category ID in the filter)
+  const filters = category ? { category: category.id } : {};
+
   const [{ data: products, total }, discounts] = await Promise.all([
-    fetchProducts({}, { page: 1, limit: 50 }),
+    fetchProducts(filters, { page: 1, limit: 50 }),
     getActiveDiscounts(),
   ]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header Section */}
-      <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-12 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-16 relative overflow-hidden">
         {/* Animated wave background */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%23ffffff%22 d=%22M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E')] bg-cover bg-bottom animate-pulse" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection animation="fadeInDown" className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">
-              Ocean Treasures
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">
+              {category ? category.name : 'Ocean Treasures'}
             </h1>
-            <p className="text-xl text-cyan-100 max-w-2xl mx-auto">
-              {total} handcrafted pieces available
+            <p className="text-xl text-cyan-100 max-w-2xl mx-auto mb-8">
+              {category 
+                ? `${total} ${category.name.toLowerCase()} available` 
+                : `${total} handcrafted pieces available`}
             </p>
+
+            {/* Category Navigation Buttons */}
+            <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
+              {/* Bracelets / All Products */}
+              <Link
+                href="/products"
+                className="group flex items-center gap-2 bg-white/95 hover:bg-white text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm"
+              >
+                <span className="text-xl group-hover:scale-110 transition-transform">📿</span>
+                <span>Bracelets</span>
+              </Link>
+
+              {/* T-Shirts */}
+              <Link
+                href="/products?category=t-shirts"
+                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+              >
+                <span className="text-xl group-hover:scale-110 transition-transform">👕</span>
+                <span>T-Shirts</span>
+              </Link>
+
+              {/* Necklaces */}
+              <Link
+                href="/products?category=necklaces"
+                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+              >
+                <span className="text-xl group-hover:scale-110 transition-transform">💎</span>
+                <span>Necklaces</span>
+              </Link>
+
+              {/* Pets */}
+              <Link
+                href="/products?category=pets"
+                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+              >
+                <span className="text-xl group-hover:scale-110 transition-transform">🐾</span>
+                <span>Pets</span>
+              </Link>
+
+              {/* Holidays */}
+              <Link
+                href="/products?category=holidays"
+                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+              >
+                <span className="text-xl group-hover:scale-110 transition-transform">🎄</span>
+                <span>Holidays</span>
+              </Link>
+            </div>
           </AnimatedSection>
         </div>
       </section>

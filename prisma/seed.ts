@@ -44,12 +44,20 @@ async function main() {
   console.log('📁 Checking categories...')
 
   const categoryData = [
+    // Existing categories
     { name: 'Ocean Inspired', slug: 'ocean-inspired', description: 'Bracelets inspired by the beauty of the ocean' },
     { name: 'Conservation Collection', slug: 'conservation-collection', description: 'Every purchase supports marine conservation' },
     { name: 'Sea Turtle Collection', slug: 'sea-turtle-collection', description: "Inspired by Kemp's Ridley sea turtles" },
     { name: 'Luxury Collection', slug: 'luxury-collection', description: 'Premium handcrafted bracelets' },
     { name: 'Limited Edition', slug: 'limited-edition', description: 'Exclusive limited run designs' },
     { name: 'Gift Sets', slug: 'gift-sets', description: 'Curated bracelet sets perfect for gifting' },
+    
+    // New product categories
+    { name: 'Bracelets', slug: 'bracelets', description: 'Handcrafted ocean-inspired bracelets for all styles' },
+    { name: 'Necklaces', slug: 'necklaces', description: 'Beautiful ocean-themed necklaces and pendants' },
+    { name: 'T-Shirts', slug: 't-shirts', description: 'Comfortable ocean-inspired apparel and tees' },
+    { name: 'Pets', slug: 'pets', description: 'Ocean-themed accessories for your furry friends' },
+    { name: 'Holidays', slug: 'holidays', description: 'Special holiday-themed ocean jewelry and gifts' },
   ]
 
   const categories = []

@@ -11,8 +11,11 @@ export async function POST(request: NextRequest) {
   // Lazy load Stripe modules to avoid build-time errors
   const { stripe, isStripeEnabled } = await import('@/lib/stripe');
 
+  console.log('🔔 Webhook received at:', new Date().toISOString());
+
   // Check if Stripe is enabled
   if (!isStripeEnabled() || !stripe) {
+    console.error('❌ Stripe is not enabled or configured');
     return NextResponse.json(
       { error: 'Stripe webhooks are not configured' },
       { status: 503 }
@@ -23,13 +26,17 @@ export async function POST(request: NextRequest) {
   const signature = (await headers()).get('stripe-signature');
 
   if (!signature) {
+    console.error('❌ No stripe-signature header found');
     return NextResponse.json({ error: 'No signature provided' }, { status: 400 });
   }
 
   if (!process.env.STRIPE_WEBHOOK_SECRET) {
-    console.error('STRIPE_WEBHOOK_SECRET is not configured');
+    console.error('❌ STRIPE_WEBHOOK_SECRET is not configured in environment variables');
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }
+
+  // Log webhook secret prefix for debugging (first 15 chars only)
+  console.log('🔑 Using webhook secret:', process.env.STRIPE_WEBHOOK_SECRET.slice(0, 15) + '...');
 
   let event: Stripe.Event;
 
@@ -39,8 +46,16 @@ export async function POST(request: NextRequest) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
+    console.log('✅ Webhook signature verified successfully');
+    console.log('📋 Event type:', event.type);
+    console.log('🆔 Event ID:', event.id);
   } catch (err: unknown) {
-    console.error('Webhook signature verification failed:', err);
+    console.error('❌ Webhook signature verification failed:', err);
+    console.error('   Signature received:', signature.slice(0, 50) + '...');
+    console.error('   This usually means:');
+    console.error('   1. Wrong webhook secret configured');
+    console.error('   2. Webhook secret not updated after container restart');
+    console.error('   3. Using test secret with live mode (or vice versa)');
     return NextResponse.json(
       { error: err instanceof Error ? err.message : 'Invalid signature' },
       { status: 400 }
@@ -50,6 +65,12 @@ export async function POST(request: NextRequest) {
   // Handle the checkout.session.completed event
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
+    
+    console.log('💳 Processing checkout.session.completed');
+    console.log('   Session ID:', session.id);
+    console.log('   Payment Intent:', session.payment_intent);
+    console.log('   Customer Email:', session.customer_email || session.customer_details?.email);
+    console.log('   Amount Total:', session.amount_total ? (session.amount_total / 100) : 'unknown');
 
     try {
       // Lazy load order creation module
@@ -60,14 +81,19 @@ export async function POST(request: NextRequest) {
       // Extract metadata from session
       const metadata = session.metadata;
       if (!metadata) {
+        console.error('❌ No metadata found in checkout session');
         throw new Error('No metadata found in session');
       }
+
+      console.log('📦 Metadata found:', Object.keys(metadata).join(', '));
 
       const userId = metadata.userId || null; // Optional for guest checkout
       const subtotal = parseFloat(metadata.subtotal);
       const shipping = parseFloat(metadata.shipping);
       const tax = parseFloat(metadata.tax);
       const total = parseFloat(metadata.total);
+
+      console.log('💰 Order totals - Subtotal:', subtotal, 'Shipping:', shipping, 'Tax:', tax, 'Total:', total);
 
       // Parse compact items format: "variantId:qty:price|variantId:qty:price|..."
       // And get full item details from Stripe line items
@@ -105,6 +131,7 @@ export async function POST(request: NextRequest) {
       };
 
       // Create order in database
+      console.log('📝 Creating order in database...');
       const order = await createOrder({
         userId,
         items,
@@ -117,7 +144,11 @@ export async function POST(request: NextRequest) {
         shippingAddress,
       });
 
-      console.log('Order created successfully:', order.id);
+      console.log('✅ Order created successfully!');
+      console.log('   Order ID:', order.id);
+      console.log('   Order Number:', order.orderNumber);
+      console.log('   Customer Email:', order.customerEmail);
+      console.log('   Total:', order.total);
 
       // Send order confirmation email
       try {
@@ -150,16 +181,23 @@ export async function POST(request: NextRequest) {
               shippingAddress,
             }),
           });
-          console.log('Order confirmation email sent to:', customerEmail);
+          console.log('✅ Order confirmation email sent to:', customerEmail);
         }
       } catch (emailError: unknown) {
         // Log email error but don't fail the webhook
-        console.error('Failed to send order confirmation email:', emailError);
+        console.error('⚠️  Failed to send order confirmation email:', emailError);
       }
 
       return NextResponse.json({ received: true, orderId: order.id });
     } catch (error: unknown) {
-      console.error('Error processing checkout session:', error);
+      console.error('❌ ERROR processing checkout session:');
+      console.error('   Error:', error);
+      console.error('   Session ID:', session.id);
+      console.error('   Payment Intent:', session.payment_intent);
+      if (error instanceof Error) {
+        console.error('   Message:', error.message);
+        console.error('   Stack:', error.stack);
+      }
       return NextResponse.json(
         { error: error instanceof Error ? error.message : 'Failed to process order' },
         { status: 500 }
