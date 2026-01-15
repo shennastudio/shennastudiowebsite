@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, SubscriptionTier } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -47,7 +47,7 @@ async function seedDatabase() {
   const plans = [
     {
       name: 'Ocean Lover',
-      tier: 'OCEAN_LOVER' as const,
+      tier: SubscriptionTier.OCEAN_LOVER,
       description: 'Start your ocean jewelry journey with 1 beautiful bracelet delivered each month, plus subscriber-only discounts.',
       priceMonthly: 19.99,
       braceletsPerMonth: 1,
@@ -61,7 +61,7 @@ async function seedDatabase() {
     },
     {
       name: 'Wave Rider',
-      tier: 'WAVE_RIDER' as const,
+      tier: SubscriptionTier.WAVE_RIDER,
       description: 'Elevate your collection with 2 bracelets monthly, early access to new designs, and exclusive subscriber perks.',
       priceMonthly: 34.99,
       braceletsPerMonth: 2,
@@ -75,7 +75,7 @@ async function seedDatabase() {
     },
     {
       name: 'Collector',
-      tier: 'COLLECTOR' as const,
+      tier: SubscriptionTier.COLLECTOR,
       description: 'The ultimate ocean jewelry experience. 3 bracelets including limited editions, VIP perks, and exclusive collector benefits.',
       priceMonthly: 54.99,
       braceletsPerMonth: 3,
