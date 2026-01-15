@@ -5,8 +5,8 @@ import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
 const updateTicketSchema = z.object({
-  status: z.enum(['open', 'in_progress', 'waiting', 'resolved', 'closed']).optional(),
-  priority: z.enum(['low', 'medium', 'high', 'urgent']).optional(),
+  status: z.enum(['OPEN', 'IN_PROGRESS', 'WAITING', 'RESOLVED', 'CLOSED']).optional(),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).optional(),
   assignedToId: z.string().optional().nullable(),
   category: z.string().optional(),
 });
@@ -108,11 +108,7 @@ export async function PATCH(
     if (body.action === 'add_message') {
       const validated = addMessageSchema.parse(body);
 
-      // Get ticket to check if first response
-      const ticket = await prisma.supportTicket.findUnique({
-        where: { id },
-        select: { firstResponseAt: true },
-      });
+      // firstResponseAt removed - not in schema
 
       const message = await prisma.ticketMessage.create({
         data: {
@@ -130,10 +126,7 @@ export async function PATCH(
         updatedAt: new Date(),
       };
 
-      // If first response, set timestamp
-      if (!ticket?.firstResponseAt) {
-        updateData.firstResponseAt = new Date();
-      }
+      // Track response timing removed - field not in schema
 
       // If status is open, change to in_progress
       await prisma.supportTicket.update({
@@ -150,7 +143,7 @@ export async function PATCH(
 
     if (validated.status !== undefined) {
       updateData.status = validated.status;
-      if (validated.status === 'resolved' || validated.status === 'closed') {
+      if (validated.status === 'RESOLVED' || validated.status === 'CLOSED') {
         updateData.resolvedAt = new Date();
       }
     }
@@ -174,7 +167,7 @@ export async function PATCH(
     console.error('Update ticket error:', error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: 'Validation error', details: error.issues },
         { status: 400 }
       );
     }

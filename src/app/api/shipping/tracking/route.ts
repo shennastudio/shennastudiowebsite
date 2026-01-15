@@ -210,7 +210,9 @@ export async function POST(request: NextRequest) {
       }, { status: 404 });
     }
 
-    const updateData: { status: string; shippedAt?: Date; deliveredAt?: Date } = { status };
+    const updateData: Record<string, unknown> = { 
+      status: status as 'PENDING' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED'
+    };
 
     if (status === 'SHIPPED' && !order.shippedAt) {
       updateData.shippedAt = new Date();

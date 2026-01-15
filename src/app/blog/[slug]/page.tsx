@@ -81,15 +81,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           options={{
             mdxOptions: {
               remarkPlugins: [
-                // @ts-expect-error - types for remark plugins
                 remarkGfm,
-                // @ts-expect-error - types for remark plugins
                 remarkBreaks
               ],
               rehypePlugins: [
-                // @ts-expect-error - types for rehype plugins
                 rehypeSlug,
-                // @ts-expect-error - types for rehype plugins
                 rehypeHighlight
               ]
             }

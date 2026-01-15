@@ -126,7 +126,7 @@ export async function POST(request: Request) {
     if (validated.segmentName === 'All Newsletter Subscribers') {
       targetAudienceJson = JSON.stringify({ subscribedToNewsletter: true });
       recipientCount = await prisma.newsletterSubscriber.count({
-        where: { subscribed: true },
+        where: { isActive: true },
       });
     } else if (validated.segmentName === 'Customers Who Have Ordered') {
       targetAudienceJson = JSON.stringify({ hasOrdered: true });
@@ -148,7 +148,7 @@ export async function POST(request: Request) {
       // Fallback to all newsletter subscribers if segment is unrecognized or default
       targetAudienceJson = JSON.stringify({ subscribedToNewsletter: true });
       recipientCount = await prisma.newsletterSubscriber.count({
-        where: { subscribed: true },
+        where: { isActive: true },
       });
     }
 
@@ -176,7 +176,7 @@ export async function POST(request: Request) {
     console.error('Create email campaign error:', error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: 'Validation error', details: error.issues },
         { status: 400 }
       );
     }

@@ -10,7 +10,7 @@ export function getStripe(): Stripe {
       throw new Error('STRIPE_SECRET_KEY environment variable is required');
     }
     _stripe = new Stripe(apiKey, {
-      apiVersion: '2025-05-28.acacia',
+      apiVersion: '2025-12-15.clover',
     });
   }
   return _stripe;

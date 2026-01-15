@@ -246,7 +246,7 @@ export default function AnalyticsPage() {
                     tickFormatter={(value) => `$${value}`}
                   />
                   <Tooltip 
-                    formatter={(value: number) => [`$${value.toFixed(2)}`, 'Revenue']}
+                    formatter={(value: number | undefined) => value !== undefined ? [`$${value.toFixed(2)}`, 'Revenue'] : ['$0.00', 'Revenue']}
                     labelFormatter={(label) => new Date(label).toLocaleDateString()}
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                   />

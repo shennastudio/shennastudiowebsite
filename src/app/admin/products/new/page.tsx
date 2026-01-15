@@ -27,6 +27,7 @@ interface BraceletSize {
   id: string;
   name: string;
   label: string;
+  isActive?: boolean; // Optional to handle API responses
 }
 
 export default function NewProductPage() {

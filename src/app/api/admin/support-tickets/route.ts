@@ -7,7 +7,7 @@ import { z } from 'zod';
 const createTicketSchema = z.object({
   subject: z.string().min(1, 'Subject is required'),
   category: z.string().default('general'),
-  priority: z.enum(['low', 'medium', 'high', 'urgent']).default('medium'),
+  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).default('MEDIUM'),
   customerEmail: z.string().email(),
   customerName: z.string(),
   message: z.string().min(1, 'Message is required'),
@@ -147,11 +147,12 @@ export async function POST(request: Request) {
         subject: validated.subject,
         category: validated.category,
         priority: validated.priority,
-        customerId: customer?.id,
+        customerId: customer?.id || null,
         customerEmail: validated.customerEmail,
         customerName: validated.customerName,
-        orderId: validated.orderId,
-        status: 'open',
+        description: validated.message, // Initial message as description
+        orderId: validated.orderId || null,
+        status: 'OPEN',
         messages: {
           create: {
             senderEmail: validated.customerEmail,
@@ -175,7 +176,7 @@ export async function POST(request: Request) {
     console.error('Create support ticket error:', error);
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
+        { error: 'Validation error', details: error.issues },
         { status: 400 }
       );
     }

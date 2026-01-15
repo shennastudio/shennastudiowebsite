@@ -59,7 +59,7 @@ export async function POST(
 
       if (audience.subscribedToNewsletter) {
         const subscribers = await prisma.newsletterSubscriber.findMany({
-          where: { subscribed: true },
+          where: { isActive: true },
           select: { email: true },
         });
         recipients = subscribers.map(s => ({ email: s.email, name: null, userId: null }));
@@ -77,7 +77,7 @@ export async function POST(
     } else {
       // Default: newsletter subscribers
       const subscribers = await prisma.newsletterSubscriber.findMany({
-        where: { subscribed: true },
+        where: { isActive: true },
         select: { email: true },
       });
       recipients = subscribers.map(s => ({ email: s.email, name: null, userId: null }));
@@ -105,7 +105,7 @@ export async function POST(
           data: {
             to: recipient.email,
             subject: campaign.subject,
-            template: 'CAMPAIGN',
+            template: 'ORDER_CONFIRMATION', // Using existing template type
             status: 'pending',
             variables: {
               campaignId: id,
