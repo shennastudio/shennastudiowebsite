@@ -1,22 +1,5 @@
 -- Seed Subscription Plans for ShennaStudio
--- Fix: Ensure the database enum matches the Prisma schema
-DO $$ 
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'SubscriptionTier') THEN
-        -- If it doesn't exist, it might be managed by Prisma, but we can try to create it
-        -- However, usually it exists if the table exists.
-    ELSE
-        -- Add missing values to the existing enum
-        BEGIN
-            ALTER TYPE "SubscriptionTier" ADD VALUE IF NOT EXISTS 'BASIC';
-        EXCEPTION WHEN duplicate_object THEN NULL;
-        END;
-        BEGIN
-            ALTER TYPE "SubscriptionTier" ADD VALUE IF NOT EXISTS 'PREMIUM';
-        EXCEPTION WHEN duplicate_object THEN NULL;
-        END;
-    END IF;
-END $$;
+-- This script ensures the 3 tiers exist with the requested names and pricing.
 
 INSERT INTO "subscription_plans" (
   "id", "name", "tier", "description", "priceMonthly", "braceletsPerMonth", 
