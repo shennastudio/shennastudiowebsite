@@ -1,6 +1,17 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { z } from 'zod';
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_KEY || '');
+
+/**
+ * Zod schema for validated Social Media responses
+ */
+export const GeneratedSocialPostSchema = z.object({
+  caption: z.string().min(10),
+  hashtags: z.array(z.string()).min(5).max(20),
+});
+
+export type GeneratedSocialPost = z.infer<typeof GeneratedSocialPostSchema>;
 
 export interface SocialMediaPost {
   platform: 'instagram' | 'facebook' | 'pinterest' | 'twitter';
@@ -25,53 +36,51 @@ export async function generateSocialCaption(
   product: ProductInfo,
   platform: 'instagram' | 'facebook' | 'pinterest' | 'twitter',
   tone: 'casual' | 'professional' | 'enthusiastic' = 'enthusiastic'
-): Promise<{ caption: string; hashtags: string[] }> {
+): Promise<GeneratedSocialPost> {
   try {
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-    const prompt = `You are a social media expert for an ocean-themed handcrafted jewelry business called ShennaStudio.
+    const prompt = `
+      You are a social media expert for ShennaStudio, an ocean-themed jewelry business.
+      Create an engaging ${platform} post for the product listed below.
 
-Product Details:
-- Name: ${product.name}
-- Description: ${product.description}
-- Price: $${product.price}
-- Category: ${product.category}
+      PRODUCT DETAILS:
+      - Name: ${product.name}
+      - Description: ${product.description}
+      - Price: $${product.price}
+      - Category: ${product.category}
 
-Platform: ${platform}
-Tone: ${tone}
+      PLATFORM: ${platform}
+      TONE: ${tone}
 
-Create an engaging ${platform} post caption that:
-1. Highlights the beauty and uniqueness of this ocean-inspired jewelry
-2. Mentions that 10% of sales support marine conservation
-3. Creates emotional connection with ocean lovers
-4. Includes a clear call-to-action
-5. Is ${platform === 'twitter' ? 'under 280 characters' : platform === 'instagram' ? 'engaging and story-driven (max 200 words)' : 'descriptive and informative'}
+      GUIDELINES:
+      - Highlight the ocean-inspired design and the fact that 10% supports marine conservation.
+      - ${platform === 'twitter' ? 'Keep it under 280 characters.' : 'Make it engaging and story-driven.'}
+      - Include a clear call-to-action to "Shop now".
 
-Also suggest 10-15 relevant hashtags for maximum reach.
-
-Format your response as:
-CAPTION:
-[your caption here]
-
-HASHTAGS:
-[comma-separated hashtags without # symbol]`;
+      RESPONSE FORMAT:
+      You must return ONLY a strictly valid JSON object. No preamble, no markdown.
+      JSON STRUCTURE:
+      {
+        "caption": "Your compelling post caption",
+        "hashtags": ["list", "of", "10-15", "relevant", "hashtags", "without", "#"]
+      }
+    `;
 
     const result = await model.generateContent(prompt);
-    const response = result.response.text();
+    const text = result.response.text();
 
-    // Parse the response
-    const captionMatch = response.match(/CAPTION:\s*([\s\S]*?)(?=HASHTAGS:|$)/i);
-    const hashtagsMatch = response.match(/HASHTAGS:\s*([\s\S]*?)$/i);
+    // Secure JSON parsing
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    const jsonString = jsonMatch ? jsonMatch[0] : text;
+    const rawJson = JSON.parse(jsonString);
 
-    const caption = captionMatch ? captionMatch[1].trim() : response;
-    const hashtagsText = hashtagsMatch ? hashtagsMatch[1].trim() : '';
-    const hashtags = hashtagsText
-      .split(',')
-      .map(tag => tag.trim().replace(/^#/, ''))
-      .filter(tag => tag.length > 0)
-      .slice(0, 15);
+    const validated = GeneratedSocialPostSchema.safeParse(rawJson);
+    if (!validated.success) {
+      throw new Error(`AI social post validation failed: ${validated.error.issues[0].message}`);
+    }
 
-    return { caption, hashtags };
+    return validated.data;
   } catch (error) {
     console.error('AI caption generation error:', error);
     

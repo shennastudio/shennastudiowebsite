@@ -1005,8 +1005,8 @@ enum SubscriptionStatus {
 }
 
 enum SubscriptionTier {
-  OCEAN_LOVER
-  WAVE_RIDER
+  BASIC
+  PREMIUM
   COLLECTOR
 }
 

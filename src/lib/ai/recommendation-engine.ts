@@ -130,19 +130,19 @@ function getSimilarityReason(product1: Product, product2: Product): string {
   const reasons: string[] = [];
 
   if (product1.categoryId === product2.categoryId) {
-    reasons.push('Similar category');
+    reasons.push('Matches your style');
   }
 
   const priceDiff = Math.abs(product1.basePrice - product2.basePrice);
-  if (priceDiff < 10) {
-    reasons.push('Similar price');
+  if (priceDiff < 15) {
+    reasons.push('Similar price range');
   }
 
-  if (product1.conservationFocus === product2.conservationFocus) {
+  if (product1.conservationFocus === product2.conservationFocus && product1.conservationFocus) {
     reasons.push(`Supports ${product1.conservationFocus}`);
   }
 
-  return reasons.join(' • ') || 'Recommended for you';
+  return reasons.join(' • ') || 'Handpicked for you';
 }
 
 /**

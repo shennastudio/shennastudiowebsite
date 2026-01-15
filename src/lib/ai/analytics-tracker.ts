@@ -13,7 +13,7 @@
  * @module analytics-tracker
  */
 
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/db';
 import { AnalyticsEventType, Prisma } from '@prisma/client';
 
 // ============================================================================

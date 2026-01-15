@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import Anthropic from '@anthropic-ai/sdk';
 import { HfInference } from '@huggingface/inference';
+import { z } from 'zod';
 
 export type AIProvider = 'gemini' | 'claude' | 'huggingface';
 
@@ -36,13 +37,18 @@ export interface BlogGenerationParams {
   model: string; // Model name to use for the selected provider
 }
 
-export interface GeneratedBlog {
-  title: string;
-  content: string; // HTML content
-  excerpt: string;
-  tags: string[];
-  category: string;
-}
+/**
+ * Zod schema for validated AI responses
+ */
+export const GeneratedBlogSchema = z.object({
+  title: z.string().min(10).max(100),
+  content: z.string().min(100), // HTML content
+  excerpt: z.string().min(50).max(160),
+  tags: z.array(z.string()).min(3).max(10),
+  category: z.enum(['Conservation', 'Marine Life', 'Ecosystems', 'Community']),
+});
+
+export type GeneratedBlog = z.infer<typeof GeneratedBlogSchema>;
 
 export class BlogGenerator {
   private gemini?: GoogleGenerativeAI;
@@ -81,22 +87,29 @@ export class BlogGenerator {
   private buildPrompt(params: BlogGenerationParams): string {
     return `
       You are an expert marine conservation blogger for ShennaStudio, a jewelry brand that supports ocean conservation.
-      Write a blog post about: "${params.topic}".
-      
-      Keywords to include: ${params.keywords.join(', ')}.
-      Tone: ${params.tone || 'Educational and Inspiring'}.
-      Length: ${params.length || 'medium'} (Short: ~500 words, Medium: ~1000 words, Long: ~1500 words).
+      Your writing style is professional, engaging, and emotionally resonant.
 
-      Return the result as a strictly valid JSON object with the following structure:
+      TOPIC: "${params.topic}"
+      KEYWORDS: ${params.keywords.join(', ')}
+      TONE: ${params.tone || 'Educational and Inspiring'}
+      LENGTH: ${params.length || 'medium'} (Short: ~500 words, Medium: ~1000 words, Long: ~1500 words)
+
+      REQUIREMENTS:
+      1. Use semantically correct HTML for the content (<h2>, <h3>, <p>, <ul>, <li>).
+      2. No <h1> tags in the content (the title field will be used for <h1>).
+      3. Content must be SEO-optimized and include the keywords naturally.
+      4. Ensure the call-to-action is subtle but effective, linking the topic to ocean-inspired jewelry.
+
+      RESPONSE FORMAT:
+      You must return ONLY a strictly valid JSON object. No preamble, no markdown code blocks, no trailing text.
+      JSON STRUCTURE:
       {
-        "title": "Catchy Blog Title",
-        "content": "HTML formatted body content (use <h2>, <h3>, <p>, <ul>, <li>)",
-        "excerpt": "A brief summary (max 160 chars)",
-        "tags": ["tag1", "tag2", "tag3"],
+        "title": "Catchy SEO-optimized title",
+        "content": "Full HTML content",
+        "excerpt": "A compelling 150-160 character summary for meta descriptions",
+        "tags": ["3-7 relevant tags"],
         "category": "One of: Conservation, Marine Life, Ecosystems, Community"
       }
-      
-      Do not include markdown formatting (like json code blocks) around the response. Just the raw JSON string.
     `;
   }
 
@@ -142,19 +155,24 @@ export class BlogGenerator {
 
   private parseResponse(text: string): GeneratedBlog {
     try {
-      // Clean up potential markdown code blocks if the model ignored instructions
-      const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
-      const json = JSON.parse(cleaned);
+      // Find JSON block if the model included extra text
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      const jsonString = jsonMatch ? jsonMatch[0] : text;
       
-      // Basic validation
-      if (!json.title || !json.content) {
-        throw new Error('Invalid JSON structure from AI');
+      const rawJson = JSON.parse(jsonString);
+      
+      // Validate with Zod
+      const validated = GeneratedBlogSchema.safeParse(rawJson);
+      
+      if (!validated.success) {
+        console.error('AI response validation failed:', validated.error.format());
+        throw new Error(`AI response failed validation: ${validated.error.issues[0].message}`);
       }
       
-      return json;
+      return validated.data;
     } catch (error) {
       console.error('Failed to parse AI response:', text, error);
-      throw new Error('Failed to parse AI response. The model might have failed to produce valid JSON.');
+      throw new Error(`Failed to generate valid blog content: ${(error as Error).message}`);
     }
   }
 }
