@@ -84,7 +84,7 @@ export const abandonedCartSequence: EmailSequence[] = [
     name: 'Cart Reminder - Extra Incentive',
     trigger: 'abandoned_cart',
     delay: 1440, // 24 hours
-    subject: '🎁 Still Thinking? Here's An Extra Surprise!',
+    subject: '🎁 Still Thinking? Here\'s An Extra Surprise!',
     content: `
       <h1>We Really Want You to Have These! 💙</h1>
       <p>Your cart is still waiting, and we've added something special...</p>
@@ -183,7 +183,7 @@ export async function scheduleSequenceEmail(
     content = content.replace(new RegExp(`{${key}}`, 'g'), value);
   });
 
-  // Schedule the email
+  // Schedule the email - store delay in variables since scheduledAt isn't in schema
   const sendAt = new Date(Date.now() + sequence.delay * 60 * 1000);
 
   await prisma.emailLog.create({
@@ -192,10 +192,11 @@ export async function scheduleSequenceEmail(
       subject: sequence.subject,
       template: 'NEWSLETTER', // Using existing template
       status: 'pending',
-      scheduledAt: sendAt,
       variables: {
         content,
         sequenceName: sequence.name,
+        scheduledFor: sendAt.toISOString(),
+        delayMinutes: sequence.delay,
         ...variables
       }
     }
