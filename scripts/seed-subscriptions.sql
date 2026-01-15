@@ -1,12 +1,22 @@
 -- Seed Subscription Plans for ShennaStudio
--- This script ensures the 3 tiers exist with the requested names and pricing.
-
--- 1. Ensure the SubscriptionPlan table is clean or handle conflicts
--- Note: 'id' is generated via cuid() in Prisma, but for SQL we can use fixed UUIDs or let it auto-gen if possible.
--- Since Prisma uses cuid, we'll try to match the logic or just insert if not exists.
-
--- First, ensure the enum is correct (if managed by PG enum)
--- Usually Prisma handles this, but since we are pushing SQL...
+-- Fix: Ensure the database enum matches the Prisma schema
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'SubscriptionTier') THEN
+        -- If it doesn't exist, it might be managed by Prisma, but we can try to create it
+        -- However, usually it exists if the table exists.
+    ELSE
+        -- Add missing values to the existing enum
+        BEGIN
+            ALTER TYPE "SubscriptionTier" ADD VALUE IF NOT EXISTS 'BASIC';
+        EXCEPTION WHEN duplicate_object THEN NULL;
+        END;
+        BEGIN
+            ALTER TYPE "SubscriptionTier" ADD VALUE IF NOT EXISTS 'PREMIUM';
+        EXCEPTION WHEN duplicate_object THEN NULL;
+        END;
+    END IF;
+END $$;
 
 INSERT INTO "subscription_plans" (
   "id", "name", "tier", "description", "priceMonthly", "braceletsPerMonth", 
