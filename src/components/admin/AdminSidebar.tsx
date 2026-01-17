@@ -35,6 +35,7 @@ import {
   Repeat,
   Ruler,
   Megaphone,
+  Shirt,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -60,6 +61,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       items: [
         { href: '/admin/products', label: 'Products', icon: Package, color: 'from-emerald-400 to-green-500' },
         { href: '/admin/inventory', label: 'Inventory', icon: Boxes, color: 'from-amber-400 to-orange-500' },
+        { href: '/admin/inventory/tshirts', label: 'T-Shirts', icon: Shirt, color: 'from-purple-400 to-pink-500' },
         { href: '/admin/inventory-forecast', label: 'Forecasting', icon: LineChart, color: 'from-cyan-400 to-blue-500' },
         { href: '/admin/categories', label: 'Categories', icon: Boxes, color: 'from-lime-400 to-green-500' },
       ]
