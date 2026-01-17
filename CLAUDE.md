@@ -134,7 +134,7 @@ POSTGRES_URL=
 DATABASE_URL=
 
 # Vercel Blob Storage
-BLOB_READ_WRITE_TOKEN=
+IMAGES_READ_WRITE_TOKEN=
 ```
 
 ## Development Workflow

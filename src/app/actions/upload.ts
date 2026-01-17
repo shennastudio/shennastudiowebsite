@@ -42,6 +42,7 @@ export async function uploadProductImage(formData: FormData) {
       access: 'public',
       addRandomSuffix: true,
       contentType: 'image/webp',
+      token: process.env.IMAGES_READ_WRITE_TOKEN,
     });
 
     return { success: true, url: blob.url };
