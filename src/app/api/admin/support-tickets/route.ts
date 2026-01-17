@@ -4,15 +4,27 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
+// Map frontend priority to database enum
+const priorityMap: Record<string, 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'> = {
+  'low': 'LOW',
+  'medium': 'MEDIUM',
+  'high': 'HIGH',
+  'urgent': 'URGENT'
+};
+
 const createTicketSchema = z.object({
   subject: z.string().min(1, 'Subject is required'),
   category: z.string().default('general'),
-  priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']).default('MEDIUM'),
+  priority: z.string().default('medium'),
   customerEmail: z.string().email(),
   customerName: z.string(),
   message: z.string().min(1, 'Message is required'),
   orderId: z.string().optional(),
-});
+}).transform((data) => ({
+  ...data,
+  // Convert lowercase priority to uppercase enum value
+  priority: priorityMap[data.priority.toLowerCase()] || 'MEDIUM',
+}));
 
 // GET - Fetch support tickets
 export async function GET(request: Request) {
@@ -35,10 +47,25 @@ export async function GET(request: Request) {
     const where: Record<string, unknown> = {};
 
     if (status && status !== 'all') {
-      where.status = status;
+      // Normalize status - frontend sends lowercase, DB uses uppercase enums
+      const statusMap: Record<string, string> = {
+        'open': 'OPEN',
+        'in_progress': 'IN_PROGRESS',
+        'waiting': 'WAITING',
+        'resolved': 'RESOLVED',
+        'closed': 'CLOSED'
+      };
+      where.status = statusMap[status] || status.toUpperCase();
     }
     if (priority && priority !== 'all') {
-      where.priority = priority;
+      // Normalize priority - frontend sends lowercase, DB uses uppercase enums
+      const priorityMap: Record<string, string> = {
+        'low': 'LOW',
+        'medium': 'MEDIUM',
+        'high': 'HIGH',
+        'urgent': 'URGENT'
+      };
+      where.priority = priorityMap[priority] || priority.toUpperCase();
     }
     if (category && category !== 'all') {
       where.category = category;
@@ -84,7 +111,7 @@ export async function GET(request: Request) {
     });
 
     const openCount = await prisma.supportTicket.count({
-      where: { status: { in: ['OPEN', 'IN_PROGRESS'] } },
+      where: { status: { in: ['OPEN', 'IN_PROGRESS', 'WAITING_CUSTOMER'] as any } },
     });
 
     // avgResponseTime skipped as firstResponseAt is not in schema

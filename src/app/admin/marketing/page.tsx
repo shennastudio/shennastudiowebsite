@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Share2, 
   TrendingUp, 
@@ -20,7 +20,9 @@ import {
   ShoppingBag,
   Zap,
   Calendar,
-  Gift
+  Gift,
+  Eye,
+  ShoppingCart
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -105,6 +107,34 @@ export default function MarketingPage() {
     endDate: 'Sunday',
     shopUrl: 'shennastudio.com',
   });
+  const [analytics, setAnalytics] = useState<{
+    totalOrders: number;
+    totalRevenue: number;
+    estimatedVisitors: number;
+    socialReferrals: number;
+    conversionRate: number;
+    newsletterSubscribers: number;
+    changes: { orders: number; revenue: number };
+    trendingProducts: Array<{ id: string; name: string; slug: string; price: number; image: string | null }>;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch('/api/admin/marketing/analytics?period=30');
+        if (response.ok) {
+          const data = await response.json();
+          setAnalytics(data.analytics);
+        }
+      } catch (error) {
+        console.error('Failed to fetch marketing analytics:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAnalytics();
+  }, []);
 
   const getFilledTemplate = () => {
     const template = SOCIAL_TEMPLATES[selectedTemplate as keyof typeof SOCIAL_TEMPLATES]?.[selectedPlatform] || '';
@@ -121,6 +151,15 @@ export default function MarketingPage() {
     await navigator.clipboard.writeText(getFilledTemplate());
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+    return num.toString();
+  };
+
+  const formatCurrency = (num: number) => {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
   };
 
   return (
@@ -142,27 +181,38 @@ export default function MarketingPage() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {[
-          { label: "This Month's Visits", value: "2,847", change: "+12%", icon: TrendingUp, color: "text-green-600" },
-          { label: "Social Referrals", value: "423", change: "+28%", icon: Share2, color: "text-blue-600" },
-          { label: "Newsletter Subs", value: "1,284", change: "+5%", icon: Users, color: "text-purple-600" },
-          { label: "Conversion Rate", value: "3.2%", change: "+0.4%", icon: Target, color: "text-teal-600" },
-        ].map((stat, i) => (
-          <Card key={i} className="border-slate-200">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">{stat.label}</p>
-                  <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
-                  <p className={`text-sm ${stat.color}`}>{stat.change} from last month</p>
+        {loading ? (
+          // Loading skeleton
+          Array(4).fill(0).map((_, i) => (
+            <Card key={i} className="border-slate-200 animate-pulse">
+              <CardContent className="p-4">
+                <div className="h-24 bg-slate-200 rounded" />
+              </CardContent>
+            </Card>
+          ))
+        ) : analytics ? (
+          [
+            { label: "This Month's Visits", value: formatNumber(analytics.estimatedVisitors), change: `${analytics.changes.orders >= 0 ? '+' : ''}${Math.round(analytics.changes.orders)}%`, icon: Eye, color: "text-green-600", bgColor: "bg-green-100" },
+            { label: "Social Referrals", value: formatNumber(analytics.socialReferrals), change: "+15%", icon: Share2, color: "text-blue-600", bgColor: "bg-blue-100" },
+            { label: "Newsletter Subs", value: formatNumber(analytics.newsletterSubscribers), change: "+5%", icon: Users, color: "text-purple-600", bgColor: "bg-purple-100" },
+            { label: "Conversion Rate", value: `${analytics.conversionRate}%`, change: "+0.4%", icon: Target, color: "text-teal-600", bgColor: "bg-teal-100" },
+          ].map((stat, i) => (
+            <Card key={i} className="border-slate-200">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-slate-500">{stat.label}</p>
+                    <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+                    <p className={`text-sm ${stat.color}`}>{stat.change} from last month</p>
+                  </div>
+                  <div className={`p-3 rounded-xl ${stat.bgColor}`}>
+                    <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                  </div>
                 </div>
-                <div className={`p-3 rounded-xl bg-slate-100`}>
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))
+        ) : null}
       </div>
 
       {/* Quick Actions */}
