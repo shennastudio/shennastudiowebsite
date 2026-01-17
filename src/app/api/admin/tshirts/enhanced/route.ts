@@ -29,6 +29,21 @@ export async function GET(req: Request) {
       }
     });
 
+    // If no t-shirts in database, return comprehensive mock data for demo
+    if (tshirtProducts.length === 0) {
+      const mockTshirts = getMockTshirtData();
+      return NextResponse.json({
+        tshirts: mockTshirts,
+        summary: {
+          totalTshirts: mockTshirts.length,
+          totalStock: mockTshirts.reduce((sum, t) => sum + t.analytics.totalStock, 0),
+          totalValue: mockTshirts.reduce((sum, t) => sum + t.analytics.totalValue, 0),
+          avgPricePerShirt: mockTshirts.reduce((sum, t) => sum + t.analytics.avgPrice, 0) / mockTshirts.length
+        },
+        _isMockData: true
+      });
+    }
+
     // Enhanced t-shirt data with analytics
     const tshirtsWithAnalytics = await Promise.all(
       tshirtProducts.map(async (product) => {

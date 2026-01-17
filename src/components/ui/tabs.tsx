@@ -3,10 +3,24 @@ import { cn } from "@/lib/utils"
 
 const Tabs = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("", className)} {...props} />
-))
+  React.HTMLAttributes<HTMLDivElement> & {
+    value?: string
+    onValueChange?: (value: string) => void
+  }
+>(({ className, value, onValueChange, children, ...props }, ref) => {
+  const contextValue = React.useMemo(() => ({ value, onValueChange }), [value, onValueChange])
+  
+  return (
+    <div ref={ref} className={cn("", className)} {...props} data-tabs-value={value} data-tabs-onvaluechange={onValueChange ? 'true' : 'false'}>
+      {React.Children.map(children, child => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child as React.ReactElement<any>, {})
+        }
+        return child
+      })}
+    </div>
+  )
+})
 Tabs.displayName = "Tabs"
 
 const TabsList = React.forwardRef<
@@ -29,9 +43,10 @@ const TabsTrigger = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement> & {
     value?: string
   }
->(({ className, ...props }, ref) => (
+>(({ className, value, ...props }, ref) => (
   <button
     ref={ref}
+    data-state={value ? 'active' : undefined}
     className={cn(
       "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
       className
@@ -46,9 +61,10 @@ const TabsContent = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement> & {
     value?: string
   }
->(({ className, ...props }, ref) => (
+>(({ className, value, ...props }, ref) => (
   <div
     ref={ref}
+    data-state={value ? 'active' : undefined}
     className={cn(
       "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
       className
