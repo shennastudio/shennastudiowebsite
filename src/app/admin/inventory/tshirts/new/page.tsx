@@ -16,6 +16,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { uploadProductImage } from '@/app/actions/upload';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -162,19 +163,19 @@ export default function NewTShirtPage() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData
-      });
+      const result = await uploadProductImage(formData);
 
-      if (!response.ok) throw new Error('Upload failed');
+      if (!result.success) {
+        throw new Error(result.error || 'Upload failed');
+      }
 
-      const data = await response.json();
-      setImageUrl(data.url);
-      toast.success('Image uploaded successfully');
+      if (result.url) {
+        setImageUrl(result.url);
+        toast.success('Image uploaded successfully');
+      }
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error('Failed to upload image');
+      toast.error(error instanceof Error ? error.message : 'Failed to upload image');
     } finally {
       setUploading(false);
     }
@@ -495,7 +496,7 @@ export default function NewTShirtPage() {
                       {variants.length === 0 && (
                         <div className="text-center py-8 text-slate-500">
                           <Package className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                          <p>No variants yet. Select sizes/colors and click "Generate"</p>
+                          <p>No variants yet. Select sizes/colors and click &quot;Generate&quot;</p>
                         </div>
                       )}
                     </div>

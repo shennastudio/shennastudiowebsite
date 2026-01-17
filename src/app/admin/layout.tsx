@@ -32,7 +32,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden dark">
       <Toaster position="top-right" />
 
       {/* Sidebar Component (Client) */}
@@ -41,10 +41,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
       {/* Main Content Area */}
       <div className="lg:pl-72 transition-all duration-300 relative z-10">
         {/* Top Header Bar with glowing effect */}
-        <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center gap-2 sm:gap-4 border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-black/80 backdrop-blur-xl pl-14 pr-3 sm:pl-6 sm:pr-6 shadow-sm">
+        <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center gap-2 sm:gap-4 border-b border-slate-800 bg-slate-950/80 dark:bg-black/80 backdrop-blur-xl pl-14 sm:pl-6 pr-3 sm:pr-6 shadow-sm">
           <div className="flex flex-1 items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
-              <h2 className="text-sm sm:text-lg font-bold text-slate-800 dark:text-slate-200 truncate">
+              <h2 className="text-sm sm:text-lg font-bold text-white truncate">
                 ShennaStudio Admin
               </h2>
             </div>
@@ -55,7 +55,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-1 sm:gap-2 px-2 sm:px-3"
+                  className="gap-1 sm:gap-2 px-2 sm:px-3 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
                 >
                   <Store className="w-4 h-4" />
                   <span className="hidden sm:inline">View Store</span>
@@ -67,7 +67,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
         </header>
 
         {/* Page Content */}
-        <main className="p-3 sm:p-6 lg:p-8 min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)]">
+        <main className="p-3 sm:p-6 lg:p-8 min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-slate-950">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
