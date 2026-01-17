@@ -6,7 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ModeToggle } from '@/components/ModeToggle';
-import { Store } from 'lucide-react';
+import { Store, Zap } from 'lucide-react';
 import { headers } from 'next/headers';
 
 interface AdminLayoutProps {
@@ -18,10 +18,8 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   const headersList = await headers();
   const pathname = headersList.get('x-pathname') || '';
 
-  // Check if we're on the login page
   const isLoginPage = pathname.includes('/admin/login');
 
-  // If it's the login page, just render children without sidebar/header
   if (isLoginPage) {
     return (
       <>
@@ -32,21 +30,28 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden admin-dark">
-      <Toaster position="top-right" />
+    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] relative overflow-hidden transition-colors duration-300">
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          className: '!bg-[var(--background-elevated)] !text-[var(--text-primary)] !border !border-[var(--border-color)]',
+        }}
+      />
 
-      {/* Sidebar Component (Client) */}
       <AdminSidebar userName={session?.user?.name} />
 
-      {/* Main Content Area */}
       <div className="lg:pl-72 transition-all duration-300 relative z-10">
-        {/* Top Header Bar with glowing effect */}
-        <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center gap-2 sm:gap-4 border-b border-slate-800 bg-slate-950/80 dark:bg-black/80 backdrop-blur-xl pl-14 sm:pl-6 pr-3 sm:pr-6 shadow-sm">
+        <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center gap-2 sm:gap-4 border-b border-[var(--border-color)] bg-[var(--background-elevated)]/80 backdrop-blur-xl pl-14 sm:pl-6 pr-3 sm:pr-6 shadow-sm transition-colors duration-300">
           <div className="flex flex-1 items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
-              <h2 className="text-sm sm:text-lg font-bold text-white truncate">
-                ShennaStudio Admin
-              </h2>
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30">
+                  <Zap className="w-4 h-4 text-cyan-500" />
+                </div>
+                <h2 className="text-sm sm:text-lg font-bold bg-gradient-to-r from-cyan-500 to-teal-500 bg-clip-text text-transparent truncate">
+                  ShennaStudio Admin
+                </h2>
+              </div>
             </div>
 
             <div className="flex items-center gap-2 sm:gap-3">
@@ -55,7 +60,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-1 sm:gap-2 px-2 sm:px-3 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+                  className="gap-1 sm:gap-2 px-2 sm:px-3 border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--background-tertiary)] hover:text-[var(--text-primary)] transition-all duration-200"
                 >
                   <Store className="w-4 h-4" />
                   <span className="hidden sm:inline">View Store</span>
@@ -66,8 +71,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </header>
 
-        {/* Page Content */}
-        <main className="p-3 sm:p-6 lg:p-8 min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-slate-950">
+        <main className="p-3 sm:p-6 lg:p-8 min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-[var(--background-primary)] transition-colors duration-300">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>

@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Package, DollarSign, TrendingUp, Search, Filter, CheckCircle, FileText, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
+import { Package, DollarSign, TrendingUp, Search, Filter, CheckCircle, FileText, ChevronDown, ChevronUp, RefreshCw, Download } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { exportOrdersToCSV } from '@/lib/utils/csv-export';
 
 interface OrderItem {
   id: string;
@@ -89,6 +90,25 @@ export default function OrdersPage() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const REFRESH_INTERVAL = 15000; // 15 seconds
+
+  const handleExportOrders = useCallback(() => {
+    const exportData = orders.map(order => ({
+      id: order.id,
+      orderNumber: order.orderNumber,
+      customerName: order.customerName,
+      customerEmail: order.customerEmail,
+      status: order.status,
+      subtotal: 0,
+      shipping: 0,
+      tax: 0,
+      total: order.total,
+      trackingNumber: order.trackingNumber || '',
+      carrier: order.carrier || '',
+      createdAt: new Date(order.createdAt),
+    }));
+    exportOrdersToCSV(exportData);
+    toast.success('Orders exported to CSV');
+  }, [orders]);
 
   const fetchOrders = useCallback(async (silent = false) => {
     if (!silent) setLoading(true);
@@ -288,6 +308,16 @@ export default function OrdersPage() {
             <Filter className="h-4 w-4" />
             <span className="hidden sm:inline">{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
             {showFilters ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+
+          <Button
+            onClick={handleExportOrders}
+            variant="outline"
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            <Download className="h-4 w-4" />
+            <span className="hidden sm:inline">Export</span>
           </Button>
         </div>
       </div>

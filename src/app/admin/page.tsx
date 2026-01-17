@@ -16,6 +16,7 @@ import {
   Mail
 } from 'lucide-react';
 import Link from 'next/link';
+import { LowStockWidget } from '@/components/admin/LowStockWidget';
 
 async function getDashboardData() {
   const [
@@ -318,6 +319,11 @@ export default async function AdminDashboard() {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Low Stock Alerts Widget */}
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+        <LowStockWidget threshold={10} limit={5} />
       </div>
 
       {/* Quick Actions */}

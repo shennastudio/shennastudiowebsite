@@ -3,9 +3,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, Search, DollarSign, TrendingUp } from 'lucide-react';
+import { Users, Search, DollarSign, TrendingUp, Download } from 'lucide-react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { exportCustomersToCSV } from '@/lib/utils/csv-export';
 
 interface Customer {
   id: string;
@@ -55,6 +56,24 @@ export default function CustomersPage() {
   const totalRevenue = customers.reduce((sum, c) => sum + c.totalSpent, 0);
   const avgLifetimeValue = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
 
+  const handleExportCustomers = useCallback(() => {
+    const exportData = customers.map(customer => ({
+      id: customer.id,
+      name: customer.name || '',
+      email: customer.email,
+      role: 'CUSTOMER',
+      orderCount: customer.orderCount,
+      totalSpent: customer.totalSpent,
+      avgOrderValue: customer.avgOrderValue,
+      rewardPoints: customer.rewardPoints,
+      tier: customer.tier,
+      lastOrderDate: customer.lastOrderDate ? new Date(customer.lastOrderDate) : null,
+      createdAt: new Date(customer.createdAt),
+    }));
+    exportCustomersToCSV(exportData);
+    toast.success('Customers exported to CSV');
+  }, [customers]);
+
   function getTierColor(tier: string) {
     const colors: Record<string, string> = {
       Bronze: 'bg-amber-100 text-amber-700',
@@ -66,41 +85,48 @@ export default function CustomersPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Customers</h1>
-        <p className="text-gray-600 dark:text-gray-300 mt-1">Manage your customer database</p>
+    <div className="space-y-4 sm:space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Customers</h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">Manage your customer database</p>
+        </div>
+        <Button onClick={handleExportCustomers} variant="outline" className="w-full sm:w-auto">
+          <Download className="h-4 w-4 mr-2" />
+          Export CSV
+        </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-3">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
             <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
             <Users className="h-4 w-4 text-gray-600" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalCustomers}</div>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl sm:text-2xl font-bold">{totalCustomers}</div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <DollarSign className="h-4 w-4 text-gray-600" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl sm:text-2xl font-bold">${totalRevenue.toFixed(2)}</div>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 p-4">
             <CardTitle className="text-sm font-medium">Avg Lifetime Value</CardTitle>
             <TrendingUp className="h-4 w-4 text-gray-600" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${avgLifetimeValue.toFixed(2)}</div>
+          <CardContent className="p-4 pt-0">
+            <div className="text-xl sm:text-2xl font-bold">${avgLifetimeValue.toFixed(2)}</div>
           </CardContent>
         </Card>
       </div>
