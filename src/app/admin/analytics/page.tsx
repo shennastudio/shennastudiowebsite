@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   BarChart3,
   TrendingUp,
@@ -71,25 +71,53 @@ export default function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState('30');
 
-  const loadAnalytics = useCallback(async () => {
+  // Real-time updates
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const REFRESH_INTERVAL = 30000; // 30 seconds for analytics
+
+  const loadAnalytics = useCallback(async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
+      setIsRefreshing(true);
       const response = await fetch(`/api/admin/analytics?period=${period}`);
       if (!response.ok) throw new Error('Failed to load analytics');
 
       const result = await response.json();
       setData(result);
+      setLastRefresh(new Date());
     } catch (error) {
       console.error('Load analytics error:', error);
-      toast.error('Failed to load analytics');
+      if (!silent) toast.error('Failed to load analytics');
     } finally {
       setLoading(false);
+      setIsRefreshing(false);
     }
   }, [period]);
 
+  // Initial fetch
   useEffect(() => {
     loadAnalytics();
-  }, [loadAnalytics]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [period]);
+
+  // Auto-refresh polling
+  useEffect(() => {
+    if (autoRefresh) {
+      refreshIntervalRef.current = setInterval(() => {
+        loadAnalytics(true);
+      }, REFRESH_INTERVAL);
+    }
+
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+        refreshIntervalRef.current = null;
+      }
+    };
+  }, [autoRefresh, loadAnalytics]);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -125,23 +153,43 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Analytics Dashboard</h1>
-          <p className="text-gray-500 mt-1">Track your store performance and insights</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">Track your store performance and insights</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Real-time status indicator */}
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg text-xs sm:text-sm">
+            <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            <span className="text-gray-600 dark:text-gray-300">
+              {autoRefresh ? 'Live' : 'Paused'}
+            </span>
+            <span className="text-gray-400 dark:text-gray-500 hidden sm:inline">
+              · {lastRefresh.toLocaleTimeString()}
+            </span>
+          </div>
+
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+            className="border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
           >
             <option value="7">Last 7 days</option>
             <option value="30">Last 30 days</option>
             <option value="90">Last 90 days</option>
             <option value="365">Last year</option>
           </select>
-          <Button variant="outline" onClick={() => loadAnalytics()}>
-            <RefreshCw className="w-4 h-4 mr-2" />
+
+          <Button variant="outline" onClick={() => loadAnalytics()} disabled={isRefreshing}>
+            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
+          </Button>
+
+          <Button
+            onClick={() => setAutoRefresh(!autoRefresh)}
+            variant={autoRefresh ? 'default' : 'outline'}
+            size="sm"
+          >
+            {autoRefresh ? 'Pause' : 'Resume'}
           </Button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import {
   Package,
   AlertTriangle,
@@ -115,9 +115,17 @@ export default function EnhancedInventoryPage() {
   const [exportFormat, setExportFormat] = useState<'pdf' | 'excel'>('pdf');
   const [dateRange, setDateRange] = useState('30');
 
-  const fetchInventory = useCallback(async () => {
+  // Real-time updates
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const REFRESH_INTERVAL = 20000; // 20 seconds for inventory
+
+  const fetchInventory = useCallback(async (silent = false) => {
     try {
-      setLoading(true);
+      if (!silent) setLoading(true);
+      setIsRefreshing(true);
       const params = new URLSearchParams({
         filter,
         search: searchQuery,
@@ -132,17 +140,37 @@ export default function EnhancedInventoryPage() {
 
       const inventoryData = await response.json();
       setData(inventoryData);
+      setLastRefresh(new Date());
     } catch (error) {
-      toast.error('Failed to load inventory');
+      if (!silent) toast.error('Failed to load inventory');
       console.error(error);
     } finally {
       setLoading(false);
+      setIsRefreshing(false);
     }
   }, [filter, searchQuery, categoryFilter, sortBy, sortOrder]);
 
+  // Initial fetch
   useEffect(() => {
     fetchInventory();
-  }, [fetchInventory]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, searchQuery, categoryFilter, sortBy, sortOrder]);
+
+  // Auto-refresh polling
+  useEffect(() => {
+    if (autoRefresh) {
+      refreshIntervalRef.current = setInterval(() => {
+        fetchInventory(true);
+      }, REFRESH_INTERVAL);
+    }
+
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+        refreshIntervalRef.current = null;
+      }
+    };
+  }, [autoRefresh, fetchInventory]);
 
   // Filtered and sorted variants
   const filteredVariants = useMemo(() => {
@@ -310,10 +338,29 @@ export default function EnhancedInventoryPage() {
             Comprehensive stock tracking, analytics, and management tools
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={fetchInventory}>
-            <RefreshCw className="w-4 h-4 mr-2" />
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Real-time status indicator */}
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg text-xs sm:text-sm">
+            <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            <span className="text-gray-600 dark:text-gray-300">
+              {autoRefresh ? 'Live' : 'Paused'}
+            </span>
+            <span className="text-gray-400 dark:text-gray-500 hidden sm:inline">
+              · {lastRefresh.toLocaleTimeString()}
+            </span>
+          </div>
+
+          <Button variant="outline" onClick={() => fetchInventory()} disabled={isRefreshing}>
+            <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
             Refresh
+          </Button>
+
+          <Button
+            onClick={() => setAutoRefresh(!autoRefresh)}
+            variant={autoRefresh ? 'default' : 'outline'}
+            size="sm"
+          >
+            {autoRefresh ? 'Pause' : 'Resume'}
           </Button>
           <Dialog>
             <DialogTrigger asChild>

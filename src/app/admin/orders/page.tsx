@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Package, DollarSign, TrendingUp, Search, Filter, CheckCircle, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { Package, DollarSign, TrendingUp, Search, Filter, CheckCircle, FileText, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -83,8 +83,16 @@ export default function OrdersPage() {
   const [carrier, setCarrier] = useState('');
   const [showBulkOptions, setShowBulkOptions] = useState(false);
 
-  const fetchOrders = useCallback(async () => {
-    setLoading(true);
+  // Real-time updates
+  const [autoRefresh, setAutoRefresh] = useState(true);
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const REFRESH_INTERVAL = 15000; // 15 seconds
+
+  const fetchOrders = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
+    setIsRefreshing(true);
     try {
       const params = new URLSearchParams();
       if (statusFilter !== 'all') params.set('status', statusFilter);
@@ -98,22 +106,53 @@ export default function OrdersPage() {
       const data = await response.json();
 
       if (response.ok) {
+        // Check if there are new orders
+        const prevOrderCount = orders.length;
         setOrders(data.orders);
         setSummary(data.summary);
-      } else {
+        setLastRefresh(new Date());
+
+        // Notify if new orders arrived (only on silent refresh)
+        if (silent && data.orders.length > prevOrderCount) {
+          const newCount = data.orders.length - prevOrderCount;
+          toast.success(`${newCount} new order${newCount > 1 ? 's' : ''} received!`, {
+            icon: '🛒',
+            duration: 5000,
+          });
+        }
+      } else if (!silent) {
         toast.error(data.error || 'Failed to fetch orders');
       }
     } catch (error) {
       console.error('Fetch orders error:', error);
-      toast.error('Failed to fetch orders');
+      if (!silent) toast.error('Failed to fetch orders');
     } finally {
       setLoading(false);
+      setIsRefreshing(false);
     }
-  }, [statusFilter, searchQuery, dateFrom, dateTo, minAmount, maxAmount]);
+  }, [statusFilter, searchQuery, dateFrom, dateTo, minAmount, maxAmount, orders.length]);
 
+  // Initial fetch
   useEffect(() => {
     fetchOrders();
-  }, [fetchOrders]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter, searchQuery, dateFrom, dateTo, minAmount, maxAmount]);
+
+  // Auto-refresh polling
+  useEffect(() => {
+    if (autoRefresh) {
+      refreshIntervalRef.current = setInterval(() => {
+        fetchOrders(true); // Silent refresh
+      }, REFRESH_INTERVAL);
+    }
+
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+        refreshIntervalRef.current = null;
+      }
+    };
+  }, [autoRefresh, fetchOrders]);
 
   function toggleOrderSelection(orderId: string) {
     const newSelection = new Set(selectedOrders);
@@ -208,15 +247,49 @@ export default function OrdersPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Orders Management</h1>
           <p className="text-gray-600 dark:text-gray-300 mt-1 text-sm sm:text-base">Advanced filtering and bulk actions</p>
         </div>
-        <Button
-          onClick={() => setShowFilters(!showFilters)}
-          variant="outline"
-          className="flex items-center gap-2 w-full sm:w-auto"
-        >
-          <Filter className="h-4 w-4" />
-          {showFilters ? 'Hide Filters' : 'Show Filters'}
-          {showFilters ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </Button>
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          {/* Real-time status indicator */}
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg text-xs sm:text-sm">
+            <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            <span className="text-gray-600 dark:text-gray-300">
+              {autoRefresh ? 'Live' : 'Paused'}
+            </span>
+            <span className="text-gray-400 dark:text-gray-500 hidden sm:inline">
+              · Updated {lastRefresh.toLocaleTimeString()}
+            </span>
+          </div>
+
+          {/* Refresh controls */}
+          <Button
+            onClick={() => fetchOrders()}
+            variant="outline"
+            size="sm"
+            disabled={isRefreshing}
+            className="flex items-center gap-1"
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span className="hidden sm:inline">Refresh</span>
+          </Button>
+
+          <Button
+            onClick={() => setAutoRefresh(!autoRefresh)}
+            variant={autoRefresh ? 'default' : 'outline'}
+            size="sm"
+            className="flex items-center gap-1"
+          >
+            {autoRefresh ? 'Pause' : 'Resume'}
+          </Button>
+
+          <Button
+            onClick={() => setShowFilters(!showFilters)}
+            variant="outline"
+            className="flex items-center gap-2"
+          >
+            <Filter className="h-4 w-4" />
+            <span className="hidden sm:inline">{showFilters ? 'Hide Filters' : 'Show Filters'}</span>
+            {showFilters ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+        </div>
       </div>
 
       {/* Advanced Filters */}
