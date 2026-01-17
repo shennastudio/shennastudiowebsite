@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Package,
   AlertTriangle,
@@ -20,7 +21,8 @@ import {
   PieChart,
   Calendar,
   Truck,
-  Eye
+  Eye,
+  Plus
 } from 'lucide-react';
 import { format } from 'date-fns';
 import toast from 'react-hot-toast';
@@ -112,6 +114,7 @@ const getAgingColor = (days: number) => {
 };
 
 export default function TShirtInventoryPage() {
+  const router = useRouter();
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -324,6 +327,11 @@ export default function TShirtInventoryPage() {
 
           <Button onClick={() => setAutoRefresh(!autoRefresh)} variant={autoRefresh ? 'default' : 'outline'} size="sm">
             {autoRefresh ? 'Pause' : 'Resume'}
+          </Button>
+
+          <Button onClick={() => router.push('/admin/inventory/tshirts/new')} variant="default" size="sm">
+            <Plus className="w-4 h-4 mr-2" />
+            Add New T-Shirt
           </Button>
         </div>
       </div>
