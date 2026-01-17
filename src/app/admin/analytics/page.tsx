@@ -153,17 +153,17 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Dashboard</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1">Track your store performance and insights</p>
+          <h1 className="text-2xl font-bold text-white">Analytics Dashboard</h1>
+          <p className="text-slate-400 mt-1">Track your store performance and insights</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {/* Real-time status indicator */}
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-slate-800 rounded-lg text-xs sm:text-sm">
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded-lg text-xs sm:text-sm">
             <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-            <span className="text-gray-600 dark:text-gray-300">
+            <span className="text-slate-300">
               {autoRefresh ? 'Live' : 'Paused'}
             </span>
-            <span className="text-gray-400 dark:text-gray-500 hidden sm:inline">
+            <span className="text-slate-500 hidden sm:inline">
               · {lastRefresh.toLocaleTimeString()}
             </span>
           </div>
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="border border-gray-200 dark:border-slate-600 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
+            className="border border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-slate-800 text-slate-200"
           >
             <option value="7">Last 7 days</option>
             <option value="30">Last 30 days</option>
@@ -197,71 +197,71 @@ export default function AnalyticsPage() {
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Revenue */}
-        <Card className="bg-gradient-to-br from-green-50 to-emerald-100">
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-green-500 rounded-xl">
-                <DollarSign className="w-6 h-6 text-white" />
+              <div className="p-3 bg-gradient-to-br from-emerald-500/20 to-green-500/20 rounded-xl border border-emerald-500/30">
+                <DollarSign className="w-6 h-6 text-emerald-400" />
               </div>
-              <div className={`flex items-center gap-1 text-sm font-medium ${data.overview.revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <div className={`flex items-center gap-1 text-sm font-medium ${data.overview.revenueGrowth >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                 {data.overview.revenueGrowth >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                 {formatPercent(data.overview.revenueGrowth)}
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(data.overview.revenue)}</h3>
-            <p className="text-sm text-gray-600">Total Revenue</p>
+            <h3 className="text-2xl font-bold text-white">{formatCurrency(data.overview.revenue)}</h3>
+            <p className="text-sm text-slate-400">Total Revenue</p>
           </CardContent>
         </Card>
 
         {/* Orders */}
-        <Card className="bg-gradient-to-br from-blue-50 to-cyan-100">
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-blue-500 rounded-xl">
-                <ShoppingCart className="w-6 h-6 text-white" />
+              <div className="p-3 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-xl border border-blue-500/30">
+                <ShoppingCart className="w-6 h-6 text-blue-400" />
               </div>
-              <div className={`flex items-center gap-1 text-sm font-medium ${data.overview.orderGrowth >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              <div className={`flex items-center gap-1 text-sm font-medium ${data.overview.orderGrowth >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                 {data.overview.orderGrowth >= 0 ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                 {formatPercent(data.overview.orderGrowth)}
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900">{data.overview.orders}</h3>
-            <p className="text-sm text-gray-600">Total Orders</p>
+            <h3 className="text-2xl font-bold text-white">{data.overview.orders}</h3>
+            <p className="text-sm text-slate-400">Total Orders</p>
           </CardContent>
         </Card>
 
         {/* Average Order Value */}
-        <Card className="bg-gradient-to-br from-purple-50 to-violet-100">
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-purple-500 rounded-xl">
-                <BarChart3 className="w-6 h-6 text-white" />
+              <div className="p-3 bg-gradient-to-br from-purple-500/20 to-violet-500/20 rounded-xl border border-purple-500/30">
+                <BarChart3 className="w-6 h-6 text-purple-400" />
               </div>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(data.overview.averageOrderValue)}</h3>
-            <p className="text-sm text-gray-600">Average Order Value</p>
+            <h3 className="text-2xl font-bold text-white">{formatCurrency(data.overview.averageOrderValue)}</h3>
+            <p className="text-sm text-slate-400">Average Order Value</p>
           </CardContent>
         </Card>
 
         {/* Customers */}
-        <Card className="bg-gradient-to-br from-orange-50 to-amber-100">
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
-              <div className="p-3 bg-orange-500 rounded-xl">
-                <Users className="w-6 h-6 text-white" />
+              <div className="p-3 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-xl border border-orange-500/30">
+                <Users className="w-6 h-6 text-orange-400" />
               </div>
-              <span className="text-sm font-medium text-green-600">+{data.overview.newCustomers} new</span>
+              <span className="text-sm font-medium text-emerald-400">+{data.overview.newCustomers} new</span>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900">{data.overview.totalCustomers}</h3>
-            <p className="text-sm text-gray-600">Total Customers</p>
+            <h3 className="text-2xl font-bold text-white">{data.overview.totalCustomers}</h3>
+            <p className="text-sm text-slate-400">Total Customers</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Revenue Chart */}
-      <Card>
+      <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
         <CardHeader>
-          <CardTitle>Revenue Over Time</CardTitle>
+          <CardTitle className="text-white">Revenue Over Time</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-80 w-full">
@@ -277,7 +277,7 @@ export default function AnalyticsPage() {
                       <stop offset="95%" stopColor="#0d9488" stopOpacity={0}/>
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#334155" />
                   <XAxis 
                     dataKey="date" 
                     tickFormatter={(date) => new Date(date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
@@ -296,7 +296,7 @@ export default function AnalyticsPage() {
                   <Tooltip 
                     formatter={(value: number | undefined) => value !== undefined ? [`$${value.toFixed(2)}`, 'Revenue'] : ['$0.00', 'Revenue']}
                     labelFormatter={(label) => new Date(label).toLocaleDateString()}
-                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)', backgroundColor: '#0f172a', color: '#fff' }}
                   />
                   <Area 
                     type="monotone" 
@@ -308,7 +308,7 @@ export default function AnalyticsPage() {
                 </AreaChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex h-full items-center justify-center text-gray-500">
+              <div className="flex h-full items-center justify-center text-slate-500">
                 No revenue data for this period
               </div>
             )}
@@ -319,32 +319,32 @@ export default function AnalyticsPage() {
       {/* Second Row - Conversion & Conservation */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Conversion Rate */}
-        <Card>
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-indigo-100 rounded-lg">
-                <TrendingUp className="w-5 h-5 text-indigo-600" />
+              <div className="p-2 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 rounded-lg border border-indigo-500/30">
+                <TrendingUp className="w-5 h-5 text-indigo-400" />
               </div>
-              <h3 className="font-semibold">Conversion Metrics</h3>
+              <h3 className="font-semibold text-white">Conversion Metrics</h3>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-gray-600">View to Cart</span>
-                <span className="font-semibold">{data.overview.conversionRate.toFixed(1)}%</span>
+                <span className="text-slate-400">View to Cart</span>
+                <span className="font-semibold text-white">{data.overview.conversionRate.toFixed(1)}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-slate-800 rounded-full h-2">
                 <div
                   className="bg-indigo-500 h-2 rounded-full"
                   style={{ width: `${Math.min(data.overview.conversionRate, 100)}%` }}
                 />
               </div>
               <div className="flex justify-between items-center mt-4">
-                <span className="text-gray-600">Cart to Purchase</span>
-                <span className="font-semibold">{data.overview.cartToPurchaseRate.toFixed(1)}%</span>
+                <span className="text-slate-400">Cart to Purchase</span>
+                <span className="font-semibold text-white">{data.overview.cartToPurchaseRate.toFixed(1)}%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-slate-800 rounded-full h-2">
                 <div
-                  className="bg-green-500 h-2 rounded-full"
+                  className="bg-emerald-500 h-2 rounded-full"
                   style={{ width: `${Math.min(data.overview.cartToPurchaseRate, 100)}%` }}
                 />
               </div>
@@ -353,54 +353,54 @@ export default function AnalyticsPage() {
         </Card>
 
         {/* Conservation Impact */}
-        <Card className="bg-gradient-to-br from-teal-50 to-cyan-100">
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-teal-500 rounded-lg">
-                <Heart className="w-5 h-5 text-white" />
+              <div className="p-2 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-lg border border-teal-500/30">
+                <Heart className="w-5 h-5 text-teal-400" />
               </div>
-              <h3 className="font-semibold text-teal-800">Conservation Impact</h3>
+              <h3 className="font-semibold text-teal-400">Conservation Impact</h3>
             </div>
             <div className="space-y-2">
               <div>
-                <p className="text-3xl font-bold text-teal-700">{formatCurrency(data.conservation.totalDonated)}</p>
-                <p className="text-sm text-teal-600">Total Donated</p>
+                <p className="text-3xl font-bold text-white">{formatCurrency(data.conservation.totalDonated)}</p>
+                <p className="text-sm text-slate-400">Total Donated</p>
               </div>
-              <div className="pt-2 border-t border-teal-200">
-                <p className="text-lg font-semibold text-teal-700">{data.conservation.donationCount}</p>
-                <p className="text-sm text-teal-600">Orders with Donations</p>
+              <div className="pt-2 border-t border-slate-700">
+                <p className="text-lg font-semibold text-teal-400">{data.conservation.donationCount}</p>
+                <p className="text-sm text-slate-400">Orders with Donations</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
         {/* Order Status Distribution */}
-        <Card>
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardContent className="p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Package className="w-5 h-5 text-blue-600" />
+              <div className="p-2 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-lg border border-blue-500/30">
+                <Package className="w-5 h-5 text-blue-400" />
               </div>
-              <h3 className="font-semibold">Order Status (Live)</h3>
+              <h3 className="font-semibold text-white">Order Status (Live)</h3>
             </div>
             <div className="space-y-2">
               {data.statusDistribution && data.statusDistribution.length > 0 ? (
                 data.statusDistribution.map((item) => (
                   <div key={item.status} className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 capitalize">{item.status.toLowerCase().replace('_', ' ')}</span>
-                    <span className="font-medium bg-gray-100 px-2 py-0.5 rounded-full text-xs">{item._count}</span>
+                    <span className="text-sm text-slate-400 capitalize">{item.status.toLowerCase().replace('_', ' ')}</span>
+                    <span className="font-medium bg-slate-800 px-2 py-0.5 rounded-full text-xs text-white">{item._count}</span>
                   </div>
                 ))
               ) : (
                 Object.entries(data.ordersByStatus || {}).map(([status, count]) => (
                   <div key={status} className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600 capitalize">{status.toLowerCase().replace('_', ' ')}</span>
-                    <span className="font-medium bg-gray-100 px-2 py-0.5 rounded-full text-xs">{count}</span>
+                    <span className="text-sm text-slate-400 capitalize">{status.toLowerCase().replace('_', ' ')}</span>
+                    <span className="font-medium bg-slate-800 px-2 py-0.5 rounded-full text-xs text-white">{count}</span>
                   </div>
                 ))
               )}
               {(!data.statusDistribution?.length && !Object.keys(data.ordersByStatus || {}).length) && (
-                <p className="text-sm text-gray-500 text-center">No active orders</p>
+                <p className="text-sm text-slate-500 text-center">No active orders</p>
               )}
             </div>
           </CardContent>
@@ -410,32 +410,32 @@ export default function AnalyticsPage() {
       {/* Third Row - Top Products & Low Stock */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Products */}
-        <Card>
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-green-500" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <TrendingUp className="w-5 h-5 text-emerald-400" />
               Top Selling Products
             </CardTitle>
           </CardHeader>
           <CardContent>
             {data.topProducts.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">No sales data yet</p>
+              <p className="text-center text-slate-500 py-8">No sales data yet</p>
             ) : (
               <div className="space-y-4">
                 {data.topProducts.slice(0, 5).map((product, index) => (
                   <div key={product.variantId} className="flex items-center gap-4">
-                    <span className="w-6 h-6 bg-gradient-to-r from-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    <span className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                       {index + 1}
                     </span>
                     <div className="flex-1">
-                      <p className="font-medium">{product.productName}</p>
+                      <p className="font-medium text-white">{product.productName}</p>
                       {product.variantName && (
-                        <p className="text-xs text-gray-500">{product.variantName}</p>
+                        <p className="text-xs text-slate-500">{product.variantName}</p>
                       )}
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold">{product._sum.quantity} sold</p>
-                      <p className="text-sm text-gray-500">{formatCurrency(product._sum.price || 0)}</p>
+                      <p className="font-semibold text-emerald-400">{product._sum.quantity} sold</p>
+                      <p className="text-sm text-slate-500">{formatCurrency(product._sum.price || 0)}</p>
                     </div>
                   </div>
                 ))}
@@ -445,30 +445,30 @@ export default function AnalyticsPage() {
         </Card>
 
         {/* Low Stock Alert */}
-        <Card>
+        <Card className="bg-slate-900/80 backdrop-blur-sm border-slate-800">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-orange-500" />
+            <CardTitle className="flex items-center gap-2 text-white">
+              <AlertTriangle className="w-5 h-5 text-orange-400" />
               Low Stock Alert
             </CardTitle>
           </CardHeader>
           <CardContent>
             {data.lowStockProducts.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">All products are well stocked!</p>
+              <p className="text-center text-slate-500 py-8">All products are well stocked!</p>
             ) : (
               <div className="space-y-3">
                 {data.lowStockProducts.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                  <div key={item.id} className="flex items-center justify-between p-3 bg-slate-800/50 rounded-lg border border-slate-700">
                     <div>
-                      <p className="font-medium">{item.product.name}</p>
-                      <p className="text-sm text-gray-500">{item.name}</p>
+                      <p className="font-medium text-white">{item.product.name}</p>
+                      <p className="text-sm text-slate-500">{item.name}</p>
                     </div>
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                       item.stock === 0
-                        ? 'bg-red-100 text-red-800'
+                        ? 'bg-red-500/20 text-red-400 border border-red-500/30'
                         : item.stock <= 5
-                        ? 'bg-orange-100 text-orange-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
+                        : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
                     }`}>
                       {item.stock === 0 ? 'Out of Stock' : `${item.stock} left`}
                     </span>
