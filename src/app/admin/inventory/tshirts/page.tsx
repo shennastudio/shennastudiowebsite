@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
-  TrendingUp, 
   DollarSign, 
   Package, 
   RefreshCw,
@@ -11,9 +10,7 @@ import {
   Edit,
   Plus,
   Minus,
-  ArrowUpRight,
   Target,
-  Clock,
   AlertTriangle
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -21,7 +18,6 @@ import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -92,15 +88,16 @@ interface TShirtData {
 interface SeasonalAnalysis {
   currentSeason: string;
   currentPerformance: { sales: number; revenue: number };
+  nextSeason: string;
   nextSeasonForecast: { sales: number; revenue: number };
   recommendation: string;
 }
 
 interface SeasonalColorData {
-  spring: { 'White': 'high'; 'Light Blue': 'high'; 'Green': 'medium' };
-  summer: { 'White': 'high'; 'Navy': 'medium'; 'Red': 'high' };
-  fall: { 'Black': 'high'; 'Orange': 'high'; 'Brown': 'medium' };
-  winter: { 'Black': 'high'; 'Navy': 'high'; 'Gray': 'medium' };
+  spring: Record<string, 'high' | 'medium' | 'low'>;
+  summer: Record<string, 'high' | 'medium' | 'low'>;
+  fall: Record<string, 'high' | 'medium' | 'low'>;
+  winter: Record<string, 'high' | 'medium' | 'low'>;
 }
 
 const seasonalColors: SeasonalColorData = {
@@ -230,6 +227,7 @@ export default function AdvancedTShirtInventory() {
     return {
       currentSeason,
       currentPerformance: seasonData[currentSeason] || { sales: 0, revenue: 0 },
+      nextSeason,
       nextSeasonForecast: seasonData[nextSeason] || { sales: 0, revenue: 0 },
       recommendation: getSeasonalRecommendation(currentSeason, nextSeason, seasonData)
     };
@@ -258,15 +256,15 @@ export default function AdvancedTShirtInventory() {
       let recommendedAction = 'Maintain current stock';
       
       const season = getCurrentSeason();
-      const seasonColorMap = {
+      const seasonColorMap: Record<string, Record<string, 'high' | 'medium' | 'low'>> = {
         'Spring': seasonalColors.spring,
         'Summer': seasonalColors.summer,
         'Fall': seasonalColors.fall,
         'Winter': seasonalColors.winter
       };
       
-      const currentSeasonColors = seasonColorMap[season as keyof typeof seasonColorMap];
-      seasonalDemand = currentSeasonColors?.[variant.color as keyof typeof currentSeasonColors] || 'medium';
+      const currentSeasonColors = seasonColorMap[season];
+      seasonalDemand = currentSeasonColors?.[variant.color] || 'medium';
       
       if (salesVelocity > 1) {
         recommendedAction = 'Fast seller - consider increasing stock';
@@ -488,7 +486,7 @@ export default function AdvancedTShirtInventory() {
         </Card>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <div className="space-y-6">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
@@ -722,54 +720,57 @@ export default function AdvancedTShirtInventory() {
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                {tshirts.map((tshirt) => (
-                  <div key={tshirt.productId} className="border rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <h5 className="font-medium">{tshirt.productName}</h5>
-                      <Button
-                        size="sm"
-                        onClick={() => handleAutoReorder(tshirt.productId)}
-                        disabled={!autoReorder}
-                      >
-                        <Plus className="w-4 h-4 mr-2" />
-                        Auto-Reorder
-                      </Button>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {generateProductionPlan(tshirt).map((plan) => (
-                        <div key={plan.weekNumber} className="border rounded p-3">
-                          <h6 className="font-medium mb-2">Week {plan.weekNumber}</h6>
-                          <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            {format(new Date(plan.startDate), 'MMM dd')} - {format(new Date(plan.endDate), 'MMM dd')}
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <div>
-                              <span className="text-xs text-gray-500">Total Units:</span>
-                              <div className="font-medium">{plan.totalUnits}</div>
-                            </div>
-                            <div>
-                              <span className="text-xs text-gray-500">Material (m²):</span>
-                              <div className="font-medium">{plan.estimatedMaterial.toFixed(1)}</div>
+                {tshirts.map((tshirt) => {
+                  const plans = generateProductionPlan(tshirt);
+                  return (
+                    <div key={tshirt.productId} className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <h5 className="font-medium">{tshirt.productName}</h5>
+                        <Button
+                          size="sm"
+                          onClick={() => handleAutoReorder(tshirt.productId)}
+                          disabled={!autoReorder}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Auto-Reorder
+                        </Button>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {plans.map((plan) => (
+                          <div key={plan.weekNumber} className="border rounded p-3">
+                            <h6 className="font-medium mb-2">Week {plan.weekNumber}</h6>
+                            <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              {format(new Date(plan.startDate), 'MMM dd')} - {format(new Date(plan.endDate), 'MMM dd')}
                             </div>
                             
-                            <div>
-                              <span className="text-xs text-gray-500">Sizes:</span>
-                              <div className="grid grid-cols-2 gap-1">
-                                {Object.entries(plan.sizeBreakdown).map(([size, qty]) => (
-                                  <div key={size} className="text-xs">
-                                    {size}: {qty}
-                                  </div>
-                                ))}
+                            <div className="space-y-2">
+                              <div>
+                                <span className="text-xs text-gray-500">Total Units:</span>
+                                <div className="font-medium">{plan.totalUnits}</div>
+                              </div>
+                              <div>
+                                <span className="text-xs text-gray-500">Material (m²):</span>
+                                <div className="font-medium">{plan.estimatedMaterial.toFixed(1)}</div>
+                              </div>
+                              
+                              <div>
+                                <span className="text-xs text-gray-500">Sizes:</span>
+                                <div className="grid grid-cols-2 gap-1">
+                                  {Object.entries(plan.sizeBreakdown).map(([size, qty]) => (
+                                    <div key={size} className="text-xs">
+                                      {size}: {qty}
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                ))}
+                    </div>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
@@ -968,7 +969,7 @@ export default function AdvancedTShirtInventory() {
                           <td className="border border-gray-200 dark:border-slate-700 px-4 py-2 font-medium">{variant.size}</td>
                           <td className="border border-gray-200 dark:border-slate-700 px-4 py-2">
                             <div className="flex items-center gap-2">
-                              <div className={`w-4 h-4 rounded-full bg-${variant.color.toLowerCase().replace(' ', '-')}`}></div>
+                              <div className="w-4 h-4 rounded-full bg-gray-400"></div>
                               <span>{variant.color}</span>
                             </div>
                           </td>
