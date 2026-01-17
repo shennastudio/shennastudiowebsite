@@ -162,6 +162,7 @@ export async function GET(req: Request) {
     });
 
     // Inventory Table
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let yPos = (doc as any).lastAutoTable.finalY + 20;
 
     if (yPos > 250) {
@@ -203,6 +204,7 @@ export async function GET(req: Request) {
 
     // Recent Transactions
     if (transactions.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       yPos = (doc as any).lastAutoTable.finalY + 20;
 
       if (yPos > 200) {

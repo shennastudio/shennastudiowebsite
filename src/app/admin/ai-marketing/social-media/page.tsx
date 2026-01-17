@@ -148,7 +148,7 @@ export default function SocialMediaAutomation() {
 
           <div>
             <Label htmlFor="platform">Platform</Label>
-            <Select value={platform} onValueChange={(val: any) => setPlatform(val)}>
+            <Select value={platform} onValueChange={(val: string) => setPlatform(val)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>

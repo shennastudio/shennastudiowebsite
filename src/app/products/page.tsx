@@ -218,7 +218,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       {category.name} are on the way! 
                     </p>
                     <p className="text-gray-600 mb-8">
-                      We're working on bringing you beautiful ocean-inspired {category.name.toLowerCase()} that support marine conservation. 
+                      We&apos;re working on bringing you beautiful ocean-inspired {category.name.toLowerCase()} that support marine conservation. 
                       <span className="block mt-2 font-semibold text-teal-600">
                         Check back soon or explore our bracelet collection!
                       </span>
