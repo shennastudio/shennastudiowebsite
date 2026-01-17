@@ -27,27 +27,33 @@ export default function SalesChart({ data }: SalesChartProps) {
   }));
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend</h3>
+    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Revenue Trend</h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart data={formattedData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <CartesianGrid strokeDasharray="3 3" className="stroke-gray-200 dark:stroke-slate-600" />
           <XAxis
             dataKey="date"
-            stroke="#6b7280"
+            className="text-gray-600 dark:text-gray-400"
+            tick={{ fill: 'currentColor' }}
+            stroke="currentColor"
             style={{ fontSize: '12px' }}
           />
           <YAxis
-            stroke="#6b7280"
+            className="text-gray-600 dark:text-gray-400"
+            tick={{ fill: 'currentColor' }}
+            stroke="currentColor"
             style={{ fontSize: '12px' }}
             tickFormatter={(value) => `$${value}`}
           />
           <Tooltip
             contentStyle={{
-              backgroundColor: '#fff',
-              border: '1px solid #e5e7eb',
+              backgroundColor: 'var(--tooltip-bg, #fff)',
+              border: '1px solid var(--tooltip-border, #e5e7eb)',
               borderRadius: '8px',
+              color: 'var(--tooltip-text, #111827)',
             }}
+            wrapperClassName="dark:[--tooltip-bg:#1e293b] dark:[--tooltip-border:#475569] dark:[--tooltip-text:#f1f5f9]"
             formatter={(value: number | string | undefined, name: string | undefined) => {
               if (value === undefined) return ['$0.00', name || 'Unknown'];
               const numValue = typeof value === 'number' ? value : parseFloat(value as string);
@@ -57,7 +63,7 @@ export default function SalesChart({ data }: SalesChartProps) {
               return [numValue, 'Orders'];
             }}
           />
-          <Legend />
+          <Legend wrapperStyle={{ color: 'inherit' }} />
           <Line
             type="monotone"
             dataKey="revenue"

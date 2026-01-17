@@ -64,10 +64,10 @@ export default function EnhancedDashboard() {
       <div className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-gray-100 rounded-lg h-32 animate-pulse" />
+            <div key={i} className="bg-gray-100 dark:bg-slate-700 rounded-lg h-32 animate-pulse" />
           ))}
         </div>
-        <div className="bg-gray-100 rounded-lg h-96 animate-pulse" />
+        <div className="bg-gray-100 dark:bg-slate-700 rounded-lg h-96 animate-pulse" />
       </div>
     );
   }
@@ -75,7 +75,7 @@ export default function EnhancedDashboard() {
   if (!data) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Failed to load analytics data</p>
+        <p className="text-gray-500 dark:text-gray-400">Failed to load analytics data</p>
       </div>
     );
   }
@@ -84,7 +84,7 @@ export default function EnhancedDashboard() {
     <div className="space-y-6">
       {/* Period Selector */}
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-gray-900">Analytics Overview</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Analytics Overview</h2>
         <div className="flex gap-2">
           {['today', 'week', 'month', 'year'].map((p) => (
             <button
@@ -93,7 +93,7 @@ export default function EnhancedDashboard() {
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 period === p
                   ? 'bg-teal-600 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  : 'bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
               }`}
             >
               {p.charAt(0).toUpperCase() + p.slice(1)}
@@ -108,25 +108,25 @@ export default function EnhancedDashboard() {
           title="Total Revenue"
           value={`$${data.metrics.totalRevenue.toFixed(2)}`}
           icon={DollarSign}
-          iconColor="text-green-600"
+          iconColor="text-green-600 dark:text-green-400"
         />
         <StatsCard
           title="Total Orders"
           value={data.metrics.totalOrders}
           icon={ShoppingCart}
-          iconColor="text-blue-600"
+          iconColor="text-blue-600 dark:text-blue-400"
         />
         <StatsCard
           title="Average Order Value"
           value={`$${data.metrics.averageOrderValue.toFixed(2)}`}
           icon={TrendingUp}
-          iconColor="text-purple-600"
+          iconColor="text-purple-600 dark:text-purple-400"
         />
         <StatsCard
           title="Conservation Impact"
           value={`$${data.metrics.totalConservationDonations.toFixed(2)}`}
           icon={Heart}
-          iconColor="text-teal-600"
+          iconColor="text-teal-600 dark:text-teal-400"
         />
       </div>
 
@@ -136,43 +136,43 @@ export default function EnhancedDashboard() {
       {/* Top Products & Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Top Products */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Products</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Top Products</h3>
           <div className="space-y-3">
             {data.topProducts.length > 0 ? (
               data.topProducts.map((product, index) => (
                 <div
                   key={product.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-gray-500 bg-white rounded-full w-6 h-6 flex items-center justify-center">
+                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-600 rounded-full w-6 h-6 flex items-center justify-center">
                       {index + 1}
                     </span>
                     <div>
-                      <p className="font-medium text-gray-900">{product.name}</p>
-                      <p className="text-sm text-gray-500">{product.quantity} sold</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{product.name}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{product.quantity} sold</p>
                     </div>
                   </div>
-                  <p className="font-semibold text-teal-600">
+                  <p className="font-semibold text-teal-600 dark:text-teal-400">
                     ${product.revenue.toFixed(2)}
                   </p>
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 text-center py-8">No sales data yet</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-8">No sales data yet</p>
             )}
           </div>
         </div>
 
         {/* Orders by Status */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Orders by Status</h3>
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Orders by Status</h3>
           <div className="space-y-3">
             {data.ordersByStatus.map((status) => (
               <div
                 key={status.status}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -188,11 +188,11 @@ export default function EnhancedDashboard() {
                         : 'bg-red-500'
                     }`}
                   />
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-gray-900 dark:text-white">
                     {status.status.charAt(0) + status.status.slice(1).toLowerCase()}
                   </p>
                 </div>
-                <p className="font-semibold text-gray-700">{status._count}</p>
+                <p className="font-semibold text-gray-700 dark:text-gray-300">{status._count}</p>
               </div>
             ))}
           </div>

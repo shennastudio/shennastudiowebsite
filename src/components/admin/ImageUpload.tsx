@@ -104,7 +104,7 @@ export function ImageUpload({
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium">{label}</label>
+      <label className="text-sm font-medium text-gray-900 dark:text-gray-100">{label}</label>
 
       {currentImage ? (
         <div className="relative">
@@ -113,7 +113,7 @@ export function ImageUpload({
           <img
             src={currentImage}
             alt="Preview"
-            className="w-full h-48 object-cover rounded-lg border bg-gray-100"
+            className="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-slate-700 bg-gray-100 dark:bg-slate-800"
             onError={(e) => {
               // Show placeholder on error
               (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIGZpbGw9IiNFNUU3RUIiLz48cGF0aCBkPSJNODAgODBINjRWNjRIODBWODBaTTEyOCA4MEgxMTJWNjRIMTI4VjgwWk04MCAxMjhINjRWMTEySDgwVjEyOFpNMTI4IDEyOEgxMTJWMTEySDEyOFYxMjhaIiBmaWxsPSIjOUNBM0FGIi8+PC9zdmc+';
@@ -126,7 +126,7 @@ export function ImageUpload({
               size="sm"
               onClick={handleButtonClick}
               disabled={uploading}
-              className="bg-white"
+              className="bg-white dark:bg-slate-800 dark:border-slate-600 dark:text-gray-100"
             >
               {uploading ? (
                 <>
@@ -146,7 +146,7 @@ export function ImageUpload({
                 variant="outline"
                 size="sm"
                 onClick={onRemove}
-                className="bg-white text-red-600 hover:text-red-700"
+                className="bg-white dark:bg-slate-800 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 dark:border-slate-600"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -157,7 +157,9 @@ export function ImageUpload({
         <div
           className={`
             relative border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors
-            ${dragActive ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-gray-400'}
+            ${dragActive
+              ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/30'
+              : 'border-gray-300 dark:border-slate-600 hover:border-gray-400 dark:hover:border-slate-500 bg-white dark:bg-slate-800/50'}
             ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
           `}
           onDragEnter={handleDrag}
@@ -168,26 +170,26 @@ export function ImageUpload({
         >
           {uploading ? (
             <div className="space-y-2">
-              <Loader2 className="h-12 w-12 mx-auto animate-spin text-blue-600" />
-              <p className="text-sm text-gray-600 font-medium">{statusText}</p>
+              <Loader2 className="h-12 w-12 mx-auto animate-spin text-blue-600 dark:text-blue-400" />
+              <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">{statusText}</p>
               {/* Progress Bar */}
-              <div className="w-full max-w-[200px] mx-auto h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-blue-600 transition-all duration-300 ease-out"
+              <div className="w-full max-w-[200px] mx-auto h-2 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-blue-600 dark:bg-blue-500 transition-all duration-300 ease-out"
                   style={{ width: `${progress}%` }}
                 />
               </div>
             </div>
           ) : (
             <div className="space-y-2">
-              <ImageIcon className="h-12 w-12 mx-auto text-gray-400" />
+              <ImageIcon className="h-12 w-12 mx-auto text-gray-400 dark:text-gray-500" />
               <div>
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
                   Drag and drop your image here
                 </p>
-                <p className="text-xs text-gray-500 mt-1">or click to browse</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">or click to browse</p>
               </div>
-              <p className="text-xs text-gray-400">{helperText}</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500">{helperText}</p>
             </div>
           )}
         </div>
@@ -203,7 +205,7 @@ export function ImageUpload({
       />
 
       {error && (
-        <p className="text-sm text-red-600">{error}</p>
+        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
       )}
     </div>
   );
