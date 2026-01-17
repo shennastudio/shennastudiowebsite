@@ -17,6 +17,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'jeuimbhpmse1l96a.public.blob.vercel-storage.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'y3lwsevd8tgknadr.public.blob.vercel-storage.com',
+      },
     ],
   },
   // Enable standalone output for Docker deployment
