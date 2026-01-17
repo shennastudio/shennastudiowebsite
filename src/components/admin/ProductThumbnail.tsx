@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { ImageOff } from 'lucide-react';
 
@@ -16,16 +17,16 @@ export function ProductThumbnail({ src, alt, size = 'md', className }: ProductTh
 
   // Size classes
   const sizeClasses = {
-    sm: 'w-8 h-8',
-    md: 'w-12 h-12',
-    lg: 'w-16 h-16',
+    sm: { width: 32, height: 32 },
+    md: { width: 48, height: 48 },
+    lg: { width: 64, height: 64 },
   };
 
   if (!src || error) {
     return (
-      <div 
+      <div
         className={cn(
-          sizeClasses[size], 
+          `w-${sizeClasses[size].width / 4} h-${sizeClasses[size].height / 4}`,
           "bg-gray-100 dark:bg-slate-700 rounded-lg flex items-center justify-center text-gray-400 dark:text-gray-500 shrink-0",
           className
         )}
@@ -37,11 +38,12 @@ export function ProductThumbnail({ src, alt, size = 'md', className }: ProductTh
   }
 
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
+      width={sizeClasses[size].width}
+      height={sizeClasses[size].height}
       className={cn(
-        sizeClasses[size],
         "object-cover rounded-lg shrink-0 border border-gray-100 dark:border-slate-700 bg-white dark:bg-slate-800",
         className
       )}
