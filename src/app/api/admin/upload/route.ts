@@ -4,6 +4,9 @@ import { authOptions } from '@/lib/auth';
 import { put } from '@vercel/blob';
 import sharp from 'sharp';
 
+// Support both BLOB_READ_WRITE_TOKEN (Vercel standard) and IMAGES_READ_WRITE_TOKEN (legacy)
+const getBlobToken = () => process.env.BLOB_READ_WRITE_TOKEN || process.env.IMAGES_READ_WRITE_TOKEN;
+
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -55,11 +58,21 @@ export async function POST(request: NextRequest) {
     const timestamp = Date.now();
     const filename = `${timestamp}-${Math.random().toString(36).substring(7)}.webp`;
 
+    // Check for token
+    const blobToken = getBlobToken();
+    if (!blobToken) {
+      return NextResponse.json(
+        { error: 'Image upload is not configured. Please set BLOB_READ_WRITE_TOKEN in environment variables.' },
+        { status: 500 }
+      );
+    }
+
     // Upload to Vercel Blob
     const blob = await put(filename, compressedBuffer, {
       access: 'public',
       addRandomSuffix: true,
       contentType: 'image/webp',
+      token: blobToken,
     });
 
     return NextResponse.json({

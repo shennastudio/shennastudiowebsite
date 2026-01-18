@@ -2,12 +2,16 @@
 import sharp from 'sharp';
 import { put } from '@vercel/blob';
 
+// Support both BLOB_READ_WRITE_TOKEN (Vercel standard) and IMAGES_READ_WRITE_TOKEN (legacy)
+const getBlobToken = () => process.env.BLOB_READ_WRITE_TOKEN || process.env.IMAGES_READ_WRITE_TOKEN;
+
 export async function uploadProductImage(formData: FormData) {
   try {
     // Check for Vercel Blob token first
-    if (!process.env.IMAGES_READ_WRITE_TOKEN) {
-      console.error('IMAGES_READ_WRITE_TOKEN is not configured');
-      return { success: false, error: 'Image upload is not configured. Please set IMAGES_READ_WRITE_TOKEN in environment variables.' };
+    const blobToken = getBlobToken();
+    if (!blobToken) {
+      console.error('BLOB_READ_WRITE_TOKEN is not configured');
+      return { success: false, error: 'Image upload is not configured. Please set BLOB_READ_WRITE_TOKEN in environment variables.' };
     }
 
     const file = formData.get('file') as File;
@@ -55,7 +59,7 @@ export async function uploadProductImage(formData: FormData) {
         access: 'public',
         addRandomSuffix: true,
         contentType: 'image/webp',
-        token: process.env.IMAGES_READ_WRITE_TOKEN,
+        token: blobToken,
       });
 
       return { success: true, url: blob.url };

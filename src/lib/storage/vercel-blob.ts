@@ -1,5 +1,8 @@
 import { put, del, head, list } from '@vercel/blob';
 
+// Support both BLOB_READ_WRITE_TOKEN (Vercel standard) and IMAGES_READ_WRITE_TOKEN (legacy)
+const getBlobToken = () => process.env.BLOB_READ_WRITE_TOKEN || process.env.IMAGES_READ_WRITE_TOKEN;
+
 export interface UploadOptions {
   folder?: string;
   addRandomSuffix?: boolean;
@@ -18,7 +21,7 @@ export async function uploadImage(file: File, options: UploadOptions = {}): Prom
   try {
     const blob = await put(path, file, {
       access: 'public',
-      token: process.env.IMAGES_READ_WRITE_TOKEN!,
+      token: getBlobToken()!,
     });
 
     return blob.url;
@@ -42,7 +45,7 @@ export async function deleteImage(url: string): Promise<void> {
   try {
     const pathname = new URL(url).pathname;
     await del(pathname, {
-      token: process.env.IMAGES_READ_WRITE_TOKEN!,
+      token: getBlobToken()!,
     });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -56,7 +59,7 @@ export async function listImages(folder = 'products'): Promise<{ url: string; si
   try {
     const blobs = await list({
       prefix: folder,
-      token: process.env.IMAGES_READ_WRITE_TOKEN!,
+      token: getBlobToken()!,
     });
 
     return blobs.blobs.map(blob => ({
@@ -76,7 +79,7 @@ export async function imageExists(url: string): Promise<boolean> {
   try {
     const pathname = new URL(url).pathname;
     await head(pathname, {
-      token: process.env.IMAGES_READ_WRITE_TOKEN!,
+      token: getBlobToken()!,
     });
     return true;
   } catch {
