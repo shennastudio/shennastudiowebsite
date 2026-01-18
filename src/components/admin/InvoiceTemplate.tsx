@@ -79,11 +79,20 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
           <div className="text-gray-700">
             <p className="font-medium">{order.customerName}</p>
             <p>{order.customerEmail}</p>
-            <p className="mt-2">{order.shippingAddress}</p>
-            <p>
-              {order.shippingCity}, {order.shippingState} {order.shippingZip}
-            </p>
-            <p>{order.shippingCountry}</p>
+            <div className="mt-2">
+              {order.shippingAddress && <p>{order.shippingAddress}</p>}
+              {(order.shippingCity || order.shippingState || order.shippingZip) && (
+                <p>
+                  {[order.shippingCity, order.shippingState].filter(Boolean).join(', ')}
+                  {(order.shippingCity || order.shippingState) && order.shippingZip ? ' ' : ''}
+                  {order.shippingZip}
+                </p>
+              )}
+              {order.shippingCountry && <p>{order.shippingCountry}</p>}
+            </div>
+            {!order.shippingAddress && !order.shippingCity && !order.shippingState && (
+              <p className="text-gray-400 italic text-sm mt-2">Address not provided at checkout</p>
+            )}
           </div>
         </div>
 

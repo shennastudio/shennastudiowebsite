@@ -379,10 +379,21 @@ export default function OrderDetailPage() {
                 <p className="font-medium text-gray-900 dark:text-white">{order.customerName}</p>
                 <p className="text-sm">{order.customerEmail}</p>
                 <div className="pt-2">
-                  <p>{order.shippingAddress}</p>
-                  <p>{order.shippingCity}, {order.shippingState} {order.shippingZip}</p>
-                  <p>{order.shippingCountry}</p>
+                  {order.shippingAddress && <p>{order.shippingAddress}</p>}
+                  {(order.shippingCity || order.shippingState || order.shippingZip) && (
+                    <p>
+                      {[order.shippingCity, order.shippingState].filter(Boolean).join(', ')}
+                      {(order.shippingCity || order.shippingState) && order.shippingZip ? ' ' : ''}
+                      {order.shippingZip}
+                    </p>
+                  )}
+                  {order.shippingCountry && <p>{order.shippingCountry}</p>}
                 </div>
+                {!order.shippingAddress && !order.shippingCity && !order.shippingState && (
+                  <p className="text-amber-600 dark:text-amber-400 text-sm mt-2">
+                    Address not provided at checkout
+                  </p>
+                )}
               </div>
               {order.trackingNumber && (
                 <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">

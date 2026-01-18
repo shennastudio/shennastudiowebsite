@@ -284,8 +284,19 @@ async function importStripeOrders() {
 
 async function importSingleOrder(session: Stripe.Checkout.Session) {
   const customerEmail = session.customer_email || session.customer_details?.email || ''
-  const customerName = session.customer_details?.name || session.shipping_details?.name || 'Guest'
+  const customerName = session.customer_details?.name || session.shipping_details?.name || session.metadata?.shippingName || 'Guest'
+
+  // Try multiple sources for shipping address
   const shipping = session.shipping_details?.address || session.customer_details?.address
+  const metadata = session.metadata || {}
+
+  // Build address from best available source
+  const shippingLine1 = shipping?.line1 || metadata.shippingLine1 || ''
+  const shippingLine2 = shipping?.line2 || metadata.shippingLine2 || ''
+  const shippingCity = shipping?.city || metadata.shippingCity || ''
+  const shippingState = shipping?.state || metadata.shippingState || ''
+  const shippingZip = shipping?.postal_code || metadata.shippingPostalCode || ''
+  const shippingCountry = shipping?.country || metadata.shippingCountry || 'US'
 
   const total = (session.amount_total || 0) / 100
   const subtotal = (session.amount_subtotal || session.amount_total || 0) / 100
@@ -322,11 +333,11 @@ async function importSingleOrder(session: Stripe.Checkout.Session) {
       tax,
       total,
       stripePaymentId: session.payment_intent as string || session.id,
-      shippingAddress: shipping ? `${shipping.line1 || ''}${shipping.line2 ? '\n' + shipping.line2 : ''}` : '',
-      shippingCity: shipping?.city || '',
-      shippingState: shipping?.state || '',
-      shippingZip: shipping?.postal_code || '',
-      shippingCountry: shipping?.country || 'US',
+      shippingAddress: shippingLine1 + (shippingLine2 ? '\n' + shippingLine2 : ''),
+      shippingCity,
+      shippingState,
+      shippingZip,
+      shippingCountry,
       createdAt: new Date(session.created * 1000),
     },
   })
