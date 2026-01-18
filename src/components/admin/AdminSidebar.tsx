@@ -146,7 +146,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
                 <Zap className="h-5 w-5 text-cyan-500" />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-[var(--text-primary)]">ShennaStudio</span>
+                <span className="text-sm font-bold text-[var(--text-primary)]">Shenna's Studio</span>
                 <span className="text-xs text-[var(--text-muted)]">Admin Panel</span>
               </div>
             </Link>

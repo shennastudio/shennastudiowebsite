@@ -103,8 +103,8 @@ const sharkBlogPosts = [
 
       <p>Whale sharks also serve as <strong>flagship species</strong> for ocean conservation—their charismatic nature helps raise awareness about marine protection more broadly. When people care about whale sharks, they become more interested in protecting the ocean ecosystems these animals depend on.</p>
 
-      <h3>ShennaStudio's Commitment to Whale Shark Conservation</h3>
-      <p>At ShennaStudio, our ocean-themed jewelry celebrates the majesty of creatures like the whale shark. A portion of every sale supports marine conservation organizations working to protect sharks and their habitats, including:</p>
+      <h3>Shenna's Studio's Commitment to Whale Shark Conservation</h3>
+      <p>At Shenna's Studio, our ocean-themed jewelry celebrates the majesty of creatures like the whale shark. A portion of every sale supports marine conservation organizations working to protect sharks and their habitats, including:</p>
 
       <ul>
         <li><strong>Research funding:</strong> Supporting satellite tagging and population studies</li>
@@ -113,7 +113,7 @@ const sharkBlogPosts = [
         <li><strong>Tourism regulation:</strong> Advocating for responsible wildlife viewing practices</li>
       </ul>
 
-      <p>When you wear a ShennaStudio bracelet, you become part of the global effort to protect these <strong>gentle giants</strong> and ensure they continue gliding through our oceans for generations to come.</p>
+      <p>When you wear a Shenna's Studio bracelet, you become part of the global effort to protect these <strong>gentle giants</strong> and ensure they continue gliding through our oceans for generations to come.</p>
 
       <p><em>Have you encountered a whale shark in the Gulf of Mexico? Report your sighting to the <a href="https://www.whaleshark.org">Whale Shark Research Project</a> or <a href="https://www.sharkresearch.org">Gulf Shark Census</a> to contribute to scientific understanding of these magnificent animals.</em></p>
     `
@@ -192,7 +192,7 @@ const sharkBlogPosts = [
       <p>As apex predators, hammerhead sharks play crucial roles in maintaining healthy ocean ecosystems. They regulate prey populations, including stingrays and smaller fish, preventing any single species from dominating. Their presence indicates a balanced, functioning marine ecosystem. The loss of hammerheads could trigger cascading effects throughout the food web.</p>
 
       <h3>Supporting Hammerhead Conservation</h3>
-      <p>ShennaStudio is committed to shark conservation. Proceeds from our ocean-inspired jewelry support organizations working to protect hammerheads and other shark species through research, advocacy, and education. When you choose ShennaStudio, you're helping ensure these remarkable predators continue patrolling our oceans.</p>
+      <p>Shenna's Studio is committed to shark conservation. Proceeds from our ocean-inspired jewelry support organizations working to protect hammerheads and other shark species through research, advocacy, and education. When you choose Shenna's Studio, you're helping ensure these remarkable predators continue patrolling our oceans.</p>
 
       <p><em>Learn more about hammerhead shark conservation at <a href="https://www.sharktrust.org">Shark Trust</a> or <a href="https://www.oceana.org">Oceana</a>.</em></p>
     `
@@ -277,8 +277,8 @@ const sharkBlogPosts = [
 
       <p>Recent studies suggest tiger sharks may play an important role in carbon cycling—their consumption of large animals and subsequent digestion releases nutrients that support phytoplankton growth, potentially affecting atmospheric carbon dioxide levels. This unexpected connection between apex predators and climate highlights the complex interconnections in marine ecosystems.</p>
 
-      <h3>ShennaStudio's Shark Conservation Support</h3>
-      <p>Every ShennaStudio purchase supports marine conservation, including programs protecting sharks like the tiger shark. We believe these magnificent predators deserve protection and appreciation, not fear and persecution. Our ocean-themed jewelry celebrates the beauty and importance of all marine life, from the smallest coral polyp to the largest apex predator.</p>
+      <h3>Shenna's Studio's Shark Conservation Support</h3>
+      <p>Every Shenna's Studio purchase supports marine conservation, including programs protecting sharks like the tiger shark. We believe these magnificent predators deserve protection and appreciation, not fear and persecution. Our ocean-themed jewelry celebrates the beauty and importance of all marine life, from the smallest coral polyp to the largest apex predator.</p>
 
       <p><em>Report tiger shark sightings in the Gulf of Mexico to <a href="https://www.gulfsharkresearch.org">Gulf Shark Research</a> or <a href="https://www.sharkresearch.org">Florida Program for Shark Research</a>.</em></p>
     `
@@ -362,7 +362,7 @@ const sharkBlogPosts = [
       <p>Their accessible nature makes nurse sharks valuable ambassadors for shark conservation. Many people who fear sharks change their attitudes after peaceful encounters with these gentle bottom-dwellers, learning that sharks are diverse animals deserving of protection rather than persecution.</p>
 
       <h3>Supporting Shark Conservation</h3>
-      <p>ShennaStudio's commitment to ocean conservation includes supporting research and protection efforts for all shark species, including the often-overlooked nurse shark. By choosing our ocean-inspired jewelry, you help fund programs that protect sharks and their habitats throughout the Gulf of Mexico and beyond.</p>
+      <p>Shenna's Studio's commitment to ocean conservation includes supporting research and protection efforts for all shark species, including the often-overlooked nurse shark. By choosing our ocean-inspired jewelry, you help fund programs that protect sharks and their habitats throughout the Gulf of Mexico and beyond.</p>
 
       <p><em>For more information about nurse sharks and Gulf of Mexico marine life, visit <a href="https://www.tpwd.texas.gov">Texas Parks and Wildlife</a> or <a href="https://www.marinelife.org">Marine Life Foundation</a>.</em></p>
     `
@@ -471,8 +471,8 @@ const sharkBlogPosts = [
 
       <p>Bull sharks also serve as indicators of ecosystem health. Healthy bull shark populations suggest productive waters with abundant prey and suitable habitat. Declining populations may signal environmental problems that could affect other species and human uses of coastal waters.</p>
 
-      <h3>ShennaStudio's Conservation Commitment</h3>
-      <p>ShennaStudio supports research and conservation programs protecting bull sharks and their habitats in the Gulf of Mexico. Our ocean-inspired jewelry celebrates all marine life, including the powerful predators that keep coastal ecosystems healthy. When you choose ShennaStudio, you support the science and stewardship that ensures bull sharks continue patrolling Texas waters.</p>
+      <h3>Shenna's Studio's Conservation Commitment</h3>
+      <p>Shenna's Studio supports research and conservation programs protecting bull sharks and their habitats in the Gulf of Mexico. Our ocean-inspired jewelry celebrates all marine life, including the powerful predators that keep coastal ecosystems healthy. When you choose Shenna's Studio, you support the science and stewardship that ensures bull sharks continue patrolling Texas waters.</p>
 
       <p><em>Report bull shark sightings and catches to <a href="https://www.tpwd.texas.gov">Texas Parks and Wildlife</a> to contribute to scientific monitoring programs.</em></p>
     `
@@ -601,7 +601,7 @@ const sharkBlogPosts = [
       </ul>
 
       <h3>Supporting Shark Conservation</h3>
-      <p>ShennaStudio celebrates the athletic blacktip shark through our ocean-themed jewelry collections. A portion of every sale supports marine conservation programs protecting sharks and their coastal habitats. When you choose ShennaStudio, you help ensure blacktips continue spinning through Texas surf for generations to come.</p>
+      <p>Shenna's Studio celebrates the athletic blacktip shark through our ocean-themed jewelry collections. A portion of every sale supports marine conservation programs protecting sharks and their coastal habitats. When you choose Shenna's Studio, you help ensure blacktips continue spinning through Texas surf for generations to come.</p>
 
       <p><em>For information on shark fishing regulations in Texas, visit <a href="https://www.tpwd.texas.gov">Texas Parks and Wildlife</a>. Report unusual shark sightings or strandings to local authorities.</em></p>
     `
@@ -709,10 +709,10 @@ const sharkBlogPosts = [
         <li><strong>Report sightings:</strong> Contribute data to citizen science programs tracking shark populations</li>
       </ul>
 
-      <h3>ShennaStudio's Commitment to Shark Conservation</h3>
-      <p>At ShennaStudio, we believe sharks deserve protection and celebration, not fear and persecution. Our ocean-themed jewelry honors these magnificent predators and the healthy oceans they represent. A portion of every sale supports marine conservation programs working to protect sharks and their habitats throughout the <strong>Gulf of Mexico</strong> and beyond.</p>
+      <h3>Shenna's Studio's Commitment to Shark Conservation</h3>
+      <p>At Shenna's Studio, we believe sharks deserve protection and celebration, not fear and persecution. Our ocean-themed jewelry honors these magnificent predators and the healthy oceans they represent. A portion of every sale supports marine conservation programs working to protect sharks and their habitats throughout the <strong>Gulf of Mexico</strong> and beyond.</p>
 
-      <p>When you choose ShennaStudio, you join a community committed to ocean stewardship. You support the research that reveals shark ecology and guides conservation strategies. You fund education programs changing how people perceive these ancient predators. You help protect the apex predators that keep our oceans healthy and vibrant.</p>
+      <p>When you choose Shenna's Studio, you join a community committed to ocean stewardship. You support the research that reveals shark ecology and guides conservation strategies. You fund education programs changing how people perceive these ancient predators. You help protect the apex predators that keep our oceans healthy and vibrant.</p>
 
       <p>Sharks have survived for over 400 million years. Whether they survive the next century depends on choices we make today. Together, we can ensure these magnificent animals continue patrolling our oceans, maintaining the ecological balance that benefits all marine life—including ourselves.</p>
 
@@ -726,7 +726,7 @@ const sharkBlogPosts = [
         <li><a href="https://www.fisheries.noaa.gov">NOAA Fisheries</a></li>
       </ul>
 
-      <p><em>Every shark matters. Every choice matters. Choose conservation. Choose ShennaStudio.</em></p>
+      <p><em>Every shark matters. Every choice matters. Choose conservation. Choose Shenna's Studio.</em></p>
     `
   },
   {
@@ -823,7 +823,7 @@ const sharkBlogPosts = [
       <p>Understanding this deep history adds dimension to every shark encounter. These aren't simply predators; they're living links to a world vastly different from our own, carrying genetic information refined over hundreds of millions of years.</p>
 
       <h3>Honoring an Ancient Legacy</h3>
-      <p>At ShennaStudio, our ocean-themed jewelry celebrates the incredible evolutionary heritage of sharks. When you wear a shark-inspired piece, you carry a symbol of resilience, adaptability, and the enduring power of life to persist through challenges. You also support conservation efforts ensuring that the shark lineage continues into the future.</p>
+      <p>At Shenna's Studio, our ocean-themed jewelry celebrates the incredible evolutionary heritage of sharks. When you wear a shark-inspired piece, you carry a symbol of resilience, adaptability, and the enduring power of life to persist through challenges. You also support conservation efforts ensuring that the shark lineage continues into the future.</p>
 
       <p>Sharks survived asteroid impacts, massive volcanic eruptions, ice ages, and continental drift. Whether they survive the Anthropocene—the age of human impact—depends on choices we make today. By supporting shark conservation, you help write the next chapter in a story 450 million years in the making.</p>
 

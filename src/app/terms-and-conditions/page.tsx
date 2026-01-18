@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms and Conditions | ShennaStudio',
-  description: 'Terms and Conditions for ShennaStudio. Complete legal terms governing purchases and use of our services.',
+  title: 'Terms and Conditions | Shenna's Studio',
+  description: 'Terms and Conditions for Shenna's Studio. Complete legal terms governing purchases and use of our services.',
 };
 
 export default function TermsAndConditionsPage() {
@@ -13,7 +13,7 @@ export default function TermsAndConditionsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Terms and Conditions</h1>
           <p className="text-xl text-cyan-100 max-w-2xl mx-auto">
-            Complete terms governing your relationship with ShennaStudio.
+            Complete terms governing your relationship with Shenna's Studio.
           </p>
         </div>
       </section>
@@ -28,8 +28,8 @@ export default function TermsAndConditionsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Introduction</h2>
               <p>
-                These Terms and Conditions (&quot;Terms&quot;) govern your use of the ShennaStudio website located at
-                shennastudio.com (&quot;Website&quot;) and any related services provided by ShennaStudio (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
+                These Terms and Conditions (&quot;Terms&quot;) govern your use of the Shenna's Studio website located at
+                shennastudio.com (&quot;Website&quot;) and any related services provided by Shenna's Studio (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;).
                 By accessing or using our Website, you agree to be bound by these Terms.
               </p>
             </div>
@@ -145,7 +145,7 @@ export default function TermsAndConditionsPage() {
                 For questions about these Terms and Conditions, please contact us at:
               </p>
               <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                <p><strong>ShennaStudio</strong></p>
+                <p><strong>Shenna's Studio</strong></p>
                 <p>100 Padre Blvd</p>
                 <p>South Padre Island, TX 78597</p>
                 <p>Email: info@shennastudio.com</p>

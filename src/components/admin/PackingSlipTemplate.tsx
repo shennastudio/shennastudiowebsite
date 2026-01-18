@@ -39,12 +39,12 @@ export const PackingSlipTemplate = React.forwardRef<HTMLDivElement, PackingSlipT
         <div className="flex justify-between items-start mb-8 border-b-2 border-gray-800 pb-6">
           <div>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">PACKING SLIP</h1>
-            <p className="text-gray-600 text-lg">ShennaStudio</p>
+            <p className="text-gray-600 text-lg">Shenna's Studio</p>
           </div>
           <div className="text-right">
             <Image
               src="/images/shenna-studio-logo.png"
-              alt="ShennaStudio"
+              alt="Shenna's Studio"
               width={100}
               height={100}
               className="object-contain mb-2"
@@ -154,7 +154,7 @@ export const PackingSlipTemplate = React.forwardRef<HTMLDivElement, PackingSlipT
             Thank you for supporting ocean conservation with every purchase!
           </p>
           <p className="mt-2 text-xs text-gray-500">
-            ShennaStudio • Protecting Our Oceans, One Bracelet at a Time
+            Shenna's Studio • Protecting Our Oceans, One Bracelet at a Time
           </p>
           <p className="mt-4 text-xs text-gray-400">
             For packing use only - Not a customer receipt

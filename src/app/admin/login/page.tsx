@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
           <div className="flex items-center gap-4 mb-6">
             <Image
               src="/images/shenna-studio-logo.png"
-              alt="ShennaStudio"
+              alt="Shenna's Studio"
               width={200}
               height={200}
               className="object-contain h-16 w-auto"
@@ -80,7 +80,7 @@ export default function AdminLoginPage() {
             <div className="flex justify-center">
               <Image
                 src="/images/shenna-studio-logo.png"
-                alt="ShennaStudio"
+                alt="Shenna's Studio"
                 width={180}
                 height={180}
                 className="object-contain h-12 w-auto"

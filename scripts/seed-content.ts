@@ -22,12 +22,12 @@ const reviews = [
   { author: "Megan F.", location: "McKinney, TX", text: "I love the adjustable size. Fits my small wrist perfectly without dangling too much.", rating: 5 },
   { author: "Joshua R.", location: "Grand Prairie, TX", text: "Unique designs you can't find in stores. I'm building a collection!", rating: 5 },
   { author: "Stephanie K.", location: "Brownsville, TX", text: "Supporting local conservation while getting beautiful jewelry? Sign me up. Love from the valley!", rating: 5 },
-  { author: "Brandon L.", location: "Pasadena, TX", text: "Got the Diamond Tide for my anniversary. She loved it. Thanks ShennaStudio!", rating: 5 },
+  { author: "Brandon L.", location: "Pasadena, TX", text: "Got the Diamond Tide for my anniversary. She loved it. Thanks Shenna's Studio!", rating: 5 },
   { author: "Lauren V.", location: "Mesquite, TX", text: "The Golden Sunset bracelet is perfect for summer. Matches everything.", rating: 5 },
   { author: "Ryan S.", location: "Killeen, TX", text: "Top notch quality. You can tell a lot of care went into making these.", rating: 5 },
   // National
   { author: "Emily R.", location: "Los Angeles, CA", text: "Stunning craftsmanship! This bracelet is even more beautiful in person. It's my new favorite accessory.", rating: 5 },
-  { author: "Michael J.", location: "New York, NY", text: "Fantastic quality and unique design. It arrived quickly and was beautifully packaged. Love ShennaStudio!", rating: 5 },
+  { author: "Michael J.", location: "New York, NY", text: "Fantastic quality and unique design. It arrived quickly and was beautifully packaged. Love Shenna's Studio!", rating: 5 },
   { author: "Jessica A.", location: "Miami, FL", text: "The colors are so vibrant, just like the ocean! I get so many compliments.", rating: 5 },
   { author: "David K.", location: "Chicago, IL", text: "Perfect for gifting. I got one for my sister and she adored it. Will be back for more.", rating: 5 },
   { author: "Sarah L.", location: "Seattle, WA", text: "Beautifully made, and the conservation aspect is a huge plus. Highly recommend!", rating: 5 },
@@ -40,7 +40,7 @@ const reviews = [
   { author: "Robert F.", location: "Tampa, FL", text: "The clasp is very secure, and the beads are smooth and well-polished.", rating: 5 },
   { author: "Jennifer H.", location: "St. Louis, MO", text: "A little piece of the coast I can wear every day. It brings me joy.", rating: 5 },
   { author: "Christopher G.", Location: "Philadelphia, PA", text: "Excellent value for the quality. It looks much more expensive than it was.", rating: 5 },
-  { author: "Ashley P.", Location: "Austin, TX", text: "I love how ShennaStudio uses sustainable materials. Makes me feel good about my purchase.", rating: 5 },
+  { author: "Ashley P.", Location: "Austin, TX", text: "I love how Shenna's Studio uses sustainable materials. Makes me feel good about my purchase.", rating: 5 },
   { author: "Matthew V.", Location: "Charlotte, NC", text: "The minimalist design is very chic and versatile.", rating: 5 },
   { author: "Nicole M.", Location: "San Francisco, CA", text: "The 'Ocean Jasper' stone is so unique. It has a calming presence.", rating: 5 },
   { author: "Andrew K.", Location: "Seattle, WA", text: "My new favorite accessory for beach trips and everyday wear.", rating: 5 },
@@ -48,7 +48,7 @@ const reviews = [
   { author: "Joshua S.", Location: "Miami, FL", text: "The packaging was eco-friendly, which I really appreciate. The bracelet itself is flawless.", rating: 5 },
   { author: "Stephanie R.", Location: "New York, NY", text: "This bracelet is a conversation starter for all the right reasons – its beauty and its mission.", rating: 5 },
   { author: "Brandon W.", Location: "Chicago, IL", text: "The stones are perfectly smooth and the colors are exactly as pictured.", rating: 5 },
-  { author: "Lauren K.", Location: "Houston, TX", text: "Fast shipping and excellent quality. I will be recommending ShennaStudio to friends.", rating: 5 },
+  { author: "Lauren K.", Location: "Houston, TX", text: "Fast shipping and excellent quality. I will be recommending Shenna's Studio to friends.", rating: 5 },
   { author: "Daniel B.", Location: "Dallas, TX", text: "The craftsmanship is evident. It feels very premium and looks amazing.", rating: 5 },
   { author: "Rachel M.", Location: "San Antonio, TX", text: "Wearing this bracelet makes me feel more connected to the ocean.", rating: 5 }
 ];

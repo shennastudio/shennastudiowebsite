@@ -48,7 +48,7 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
         <div className="flex justify-between items-start mb-8 border-b pb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h1>
-            <p className="text-gray-600">ShennaStudio</p>
+            <p className="text-gray-600">Shenna's Studio</p>
             <p className="text-gray-600">Ocean-Inspired Handcrafted Jewelry</p>
             <p className="text-gray-600">support@shennastudio.com</p>
           </div>
@@ -56,7 +56,7 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
             <div className="mb-4">
               <Image
                 src="/images/shenna-studio-logo.png"
-                alt="ShennaStudio"
+                alt="Shenna's Studio"
                 width={120}
                 height={120}
                 className="object-contain"
@@ -167,7 +167,7 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
             </p>
           )}
           <p className="mt-4 text-xs text-gray-500">
-            ShennaStudio • Protecting Our Oceans, One Bracelet at a Time
+            Shenna's Studio • Protecting Our Oceans, One Bracelet at a Time
           </p>
         </div>
       </div>

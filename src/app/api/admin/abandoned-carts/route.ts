@@ -181,7 +181,7 @@ export async function POST(request: Request) {
     await prisma.emailLog.create({
       data: {
         to: email,
-        subject: 'Complete Your Order at ShennaStudio',
+        subject: 'Complete Your Order at Shenna's Studio',
         template: 'ADMIN_CUSTOM',
         status: 'pending',
         variables: {

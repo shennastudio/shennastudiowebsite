@@ -32,7 +32,7 @@ import { Label } from '@/components/ui/label';
 // Pre-built social media templates
 const SOCIAL_TEMPLATES = {
   newProduct: {
-    instagram: "✨ NEW DROP ALERT ✨\n\nIntroducing our latest ocean treasure: {productName} 🌊\n\n💙 Handcrafted with love\n🐢 10% supports marine conservation\n📍 Made in South Padre Island\n\nLink in bio to shop!\n\n#OceanJewelry #Handmade #SustainableFashion #BeachVibes #ShennaStudio #MarineConservation #ShopSmall",
+    instagram: "✨ NEW DROP ALERT ✨\n\nIntroducing our latest ocean treasure: {productName} 🌊\n\n💙 Handcrafted with love\n🐢 10% supports marine conservation\n📍 Made in South Padre Island\n\nLink in bio to shop!\n\n#OceanJewelry #Handmade #SustainableFashion #BeachVibes #Shenna's Studio #MarineConservation #ShopSmall",
     facebook: "🌊 NEW ARRIVAL 🌊\n\nWe're so excited to introduce our newest piece: {productName}!\n\nEach bracelet is handcrafted in South Padre Island, and 10% of every sale goes directly to marine conservation efforts. 🐢💙\n\n✨ Shop now: {shopUrl}\n\n#OceanLovers #SustainableJewelry",
     twitter: "✨ Just dropped: {productName} 🌊\n\nHandcrafted in South Padre Island. 10% supports marine conservation 🐢\n\nShop now → {shopUrl}\n\n#OceanJewelry #ShopSmall",
   },
@@ -47,9 +47,9 @@ const SOCIAL_TEMPLATES = {
     twitter: "🌊 Impact Update: ${donationAmount} donated to marine conservation this month!\n\nThank you for shopping with purpose 🐢💙\n\n#MarineConservation #SustainableFashion",
   },
   engagement: {
-    instagram: "📸 PHOTO CONTEST 📸\n\nShow us how you style your ShennaStudio pieces!\n\n🏆 Winner gets a FREE bracelet\n📌 Tag @shennastudio\n#️⃣ Use #MyShennaStyle\n\nContest ends {endDate}! 🌊\n\n#PhotoContest #BeachStyle #OceanJewelry #Giveaway",
-    facebook: "📸 PHOTO CONTEST! 📸\n\nWe want to see how you rock your ShennaStudio pieces!\n\nHow to enter:\n1. Post a photo wearing your bracelet\n2. Tag @ShennaStudio\n3. Use #MyShennaStyle\n\n🏆 Winner receives a FREE bracelet of their choice!\n\nContest ends {endDate}. Good luck! 🌊",
-    twitter: "📸 GIVEAWAY TIME!\n\nShow us your ShennaStudio style!\n\n1. Follow @shennastudio\n2. RT this post\n3. Tag a friend\n\n🏆 Win a FREE bracelet!\nEnds {endDate} 🌊",
+    instagram: "📸 PHOTO CONTEST 📸\n\nShow us how you style your Shenna's Studio pieces!\n\n🏆 Winner gets a FREE bracelet\n📌 Tag @shennastudio\n#️⃣ Use #MyShennaStyle\n\nContest ends {endDate}! 🌊\n\n#PhotoContest #BeachStyle #OceanJewelry #Giveaway",
+    facebook: "📸 PHOTO CONTEST! 📸\n\nWe want to see how you rock your Shenna's Studio pieces!\n\nHow to enter:\n1. Post a photo wearing your bracelet\n2. Tag @Shenna's Studio\n3. Use #MyShennaStyle\n\n🏆 Winner receives a FREE bracelet of their choice!\n\nContest ends {endDate}. Good luck! 🌊",
+    twitter: "📸 GIVEAWAY TIME!\n\nShow us your Shenna's Studio style!\n\n1. Follow @shennastudio\n2. RT this post\n3. Tag a friend\n\n🏆 Win a FREE bracelet!\nEnds {endDate} 🌊",
   },
 };
 

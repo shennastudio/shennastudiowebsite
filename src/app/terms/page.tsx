@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | ShennaStudio',
-  description: 'Terms of Service for ShennaStudio. Read our terms governing the use of our website and services.',
+  title: 'Terms of Service | Shenna's Studio',
+  description: 'Terms of Service for Shenna's Studio. Read our terms governing the use of our website and services.',
 };
 
 export default function TermsPage() {
@@ -28,7 +28,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Agreement to Terms</h2>
               <p>
-                By accessing or using ShennaStudio&apos;s website and services, you agree to be bound by these Terms of Service.
+                By accessing or using Shenna's Studio&apos;s website and services, you agree to be bound by these Terms of Service.
                 If you do not agree to these terms, please do not use our services.
               </p>
             </div>
@@ -100,7 +100,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Intellectual Property</h2>
               <p>
                 All content on this website, including text, graphics, logos, images, and software, is the property
-                of ShennaStudio and is protected by copyright and trademark laws. You may not reproduce, distribute,
+                of Shenna's Studio and is protected by copyright and trademark laws. You may not reproduce, distribute,
                 or create derivative works from any content without our express written permission.
               </p>
             </div>
@@ -108,7 +108,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Limitation of Liability</h2>
               <p>
-                To the fullest extent permitted by law, ShennaStudio shall not be liable for any indirect, incidental,
+                To the fullest extent permitted by law, Shenna's Studio shall not be liable for any indirect, incidental,
                 special, consequential, or punitive damages arising out of or relating to your use of our services.
                 Our total liability shall not exceed the amount paid by you for the product or service in question.
               </p>

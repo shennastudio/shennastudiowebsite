@@ -89,7 +89,7 @@ export default function RegisterPage() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <Waves className="h-10 w-10" />
-              <h1 className="text-4xl font-bold">ShennaStudio</h1>
+              <h1 className="text-4xl font-bold">Shenna's Studio</h1>
             </div>
             <p className="text-xl text-cyan-50 max-w-md">
               Handcrafted Ocean Bracelets Supporting Marine Life
@@ -136,7 +136,7 @@ export default function RegisterPage() {
           <div className="lg:hidden text-center">
             <div className="flex justify-center items-center gap-2 mb-4">
               <Waves className="h-10 w-10 text-cyan-600" />
-              <h1 className="text-3xl font-bold text-gray-900">ShennaStudio</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Shenna's Studio</h1>
             </div>
           </div>
 

@@ -133,7 +133,7 @@ export async function GET(req: Request) {
 
     // Header
     doc.setFontSize(20);
-    doc.text('ShennaStudio Inventory Report', 20, 20);
+    doc.text('Shenna's Studio Inventory Report', 20, 20);
 
     doc.setFontSize(12);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 35);
@@ -251,7 +251,7 @@ export async function GET(req: Request) {
       doc.setPage(i);
       doc.setFontSize(8);
       doc.text(
-        `Page ${i} of ${pageCount} - ShennaStudio Inventory Report`,
+        `Page ${i} of ${pageCount} - Shenna's Studio Inventory Report`,
         20,
         doc.internal.pageSize.height - 10
       );

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     // Create workbook
     const workbook = new ExcelJS.Workbook();
-    workbook.creator = 'ShennaStudio';
+    workbook.creator = 'Shenna's Studio';
     workbook.created = new Date();
     workbook.modified = new Date();
 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     const pnl = reportData.profitAndLoss;
     const pnlData = [
       ['PROFIT & LOSS STATEMENT'],
-      ['ShennaStudio'],
+      ['Shenna's Studio'],
       [`For the Period: ${reportData.reportPeriod.quarter} ${reportData.reportPeriod.year}`],
       [''],
       ['REVENUE', '', ''],
@@ -247,7 +247,7 @@ export async function POST(req: Request) {
     const conservationData = [
       ['CONSERVATION IMPACT REPORT'],
       [''],
-      ['ShennaStudio - Supporting Marine Conservation'],
+      ['Shenna's Studio - Supporting Marine Conservation'],
       [''],
       ['Metric', 'Value'],
       ['Total Donations', formatCurrency(reportData.conservationImpact.totalDonations)],
@@ -266,7 +266,7 @@ export async function POST(req: Request) {
     const buffer = await workbook.xlsx.writeBuffer();
 
     // Return file
-    const filename = `ShennaStudio-Financial-Report-${reportData.reportPeriod.year}-${reportData.reportPeriod.quarter.replace(' ', '-')}.xlsx`;
+    const filename = `Shenna's Studio-Financial-Report-${reportData.reportPeriod.year}-${reportData.reportPeriod.quarter.replace(' ', '-')}.xlsx`;
 
     return new NextResponse(buffer as ArrayBuffer, {
       status: 200,

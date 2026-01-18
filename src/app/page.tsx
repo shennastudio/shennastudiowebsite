@@ -85,7 +85,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 text-center">
           <div className="flex flex-col items-center">
             <SplitText 
-              text="ShennaStudio Ocean Collection"
+              text="Shenna's Studio Ocean Collection"
               className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter justify-center text-center leading-tight"
             />
             
@@ -268,7 +268,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight">
-              Why Choose ShennaStudio?
+              Why Choose Shenna's Studio?
             </h2>
           </div>
 

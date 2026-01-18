@@ -24,7 +24,7 @@ export default function OceanEmailLayout({ children, preview }: OceanEmailLayout
         <Container style={container}>
           {/* Header with ocean wave theme */}
           <Section style={header}>
-            <Text style={headerTitle}>🌊 ShennaStudio</Text>
+            <Text style={headerTitle}>🌊 Shenna's Studio</Text>
             <Text style={headerSubtitle}>
               Ocean-Inspired Handcrafted Bracelets
             </Text>
@@ -62,7 +62,7 @@ export default function OceanEmailLayout({ children, preview }: OceanEmailLayout
               </Link>
             </Text>
             <Text style={footerText}>
-              © {new Date().getFullYear()} ShennaStudio. All rights reserved.
+              © {new Date().getFullYear()} Shenna's Studio. All rights reserved.
             </Text>
             <Text style={footerTextSmall}>
               South Padre Island, Texas · Rio Grande Valley

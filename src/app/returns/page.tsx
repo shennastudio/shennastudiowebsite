@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Returns & Exchanges | ShennaStudio',
+  title: 'Returns & Exchanges | Shenna's Studio',
   description: 'Our 30-day return and exchange policy for ocean-inspired bracelets. Easy returns, customer satisfaction guaranteed.',
 };
 

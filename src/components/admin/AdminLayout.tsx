@@ -39,7 +39,7 @@ export function AdminLayout({ children, title = "Admin Dashboard", description }
 export function AdminDashboard() {
   return (
     <AdminLayout 
-      title="ShennaStudio Admin" 
+      title="Shenna's Studio Admin" 
       description="Manage your ocean-themed bracelet store"
     >
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

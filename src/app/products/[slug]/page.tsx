@@ -115,7 +115,7 @@ export default async function ProductDetailPage({
               <div className="bg-blue-50 rounded-lg p-6 space-y-3">
                 <h3 className="font-semibold text-gray-900 flex items-center gap-2">
                   <span>🌊</span>
-                  Why Choose ShennaStudio
+                  Why Choose Shenna's Studio
                 </h3>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">

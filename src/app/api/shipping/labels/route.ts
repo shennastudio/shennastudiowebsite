@@ -23,7 +23,7 @@ export interface LabelPurchaseResult {
 
 // Generate a mock tracking number (in production, this would come from the carrier API)
 function generateTrackingNumber(): string {
-  const prefix = 'SS'; // ShennaStudio prefix
+  const prefix = 'SS'; // Shenna's Studio prefix
   const timestamp = Date.now().toString(36).toUpperCase();
   const random = Math.random().toString(36).substring(2, 8).toUpperCase();
   return `${prefix}${timestamp}${random}`;

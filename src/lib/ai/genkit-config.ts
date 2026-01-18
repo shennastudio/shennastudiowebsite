@@ -1,5 +1,5 @@
 /**
- * Genkit AI Configuration for ShennaStudio
+ * Genkit AI Configuration for Shenna's Studio
  * Product recommendation engine setup
  */
 
@@ -56,7 +56,7 @@ export function getRecommendationPrompt(productData: {
   attributes?: string[];
 }): string {
   return `
-You are a product recommendation AI for ShennaStudio, an ocean-themed bracelet store
+You are a product recommendation AI for Shenna's Studio, an ocean-themed bracelet store
 supporting marine conservation.
 
 Given this product:

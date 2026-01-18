@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
               <!-- Header -->
               <div style="background: linear-gradient(to right, #0891b2, #14b8a6); padding: 30px; text-align: center;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">ShennaStudio</h1>
+                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Shenna's Studio</h1>
                 <p style="color: #e0f2fe; margin: 5px 0 0 0; font-size: 14px;">Ocean Conservation Platform</p>
               </div>
 
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
               <!-- Footer -->
               <div style="background-color: #f3f4f6; padding: 30px; text-align: center; border-top: 1px solid #e5e7eb;">
                 <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
-                  © ${new Date().getFullYear()} ShennaStudio • Ocean Conservation Platform
+                  © ${new Date().getFullYear()} Shenna's Studio • Ocean Conservation Platform
                 </p>
                 <p style="color: #6b7280; font-size: 12px; margin: 0;">
                   💚 10% of every purchase supports sea turtle conservation
@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
             <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff;">
               <!-- Header -->
               <div style="background: linear-gradient(to right, #0891b2, #14b8a6); padding: 30px; text-align: center;">
-                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">ShennaStudio</h1>
+                <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Shenna's Studio</h1>
                 <p style="color: #e0f2fe; margin: 5px 0 0 0; font-size: 14px;">Ocean Conservation Platform</p>
               </div>
 
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
               <!-- Footer -->
               <div style="background-color: #f3f4f6; padding: 30px; text-align: center; border-top: 1px solid #e5e7eb;">
                 <p style="color: #6b7280; font-size: 12px; margin: 0 0 10px 0;">
-                  © ${new Date().getFullYear()} ShennaStudio • Ocean Conservation Platform
+                  © ${new Date().getFullYear()} Shenna's Studio • Ocean Conservation Platform
                 </p>
                 <p style="color: #6b7280; font-size: 12px; margin: 0;">
                   💚 10% of every purchase supports sea turtle conservation

@@ -41,7 +41,7 @@ export async function generateSocialCaption(
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
     const prompt = `
-      You are a social media expert for ShennaStudio, an ocean-themed jewelry business.
+      You are a social media expert for Shenna's Studio, an ocean-themed jewelry business.
       Create an engaging ${platform} post for the product listed below.
 
       PRODUCT DETAILS:

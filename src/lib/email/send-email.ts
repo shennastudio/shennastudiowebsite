@@ -39,7 +39,7 @@ export async function sendEmail({ to, subject, template }: SendEmailOptions) {
     const html = await render(template);
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'ShennaStudio <noreply@shennastudio.com>',
+      from: process.env.EMAIL_FROM || 'Shenna's Studio <noreply@shennastudio.com>',
       to,
       subject,
       html,

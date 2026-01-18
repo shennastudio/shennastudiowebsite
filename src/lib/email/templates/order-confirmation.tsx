@@ -54,7 +54,7 @@ export const OrderConfirmationEmail = ({
             src="https://shennastudio.com/images/shenna-studio-logo.png"
             width="150"
             height="150"
-            alt="ShennaStudio"
+            alt="Shenna's Studio"
             style={logo}
           />
           <Heading style={h1}>Order Confirmation</Heading>
@@ -160,7 +160,7 @@ export const OrderConfirmationEmail = ({
             Track your order: <Link href="https://shennastudio.com/account">View Order Status</Link>
           </Text>
           <Text style={copyright}>
-            © {new Date().getFullYear()} ShennaStudio. Protecting Our Oceans, One Bracelet at a Time.
+            © {new Date().getFullYear()} Shenna's Studio. Protecting Our Oceans, One Bracelet at a Time.
           </Text>
         </Section>
       </Container>

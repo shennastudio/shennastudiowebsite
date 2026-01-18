@@ -46,7 +46,7 @@ export const ShippingNotificationEmail = ({
               src="https://shennastudio.com/images/shenna-studio-logo.png"
               width="150"
               height="150"
-              alt="ShennaStudio"
+              alt="Shenna's Studio"
               style={logo}
             />
             <Heading style={h1}>Your Order Has Shipped! 📦</Heading>
@@ -122,7 +122,7 @@ export const ShippingNotificationEmail = ({
               View your order: <Link href="https://shennastudio.com/account">My Account</Link>
             </Text>
             <Text style={copyright}>
-              © {new Date().getFullYear()} ShennaStudio. Protecting Our Oceans, One Bracelet at a Time.
+              © {new Date().getFullYear()} Shenna's Studio. Protecting Our Oceans, One Bracelet at a Time.
             </Text>
           </Section>
         </Container>

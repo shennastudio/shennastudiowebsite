@@ -33,13 +33,13 @@ export async function POST(req: Request) {
 
     switch (requestType) {
       case 'schedule_c':
-        systemPrompt = `You are a professional tax advisor assistant for a small e-commerce business (ShennaStudio - handcrafted ocean-themed bracelets).
+        systemPrompt = `You are a professional tax advisor assistant for a small e-commerce business (Shenna's Studio - handcrafted ocean-themed bracelets).
 You help prepare Schedule C (Form 1040) data for sole proprietors.
 Always provide accurate calculations and clear explanations.
 Include disclaimers that this is for informational purposes and a CPA should review.
 Format all currency values with proper $ formatting.`;
 
-        prompt = `Based on the following financial data for ShennaStudio, please prepare a detailed Schedule C (Form 1040) breakdown with specific line items.
+        prompt = `Based on the following financial data for Shenna's Studio, please prepare a detailed Schedule C (Form 1040) breakdown with specific line items.
 
 FINANCIAL DATA:
 - Gross Receipts: $${reportData.taxSummary.grossReceipts.toFixed(2)}
@@ -67,7 +67,7 @@ Please provide:
 Provide strategic tax planning advice based on financial data.
 Focus on legal tax optimization strategies for sole proprietors.`;
 
-        prompt = `Based on ShennaStudio's financial performance:
+        prompt = `Based on Shenna's Studio's financial performance:
 
 Revenue: $${reportData.metrics.totalRevenue.toFixed(2)}
 Net Income: $${reportData.profitAndLoss.netIncome.toFixed(2)}
@@ -84,7 +84,7 @@ Please provide:
       case 'quarterly_estimate':
         systemPrompt = `You are a tax calculation assistant specializing in estimated quarterly taxes for self-employed individuals.`;
 
-        prompt = `Calculate the estimated quarterly tax payments for ShennaStudio based on:
+        prompt = `Calculate the estimated quarterly tax payments for Shenna's Studio based on:
 
 Year-to-Date Net Income: $${reportData.profitAndLoss.operatingIncome.toFixed(2)}
 Self-Employment Tax Rate: 15.3%
@@ -101,7 +101,7 @@ Please provide:
       case 'year_end_checklist':
         systemPrompt = `You are a year-end tax preparation specialist for small businesses.`;
 
-        prompt = `Create a comprehensive year-end tax checklist for ShennaStudio based on their data:
+        prompt = `Create a comprehensive year-end tax checklist for Shenna's Studio based on their data:
 
 Total Revenue: $${reportData.metrics.totalRevenue.toFixed(2)}
 Total Orders: ${reportData.metrics.totalOrders}
@@ -119,7 +119,7 @@ Please provide:
 
       default:
         systemPrompt = `You are a financial advisor for a small e-commerce business.`;
-        prompt = `Provide a general financial health assessment for ShennaStudio based on:
+        prompt = `Provide a general financial health assessment for Shenna's Studio based on:
 
 Revenue: $${reportData.metrics.totalRevenue.toFixed(2)}
 Gross Margin: ${reportData.metrics.grossMargin.toFixed(1)}%

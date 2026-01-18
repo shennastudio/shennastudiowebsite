@@ -29,7 +29,7 @@ export default function SettingsPage() {
 
   const [formData, setFormData] = useState<SiteSettings>({
     id: '',
-    siteName: 'ShennaStudio',
+    siteName: 'Shenna's Studio',
     logo: null,
     tagline: null,
     primaryColor: '#3B82F6',
@@ -138,7 +138,7 @@ export default function SettingsPage() {
                 name="siteName"
                 value={formData.siteName}
                 onChange={handleInputChange}
-                placeholder="ShennaStudio"
+                placeholder="Shenna's Studio"
               />
             </div>
 

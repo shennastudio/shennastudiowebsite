@@ -3,7 +3,7 @@ export default function SEOSchemas() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "ShennaStudio",
+    "name": "Shenna's Studio",
     "description": "Handcrafted ocean-inspired bracelets and jewelry supporting marine conservation in South Padre Island, Texas",
     "url": "https://shennastudio.com",
     "logo": "https://shennastudio.com/images/shenna-studio-logo.png",
@@ -33,7 +33,7 @@ export default function SEOSchemas() {
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "ShennaStudio",
+    "name": "Shenna's Studio",
     "image": "https://shennastudio.com/images/shenna-studio-logo.png",
     "description": "Artisan jewelry studio creating handcrafted ocean-inspired bracelets. 10% of proceeds support marine conservation efforts for sea turtles, whales, and ocean ecosystems in the Rio Grande Valley.",
     "address": {
@@ -73,7 +73,7 @@ export default function SEOSchemas() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "ShennaStudio",
+    "name": "Shenna's Studio",
     "url": "https://shennastudio.com",
     "potentialAction": {
       "@type": "SearchAction",
@@ -89,13 +89,13 @@ export default function SEOSchemas() {
   const ecommerceSchema = {
     "@context": "https://schema.org",
     "@type": "Store",
-    "name": "ShennaStudio Online Store",
+    "name": "Shenna's Studio Online Store",
     "description": "Shop handcrafted ocean-inspired bracelets, jewelry, and apparel. Every purchase supports marine conservation in South Padre Island and protects sea turtles, whales, and ocean life.",
     "url": "https://shennastudio.com",
     "image": "https://shennastudio.com/images/shenna-studio-logo.png",
     "brand": {
       "@type": "Brand",
-      "name": "ShennaStudio"
+      "name": "Shenna's Studio"
     },
     "offers": {
       "@type": "AggregateOffer",
@@ -144,7 +144,7 @@ export default function SEOSchemas() {
     "description": "10% of every purchase is donated to marine life conservation efforts in the Rio Grande Valley and South Padre Island",
     "recipient": {
       "@type": "Organization",
-      "name": "ShennaStudio Marine Conservation Fund"
+      "name": "Shenna's Studio Marine Conservation Fund"
     },
     "cause": "Marine Life Protection and Ocean Ecosystem Preservation"
   };

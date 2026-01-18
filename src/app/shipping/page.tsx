@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Shipping Information | ShennaStudio',
+  title: 'Shipping Information | Shenna's Studio',
   description: 'Fast and reliable shipping for ocean-inspired bracelets. Free shipping on orders over $50.',
 };
 
@@ -75,7 +75,7 @@ export default function ShippingPage() {
                 </h2>
                 <div className="space-y-4 text-gray-600 leading-relaxed">
                   <p>
-                    Because each ShennaStudio bracelet is carefully handcrafted, please allow 
+                    Because each Shenna's Studio bracelet is carefully handcrafted, please allow 
                     <span className="font-bold text-gray-900"> 1-2 business days</span> for 
                     processing before your order ships.
                   </p>

@@ -49,7 +49,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
                   <Zap className="w-4 h-4 text-cyan-500" />
                 </div>
                 <h2 className="text-sm sm:text-lg font-bold bg-gradient-to-r from-cyan-500 to-teal-500 bg-clip-text text-transparent truncate">
-                  ShennaStudio Admin
+                  Shenna's Studio Admin
                 </h2>
               </div>
             </div>

@@ -24,7 +24,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showMiniCart, setShowMiniCart] = useState(false);
   const [settings, setSettings] = useState<SiteSettings>({
-    siteName: 'ShennaStudio',
+    siteName: 'Shenna's Studio',
     logo: '/images/shenna-studio-logo.png',
   });
 
@@ -35,7 +35,7 @@ export default function Header() {
       .then(data => {
         if (data && data.logo) {
           setSettings({
-            siteName: data.siteName || 'ShennaStudio',
+            siteName: data.siteName || 'Shenna's Studio',
             logo: data.logo,
           });
         }

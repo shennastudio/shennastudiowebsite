@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'South Padre Island Conservation | ShennaStudio',
+  title: 'South Padre Island Conservation | Shenna's Studio',
   description: 'Focused conservation efforts protecting South Padre Island marine ecosystems, sea turtles, and coastal habitats.',
 }
 
@@ -95,7 +95,7 @@ export default function SPIPage() {
                   that depend on our dunes, our ecosystem is as beautiful as it is fragile.
                 </p>
                 <p>
-                  ShennaStudio was founded on these shores, and we believe it&apos;s our responsibility
+                  Shenna's Studio was founded on these shores, and we believe it&apos;s our responsibility
                   to ensure they remain vibrant for generations to come. Through your support,
                   we fund local initiatives that make a direct difference on our beaches and in our waters.
                 </p>

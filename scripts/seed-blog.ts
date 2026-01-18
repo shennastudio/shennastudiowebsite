@@ -32,7 +32,7 @@ async function seedBlogPosts() {
       {
         title: 'Protecting Sea Turtles: Our Partnership with Sea Turtle Inc.',
         slug: 'sea-turtle-inc-partnership',
-        excerpt: 'Discover how ShennaStudio supports Sea Turtle Inc., a world-renowned sea turtle rescue and rehabilitation center in South Padre Island, Texas, and learn about critical conservation work protecting five endangered species.',
+        excerpt: 'Discover how Shenna's Studio supports Sea Turtle Inc., a world-renowned sea turtle rescue and rehabilitation center in South Padre Island, Texas, and learn about critical conservation work protecting five endangered species.',
         image: blogImages.seaTurtle,
         category: 'Conservation',
         featured: true,
@@ -49,8 +49,8 @@ async function seedBlogPosts() {
           
           <p>The Kemp's Ridley sea turtle holds a special place in the hearts of South Texas conservationists. As the smallest and most endangered sea turtle species in the world, with South Padre Island being one of only two primary nesting locations globally, every single individual counts. In the 1940s, an estimated 40,000 Kemp's Ridleys nested on a single day at Rancho Nuevo, Mexico. By the 1980s, that number had plummeted to just a few hundred nests per year. Thanks to intensive conservation efforts, including those led by Sea Turtle Inc., the population is slowly recovering, but they remain critically endangered.</p>
           
-          <h3>How ShennaStudio Makes a Difference</h3>
-          <p>With every handcrafted bracelet you purchase from ShennaStudio, 10% of the sale goes directly to Sea Turtle Inc. This partnership is at the heart of our mission to combine beautiful artisan jewelry with meaningful ocean conservation. Your support funds:</p>
+          <h3>How Shenna's Studio Makes a Difference</h3>
+          <p>With every handcrafted bracelet you purchase from Shenna's Studio, 10% of the sale goes directly to Sea Turtle Inc. This partnership is at the heart of our mission to combine beautiful artisan jewelry with meaningful ocean conservation. Your support funds:</p>
           
           <ul>
             <li><strong>Emergency Rescue Operations:</strong> Rapid response teams that rescue stranded turtles along the 34-mile stretch of South Padre Island and surrounding areas</li>
@@ -76,7 +76,7 @@ async function seedBlogPosts() {
           <p>Sea Turtle Inc. has countless success stories, but each one represents hope for the species. Turtles like Gerry, a Green sea turtle who recovered from severe injuries after being hit by a boat propeller, and Kemp, a Kemp's Ridley who overcame cold-stunning and pneumonia, have returned to the wild thanks to the dedicated care they received. These releases are celebrated by the community, often with hundreds of supporters lining the beach to witness these magnificent creatures paddle back into the waves.</p>
           
           <h3>Join the Movement</h3>
-          <p>When you wear a ShennaStudio bracelet, you become part of a larger movement to protect our oceans. You're supporting not just Sea Turtle Inc., but the entire ecosystem that depends on healthy sea turtle populations. You're investing in education that inspires children to become future conservationists. You're funding the rescue of a turtle that might otherwise die on a beach. You're making a tangible difference in the fight to save these ancient mariners that have swum our oceans for over 100 million years.</p>
+          <p>When you wear a Shenna's Studio bracelet, you become part of a larger movement to protect our oceans. You're supporting not just Sea Turtle Inc., but the entire ecosystem that depends on healthy sea turtle populations. You're investing in education that inspires children to become future conservationists. You're funding the rescue of a turtle that might otherwise die on a beach. You're making a tangible difference in the fight to save these ancient mariners that have swum our oceans for over 100 million years.</p>
           
           <p>Together, we're ensuring that future generations will be able to witness the miracle of sea turtles nesting on our beaches and swimming in our seas. Every bracelet tells a story—not just of beautiful craftsmanship, but of hope, recovery, and an enduring commitment to protect the creatures that call the Gulf of Mexico home.</p>
           

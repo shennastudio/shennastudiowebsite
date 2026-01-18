@@ -17,9 +17,9 @@ export const welcomeSequence: EmailSequence[] = [
     name: 'Welcome Email',
     trigger: 'welcome',
     delay: 0, // Send immediately
-    subject: '🌊 Welcome to ShennaStudio - Your Ocean Journey Begins!',
+    subject: '🌊 Welcome to Shenna's Studio - Your Ocean Journey Begins!',
     content: `
-      <h1>Welcome to the ShennaStudio Family! 🌊</h1>
+      <h1>Welcome to the Shenna's Studio Family! 🌊</h1>
       <p>Thank you for joining our ocean-loving community!</p>
       
       <h2>Here's what makes us special:</h2>
@@ -34,7 +34,7 @@ export const welcomeSequence: EmailSequence[] = [
       
       <a href="https://shennastudio.com/products" style="background: #06b6d4; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 20px 0;">Shop Ocean Treasures →</a>
       
-      <p>With ocean love,<br>The ShennaStudio Team 💖</p>
+      <p>With ocean love,<br>The Shenna's Studio Team 💖</p>
     `
   },
   {
@@ -109,7 +109,7 @@ export const postPurchaseSequence: EmailSequence[] = [
     subject: '🎉 Thank You for Your Order!',
     content: `
       <h1>Your Ocean Treasure is On Its Way! 🌊</h1>
-      <p>Thank you so much for your purchase! We're thrilled to welcome you to the ShennaStudio family.</p>
+      <p>Thank you so much for your purchase! We're thrilled to welcome you to the Shenna's Studio family.</p>
       
       <p><strong>📦 Your order is being carefully prepared...</strong></p>
       
