@@ -20,6 +20,7 @@
     "db:update:blog-images": "tsx scripts/update-blog-images.ts",
     "db:seed:enhanced-blog": "tsx scripts/seed-enhanced-blog.ts",
     "db:seed:analytics": "tsx scripts/seed-analytics.ts",
+    "db:import:stripe-orders": "tsx scripts/import_stripe_orders.ts",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
