@@ -117,7 +117,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       {/* Header Section */}
       <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-16 relative overflow-hidden">
         {/* Animated wave background */}
@@ -204,22 +204,22 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {category && ['t-shirts', 'necklaces', 'pets', 'holidays'].includes(category.slug) ? (
                 /* Coming Soon for New Categories */
                 <div className="max-w-2xl mx-auto">
-                  <div className="bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 border-2 border-cyan-200 rounded-3xl p-12 shadow-lg">
+                  <div className="bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 dark:from-cyan-950/30 dark:via-blue-950/30 dark:to-teal-950/30 border-2 border-cyan-200 dark:border-cyan-800 rounded-3xl p-12 shadow-lg">
                     <div className="text-7xl mb-6 animate-bounce">
                       {category.slug === 't-shirts' && '👕'}
                       {category.slug === 'necklaces' && '💎'}
                       {category.slug === 'pets' && '🐾'}
                       {category.slug === 'holidays' && '🎄'}
                     </div>
-                    <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-teal-600 mb-4">
+                    <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-400 dark:to-teal-400 mb-4">
                       Coming Soon!
                     </h2>
-                    <p className="text-xl text-gray-700 mb-6">
-                      {category.name} are on the way! 
+                    <p className="text-xl text-gray-700 dark:text-gray-300 mb-6">
+                      {category.name} are on the way!
                     </p>
-                    <p className="text-gray-600 mb-8">
-                      We&apos;re working on bringing you beautiful ocean-inspired {category.name.toLowerCase()} that support marine conservation. 
-                      <span className="block mt-2 font-semibold text-teal-600">
+                    <p className="text-gray-600 dark:text-gray-400 mb-8">
+                      We&apos;re working on bringing you beautiful ocean-inspired {category.name.toLowerCase()} that support marine conservation.
+                      <span className="block mt-2 font-semibold text-teal-600 dark:text-teal-400">
                         Check back soon or explore our bracelet collection!
                       </span>
                     </p>
@@ -236,10 +236,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 /* Generic No Products */
                 <>
                   <div className="text-6xl mb-4 animate-bounce">🌊</div>
-                  <h2 className="text-2xl font-semibold text-gray-700 mb-2">
+                  <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
                     No products available yet
                   </h2>
-                  <p className="text-gray-600">
+                  <p className="text-gray-600 dark:text-gray-400">
                     Check back soon for our beautiful ocean-inspired bracelets!
                   </p>
                 </>
@@ -250,10 +250,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {products.map((productDisplay) => (
                 <div
                   key={productDisplay.product.id}
-                  className="stagger-child bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-teal-100 group hover:-translate-y-2"
+                  className="stagger-child bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-teal-100 dark:border-slate-700 group hover:-translate-y-2"
                 >
                   {/* Product Image */}
-                  <div className="relative h-64 bg-gradient-to-br from-cyan-50 to-blue-50 overflow-hidden">
+                  <div className="relative h-64 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30 overflow-hidden">
                     {productDisplay.displayImages?.[0] ? (
                       <Image
                         src={productDisplay.displayImages[0]}
@@ -284,28 +284,28 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
                     {/* Marine Life Icon */}
                     <div className="absolute bottom-4 left-4 text-3xl opacity-0 group-hover:opacity-100 transition-opacity">
-                    
+
                     </div>
                   </div>
 
                   {/* Product Info */}
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                       {productDisplay.product.name}
                     </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-2">
+                    <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
                       {productDisplay.product.description || 'Ocean-inspired handcrafted bracelet'}
                     </p>
 
                     {/* Price and Stock */}
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-2xl font-bold text-teal-600">
+                      <span className="text-2xl font-bold text-teal-600 dark:text-teal-400">
                         ${productDisplay.displayPrice.toFixed(2)}
                       </span>
                       <span className={`text-sm px-3 py-1 rounded-full ${
                         productDisplay.displayStock > 0
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
+                          ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
+                          : 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300'
                       }`}>
                         {productDisplay.displayStock > 0
                           ? `${productDisplay.displayStock} in stock`
@@ -315,15 +315,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
                     {/* Conservation Info */}
                     {productDisplay.product.conservationPercentage > 0 && (
-                      <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-                        <div className="flex items-center gap-2 text-sm text-green-800">
+                      <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
+                        <div className="flex items-center gap-2 text-sm text-green-800 dark:text-green-300">
                           <span>🪼</span>
                           <span className="font-semibold">
                             {productDisplay.product.conservationPercentage}% supports conservation
                           </span>
                         </div>
                         {productDisplay.product.conservationFocus && (
-                          <p className="text-xs text-green-700 mt-1">
+                          <p className="text-xs text-green-700 dark:text-green-400 mt-1">
                             {productDisplay.product.conservationFocus}
                           </p>
                         )}
@@ -353,7 +353,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       />
 
       {/* Conservation Info Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-cyan-50 py-12 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 py-12 relative overflow-hidden">
         {/* Floating particles */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-16 h-16 rounded-full bg-teal-500 animate-ping" style={{ animationDuration: '4s' }} />
@@ -365,19 +365,19 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             <div className="flex justify-center items-center gap-3 mb-4">
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.1s' }}>🐚</span>
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.2s' }}>🪼</span>
-              <h2 className="text-3xl font-bold text-teal-700">
+              <h2 className="text-3xl font-bold text-teal-700 dark:text-teal-300">
                 Every Purchase Protects Ocean Life
               </h2>
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.3s' }}>🐙</span>
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.4s' }}>🐡</span>
             </div>
-            <p className="text-lg text-gray-700 mb-6">
+            <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
               10% of every bracelet sale supports sea turtle conservation, whale protection,
               and marine ecosystem restoration in South Padre Island and Rio Grande Valley.
             </p>
             <Link
               href="/conservation"
-              className="inline-block border-2 border-teal-600 text-teal-600 px-8 py-3 rounded-full font-semibold hover:bg-teal-600 hover:text-white transition-all transform hover:scale-105"
+              className="inline-block border-2 border-teal-600 dark:border-teal-400 text-teal-600 dark:text-teal-400 px-8 py-3 rounded-full font-semibold hover:bg-teal-600 hover:text-white dark:hover:bg-teal-400 dark:hover:text-slate-900 transition-all transform hover:scale-105"
             >
               Learn About Our Conservation Mission
             </Link>
