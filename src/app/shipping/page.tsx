@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Shipping Information | Shenna's Studio',
+  title: "Shipping Information | Shenna's Studio",
   description: 'Fast and reliable shipping for ocean-inspired bracelets. Free shipping on orders over $50.',
 };
 

@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Frequently Asked Questions | Shenna's Studio',
+  title: "Frequently Asked Questions | Shenna's Studio",
   description: 'Find answers to common questions about our ocean-inspired bracelets, shipping, returns, and conservation efforts.',
 }
 

@@ -192,7 +192,7 @@ const sharkBlogPosts = [
       <p>As apex predators, hammerhead sharks play crucial roles in maintaining healthy ocean ecosystems. They regulate prey populations, including stingrays and smaller fish, preventing any single species from dominating. Their presence indicates a balanced, functioning marine ecosystem. The loss of hammerheads could trigger cascading effects throughout the food web.</p>
 
       <h3>Supporting Hammerhead Conservation</h3>
-      <p>Shenna's Studio is committed to shark conservation. Proceeds from our ocean-inspired jewelry support organizations working to protect hammerheads and other shark species through research, advocacy, and education. When you choose Shenna's Studio, you're helping ensure these remarkable predators continue patrolling our oceans.</p>
+      <p>Shenna"s Studio is committed to shark conservation. Proceeds from our ocean-inspired jewelry support organizations working to protect hammerheads and other shark species through research, advocacy, and education. When you choose Shenna's Studio, you"re helping ensure these remarkable predators continue patrolling our oceans.</p>
 
       <p><em>Learn more about hammerhead shark conservation at <a href="https://www.sharktrust.org">Shark Trust</a> or <a href="https://www.oceana.org">Oceana</a>.</em></p>
     `

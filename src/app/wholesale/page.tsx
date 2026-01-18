@@ -4,8 +4,8 @@ import { Package, Truck, Users, Award, CheckCircle, ArrowRight, Store, Heart } f
 import { FaireLogo } from '@/components/FaireLogo';
 
 export const metadata: Metadata = {
-  title: 'Wholesale | Shenna's Studio - Ocean-Themed Bracelets for Retailers',
-  description: 'Partner with Shenna's Studio for wholesale ocean-inspired jewelry. Competitive wholesale pricing, low MOQs, and 10% of sales donated to marine conservation. Perfect for boutiques, gift shops, and retailers.',
+  title: "Wholesale | Shenna's Studio - Ocean-Themed Bracelets for Retailers",
+  description: "Partner with Shenna's Studio for wholesale ocean-inspired jewelry. Competitive wholesale pricing, low MOQs, and 10% of sales donated to marine conservation. Perfect for boutiques, gift shops, and retailers.",
   keywords: 'wholesale bracelets, wholesale jewelry, ocean jewelry wholesale, marine conservation products, boutique wholesale, handmade jewelry wholesale, eco-friendly wholesale',
 };
 

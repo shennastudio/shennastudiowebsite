@@ -4,7 +4,7 @@ import PlanCard from '@/components/subscription/PlanCard';
 import { SUBSCRIPTION_PLANS } from '@/lib/subscription-data';
 
 export const metadata: Metadata = {
-  title: 'Ocean Guardian Subscription | Shenna's Studio',
+  title: "Ocean Guardian Subscription | Shenna's Studio",
   description: 'Subscribe to receive handcrafted ocean-themed bracelets monthly. Support marine conservation with every delivery.',
 };
 

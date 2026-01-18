@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     try {
       await sendEmail({
         to: user.email,
-        subject: 'Welcome to Shenna's Studio! 🌊',
+        subject: "Welcome to Shenna's Studio! 🌊",
         react: WelcomeEmail({
           customerName: user.name || 'Ocean Lover',
         }),

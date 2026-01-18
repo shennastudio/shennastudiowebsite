@@ -13,12 +13,64 @@ import {
   Clock,
   MessageSquare,
   FileText,
-  ShoppingBag
+  ShoppingBag,
+  MapPin,
+  CreditCard,
+  Leaf,
+  Copy,
+  ExternalLink
 } from 'lucide-react';
 import { ShippingLabelPanel } from '@/components/admin/ShippingLabelPanel';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import type { OrderDetail } from '@/types';
+
+interface OrderItem {
+  id: string;
+  quantity: number;
+  price: number;
+  variant: {
+    id: string;
+    name: string;
+    sku: string;
+    size?: string | null;
+    color?: string | null;
+    material?: string | null;
+    product: {
+      id: string;
+      name: string;
+      images?: string[];
+    };
+  };
+}
+
+interface OrderData {
+  id: string;
+  orderNumber: string;
+  status: string;
+  subtotal: number;
+  shipping: number;
+  tax: number;
+  total: number;
+  customerName: string;
+  customerEmail: string;
+  shippingAddress: string;
+  shippingCity: string;
+  shippingState: string;
+  shippingZip: string;
+  shippingCountry: string;
+  stripePaymentId?: string | null;
+  trackingNumber?: string | null;
+  carrier?: string | null;
+  createdAt: string;
+  shippedAt?: string | null;
+  deliveredAt?: string | null;
+  items: OrderItem[];
+  conservationDonation?: {
+    amount: number;
+    percentage: number;
+    status: string;
+  } | null;
+}
 
 interface TimelineEvent {
   type: string;
@@ -41,7 +93,7 @@ interface OrderNote {
 export default function OrderDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [order, setOrder] = useState<OrderDetail | null>(null);
+  const [order, setOrder] = useState<OrderData | null>(null);
   const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
   const [notes, setNotes] = useState<OrderNote[]>([]);
   const [newNote, setNewNote] = useState('');
@@ -49,7 +101,6 @@ export default function OrderDetailPage() {
   const [submitting, setSubmitting] = useState(false);
 
   const fetchOrderDetails = useCallback(async () => {
-
     setLoading(true);
     try {
       const [timelineRes, notesRes] = await Promise.all([
@@ -107,8 +158,13 @@ export default function OrderDetailPage() {
     }
   }
 
+  function copyToClipboard(text: string, label: string) {
+    navigator.clipboard.writeText(text);
+    toast.success(`${label} copied to clipboard`);
+  }
+
   function getIcon(iconName: string) {
-    const icons: Record<string, React.ComponentType> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       'shopping-bag': ShoppingBag,
       'clock': Clock,
       'truck': Truck,
@@ -123,24 +179,24 @@ export default function OrderDetailPage() {
   function getStatusColor(status: string) {
     switch (status) {
       case 'PENDING':
-        return 'bg-yellow-100 text-yellow-700';
+        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400';
       case 'PROCESSING':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400';
       case 'SHIPPED':
-        return 'bg-purple-100 text-purple-700';
+        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400';
       case 'DELIVERED':
-        return 'bg-green-100 text-green-700';
+        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400';
       case 'CANCELLED':
-        return 'bg-red-100 text-red-700';
+        return 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400';
       default:
-        return 'bg-gray-100 text-gray-700';
+        return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
     }
   }
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-gray-600">Loading order details...</p>
+        <p className="text-gray-600 dark:text-gray-400">Loading order details...</p>
       </div>
     );
   }
@@ -148,7 +204,7 @@ export default function OrderDetailPage() {
   if (!order) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
-        <p className="text-gray-600 mb-4">Order not found</p>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">Order not found</p>
         <Button onClick={() => router.push('/admin/orders')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Orders
@@ -160,16 +216,23 @@ export default function OrderDetailPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-start">
+      <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
         <div>
           <Button onClick={() => router.push('/admin/orders')} variant="outline" className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Orders
           </Button>
-          <h1 className="text-3xl font-bold">Order #{order.orderNumber}</h1>
-          <p className="text-gray-600 mt-1">{order.customerName} • {order.customerEmail}</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+            Order #{order.orderNumber}
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            {order.customerName} • {order.customerEmail}
+          </p>
+          <p className="text-sm text-gray-500 dark:text-gray-500 mt-1">
+            Placed on {new Date(order.createdAt).toLocaleString()}
+          </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
             {order.status}
           </span>
@@ -179,43 +242,116 @@ export default function OrderDetailPage() {
               View Invoice
             </Button>
           </Link>
+          <Link href={`/admin/orders/${params.id}/packing-slip`}>
+            <Button variant="outline">
+              <Package className="h-4 w-4 mr-2" />
+              Packing Slip
+            </Button>
+          </Link>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Timeline and Shipping */}
+        {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
+          {/* Order Items */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShoppingBag className="h-5 w-5" />
+                Order Items ({order.items.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {order.items.map((item) => (
+                  <div key={item.id} className="flex items-start gap-4 p-4 bg-gray-50 dark:bg-slate-800 rounded-lg">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-900 dark:text-white">
+                        {item.variant.product.name}
+                      </h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {[item.variant.size, item.variant.color, item.variant.material]
+                          .filter(Boolean)
+                          .join(' / ') || item.variant.name}
+                      </p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 font-mono mt-1">
+                        SKU: {item.variant.sku}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {item.quantity} × ${item.price.toFixed(2)}
+                      </p>
+                      <p className="font-semibold text-gray-900 dark:text-white">
+                        ${(item.quantity * item.price).toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Order Totals */}
+              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-slate-700">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
+                    <span className="text-gray-900 dark:text-white">${order.subtotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600 dark:text-gray-400">Shipping</span>
+                    <span className="text-gray-900 dark:text-white">${order.shipping.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600 dark:text-gray-400">Tax</span>
+                    <span className="text-gray-900 dark:text-white">${order.tax.toFixed(2)}</span>
+                  </div>
+                  {order.conservationDonation && (
+                    <div className="flex justify-between text-sm bg-green-50 dark:bg-green-900/20 p-2 rounded">
+                      <span className="text-green-700 dark:text-green-400 flex items-center gap-1">
+                        <Leaf className="h-4 w-4" />
+                        Conservation ({order.conservationDonation.percentage}%)
+                      </span>
+                      <span className="text-green-700 dark:text-green-400 font-medium">
+                        ${order.conservationDonation.amount.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200 dark:border-slate-700">
+                    <span className="text-gray-900 dark:text-white">Total</span>
+                    <span className="text-gray-900 dark:text-white">${order.total.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Shipping Label Panel */}
-          <ShippingLabelPanel order={order} onLabelPurchased={fetchOrderDetails} />
+          <ShippingLabelPanel order={order as any} onLabelPurchased={fetchOrderDetails} />
+
+          {/* Timeline */}
           <Card>
             <CardHeader>
               <CardTitle>Order Timeline</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="relative">
-                {/* Timeline line */}
-                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200"></div>
-
-                {/* Timeline events */}
+                <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200 dark:bg-slate-700"></div>
                 <div className="space-y-6">
                   {timeline.map((event, index) => {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const IconComponent = getIcon(event.icon) as any;
+                    const IconComponent = getIcon(event.icon);
                     return (
                       <div key={index} className="relative flex gap-4">
-                        {/* Icon */}
-                        <div className="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center z-10">
-                          <IconComponent className="h-5 w-5 text-blue-600" />
+                        <div className="flex-shrink-0 w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center z-10">
+                          <IconComponent className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                         </div>
-
-                        {/* Content */}
                         <div className="flex-1 pt-1">
-                          <h3 className="font-semibold text-gray-900">{event.title}</h3>
-                          <p className="text-gray-600 text-sm mt-1">{event.description}</p>
+                          <h3 className="font-semibold text-gray-900 dark:text-white">{event.title}</h3>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{event.description}</p>
                           {event.user && (
-                            <p className="text-gray-500 text-xs mt-1">by {event.user}</p>
+                            <p className="text-gray-500 dark:text-gray-500 text-xs mt-1">by {event.user}</p>
                           )}
-                          <p className="text-gray-400 text-xs mt-1">
+                          <p className="text-gray-400 dark:text-gray-600 text-xs mt-1">
                             {new Date(event.timestamp).toLocaleString()}
                           </p>
                         </div>
@@ -228,20 +364,139 @@ export default function OrderDetailPage() {
           </Card>
         </div>
 
-        {/* Notes */}
-        <div>
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Customer & Shipping */}
           <Card>
             <CardHeader>
-              <CardTitle>Order Notes</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                Shipping Address
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-1 text-gray-700 dark:text-gray-300">
+                <p className="font-medium text-gray-900 dark:text-white">{order.customerName}</p>
+                <p className="text-sm">{order.customerEmail}</p>
+                <div className="pt-2">
+                  <p>{order.shippingAddress}</p>
+                  <p>{order.shippingCity}, {order.shippingState} {order.shippingZip}</p>
+                  <p>{order.shippingCountry}</p>
+                </div>
+              </div>
+              {order.trackingNumber && (
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-700">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tracking</p>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-sm text-gray-900 dark:text-white">{order.trackingNumber}</span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(order.trackingNumber!, 'Tracking number')}
+                    >
+                      <Copy className="h-3 w-3" />
+                    </Button>
+                  </div>
+                  {order.carrier && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400">via {order.carrier}</p>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Payment Info */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <CreditCard className="h-5 w-5" />
+                Payment
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Amount Paid</p>
+                  <p className="text-xl font-bold text-gray-900 dark:text-white">${order.total.toFixed(2)}</p>
+                </div>
+                {order.stripePaymentId && (
+                  <div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Stripe Payment ID</p>
+                    <div className="flex items-center gap-2">
+                      <code className="text-xs bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded font-mono text-gray-700 dark:text-gray-300 break-all">
+                        {order.stripePaymentId}
+                      </code>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(order.stripePaymentId!, 'Payment ID')}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    <a
+                      href={`https://dashboard.stripe.com/payments/${order.stripePaymentId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 mt-1"
+                    >
+                      View in Stripe <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Conservation Donation */}
+          {order.conservationDonation && (
+            <Card className="border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                  <Leaf className="h-5 w-5" />
+                  Conservation Donation
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-green-700 dark:text-green-400">Donation Amount</span>
+                    <span className="font-bold text-green-700 dark:text-green-400">
+                      ${order.conservationDonation.amount.toFixed(2)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600 dark:text-green-500">Percentage</span>
+                    <span className="text-green-600 dark:text-green-500">
+                      {order.conservationDonation.percentage}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-green-600 dark:text-green-500">Status</span>
+                    <span className="font-medium text-green-600 dark:text-green-500 uppercase">
+                      {order.conservationDonation.status}
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Notes */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Order Notes
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Add note form */}
               <form onSubmit={handleAddNote} className="space-y-2">
                 <textarea
                   value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
                   placeholder="Add a note..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md resize-none bg-white dark:bg-slate-800 text-gray-900 dark:text-white"
                   rows={3}
                 />
                 <Button type="submit" size="sm" disabled={submitting || !newNote.trim()}>
@@ -250,36 +505,20 @@ export default function OrderDetailPage() {
                 </Button>
               </form>
 
-              {/* Notes list */}
-              <div className="space-y-3 max-h-96 overflow-y-auto">
+              <div className="space-y-3 max-h-64 overflow-y-auto">
                 {notes.length === 0 ? (
-                  <p className="text-gray-500 text-sm text-center py-4">No notes yet</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-sm text-center py-4">No notes yet</p>
                 ) : (
                   notes.map((note) => (
-                    <div key={note.id} className="bg-gray-50 p-3 rounded-lg">
-                      <p className="text-sm text-gray-700">{note.content}</p>
-                      <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
+                    <div key={note.id} className="bg-gray-50 dark:bg-slate-800 p-3 rounded-lg">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">{note.content}</p>
+                      <div className="flex justify-between items-center mt-2 text-xs text-gray-500 dark:text-gray-500">
                         <span>{note.user?.name || 'Unknown'}</span>
                         <span>{new Date(note.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
                   ))
                 )}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Order Summary */}
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle>Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Total</span>
-                  <span className="font-semibold">${order.total.toFixed(2)}</span>
-                </div>
               </div>
             </CardContent>
           </Card>

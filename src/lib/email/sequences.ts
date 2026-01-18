@@ -17,7 +17,7 @@ export const welcomeSequence: EmailSequence[] = [
     name: 'Welcome Email',
     trigger: 'welcome',
     delay: 0, // Send immediately
-    subject: '🌊 Welcome to Shenna's Studio - Your Ocean Journey Begins!',
+    subject: "🌊 Welcome to Shenna's Studio - Your Ocean Journey Begins!",
     content: `
       <h1>Welcome to the Shenna's Studio Family! 🌊</h1>
       <p>Thank you for joining our ocean-loving community!</p>

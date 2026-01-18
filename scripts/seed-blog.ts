@@ -32,7 +32,7 @@ async function seedBlogPosts() {
       {
         title: 'Protecting Sea Turtles: Our Partnership with Sea Turtle Inc.',
         slug: 'sea-turtle-inc-partnership',
-        excerpt: 'Discover how Shenna's Studio supports Sea Turtle Inc., a world-renowned sea turtle rescue and rehabilitation center in South Padre Island, Texas, and learn about critical conservation work protecting five endangered species.',
+        excerpt: "Discover how Shenna's Studio supports Sea Turtle Inc., a world-renowned sea turtle rescue and rehabilitation center in South Padre Island, Texas, and learn about critical conservation work protecting five endangered species.",
         image: blogImages.seaTurtle,
         category: 'Conservation',
         featured: true,

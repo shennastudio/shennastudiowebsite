@@ -256,7 +256,7 @@ async function importOrder(session: Stripe.Checkout.Session): Promise<void> {
 
 async function main() {
   console.log('═══════════════════════════════════════════════════════════');
-  console.log('           STRIPE ORDER IMPORT TOOL - Shenna's Studio');
+  console.log("           STRIPE ORDER IMPORT TOOL - Shenna's Studio");
   console.log('═══════════════════════════════════════════════════════════');
 
   if (!process.env.STRIPE_SECRET_KEY) {

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     // Create workbook
     const workbook = new ExcelJS.Workbook();
-    workbook.creator = 'Shenna's Studio';
+    workbook.creator = "Shenna's Studio";
     workbook.created = new Date();
     workbook.modified = new Date();
 
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     const pnl = reportData.profitAndLoss;
     const pnlData = [
       ['PROFIT & LOSS STATEMENT'],
-      ['Shenna's Studio'],
+      ["Shenna's Studio"],
       [`For the Period: ${reportData.reportPeriod.quarter} ${reportData.reportPeriod.year}`],
       [''],
       ['REVENUE', '', ''],
@@ -247,7 +247,7 @@ export async function POST(req: Request) {
     const conservationData = [
       ['CONSERVATION IMPACT REPORT'],
       [''],
-      ['Shenna's Studio - Supporting Marine Conservation'],
+      ["Shenna's Studio - Supporting Marine Conservation"],
       [''],
       ['Metric', 'Value'],
       ['Total Donations', formatCurrency(reportData.conservationImpact.totalDonations)],

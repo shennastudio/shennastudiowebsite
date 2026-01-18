@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
         try {
           await sendEmail({
             to: email,
-            subject: '🌊 Welcome Back to Shenna's Studio!',
+            subject: "🌊 Welcome Back to Shenna's Studio!",
             react: WelcomeEmail({ customerName: name || existing.name || 'Ocean Lover' }),
           });
           console.log(`Welcome back email sent to ${email}`);
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     try {
       await sendEmail({
         to: email,
-        subject: '🌊 Welcome to Shenna's Studio - Your Ocean Conservation Journey Begins!',
+        subject: "🌊 Welcome to Shenna's Studio - Your Ocean Conservation Journey Begins!",
         react: WelcomeEmail({ customerName: name || 'Ocean Lover' }),
       });
       console.log(`Welcome email sent to ${email}`);

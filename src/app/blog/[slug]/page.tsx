@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!post) {
     return {
-      title: 'Post Not Found | Shenna's Studio Blog',
+      title: "Post Not Found | Shenna's Studio Blog",
     }
   }
 

@@ -143,7 +143,7 @@ export function validateUSAddress(address: {
 export function formatShippingRateForResponse(rate: ShippingRate) {
   return {
     id: rate.id,
-    provider: 'Shenna's Studio',
+    provider: "Shenna's Studio",
     servicelevel: {
       name: rate.name,
       token: rate.type,

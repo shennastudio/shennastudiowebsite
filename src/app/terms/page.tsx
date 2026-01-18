@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Shenna's Studio',
-  description: 'Terms of Service for Shenna's Studio. Read our terms governing the use of our website and services.',
+  title: "Terms of Service | Shenna's Studio",
+  description: "Terms of Service for Shenna's Studio. Read our terms governing the use of our website and services.",
 };
 
 export default function TermsPage() {

@@ -29,7 +29,7 @@ export default function SettingsPage() {
 
   const [formData, setFormData] = useState<SiteSettings>({
     id: '',
-    siteName: 'Shenna's Studio',
+    siteName: "Shenna's Studio",
     logo: null,
     tagline: null,
     primaryColor: '#3B82F6',

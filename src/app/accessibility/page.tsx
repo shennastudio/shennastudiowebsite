@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Accessibility Statement | Shenna's Studio',
-  description: 'Accessibility Statement for Shenna's Studio. Our commitment to making our website accessible to everyone.',
+  title: "Accessibility Statement | Shenna's Studio",
+  description: "Accessibility Statement for Shenna's Studio. Our commitment to making our website accessible to everyone.",
 };
 
 export default function AccessibilityPage() {

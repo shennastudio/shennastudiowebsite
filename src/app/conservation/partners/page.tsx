@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Conservation Partners | Shenna's Studio',
+  title: "Conservation Partners | Shenna's Studio",
   description: 'Meet our conservation partners in Rio Grande Valley and South Padre Island working to protect marine life.',
 }
 

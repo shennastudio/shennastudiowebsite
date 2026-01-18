@@ -4,7 +4,7 @@ import { prisma } from '@/lib/db'
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection'
 
 export const metadata = {
-  title: 'Conservation Blog | Shenna's Studio',
+  title: "Conservation Blog | Shenna's Studio",
   description: 'Read about our ocean conservation efforts supporting Sea Turtle Inc. and marine life protection in South Padre Island and the Rio Grande Valley.'
 }
 

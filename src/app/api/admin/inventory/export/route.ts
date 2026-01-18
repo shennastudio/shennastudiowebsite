@@ -133,7 +133,7 @@ export async function GET(req: Request) {
 
     // Header
     doc.setFontSize(20);
-    doc.text('Shenna's Studio Inventory Report', 20, 20);
+    doc.text("Shenna's Studio Inventory Report", 20, 20);
 
     doc.setFontSize(12);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 35);

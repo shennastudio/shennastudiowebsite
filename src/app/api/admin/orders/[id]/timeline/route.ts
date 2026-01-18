@@ -23,11 +23,18 @@ export async function GET(
           include: {
             variant: {
               include: {
-                product: true,
+                product: {
+                  select: {
+                    id: true,
+                    name: true,
+                    images: true,
+                  },
+                },
               },
             },
           },
         },
+        conservationDonation: true,
         notes: {
           include: {
             user: {
@@ -121,9 +128,42 @@ export async function GET(
         id: order.id,
         orderNumber: order.orderNumber,
         status: order.status,
+        subtotal: order.subtotal,
+        shipping: order.shipping,
+        tax: order.tax,
         total: order.total,
         customerName: order.customerName,
         customerEmail: order.customerEmail,
+        shippingAddress: order.shippingAddress,
+        shippingCity: order.shippingCity,
+        shippingState: order.shippingState,
+        shippingZip: order.shippingZip,
+        shippingCountry: order.shippingCountry,
+        stripePaymentId: order.stripePaymentId,
+        trackingNumber: order.trackingNumber,
+        carrier: order.carrier,
+        createdAt: order.createdAt,
+        shippedAt: order.shippedAt,
+        deliveredAt: order.deliveredAt,
+        items: order.items.map(item => ({
+          id: item.id,
+          quantity: item.quantity,
+          price: item.price,
+          variant: {
+            id: item.variant.id,
+            name: item.variant.name,
+            sku: item.variant.sku,
+            size: item.variant.size,
+            color: item.variant.color,
+            material: item.variant.material,
+            product: item.variant.product,
+          },
+        })),
+        conservationDonation: order.conservationDonation ? {
+          amount: order.conservationDonation.amount,
+          percentage: order.conservationDonation.percentage,
+          status: order.conservationDonation.status,
+        } : null,
       },
       timeline
     });

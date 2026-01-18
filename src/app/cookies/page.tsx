@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy | Shenna's Studio',
-  description: 'Cookie Policy for Shenna's Studio. Learn how we use cookies and similar technologies on our website.',
+  title: "Cookie Policy | Shenna's Studio",
+  description: "Cookie Policy for Shenna's Studio. Learn how we use cookies and similar technologies on our website.",
 };
 
 export default function CookiesPage() {
