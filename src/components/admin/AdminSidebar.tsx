@@ -76,7 +76,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
         { href: '/admin/payments', label: 'Payments', icon: CreditCard, color: 'from-indigo-500 to-blue-400' },
         { href: '/admin/discounts', label: 'Discounts', icon: Ticket, color: 'from-fuchsia-500 to-pink-400' },
         { href: '/admin/returns', label: 'Returns', icon: RotateCcw, color: 'from-orange-500 to-red-400' },
-        { href: '/admin/shipping', label: 'Shipping', icon: Truck, color: 'from-purple-500 to-violet-400' },
+        { href: '/admin/shipping', label: 'Shipping & Labels', icon: Truck, color: 'from-indigo-500 to-violet-400' },
       ]
     },
     {

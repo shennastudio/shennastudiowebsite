@@ -332,7 +332,7 @@ export default async function AdminDashboard() {
           <CardTitle className="text-base sm:text-lg text-slate-200">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent className="p-3 sm:p-6 pt-0 sm:pt-0">
-          <div className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-4">
+          <div className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-5">
             <Link
               href="/admin/products/new"
               className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700 hover:shadow-lg hover:border-cyan-700/50 transition-all duration-200"
@@ -343,6 +343,19 @@ export default async function AdminDashboard() {
               <div className="text-center sm:text-left">
                 <p className="font-semibold text-slate-100 group-hover:text-cyan-400 transition-colors text-xs sm:text-sm">Add Product</p>
                 <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Create new listing</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/shipping"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700 hover:shadow-lg hover:border-indigo-700/50 transition-all duration-200"
+            >
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-indigo-500/20 to-blue-500/20 rounded-lg group-hover:scale-110 transition-transform">
+                <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-100 group-hover:text-indigo-400 transition-colors text-xs sm:text-sm">Shipping</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Manage labels</p>
               </div>
             </Link>
 
