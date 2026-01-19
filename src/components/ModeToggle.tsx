@@ -3,12 +3,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { Sun, Moon, Monitor, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from '@/lib/theme';
+import { useTheme } from 'next-themes';
 
 export function ModeToggle() {
-  const { mode, actualMode, setMode } = useTheme();
+  const { theme, setTheme, resolvedTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Prevent hydration mismatch - only render after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -27,6 +33,17 @@ export function ModeToggle() {
     { value: 'system' as const, label: 'System', icon: Monitor },
   ];
 
+  // Render placeholder during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="relative">
+        <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+          <div className="w-4 h-4" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -36,7 +53,7 @@ export function ModeToggle() {
         aria-expanded={isOpen}
       >
         <AnimatePresence mode="wait">
-          {actualMode === 'light' ? (
+          {resolvedTheme === 'light' ? (
             <motion.div
               key="sun"
               initial={{ rotate: -90, opacity: 0 }}
@@ -76,12 +93,12 @@ export function ModeToggle() {
             >
               {options.map((option) => {
                 const Icon = option.icon;
-                const isActive = mode === option.value;
+                const isActive = theme === option.value;
                 return (
                   <button
                     key={option.value}
                     onClick={() => {
-                      setMode(option.value);
+                      setTheme(option.value);
                       setIsOpen(false);
                     }}
                     className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${
