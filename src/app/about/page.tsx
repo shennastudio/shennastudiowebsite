@@ -17,7 +17,7 @@ export default function AboutPage() {
               Our Ocean Conservation Mission
             </h1>
             <p className="text-xl text-cyan-100 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Shenna's Studio was born from love of ocean and commitment to protecting marine life in Rio Grande Valley and South Padre Island.
+              Shenna&apos;s Studio was born from love of ocean and commitment to protecting marine life in Rio Grande Valley and South Padre Island.
             </p>
           </AnimatedSection>
         </div>
@@ -29,11 +29,11 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <AnimatedSection animation="fadeInLeft">
               <h2 className="text-3xl font-bold text-teal-700 mb-6">
-               How Shenna's Studio Began
+               How Shenna&apos;s Studio Began
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed">
                 <p>
-                  Founded in 2025, Shenna's Studio started as a small family business creating handmade bracelets in our home studio in South Texas. 
+                   Founded in 2025, Shenna&apos;s Studio started as a small family business creating handmade bracelets in our home studio in South Texas.
                   What began as a creative outlet quickly evolved into a mission-driven enterprise when we witnessed firsthand 
                   the impact of plastic pollution and climate change on our local marine ecosystems.
                 </p>

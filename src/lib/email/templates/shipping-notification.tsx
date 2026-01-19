@@ -122,7 +122,7 @@ export const ShippingNotificationEmail = ({
               View your order: <Link href="https://shennastudio.com/account">My Account</Link>
             </Text>
             <Text style={copyright}>
-              © {new Date().getFullYear()} Shenna's Studio. Protecting Our Oceans, One Bracelet at a Time.
+              © {new Date().getFullYear()} Shenna&apos;s Studio. Protecting Our Oceans, One Bracelet at a Time.
             </Text>
           </Section>
         </Container>

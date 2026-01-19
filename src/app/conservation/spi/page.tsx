@@ -95,7 +95,7 @@ export default function SPIPage() {
                   that depend on our dunes, our ecosystem is as beautiful as it is fragile.
                 </p>
                 <p>
-                  Shenna's Studio was founded on these shores, and we believe it&apos;s our responsibility
+                  Shenna&apos;s Studio was founded on these shores, and we believe it&apos;s our responsibility
                   to ensure they remain vibrant for generations to come. Through your support,
                   we fund local initiatives that make a direct difference on our beaches and in our waters.
                 </p>

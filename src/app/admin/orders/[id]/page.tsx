@@ -23,6 +23,7 @@ import {
 import { ShippingLabelPanel } from '@/components/admin/ShippingLabelPanel';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import type { OrderDetail } from '@/types';
 
 interface OrderItem {
   id: string;
@@ -327,7 +328,7 @@ export default function OrderDetailPage() {
           </Card>
 
           {/* Shipping Label Panel */}
-          <ShippingLabelPanel order={order as any} onLabelPurchased={fetchOrderDetails} />
+          <ShippingLabelPanel order={order as unknown as OrderDetail} onLabelPurchased={fetchOrderDetails} />
 
           {/* Timeline */}
           <Card>

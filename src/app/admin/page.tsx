@@ -13,7 +13,8 @@ import {
   ArrowUpRight,
   Heart,
   Star,
-  Mail
+  Mail,
+  Truck
 } from 'lucide-react';
 import Link from 'next/link';
 import { LowStockWidget } from '@/components/admin/LowStockWidget';

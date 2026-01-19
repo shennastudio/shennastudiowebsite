@@ -6,7 +6,6 @@ import {
   Save,
   X,
   Upload,
-  DollarSign,
   Package,
   Tag,
   Layers,

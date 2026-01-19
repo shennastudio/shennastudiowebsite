@@ -14,9 +14,6 @@ import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
 import { SaleBanner } from '@/components/SaleBanner'
 import { fetchFeaturedProducts } from './actions'
 
-// Note: Removed force-dynamic to allow client-side features, but we fetch data.
-// In a real app, you might use a wrapper for the client parts or separate server/client components.
-
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<{
     product: {
@@ -42,7 +39,6 @@ export default function Home() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   useEffect(() => {
-    // Fetch products immediately - server will handle caching
     let isMounted = true;
     
     fetchFeaturedProducts(6).then((products) => {
@@ -62,8 +58,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen">
-      {/* Sale Banner - Ocean Treasures 25% OFF */}
+    <div className="min-h-screen bg-slate-950">
+      {/* Sale Banner */}
       <SaleBanner />
       
       {/* Ocean Hero Section */}
@@ -139,18 +135,18 @@ export default function Home() {
       </section>
 
       {/* Featured Products */}
-      <section className="py-24 bg-white dark:bg-slate-900 relative">
+      <section className="py-24 bg-slate-900 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative z-10 text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight"
+              className="relative z-10 text-4xl md:text-5xl font-black text-white mb-4 tracking-tight"
             >
               Ocean Treasures
             </motion.h2>
-            <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
               Handpicked bracelets inspired by sea turtles, whales, and marine life
             </p>
           </div>
@@ -158,17 +154,17 @@ export default function Home() {
           {isLoading && featuredProducts.length === 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden animate-pulse">
-                  <div className="h-80 bg-slate-200 dark:bg-slate-700" />
+                <div key={i} className="bg-slate-800 rounded-3xl shadow-sm border border-slate-700 overflow-hidden animate-pulse">
+                  <div className="h-80 bg-slate-700" />
                   <div className="p-8 space-y-4">
-                    <div className="h-6 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
-                    <div className="h-4 bg-slate-100 dark:bg-slate-600 rounded w-full" />
-                    <div className="h-4 bg-slate-100 dark:bg-slate-600 rounded w-2/3" />
+                    <div className="h-6 bg-slate-700 rounded w-3/4" />
+                    <div className="h-4 bg-slate-600 rounded w-full" />
+                    <div className="h-4 bg-slate-600 rounded w-2/3" />
                     <div className="flex justify-between items-center">
-                      <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-20" />
-                      <div className="h-6 bg-slate-100 dark:bg-slate-600 rounded w-16" />
+                      <div className="h-8 bg-slate-700 rounded w-20" />
+                      <div className="h-6 bg-slate-600 rounded w-16" />
                     </div>
-                    <div className="h-12 bg-slate-200 dark:bg-slate-700 rounded-2xl" />
+                    <div className="h-12 bg-slate-700 rounded-2xl" />
                   </div>
                 </div>
               ))}
@@ -176,7 +172,7 @@ export default function Home() {
           ) : featuredProducts.length === 0 ? (
             <div className="col-span-full text-center py-12">
               <div className="text-6xl mb-4">🌊</div>
-              <p className="text-slate-500 dark:text-slate-400 text-lg">No featured products yet</p>
+              <p className="text-slate-400 text-lg">No featured products yet</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -188,7 +184,7 @@ export default function Home() {
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden group transition-all hover:shadow-2xl hover:shadow-teal-500/10"
+                className="bg-slate-800 rounded-3xl shadow-sm border border-slate-700 overflow-hidden group transition-all hover:shadow-2xl hover:shadow-teal-500/10"
               >
                 <div className="relative h-80 overflow-hidden">
                   {productDisplay.displayImages?.[0] ? (
@@ -200,9 +196,9 @@ export default function Home() {
                       className="object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-50 dark:bg-slate-700">
-                      <div className="w-20 h-20 bg-teal-100 dark:bg-teal-900/50 rounded-full flex items-center justify-center">
-                        <Waves className="w-10 h-10 text-teal-500 dark:text-teal-400" />
+                    <div className="w-full h-full flex items-center justify-center bg-slate-700">
+                      <div className="w-20 h-20 bg-teal-900/50 rounded-full flex items-center justify-center">
+                        <Waves className="w-10 h-10 text-teal-400" />
                       </div>
                     </div>
                   )}
@@ -213,26 +209,26 @@ export default function Home() {
                   )}
                 </div>
                 <div className="p-8">
-                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-teal-400 transition-colors">
                     {productDisplay.product?.name || 'Product'}
                   </h3>
-                  <p className="text-slate-500 dark:text-slate-400 mb-6 line-clamp-2 leading-relaxed">
+                  <p className="text-slate-400 mb-6 line-clamp-2 leading-relaxed">
                     {productDisplay.product?.description || 'Ocean-inspired bracelet'}
                   </p>
                   <div className="flex items-center justify-between mb-8">
-                    <span className="text-3xl font-black text-slate-900 dark:text-white">
+                    <span className="text-3xl font-black text-white">
                       ${productDisplay.displayPrice}
                     </span>
                     <span className={cn(
                       "text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider",
-                      productDisplay.displayStock > 0 ? "bg-emerald-50 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400" : "bg-rose-50 dark:bg-rose-900/50 text-red-600 dark:text-red-400"
+                      productDisplay.displayStock > 0 ? "bg-emerald-900/50 text-emerald-400" : "bg-rose-900/50 text-red-400"
                     )}>
                       {productDisplay.displayStock > 0 ? 'In Stock' : 'Sold Out'}
                     </span>
                   </div>
                   <Link
                     href={`/products/${productDisplay.product?.slug || 'ocean-wave-bracelet'}`}
-                    className="block w-full text-center bg-slate-900 dark:bg-teal-600 text-white py-4 rounded-2xl font-bold transition-all hover:bg-teal-600 dark:hover:bg-teal-500 hover:shadow-xl hover:shadow-teal-500/20 active:scale-95"
+                    className="block w-full text-center bg-teal-600 text-white py-4 rounded-2xl font-bold transition-all hover:bg-teal-500 hover:shadow-xl hover:shadow-teal-500/20 active:scale-95"
                   >
                     View Details
                   </Link>
@@ -245,7 +241,7 @@ export default function Home() {
           <div className="text-center mt-20">
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 text-teal-600 font-bold text-lg hover:gap-4 transition-all"
+              className="inline-flex items-center gap-2 text-teal-400 font-bold text-lg hover:gap-4 transition-all"
             >
               View All Products <ArrowRight className="w-5 h-5" />
             </Link>
@@ -264,10 +260,10 @@ export default function Home() {
       />
 
       {/* Ocean Features Section */}
-      <section className="bg-slate-50 dark:bg-slate-800 py-24">
+      <section className="bg-slate-950 py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
               Why Choose Shenna&apos;s Studio?
             </h2>
           </div>
@@ -278,34 +274,34 @@ export default function Home() {
                 title: "Sea Turtle Conservation",
                 desc: "Each purchase directly supports sea turtle protection programs in South Padre Island nesting grounds.",
                 icon: ShieldCheck,
-                color: "text-emerald-500 dark:text-emerald-400",
-                bg: "bg-emerald-50 dark:bg-emerald-900/30"
+                color: "text-emerald-400",
+                bg: "bg-emerald-900/30"
               },
               {
                 title: "Ocean-Quality Materials",
                 desc: "Premium, sustainably sourced materials that honor marine life and coastal ecosystems.",
                 icon: Anchor,
-                color: "text-blue-500 dark:text-blue-400",
-                bg: "bg-blue-50 dark:bg-blue-900/30"
+                color: "text-blue-400",
+                bg: "bg-blue-900/30"
               },
               {
                 title: "Shark Research Support",
                 desc: "10% of every sale funds important shark research and ocean conservation efforts.",
                 icon: Waves,
-                color: "text-cyan-500 dark:text-cyan-400",
-                bg: "bg-cyan-50 dark:bg-cyan-900/30"
+                color: "text-cyan-400",
+                bg: "bg-cyan-900/30"
               }
             ].map((feature, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -10, scale: 1.02 }}
-                className="text-center bg-white dark:bg-slate-900 p-10 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-2xl transition-all"
+                className="text-center bg-slate-900 p-10 rounded-3xl shadow-sm border border-slate-800 hover:shadow-2xl transition-all"
               >
                 <div className={cn("w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-8", feature.bg)}>
                   <feature.icon className={cn("w-10 h-10", feature.color)} />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">{feature.title}</h3>
-                <p className="text-slate-500 dark:text-slate-400 leading-relaxed">{feature.desc}</p>
+                <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
+                <p className="text-slate-400 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
           </div>

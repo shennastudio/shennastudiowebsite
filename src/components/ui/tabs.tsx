@@ -8,13 +8,13 @@ const Tabs = React.forwardRef<
     onValueChange?: (value: string) => void
   }
 >(({ className, value, onValueChange, children, ...props }, ref) => {
-  const contextValue = React.useMemo(() => ({ value, onValueChange }), [value, onValueChange])
+  React.useMemo(() => ({ value, onValueChange }), [value, onValueChange])
   
   return (
     <div ref={ref} className={cn("", className)} {...props} data-tabs-value={value} data-tabs-onvaluechange={onValueChange ? 'true' : 'false'}>
       {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<any>, {})
+          return React.cloneElement(child as React.ReactElement<{ value?: string }>, {})
         }
         return child
       })}

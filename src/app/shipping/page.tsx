@@ -75,7 +75,7 @@ export default function ShippingPage() {
                 </h2>
                 <div className="space-y-4 text-gray-600 leading-relaxed">
                   <p>
-                    Because each Shenna's Studio bracelet is carefully handcrafted, please allow 
+                     Because each Shenna&apos;s Studio bracelet is carefully handcrafted, please allow
                     <span className="font-bold text-gray-900"> 1-2 business days</span> for 
                     processing before your order ships.
                   </p>

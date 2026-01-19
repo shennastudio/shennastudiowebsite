@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Brain,
   TrendingUp,
-  TrendingDown,
   DollarSign,
   Package,
   AlertTriangle,

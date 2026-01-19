@@ -28,7 +28,7 @@ export default function PrivacyPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Introduction</h2>
               <p>
-                Welcome to Shenna's Studio. We are committed to protecting your personal information and your right to privacy.
+                Welcome to Shenna&apos;s Studio. We are committed to protecting your personal information and your right to privacy.
                 This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website
                 and purchase our ocean-inspired bracelets.
               </p>

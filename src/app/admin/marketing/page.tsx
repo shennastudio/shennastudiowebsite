@@ -12,17 +12,14 @@ import {
   Facebook,
   Twitter,
   Sparkles,
-  RefreshCw,
   ExternalLink,
   Megaphone,
   BarChart3,
   Users,
-  ShoppingBag,
   Zap,
   Calendar,
   Gift,
-  Eye,
-  ShoppingCart
+  Eye
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

@@ -28,7 +28,7 @@ export default function AccessibilityPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Commitment</h2>
               <p>
-                Shenna's Studio is committed to ensuring digital accessibility for people with disabilities. We are
+                Shenna&apos;s Studio is committed to ensuring digital accessibility for people with disabilities. We are
                 continually improving the user experience for everyone and applying the relevant accessibility
                 standards to ensure we provide equal access to all users.
               </p>

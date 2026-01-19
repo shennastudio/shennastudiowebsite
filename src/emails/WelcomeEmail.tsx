@@ -13,11 +13,11 @@ interface WelcomeEmailProps {
 
 export default function WelcomeEmail({ customerName }: WelcomeEmailProps) {
   return (
-    <OceanEmailLayout preview="Welcome to Shenna's Studio - Start your ocean conservation journey!">
+    <OceanEmailLayout preview="Welcome to Shenna&apos;s Studio - Start your ocean conservation journey!">
       {/* Hero section */}
       <Section style={heroSection}>
         <div style={waveIcon}>🌊</div>
-        <Heading style={h1}>Welcome to Shenna's Studio!</Heading>
+        <Heading style={h1}>Welcome to Shenna&apos;s Studio!</Heading>
         <Text style={heroText}>
           Hi {customerName}, thank you for joining our ocean conservation community!
         </Text>

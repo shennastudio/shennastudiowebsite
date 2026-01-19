@@ -46,7 +46,7 @@ export default async function BlogPage() {
         <div className="max-w-7xl mx-auto">
           <AnimatedSection animation="fadeInDown" className="text-center max-w-4xl mx-auto">
             <span className="inline-block py-1 px-3 rounded-full bg-teal-100/80 text-teal-700 text-sm font-semibold mb-6 backdrop-blur-sm border border-teal-200">
-              Shenna's Studio Journal
+              Shenna&apos;s Studio Journal
             </span>
             <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-teal-800 via-blue-700 to-cyan-700 tracking-tight">
               Stories from the Ocean

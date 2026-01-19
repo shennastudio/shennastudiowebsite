@@ -12,6 +12,9 @@ const priorityMap: Record<string, 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'> = {
   'urgent': 'URGENT'
 };
 
+// Ticket status type for TypeScript
+type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'WAITING_CUSTOMER' | 'RESOLVED' | 'CLOSED';
+
 const createTicketSchema = z.object({
   subject: z.string().min(1, 'Subject is required'),
   category: z.string().default('general'),
@@ -111,7 +114,7 @@ export async function GET(request: Request) {
     });
 
     const openCount = await prisma.supportTicket.count({
-      where: { status: { in: ['OPEN', 'IN_PROGRESS', 'WAITING_CUSTOMER'] as any } },
+      where: { status: { in: ['OPEN', 'IN_PROGRESS', 'WAITING_CUSTOMER'] as const } },
     });
 
     // avgResponseTime skipped as firstResponseAt is not in schema

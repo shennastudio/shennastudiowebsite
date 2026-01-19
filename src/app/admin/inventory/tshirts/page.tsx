@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import {
   Package,
   AlertTriangle,
-  TrendingUp,
   DollarSign,
   Edit,
   Search,
