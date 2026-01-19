@@ -21,7 +21,6 @@ export function useKeyboardShortcuts(
   options: UseKeyboardShortcutsOptions = {}
 ) {
   const { enabled = true, ignoreInput = true } = options;
-  const router = useRouter();
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {

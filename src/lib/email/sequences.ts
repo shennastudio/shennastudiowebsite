@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
-import { sendEmail } from '@/lib/email';
+// sendEmail will be used when email automation is implemented
+// import { sendEmail } from '@/lib/email';
 
 export interface EmailSequence {
   name: string;

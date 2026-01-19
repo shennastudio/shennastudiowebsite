@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, X, Shirt, Gem, Package } from 'lucide-react';
 import { ImageUpload } from '@/components/admin/ImageUpload';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 interface ProductCategory {
   id: string;
@@ -72,8 +73,7 @@ export default function CategoriesPage() {
     // Auto-generate slug from name
     if (name === 'name') {
       const baseSlug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      const typePrefix = formData.type === 'tshirt' ? 'tshirt-' : 'bracelet-';
-      const slug = formData.type === 'tshirt' 
+      const slug = formData.type === 'tshirt'
         ? `tshirt-${baseSlug}`
         : `bracelet-${baseSlug}`;
       setFormData(prev => ({ ...prev, slug }));
@@ -163,9 +163,11 @@ export default function CategoriesPage() {
     <div className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
       <div className="flex items-start gap-4">
         {category.image ? (
-          <img
+          <Image
             src={category.image}
             alt={category.name}
+            width={80}
+            height={80}
             className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
           />
         ) : (

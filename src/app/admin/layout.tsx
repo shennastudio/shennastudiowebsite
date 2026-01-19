@@ -57,7 +57,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-2 px-3 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-200"
+                   className="gap-2 px-3 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-slate-200 transition-all duration-200"
                 >
                   <Store className="w-4 h-4" />
                   <span className="hidden sm:inline">Store</span>

@@ -20,16 +20,17 @@ const prisma = new PrismaClient({
   }
 });
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'] as const;
-const COLORS = [
-  { name: 'White', hex: '#FFFFFF' },
-  { name: 'Black', hex: '#1A1A1A' },
-  { name: 'Navy', hex: '#1E3A5F' },
-  { name: 'Ocean Blue', hex: '#0077B6' },
-  { name: 'Coral', hex: '#FF6B6B' },
-  { name: 'Seafoam', hex: '#9EE6CF' },
-  { name: 'Sand', hex: '#F5E6D3' },
-];
+// Available sizes and colors for reference
+// const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'] as const;
+// const COLORS = [
+//   { name: 'White', hex: '#FFFFFF' },
+//   { name: 'Black', hex: '#1A1A1A' },
+//   { name: 'Navy', hex: '#1E3A5F' },
+//   { name: 'Ocean Blue', hex: '#0077B6' },
+//   { name: 'Coral', hex: '#FF6B6B' },
+//   { name: 'Seafoam', hex: '#9EE6CF' },
+//   { name: 'Sand', hex: '#F5E6D3' },
+// ];
 
 const T_SHIRT_PRODUCTS = [
   {

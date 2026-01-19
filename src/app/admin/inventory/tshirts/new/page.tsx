@@ -37,7 +37,6 @@ const COLORS = [
   { name: 'Sand', hex: '#F5E6D3', class: 'bg-amber-100' },
   { name: 'Heather Gray', hex: '#9CA3AF', class: 'bg-gray-400' },
 ];
-const COLOR_DATA = COLORS;
 
 interface VariantData {
   size: string;

@@ -53,7 +53,8 @@ export function checkContrast(
 
   if (context === 'largeText') {
     const aaLarge = ratio >= 3;
-    const aaaLarge = ratio >= 4.5;
+    // AAA compliance for large text requires 4.5:1 ratio
+    // const aaaLarge = ratio >= 4.5;
     status = aaLarge ? 'pass' : 'fail';
     message = aaLarge
       ? `Pass (AA large text: ${ratio.toFixed(2)}:1)`

@@ -77,8 +77,9 @@ export default function CartPage() {
     router.push('/checkout');
   };
 
-  const subtotal = state.subtotal;
-  const donationAmount = state.total * 0.10;
+  // Reserved for conservation donation display
+  // const subtotal = state.subtotal;
+  // const donationAmount = state.total * 0.10;
 
   if (state.items.length === 0) {
     return (

@@ -19,7 +19,6 @@ import {
   Settings,
   Menu,
   X,
-  ChevronRight,
   Calendar,
   FileText,
   Sparkles,
@@ -145,10 +144,10 @@ export function AdminSidebar({}: AdminSidebarProps) {
               <div className="relative h-10 w-10 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
                 <Zap className="h-5 w-5 text-cyan-400" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-sm font-bold text-white">Shenna&apos;s Studio</span>
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider">Admin Panel</span>
-              </div>
+                <div className="flex flex-col">
+                  <span className="text-sm font-bold text-white font-serif italic">Shenna&apos;s Studio</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">Admin Panel</span>
+                </div>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

@@ -188,6 +188,7 @@ export function NeonBarChart({
 export function NeonPieChart({
   data,
   dataKey = 'value',
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   nameKey = 'name',
   height = 300,
 }: {

@@ -26,7 +26,8 @@ export async function POST(req: Request) {
     syncInProgress = true;
 
     const body = await req.json();
-    const { type = 'full' } = body;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { type: _type = 'full' } = body; // Reserved for future sync type filtering
 
     const syncResults = {
       products: 0,
@@ -114,7 +115,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
@@ -125,12 +126,12 @@ export async function GET(req: Request) {
     return NextResponse.json({
       lastSync: lastSyncTime.toISOString(),
       syncInProgress,
-      nextSyncAvailable: syncInProgress 
-        ? null 
+      nextSyncAvailable: syncInProgress
+        ? null
         : new Date(Date.now() + 30000).toISOString()
     });
 
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Failed to get sync status' },
       { status: 500 }

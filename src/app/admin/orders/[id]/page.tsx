@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,11 +18,12 @@ import {
   CreditCard,
   Leaf,
   Copy,
-  ExternalLink
+  ExternalLink,
+  X
 } from 'lucide-react';
 import { ShippingLabelPanel } from '@/components/admin/ShippingLabelPanel';
 import toast from 'react-hot-toast';
-import Link from 'next/link';
+import { useReactToPrint } from 'react-to-print';
 import type { OrderDetail } from '@/types';
 
 interface OrderItem {
@@ -100,6 +101,26 @@ export default function OrderDetailPage() {
   const [newNote, setNewNote] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showPrintModal, setShowPrintModal] = useState<'invoice' | 'packing-slip' | null>(null);
+  const printRef = useRef<HTMLDivElement>(null);
+
+  const handlePrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: order ? `Invoice-${order.orderNumber}` : 'Document',
+    pageStyle: `
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+    `,
+    onAfterPrint: () => setShowPrintModal(null),
+  });
 
   const fetchOrderDetails = useCallback(async () => {
     setLoading(true);
@@ -237,18 +258,26 @@ export default function OrderDetailPage() {
           <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
             {order.status}
           </span>
-          <Link href={`/admin/orders/${params.id}/invoice`}>
-            <Button variant="outline">
-              <FileText className="h-4 w-4 mr-2" />
-              View Invoice
-            </Button>
-          </Link>
-          <Link href={`/admin/orders/${params.id}/packing-slip`}>
-            <Button variant="outline">
-              <Package className="h-4 w-4 mr-2" />
-              Packing Slip
-            </Button>
-          </Link>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setShowPrintModal('invoice');
+              setTimeout(() => handlePrint?.(), 100);
+            }}
+          >
+            <FileText className="h-4 w-4 mr-2" />
+            Print Invoice
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setShowPrintModal('packing-slip');
+              setTimeout(() => handlePrint?.(), 100);
+            }}
+          >
+            <Package className="h-4 w-4 mr-2" />
+            Print Packing Slip
+          </Button>
         </div>
       </div>
 
@@ -536,6 +565,194 @@ export default function OrderDetailPage() {
           </Card>
         </div>
       </div>
+
+      {/* Print Modal */}
+      {showPrintModal && order && (
+        <div className="fixed inset-0 bg-black/80 z-50 overflow-auto">
+          <div className="min-h-screen flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto relative">
+              {/* Close button */}
+              <button
+                onClick={() => setShowPrintModal(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-gray-100 hover:bg-gray-200 rounded-full"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Print content */}
+              <div ref={printRef} className="p-8">
+                {showPrintModal === 'invoice' ? (
+                  <div className="bg-white p-8">
+                    {/* Invoice Header */}
+                    <div className="flex justify-between items-start mb-8 border-b pb-6">
+                      <div>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h1>
+                        <p className="text-gray-600">Shenna&apos;s Studio</p>
+                        <p className="text-gray-600">Ocean-Inspired Handcrafted Jewelry</p>
+                        <p className="text-gray-600">support@shennastudio.com</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm">
+                          <p className="font-semibold">Invoice #</p>
+                          <p className="text-gray-600">{order.orderNumber}</p>
+                          <p className="font-semibold mt-2">Date</p>
+                          <p className="text-gray-600">{new Date(order.createdAt).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bill To */}
+                    <div className="mb-8">
+                      <h2 className="text-lg font-semibold mb-3">Bill To:</h2>
+                      <div className="text-gray-700">
+                        <p className="font-medium">{order.customerName}</p>
+                        <p>{order.customerEmail}</p>
+                      </div>
+                    </div>
+
+                    {/* Ship To */}
+                    <div className="mb-8">
+                      <h2 className="text-lg font-semibold mb-3">Ship To:</h2>
+                      <div className="text-gray-700">
+                        <p className="font-medium">{order.customerName}</p>
+                        <p>{order.shippingAddress}</p>
+                        <p>{order.shippingCity}, {order.shippingState} {order.shippingZip}</p>
+                        <p>{order.shippingCountry}</p>
+                      </div>
+                    </div>
+
+                    {/* Order Items */}
+                    <div className="mb-8">
+                      <table className="w-full mb-4">
+                        <thead>
+                          <tr className="border-b">
+                            <th className="text-left py-2">Item</th>
+                            <th className="text-center py-2">Qty</th>
+                            <th className="text-right py-2">Price</th>
+                            <th className="text-right py-2">Total</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {order.items.map((item) => (
+                            <tr key={item.id} className="border-b">
+                              <td className="py-3">
+                                <p className="font-medium">{item.variant.product.name}</p>
+                                <p className="text-sm text-gray-500">
+                                  {[item.variant.size, item.variant.color, item.variant.material].filter(Boolean).join(' / ') || item.variant.name}
+                                </p>
+                                <p className="text-xs text-gray-400 font-mono">SKU: {item.variant.sku}</p>
+                              </td>
+                              <td className="text-center py-3">{item.quantity}</td>
+                              <td className="text-right py-3">${item.price.toFixed(2)}</td>
+                              <td className="text-right py-3">${(item.quantity * item.price).toFixed(2)}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Totals */}
+                    <div className="flex justify-end">
+                      <div className="w-64">
+                        <div className="flex justify-between py-2">
+                          <span className="text-gray-600">Subtotal</span>
+                          <span className="font-medium">${order.subtotal.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-gray-600">Shipping</span>
+                          <span className="font-medium">${order.shipping.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between py-2">
+                          <span className="text-gray-600">Tax</span>
+                          <span className="font-medium">${order.tax.toFixed(2)}</span>
+                        </div>
+                        {order.conservationDonation && (
+                          <div className="flex justify-between py-2 text-green-600">
+                            <span>Conservation Donation ({order.conservationDonation.percentage}%)</span>
+                            <span className="font-medium">${order.conservationDonation.amount.toFixed(2)}</span>
+                          </div>
+                        )}
+                        <div className="flex justify-between py-2 border-t font-bold text-lg">
+                          <span>Total</span>
+                          <span>${order.total.toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-8 pt-6 border-t text-center text-gray-500 text-sm">
+                      <p>Thank you for your order!</p>
+                      <p className="mt-1">10% of your purchase supports marine conservation.</p>
+                    </div>
+                  </div>
+                ) : (
+                  /* Packing Slip */
+                  <div className="bg-white p-8">
+                    {/* Header */}
+                    <div className="flex justify-between items-start mb-8 border-b pb-6">
+                      <div>
+                        <h1 className="text-3xl font-bold text-gray-900 mb-2">PACKING SLIP</h1>
+                        <p className="text-gray-600">Shenna&apos;s Studio</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm">
+                          <p className="font-semibold">Order #</p>
+                          <p className="text-gray-600">{order.orderNumber}</p>
+                          <p className="font-semibold mt-2">Date</p>
+                          <p className="text-gray-600">{new Date(order.createdAt).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Ship To */}
+                    <div className="mb-8">
+                      <h2 className="text-lg font-semibold mb-3">Ship To:</h2>
+                      <div className="text-gray-700">
+                        <p className="font-medium">{order.customerName}</p>
+                        <p>{order.shippingAddress}</p>
+                        <p>{order.shippingCity}, {order.shippingState} {order.shippingZip}</p>
+                        <p>{order.shippingCountry}</p>
+                      </div>
+                    </div>
+
+                    {/* Order Items */}
+                    <div className="mb-8">
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b-2 border-gray-300">
+                            <th className="text-left py-3">Item</th>
+                            <th className="text-center py-3">Qty</th>
+                            <th className="text-left py-3">SKU</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {order.items.map((item) => (
+                            <tr key={item.id} className="border-b">
+                              <td className="py-4">
+                                <p className="font-medium">{item.variant.product.name}</p>
+                                <p className="text-sm text-gray-500">
+                                  {[item.variant.size, item.variant.color, item.variant.material].filter(Boolean).join(' / ') || item.variant.name}
+                                </p>
+                              </td>
+                              <td className="text-center py-4">{item.quantity}</td>
+                              <td className="py-4 font-mono text-sm">{item.variant.sku}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="mt-8 pt-6 border-t text-center text-gray-500 text-sm">
+                      <p>Thank you for your order!</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

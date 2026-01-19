@@ -40,14 +40,15 @@ const USPS_SHIPPING_RATES = [
   },
 ];
 
-interface AppliedDiscount {
-  id: string;
-  code: string;
-  type: string;
-  value: number;
-  description: string;
-  discountAmount: number;
-}
+// Reserved for discount feature integration
+// interface AppliedDiscount {
+//   id: string;
+//   code: string;
+//   type: string;
+//   value: number;
+//   description: string;
+//   discountAmount: number;
+// }
 
 export default function CheckoutPage() {
   const { data: session } = useSession();

@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     try {
       const json = JSON.parse(cleaned);
       return NextResponse.json(json);
-    } catch (parseError) {
+    } catch {
       console.error('Failed to parse AI response:', text);
       return NextResponse.json(
         { error: 'Failed to generate valid email content' },

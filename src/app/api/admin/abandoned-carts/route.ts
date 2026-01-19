@@ -21,9 +21,11 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
-    const status = searchParams.get('status') || 'all';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _status = searchParams.get('status') || 'all'; // Reserved for future filtering
 
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // Reserved for future filtering
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
 
     // Get sessions with ADD_TO_CART but no PURCHASE

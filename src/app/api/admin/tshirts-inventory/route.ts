@@ -228,7 +228,8 @@ export async function GET(req: Request) {
     }
 
     const { searchParams } = new URL(req.url);
-    const dateRange = searchParams.get('range') || '90';
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _dateRange = searchParams.get('range') || '90'; // Reserved for future date filtering
 
     // Try to get data from database
     try {
@@ -342,7 +343,7 @@ export async function GET(req: Request) {
         }
       });
 
-    } catch (dbError) {
+    } catch {
       console.log('Database unavailable, returning mock data for demo');
       const mockTshirts = getMockTshirtData();
       return NextResponse.json({

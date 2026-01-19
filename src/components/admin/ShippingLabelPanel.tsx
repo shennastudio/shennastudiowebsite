@@ -12,6 +12,9 @@ import {
   CheckCircle,
   AlertCircle,
   RefreshCw,
+  Eye,
+  EyeOff,
+  Download,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { OrderDetail } from '@/types';
@@ -72,6 +75,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
   const [loadingLabel, setLoadingLabel] = useState(false);
   const [purchasingLabel, setPurchasingLabel] = useState(false);
   const [loadingTracking, setLoadingTracking] = useState(false);
+  const [showLabelPreview, setShowLabelPreview] = useState(false);
 
   // Fetch existing label on mount
   useEffect(() => {
@@ -262,25 +266,66 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
               )}
             </div>
             {label?.labelUrl && (
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 space-y-3">
+                {/* Primary Print Button */}
                 <Button
-                  variant="outline"
-                  size="sm"
                   onClick={() => window.open(label.labelUrl!, '_blank')}
-                  className="border-green-800 text-green-400 hover:bg-green-900/30"
+                  className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3"
                 >
-                  <Printer className="h-4 w-4 mr-2" />
-                  Print Label
+                  <Printer className="h-5 w-5 mr-2" />
+                  Print Shipping Label
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.open(label.labelUrl!, '_blank')}
-                  className="border-green-800 text-green-400 hover:bg-green-900/30"
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Download PDF
-                </Button>
+
+                {/* Secondary Actions */}
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowLabelPreview(!showLabelPreview)}
+                    className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-800"
+                  >
+                    {showLabelPreview ? (
+                      <>
+                        <EyeOff className="h-4 w-4 mr-2" />
+                        Hide Preview
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="h-4 w-4 mr-2" />
+                        Preview Label
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = label.labelUrl!;
+                      link.download = `shipping-label-${order.orderNumber || 'label'}.pdf`;
+                      link.click();
+                    }}
+                    className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-800"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Download PDF
+                  </Button>
+                </div>
+
+                {/* Label Preview */}
+                {showLabelPreview && (
+                  <div className="border border-slate-600 rounded-lg overflow-hidden bg-white">
+                    <div className="bg-slate-800 px-3 py-2 flex items-center justify-between">
+                      <span className="text-sm text-slate-300">Shipping Label Preview</span>
+                      <span className="text-xs text-slate-500">4x6 Label</span>
+                    </div>
+                    <iframe
+                      src={label.labelUrl}
+                      className="w-full h-96 border-0"
+                      title="Shipping Label Preview"
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>

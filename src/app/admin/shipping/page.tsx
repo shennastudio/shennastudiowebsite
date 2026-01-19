@@ -56,11 +56,11 @@ interface Stats {
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  created: 'bg-gray-100 text-gray-800',
-  printed: 'bg-blue-100 text-blue-800',
-  shipped: 'bg-purple-100 text-purple-800',
-  delivered: 'bg-green-100 text-green-800',
-  void: 'bg-red-100 text-red-800',
+  created: 'bg-slate-700 text-slate-200',
+  printed: 'bg-blue-900/50 text-blue-300',
+  shipped: 'bg-purple-900/50 text-purple-300',
+  delivered: 'bg-green-900/50 text-green-300',
+  void: 'bg-red-900/50 text-red-300',
 };
 
 const CARRIER_ICONS: Record<string, string> = {
@@ -148,79 +148,134 @@ export default function ShippingPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Shipping Management</h1>
-          <p className="text-gray-500 mt-1">Create and manage shipping labels</p>
+          <h1 className="text-2xl font-bold text-white">Shipping Management</h1>
+          <p className="text-slate-400 mt-1">Create and manage shipping labels</p>
         </div>
       </div>
 
+      {/* Quick Print Section - Labels Ready to Print */}
+      {labels.filter(l => l.status === 'created' && l.labelUrl).length > 0 && (
+        <Card className="border-2 border-green-500/30 bg-gradient-to-br from-green-900/20 to-emerald-900/10">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-green-400">
+              <Printer className="h-5 w-5" />
+              Ready to Print ({labels.filter(l => l.status === 'created' && l.labelUrl).length} labels)
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {labels.filter(l => l.status === 'created' && l.labelUrl).slice(0, 5).map((label) => (
+                <div key={label.id} className="flex items-center justify-between bg-slate-800/50 rounded-lg p-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">{CARRIER_ICONS[label.carrier] || '📦'}</span>
+                    <div>
+                      {label.order && (
+                        <p className="font-medium text-white">Order #{label.order.orderNumber.slice(0, 8)}</p>
+                      )}
+                      <p className="text-xs text-slate-400">
+                        {label.carrier} {label.service} • {label.order?.shippingCity}, {label.order?.shippingState}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      size="sm"
+                      onClick={() => window.open(label.labelUrl!, '_blank')}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
+                      <Printer className="w-4 h-4 mr-1" />
+                      Print
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => updateLabelStatus(label.id, 'printed')}
+                      className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                    >
+                      <CheckCircle className="w-4 h-4 mr-1" />
+                      Done
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              {labels.filter(l => l.status === 'created' && l.labelUrl).length > 5 && (
+                <p className="text-xs text-slate-500 text-center pt-2">
+                  +{labels.filter(l => l.status === 'created' && l.labelUrl).length - 5} more labels ready to print
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100">
+        <Card className="bg-gradient-to-br from-orange-900/30 to-orange-800/20 border-orange-700/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-orange-600 uppercase">Ready to Ship</p>
-                <p className="text-2xl font-bold text-orange-700">{stats.ordersReady}</p>
+                <p className="text-xs text-orange-400 uppercase">Ready to Ship</p>
+                <p className="text-2xl font-bold text-orange-300">{stats.ordersReady}</p>
               </div>
               <AlertCircle className="w-8 h-8 text-orange-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-gray-50 to-gray-100">
+        <Card className="bg-gradient-to-br from-slate-800/50 to-slate-700/30 border-slate-600/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-500 uppercase">Created</p>
-                <p className="text-2xl font-bold text-gray-700">{stats.created}</p>
+                <p className="text-xs text-slate-400 uppercase">Created</p>
+                <p className="text-2xl font-bold text-slate-200">{stats.created}</p>
               </div>
-              <Clock className="w-8 h-8 text-gray-400" />
+              <Clock className="w-8 h-8 text-slate-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100">
+        <Card className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 border-blue-700/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-blue-600 uppercase">Printed</p>
-                <p className="text-2xl font-bold text-blue-700">{stats.printed}</p>
+                <p className="text-xs text-blue-400 uppercase">Printed</p>
+                <p className="text-2xl font-bold text-blue-300">{stats.printed}</p>
               </div>
               <Printer className="w-8 h-8 text-blue-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100">
+        <Card className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 border-purple-700/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-purple-600 uppercase">Shipped</p>
-                <p className="text-2xl font-bold text-purple-700">{stats.shipped}</p>
+                <p className="text-xs text-purple-400 uppercase">Shipped</p>
+                <p className="text-2xl font-bold text-purple-300">{stats.shipped}</p>
               </div>
               <Truck className="w-8 h-8 text-purple-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100">
+        <Card className="bg-gradient-to-br from-green-900/30 to-green-800/20 border-green-700/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-green-600 uppercase">Delivered</p>
-                <p className="text-2xl font-bold text-green-700">{stats.delivered}</p>
+                <p className="text-xs text-green-400 uppercase">Delivered</p>
+                <p className="text-2xl font-bold text-green-300">{stats.delivered}</p>
               </div>
               <CheckCircle className="w-8 h-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-teal-50 to-teal-100">
+        <Card className="bg-gradient-to-br from-teal-900/30 to-teal-800/20 border-teal-700/30">
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-teal-600 uppercase">Total Labels</p>
-                <p className="text-2xl font-bold text-teal-700">{stats.total}</p>
+                <p className="text-xs text-teal-400 uppercase">Total Labels</p>
+                <p className="text-2xl font-bold text-teal-300">{stats.total}</p>
               </div>
               <Package className="w-8 h-8 text-teal-500" />
             </div>
@@ -239,7 +294,7 @@ export default function ShippingPage() {
                 placeholder="Search by tracking #, order #, customer..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-slate-600 rounded-lg bg-slate-800 text-white placeholder:text-slate-400 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               />
             </div>
             <div className="flex items-center gap-2">
@@ -247,7 +302,7 @@ export default function ShippingPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="border border-slate-600 rounded-lg px-3 py-2 bg-slate-800 text-white focus:ring-2 focus:ring-teal-500 focus:border-transparent"
               >
                 <option value="all">All Status</option>
                 <option value="created">Created</option>
@@ -277,75 +332,75 @@ export default function ShippingPage() {
             </div>
           ) : labels.length === 0 ? (
             <div className="text-center py-12">
-              <Package className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-500">No shipping labels found</p>
+              <Package className="w-12 h-12 text-slate-600 mx-auto mb-4" />
+              <p className="text-slate-400">No shipping labels found</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Order</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Carrier</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Tracking</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Destination</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Cost</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="text-left py-3 px-4 text-xs font-medium text-gray-500 uppercase">Date</th>
-                    <th className="text-right py-3 px-4 text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  <tr className="border-b border-slate-700">
+                    <th className="text-left py-3 px-4 text-xs font-medium text-slate-400 uppercase">Order</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-slate-400 uppercase">Carrier</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-slate-400 uppercase">Tracking</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-slate-400 uppercase">Destination</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-slate-400 uppercase">Cost</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-slate-400 uppercase">Status</th>
+                    <th className="text-left py-3 px-4 text-xs font-medium text-slate-400 uppercase">Date</th>
+                    <th className="text-right py-3 px-4 text-xs font-medium text-slate-400 uppercase">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {labels.map((label) => (
-                    <tr key={label.id} className="border-b border-gray-100 hover:bg-gray-50">
+                    <tr key={label.id} className="border-b border-slate-700 hover:bg-slate-800">
                       <td className="py-3 px-4">
                         {label.order ? (
                           <div>
-                            <p className="font-medium text-sm">#{label.order.orderNumber.slice(0, 8)}</p>
-                            <p className="text-xs text-gray-500">{label.order.customerName}</p>
+                            <p className="font-medium text-sm text-white">#{label.order.orderNumber.slice(0, 8)}</p>
+                            <p className="text-xs text-slate-400">{label.order.customerName}</p>
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm">No order</span>
+                          <span className="text-slate-500 text-sm">No order</span>
                         )}
                       </td>
                       <td className="py-3 px-4">
                         <div className="flex items-center gap-2">
                           <span className="text-lg">{CARRIER_ICONS[label.carrier] || '📦'}</span>
                           <div>
-                            <p className="font-medium text-sm">{label.carrier}</p>
-                            <p className="text-xs text-gray-500">{label.service}</p>
+                            <p className="font-medium text-sm text-white">{label.carrier}</p>
+                            <p className="text-xs text-slate-400">{label.service}</p>
                           </div>
                         </div>
                       </td>
                       <td className="py-3 px-4">
                         {label.trackingNumber ? (
-                          <span className="font-mono text-sm">{label.trackingNumber}</span>
+                          <span className="font-mono text-sm text-white">{label.trackingNumber}</span>
                         ) : (
-                          <span className="text-gray-400 text-sm">—</span>
+                          <span className="text-slate-500 text-sm">—</span>
                         )}
                       </td>
                       <td className="py-3 px-4">
                         {label.order ? (
                           <div className="flex items-start gap-1">
-                            <MapPin className="w-3 h-3 text-gray-400 mt-0.5 flex-shrink-0" />
+                            <MapPin className="w-3 h-3 text-slate-500 mt-0.5 flex-shrink-0" />
                             <div>
-                              <p className="text-sm">{label.order.shippingCity}, {label.order.shippingState}</p>
-                              <p className="text-xs text-gray-500">{label.order.shippingZip}</p>
+                              <p className="text-sm text-white">{label.order.shippingCity}, {label.order.shippingState}</p>
+                              <p className="text-xs text-slate-400">{label.order.shippingZip}</p>
                             </div>
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-sm">—</span>
+                          <span className="text-slate-500 text-sm">—</span>
                         )}
                       </td>
                       <td className="py-3 px-4">
-                        <span className="font-medium">{formatCurrency(label.cost)}</span>
+                        <span className="font-medium text-white">{formatCurrency(label.cost)}</span>
                       </td>
                       <td className="py-3 px-4">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${STATUS_COLORS[label.status]}`}>
                           {label.status}
                         </span>
                       </td>
-                      <td className="py-3 px-4 text-sm text-gray-500">
+                      <td className="py-3 px-4 text-sm text-slate-400">
                         {formatDate(label.createdAt)}
                       </td>
                       <td className="py-3 px-4">
@@ -401,8 +456,8 @@ export default function ShippingPage() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-between mt-4 pt-4 border-t">
-              <p className="text-sm text-gray-500">
+            <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-700">
+              <p className="text-sm text-slate-400">
                 Page {page} of {totalPages}
               </p>
               <div className="flex gap-2">

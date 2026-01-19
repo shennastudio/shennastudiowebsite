@@ -158,7 +158,8 @@ export function getOptimalPostingTimes(platform: string): Date[] {
 export async function createContentCalendar(
   products: ProductInfo[],
   startDate: Date = new Date(),
-  daysAhead: number = 14
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _daysAhead: number = 14 // Reserved for future calendar range functionality
 ): Promise<SocialMediaPost[]> {
   const posts: SocialMediaPost[] = [];
   const platforms: Array<'instagram' | 'facebook' | 'pinterest'> = [

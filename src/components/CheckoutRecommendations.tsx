@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
-import { Plus, Check, Loader2 } from 'lucide-react';
+import { Plus, Check } from 'lucide-react';
 
 interface RecommendedProduct {
   id: string;

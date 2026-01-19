@@ -213,7 +213,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
         <div className="relative">
           <button
             onClick={() => router.push('/admin/discounts')}
-            className="flex items-center gap-2 text-purple-100 hover:text-white mb-4 transition-colors"
+            className="flex items-center gap-2 text-purple-200 hover:text-white mb-4 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Discounts
@@ -282,11 +282,11 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
                       className={`relative p-4 rounded-xl border-2 transition-all duration-200 ${
                         isSelected
                           ? `border-${type.color}-500 bg-gradient-to-br ${type.gradient} text-white shadow-lg scale-105`
-                          : 'border-gray-200 hover:border-gray-300 hover:shadow-md bg-white'
+                          : 'border-slate-600 hover:border-slate-500 hover:shadow-md bg-slate-800 hover:bg-slate-700'
                       }`}
                     >
-                      <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? 'text-white' : `text-${type.color}-500`}`} />
-                      <span className={`text-xs font-medium ${isSelected ? 'text-white' : 'text-gray-600'}`}>
+                      <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? 'text-white' : `text-${type.color}-400`}`} />
+                      <span className={`text-xs font-medium ${isSelected ? 'text-white' : 'text-slate-300'}`}>
                         {type.label}
                       </span>
                       {isSelected && (
@@ -491,7 +491,7 @@ export default function EditDiscountPage({ params }: { params: Promise<{ id: str
               <button
                 type="button"
                 onClick={() => router.push('/admin/discounts')}
-                className="flex-1 sm:flex-none px-6 py-3 border-2 border-gray-200 dark:border-slate-600 rounded-xl bg-white dark:bg-slate-800 font-semibold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all"
+                className="flex-1 sm:flex-none px-6 py-3 border-2 border-slate-600 rounded-xl bg-slate-800 font-semibold text-slate-300 hover:bg-slate-700 hover:border-slate-500 transition-all"
               >
                 Cancel
               </button>
