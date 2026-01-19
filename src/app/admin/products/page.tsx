@@ -1,13 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
-import { Plus, Edit, Upload, Edit3, Package } from 'lucide-react';
-import { DeleteProductButton } from '@/components/admin/DeleteProductButton';
-import { ProductThumbnail } from '@/components/admin/ProductThumbnail';
 import { ProductsTable } from '@/components/admin/ProductsTable';
 
 async function getProducts() {
@@ -32,5 +26,6 @@ export default async function ProductsPage() {
 
   const products = await getProducts();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return <ProductsTable initialProducts={products as any} />;
 }

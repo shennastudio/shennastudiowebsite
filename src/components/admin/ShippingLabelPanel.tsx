@@ -90,7 +90,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
   async function fetchExistingLabel() {
     setLoadingLabel(true);
     try {
-      const res = await fetch(`/api/shipping/labels?orderId=${order.id}`);
+      const res = await fetch(`/api/admin/shipping/labels?orderId=${order.id}`);
       if (res.ok) {
         const data = await res.json();
         if (data.label) {
@@ -113,7 +113,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
       // Calculate total weight from items
       const totalQuantity = order.items.reduce((sum, item) => sum + item.quantity, 0);
 
-      const res = await fetch('/api/shipping/rates', {
+      const res = await fetch('/api/admin/shipping/rates', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -156,12 +156,14 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
 
     setPurchasingLabel(true);
     try {
-      const res = await fetch('/api/shipping/labels', {
+      const res = await fetch('/api/admin/shipping/labels', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderId: order.id,
           rateId: selectedRate.id,
+          carrier: selectedRate.provider,
+          service: selectedRate.servicelevel.name,
         }),
       });
 
@@ -196,7 +198,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
   async function fetchTracking() {
     setLoadingTracking(true);
     try {
-      const res = await fetch(`/api/shipping/tracking?orderId=${order.id}`);
+      const res = await fetch(`/api/admin/shipping/tracking?orderId=${order.id}`);
       if (res.ok) {
         const data = await res.json();
         setTracking(data);
