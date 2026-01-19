@@ -130,40 +130,40 @@ export function AdminSidebar({}: AdminSidebarProps) {
     <>
       <button
         onClick={() => setSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-xl bg-[var(--background-elevated)] text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] transition-colors shadow-lg border border-[var(--border-color)]"
+        className="lg:hidden fixed top-4 left-4 z-50 p-3 rounded-xl bg-slate-900/90 backdrop-blur-md text-white shadow-lg border border-slate-800 active:scale-95 transition-transform"
       >
-        <Menu className="h-5 w-5" />
+        <Menu className="h-6 w-6" />
       </button>
 
       <aside className={`fixed left-0 top-0 z-40 h-screen w-72 transform transition-all duration-300 ease-in-out lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex h-full flex-col bg-[var(--background-secondary)] border-r border-[var(--border-color)] h-full">
-          <div className="flex h-16 items-center justify-between px-4 border-b border-[var(--border-color)]">
+        <div className="flex h-full flex-col bg-slate-900 border-r border-slate-800 pt-safe-top pb-safe-bottom">
+          <div className="flex h-16 items-center justify-between px-6 border-b border-slate-800">
             <Link href="/admin" className="flex items-center gap-3 group">
-              <div className="relative h-10 w-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 flex items-center justify-center border border-cyan-500/30">
-                <Zap className="h-5 w-5 text-cyan-500" />
+              <div className="relative h-10 w-10 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
+                <Zap className="h-5 w-5 text-cyan-400" />
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-[var(--text-primary)]">Shenna's Studio</span>
-                <span className="text-xs text-[var(--text-muted)]">Admin Panel</span>
+                <span className="text-sm font-bold text-white">Shenna&apos;s Studio</span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-wider">Admin Panel</span>
               </div>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 rounded-lg text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)] transition-colors"
+              className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
             >
-              <X className="h-5 w-5" />
+              <X className="h-6 w-6" />
             </button>
           </div>
 
-          <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+          <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-6 scrollbar-hide">
             {navSections.map((section) => (
               <div key={section.title}>
-                <h3 className="px-3 mb-2 text-[10px] font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+                <h3 className="px-3 mb-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">
                   {section.title}
                 </h3>
-                <div className="space-y-0.5">
+                <div className="space-y-1">
                   {section.items.map((item) => {
                     const Icon = item.icon;
                     const active = isActive(item.href);
@@ -172,24 +172,21 @@ export function AdminSidebar({}: AdminSidebarProps) {
                         key={item.href}
                         href={item.href}
                         onClick={() => setSidebarOpen(false)}
-                        className={`group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 relative ${
+                        className={`group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative ${
                           active
                             ? 'text-white'
-                            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-tertiary)]'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                         }`}
                       >
                         {active && (
-                          <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${item.color} opacity-100`} />
-                        )}
-                        {!active && (
-                          <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${item.color} opacity-0 group-hover:opacity-10 transition-opacity duration-200`} />
+                          <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${item.color} opacity-10`} />
                         )}
                         <div className="relative z-10 flex items-center gap-3">
-                          <Icon className={`h-4 w-4 transition-transform ${active ? '' : 'group-hover:scale-110'}`} />
+                          <Icon className={cn("h-5 w-5 transition-transform", active ? "text-teal-400" : "group-hover:scale-110")} />
                           <span>{item.label}</span>
                         </div>
                         {active && (
-                          <ChevronRight className="ml-auto h-4 w-4 relative z-10" />
+                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_8px_rgba(45,212,191,0.6)]" />
                         )}
                       </Link>
                     );
@@ -199,15 +196,15 @@ export function AdminSidebar({}: AdminSidebarProps) {
             ))}
           </nav>
 
-          <div className="p-3 border-t border-[var(--border-color)]">
-            <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20">
+          <div className="p-4 border-t border-slate-800">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-teal-500/5 border border-teal-500/10">
               <div className="relative">
-                <Heart className="h-4 w-4 text-teal-500" />
-                <div className="absolute inset-0 Heart h-4 w-4 text-teal-500 animate-ping opacity-50" />
+                <Heart className="h-5 w-5 text-teal-500" />
+                <div className="absolute inset-0 h-5 w-5 text-teal-500 animate-ping opacity-20" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-[var(--text-primary)]">Conservation Impact</p>
-                <p className="text-[10px] text-[var(--text-muted)]">10% to ocean protection</p>
+                <p className="text-xs font-bold text-white uppercase tracking-tight">Conservation</p>
+                <p className="text-[10px] text-teal-500/80 font-medium">10% Impact Fund</p>
               </div>
             </div>
           </div>
@@ -217,9 +214,10 @@ export function AdminSidebar({}: AdminSidebarProps) {
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 z-30 bg-slate-950/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
         />
       )}
     </>
   );
+}
 }

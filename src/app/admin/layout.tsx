@@ -30,28 +30,26 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background-primary)] text-[var(--text-primary)] relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-slate-950 text-slate-50 relative overflow-hidden transition-colors duration-300">
       <Toaster
         position="top-right"
         toastOptions={{
-          className: '!bg-[var(--background-elevated)] !text-[var(--text-primary)] !border !border-[var(--border-color)]',
+          className: '!bg-slate-900 !text-white !border !border-slate-800',
         }}
       />
 
       <AdminSidebar userName={session?.user?.name} />
 
-      <div className="lg:pl-72 transition-all duration-300 relative z-10">
-        <header className="sticky top-0 z-30 flex h-14 sm:h-16 items-center gap-2 sm:gap-4 border-b border-[var(--border-color)] bg-[var(--background-elevated)]/80 backdrop-blur-xl pl-14 sm:pl-6 pr-3 sm:pr-6 shadow-sm transition-colors duration-300">
+      <div className="lg:pl-72 transition-all duration-300 relative z-10 flex flex-col min-h-screen">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-slate-800 bg-slate-900/80 backdrop-blur-xl px-4 sm:px-6 pt-safe-top shadow-sm transition-colors duration-300">
           <div className="flex flex-1 items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30">
-                  <Zap className="w-4 h-4 text-cyan-500" />
-                </div>
-                <h2 className="text-sm sm:text-lg font-bold bg-gradient-to-r from-cyan-500 to-teal-500 bg-clip-text text-transparent truncate">
-                  Shenna's Studio Admin
-                </h2>
+            <div className="flex items-center gap-3">
+              <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                <Zap className="w-4 h-4 text-cyan-400" />
               </div>
+              <h2 className="text-base sm:text-lg font-bold text-white truncate">
+                Admin
+              </h2>
             </div>
 
             <div className="flex items-center gap-2 sm:gap-3">
@@ -59,10 +57,10 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="gap-1 sm:gap-2 px-2 sm:px-3 border-[var(--border-color)] text-[var(--text-secondary)] hover:bg-[var(--background-tertiary)] hover:text-[var(--text-primary)] transition-all duration-200"
+                  className="gap-2 px-3 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white transition-all duration-200"
                 >
                   <Store className="w-4 h-4" />
-                  <span className="hidden sm:inline">View Store</span>
+                  <span className="hidden sm:inline">Store</span>
                 </Button>
               </Link>
               {session && <UserNav user={session.user} />}
@@ -70,8 +68,8 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
           </div>
         </header>
 
-        <main className="p-3 sm:p-6 lg:p-8 min-h-[calc(100vh-3.5rem)] sm:min-h-[calc(100vh-4rem)] bg-[var(--background-primary)] transition-colors duration-300">
-          <div className="max-w-[1600px] mx-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-slate-950 pb-safe-bottom">
+          <div className="max-w-7xl mx-auto">
             {children}
           </div>
         </main>

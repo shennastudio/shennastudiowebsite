@@ -35,7 +35,12 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0ea5e9',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
+  themeColor: '#0f172a',
 };
 
 export default function RootLayout({
@@ -49,7 +54,7 @@ export default function RootLayout({
         <SEOSchemas />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${greatVibes.variable} antialiased min-h-screen flex flex-col bg-slate-950 text-slate-50`}
+        className={`${geistSans.variable} ${geistMono.variable} ${greatVibes.variable} antialiased min-h-screen flex flex-col bg-slate-950 text-slate-50 touch-manipulation selection:bg-teal-500/30 overflow-x-hidden w-full`}
       >
         <ScrollProgress />
         <AnalyticsProvider />
