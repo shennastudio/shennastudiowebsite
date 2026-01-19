@@ -89,16 +89,16 @@ interface Alert {
 }
 
 const SEVERITY_COLORS: Record<string, string> = {
-  low: 'bg-blue-100 text-blue-800',
-  medium: 'bg-yellow-100 text-yellow-800',
-  high: 'bg-orange-100 text-orange-800',
-  critical: 'bg-red-100 text-red-800',
+  low: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+  medium: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+  high: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+  critical: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  healthy: 'bg-green-100 text-green-800',
-  low_stock: 'bg-orange-100 text-orange-800',
-  out_of_stock: 'bg-red-100 text-red-800',
+  healthy: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+  low_stock: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+  out_of_stock: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
 };
 
 export default function InventoryForecastPage() {
@@ -190,25 +190,25 @@ export default function InventoryForecastPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Inventory Forecasting</h1>
-          <p className="text-gray-500 mt-1">Predict demand and optimize stock levels</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Inventory Forecasting</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">Predict demand and optimize stock levels</p>
         </div>
         <div className="flex gap-2">
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="border border-gray-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500"
+            className="border border-gray-200 dark:border-slate-700 rounded-lg px-3 py-2 focus:ring-2 focus:ring-teal-500 bg-white dark:bg-slate-900 text-gray-900 dark:text-white"
           >
             <option value="7">Last 7 days</option>
             <option value="30">Last 30 days</option>
             <option value="90">Last 90 days</option>
           </select>
-          <Button variant="outline" onClick={() => loadData()}>
+          <Button variant="outline" onClick={() => loadData()} className="dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">
             <RefreshCw className="w-4 h-4 mr-2" />
             Refresh
           </Button>
           <Button
-            className="bg-teal-500 hover:bg-teal-600"
+            className="bg-teal-500 hover:bg-teal-600 text-white"
             onClick={generateAlerts}
             disabled={generating}
           >
@@ -223,14 +223,14 @@ export default function InventoryForecastPage() {
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-gray-200 dark:border-slate-700">
         <nav className="flex gap-8">
           <button
             onClick={() => setView('overview')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
+            className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               view === 'overview'
-                ? 'border-teal-500 text-teal-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-teal-500 text-teal-600 dark:text-teal-400'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -240,10 +240,10 @@ export default function InventoryForecastPage() {
           </button>
           <button
             onClick={() => setView('forecasts')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
+            className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               view === 'forecasts'
-                ? 'border-teal-500 text-teal-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-teal-500 text-teal-600 dark:text-teal-400'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -253,10 +253,10 @@ export default function InventoryForecastPage() {
           </button>
           <button
             onClick={() => setView('alerts')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm ${
+            className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
               view === 'alerts'
-                ? 'border-teal-500 text-teal-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-teal-500 text-teal-600 dark:text-teal-400'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -284,82 +284,82 @@ export default function InventoryForecastPage() {
             <div className="space-y-6">
               {/* Stats Cards */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card className="bg-gradient-to-br from-green-50 to-emerald-100">
+                <Card className="bg-gradient-to-br from-green-50 to-emerald-100 dark:from-green-900/20 dark:to-emerald-900/20 border-green-100 dark:border-green-900/30">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 bg-green-500 rounded-xl">
                         <Package className="w-6 h-6 text-white" />
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">{overviewData.overview.healthyStock}</h3>
-                    <p className="text-sm text-gray-600">Healthy Stock</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{overviewData.overview.healthyStock}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Healthy Stock</p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-orange-50 to-amber-100">
+                <Card className="bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 border-orange-100 dark:border-orange-900/30">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 bg-orange-500 rounded-xl">
                         <AlertTriangle className="w-6 h-6 text-white" />
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">{overviewData.overview.lowStockCount}</h3>
-                    <p className="text-sm text-gray-600">Low Stock Items</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{overviewData.overview.lowStockCount}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Low Stock Items</p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-red-50 to-rose-100">
+                <Card className="bg-gradient-to-br from-red-50 to-rose-100 dark:from-red-900/20 dark:to-rose-900/20 border-red-100 dark:border-red-900/30">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 bg-red-500 rounded-xl">
                         <X className="w-6 h-6 text-white" />
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">{overviewData.overview.outOfStockCount}</h3>
-                    <p className="text-sm text-gray-600">Out of Stock</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{overviewData.overview.outOfStockCount}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Out of Stock</p>
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-br from-blue-50 to-cyan-100">
+                <Card className="bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-100 dark:border-blue-900/30">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="p-3 bg-blue-500 rounded-xl">
                         <ShoppingBag className="w-6 h-6 text-white" />
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900">{overviewData.overview.avgDailySales.toFixed(1)}</h3>
-                    <p className="text-sm text-gray-600">Avg. Daily Sales</p>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{overviewData.overview.avgDailySales.toFixed(1)}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">Avg. Daily Sales</p>
                   </CardContent>
                 </Card>
               </div>
 
               {/* Top Selling & Slow Moving */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <Card>
+                <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                       <TrendingUp className="w-5 h-5 text-green-500" />
                       Top Selling Products
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     {overviewData.topSelling.length === 0 ? (
-                      <p className="text-center text-gray-500 py-8">No sales data yet</p>
+                      <p className="text-center text-gray-500 dark:text-gray-400 py-8">No sales data yet</p>
                     ) : (
                       <div className="space-y-3">
                         {overviewData.topSelling.map((item, index) => (
-                          <div key={item.variantId} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                          <div key={item.variantId} className="flex items-center gap-4 p-3 bg-gray-50 dark:bg-slate-900 rounded-lg border border-gray-100 dark:border-slate-700">
                             <span className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
                               {index + 1}
                             </span>
                             <div className="flex-1">
-                              <p className="font-medium">{item.variant?.product.name}</p>
-                              <p className="text-sm text-gray-500">{item.variant?.name}</p>
+                              <p className="font-medium text-gray-900 dark:text-white">{item.variant?.product.name}</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{item.variant?.name}</p>
                             </div>
                             <div className="text-right">
-                              <p className="font-semibold">{item._sum.quantity} sold</p>
+                              <p className="font-semibold text-gray-900 dark:text-white">{item._sum.quantity} sold</p>
                               {item.daysOfStock !== null && item.daysOfStock < 30 && (
-                                <p className="text-xs text-orange-600">
+                                <p className="text-xs text-orange-600 dark:text-orange-400">
                                   ~{item.daysOfStock} days left
                                 </p>
                               )}
@@ -371,27 +371,27 @@ export default function InventoryForecastPage() {
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                       <TrendingDown className="w-5 h-5 text-red-500" />
                       Slow Moving Products
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     {overviewData.slowMoving.length === 0 ? (
-                      <p className="text-center text-gray-500 py-8">All products are selling well!</p>
+                      <p className="text-center text-gray-500 dark:text-gray-400 py-8">All products are selling well!</p>
                     ) : (
                       <div className="space-y-3">
                         {overviewData.slowMoving.map((item) => (
-                          <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                          <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded-lg border border-gray-100 dark:border-slate-700">
                             <div>
-                              <p className="font-medium">{item.product.name}</p>
-                              <p className="text-sm text-gray-500">{item.name}</p>
+                              <p className="font-medium text-gray-900 dark:text-white">{item.product.name}</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{item.name}</p>
                             </div>
                             <div className="text-right">
-                              <p className="font-semibold">{item.stock} in stock</p>
-                              <p className="text-xs text-gray-500">No sales in {period} days</p>
+                              <p className="font-semibold text-gray-900 dark:text-white">{item.stock} in stock</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">No sales in {period} days</p>
                             </div>
                           </div>
                         ))}
@@ -405,49 +405,49 @@ export default function InventoryForecastPage() {
 
           {/* Forecasts Tab */}
           {view === 'forecasts' && (
-            <Card>
+            <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                   <LineChart className="w-5 h-5 text-blue-500" />
                   Demand Forecasts
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {forecasts.length === 0 ? (
-                  <p className="text-center text-gray-500 py-8">No forecast data available</p>
+                  <p className="text-center text-gray-500 dark:text-gray-400 py-8">No forecast data available</p>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b">
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">Product</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">SKU</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">Stock</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">Daily Avg</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">Weekly Avg</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">Days Until Out</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">Reorder</th>
-                          <th className="text-left py-3 px-4 font-medium text-gray-500">Status</th>
+                        <tr className="border-b border-gray-200 dark:border-slate-700">
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Product</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">SKU</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Stock</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Daily Avg</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Weekly Avg</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Days Until Out</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Reorder</th>
+                          <th className="text-left py-3 px-4 font-medium text-gray-500 dark:text-gray-400">Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         {forecasts.map((forecast) => (
-                          <tr key={forecast.id} className="border-b hover:bg-gray-50">
+                          <tr key={forecast.id} className="border-b border-gray-100 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
                             <td className="py-3 px-4">
                               <div>
-                                <p className="font-medium">{forecast.productName}</p>
-                                <p className="text-sm text-gray-500">{forecast.name}</p>
+                                <p className="font-medium text-gray-900 dark:text-white">{forecast.productName}</p>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">{forecast.name}</p>
                               </div>
                             </td>
-                            <td className="py-3 px-4 font-mono text-sm">{forecast.sku}</td>
-                            <td className="py-3 px-4 font-semibold">{forecast.currentStock}</td>
-                            <td className="py-3 px-4">{forecast.dailyAverage}</td>
-                            <td className="py-3 px-4">{forecast.weeklyAverage}</td>
+                            <td className="py-3 px-4 font-mono text-sm text-gray-600 dark:text-gray-400">{forecast.sku}</td>
+                            <td className="py-3 px-4 font-semibold text-gray-900 dark:text-white">{forecast.currentStock}</td>
+                            <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{forecast.dailyAverage}</td>
+                            <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{forecast.weeklyAverage}</td>
                             <td className="py-3 px-4">
                               {forecast.daysUntilOut !== null ? (
                                 <div className="flex items-center gap-2">
                                   <Clock className="w-4 h-4 text-gray-400" />
-                                  <span className={forecast.daysUntilOut < 14 ? 'text-red-600 font-medium' : ''}>
+                                  <span className={forecast.daysUntilOut < 14 ? 'text-red-600 dark:text-red-400 font-medium' : 'text-gray-700 dark:text-gray-300'}>
                                     {forecast.daysUntilOut} days
                                   </span>
                                 </div>
@@ -457,7 +457,7 @@ export default function InventoryForecastPage() {
                             </td>
                             <td className="py-3 px-4">
                               {forecast.recommendedReorder > 0 ? (
-                                <span className="text-orange-600 font-medium">
+                                <span className="text-orange-600 dark:text-orange-400 font-medium">
                                   +{forecast.recommendedReorder}
                                 </span>
                               ) : (
@@ -481,15 +481,15 @@ export default function InventoryForecastPage() {
 
           {/* Alerts Tab */}
           {view === 'alerts' && (
-            <Card>
+            <Card className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                     <Bell className="w-5 h-5 text-orange-500" />
                     Inventory Alerts
                   </CardTitle>
                   {alerts.some(a => !a.isRead) && (
-                    <Button variant="outline" size="sm" onClick={markAllRead}>
+                    <Button variant="outline" size="sm" onClick={markAllRead} className="dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700">
                       <BellOff className="w-4 h-4 mr-2" />
                       Mark All Read
                     </Button>
@@ -500,7 +500,7 @@ export default function InventoryForecastPage() {
                 {alerts.length === 0 ? (
                   <div className="text-center py-12">
                     <Check className="w-12 h-12 text-green-300 mx-auto mb-4" />
-                    <p className="text-gray-500">No active alerts</p>
+                    <p className="text-gray-500 dark:text-gray-400">No active alerts</p>
                     <p className="text-sm text-gray-400">All inventory levels are healthy</p>
                   </div>
                 ) : (
@@ -509,25 +509,27 @@ export default function InventoryForecastPage() {
                       <div
                         key={alert.id}
                         className={`p-4 rounded-lg border ${
-                          alert.isRead ? 'bg-gray-50' : 'bg-white border-orange-200'
+                          alert.isRead 
+                            ? 'bg-gray-50 dark:bg-slate-900 border-gray-200 dark:border-slate-700' 
+                            : 'bg-white dark:bg-slate-800 border-orange-200 dark:border-orange-900/50'
                         }`}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3">
                             <div className={`p-2 rounded-lg ${
-                              alert.severity === 'critical' ? 'bg-red-100' :
-                              alert.severity === 'high' ? 'bg-orange-100' :
-                              alert.severity === 'medium' ? 'bg-yellow-100' : 'bg-blue-100'
+                              alert.severity === 'critical' ? 'bg-red-100 dark:bg-red-900/30' :
+                              alert.severity === 'high' ? 'bg-orange-100 dark:bg-orange-900/30' :
+                              alert.severity === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/30' : 'bg-blue-100 dark:bg-blue-900/30'
                             }`}>
                               <AlertTriangle className={`w-5 h-5 ${
-                                alert.severity === 'critical' ? 'text-red-600' :
-                                alert.severity === 'high' ? 'text-orange-600' :
-                                alert.severity === 'medium' ? 'text-yellow-600' : 'text-blue-600'
+                                alert.severity === 'critical' ? 'text-red-600 dark:text-red-400' :
+                                alert.severity === 'high' ? 'text-orange-600 dark:text-orange-400' :
+                                alert.severity === 'medium' ? 'text-yellow-600 dark:text-yellow-400' : 'text-blue-600 dark:text-blue-400'
                               }`} />
                             </div>
                             <div>
-                              <p className="font-medium">{alert.message}</p>
-                              <p className="text-sm text-gray-500">
+                              <p className="font-medium text-gray-900 dark:text-white">{alert.message}</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">
                                 {alert.variant.product.name} - {alert.variant.name}
                               </p>
                               <p className="text-xs text-gray-400 mt-1">
