@@ -511,3 +511,195 @@ body:has(.admin-section) {
 .animate-pulse-ring {
   animation: pulse-ring 2s ease-in-out infinite;
 }
+
+/* ========================================
+   ADMIN PANEL DARK MODE UTILITIES
+   ======================================== */
+
+/* These utilities automatically apply dark mode to common admin patterns */
+
+/* Admin page backgrounds */
+.dark .admin-page,
+.dark [data-admin-page] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(15 23 42 / var(--tw-bg-opacity)); /* slate-900 */
+}
+
+/* Common light backgrounds that need dark variants */
+.dark .bg-white:not(.dark\:bg-*) {
+  background-color: rgb(30 41 59) !important; /* slate-800 */
+}
+
+.dark .bg-gray-50:not(.dark\:bg-*),
+.dark .bg-slate-50:not(.dark\:bg-*) {
+  background-color: rgb(51 65 85) !important; /* slate-700 */
+}
+
+.dark .bg-gray-100:not(.dark\:bg-*),
+.dark .bg-slate-100:not(.dark\:bg-*) {
+  background-color: rgb(71 85 105) !important; /* slate-600 */
+}
+
+/* Common text colors */
+.dark .text-gray-900:not(.dark\:text-*),
+.dark .text-slate-900:not(.dark\:text-*) {
+  color: rgb(248 250 252) !important; /* slate-50 */
+}
+
+.dark .text-gray-800:not(.dark\:text-*),
+.dark .text-slate-800:not(.dark\:text-*) {
+  color: rgb(241 245 249) !important; /* slate-100 */
+}
+
+.dark .text-gray-700:not(.dark\:text-*),
+.dark .text-slate-700:not(.dark\:text-*) {
+  color: rgb(226 232 240) !important; /* slate-200 */
+}
+
+.dark .text-gray-600:not(.dark\:text-*),
+.dark .text-slate-600:not(.dark\:text-*) {
+  color: rgb(203 213 225) !important; /* slate-300 */
+}
+
+.dark .text-gray-500:not(.dark\:text-*),
+.dark .text-slate-500:not(.dark\:text-*) {
+  color: rgb(148 163 184) !important; /* slate-400 */
+}
+
+/* Common border colors */
+.dark .border-gray-200:not(.dark\:border-*),
+.dark .border-slate-200:not(.dark\:border-*),
+.dark .border-gray-300:not(.dark\:border-*),
+.dark .border-slate-300:not(.dark\:border-*) {
+  border-color: rgb(71 85 105) !important; /* slate-600 */
+}
+
+.dark .border-gray-100:not(.dark\:border-*),
+.dark .border-slate-100:not(.dark\:border-*) {
+  border-color: rgb(51 65 85) !important; /* slate-700 */
+}
+
+/* Form inputs in dark mode */
+.dark input:not([type="checkbox"]):not([type="radio"]):not(.dark\:bg-*),
+.dark select:not(.dark\:bg-*),
+.dark textarea:not(.dark\:bg-*) {
+  background-color: rgb(30 41 59) !important; /* slate-800 */
+  border-color: rgb(71 85 105) !important; /* slate-600 */
+  color: rgb(248 250 252) !important; /* slate-50 */
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: rgb(148 163 184) !important; /* slate-400 */
+}
+
+/* Hover states */
+.dark .hover\:bg-gray-50:hover:not(.dark\:hover\:bg-*),
+.dark .hover\:bg-slate-50:hover:not(.dark\:hover\:bg-*) {
+  background-color: rgb(51 65 85) !important; /* slate-700 */
+}
+
+.dark .hover\:bg-gray-100:hover:not(.dark\:hover\:bg-*),
+.dark .hover\:bg-slate-100:hover:not(.dark\:hover\:bg-*) {
+  background-color: rgb(71 85 105) !important; /* slate-600 */
+}
+
+/* Priority and status badges */
+.dark .bg-slate-100.text-slate-700,
+.dark .bg-gray-100.text-gray-700,
+.dark .bg-gray-100.text-gray-800 {
+  background-color: rgb(51 65 85) !important;
+  color: rgb(226 232 240) !important;
+}
+
+.dark .bg-yellow-100.text-yellow-700,
+.dark .bg-yellow-100.text-yellow-800 {
+  background-color: rgb(113 63 18) !important;
+  color: rgb(254 240 138) !important;
+}
+
+.dark .bg-orange-100.text-orange-700,
+.dark .bg-orange-100.text-orange-800 {
+  background-color: rgb(124 45 18) !important;
+  color: rgb(254 215 170) !important;
+}
+
+.dark .bg-red-100.text-red-700,
+.dark .bg-red-100.text-red-800 {
+  background-color: rgb(127 29 29) !important;
+  color: rgb(254 202 202) !important;
+}
+
+.dark .bg-green-100.text-green-700,
+.dark .bg-green-100.text-green-800 {
+  background-color: rgb(20 83 45) !important;
+  color: rgb(187 247 208) !important;
+}
+
+.dark .bg-blue-100.text-blue-700,
+.dark .bg-blue-100.text-blue-800 {
+  background-color: rgb(30 58 138) !important;
+  color: rgb(191 219 254) !important;
+}
+
+.dark .bg-purple-100.text-purple-700,
+.dark .bg-purple-100.text-purple-800 {
+  background-color: rgb(88 28 135) !important;
+  color: rgb(233 213 255) !important;
+}
+
+.dark .bg-cyan-100.text-cyan-700,
+.dark .bg-cyan-100.text-cyan-800 {
+  background-color: rgb(22 78 99) !important;
+  color: rgb(165 243 252) !important;
+}
+
+.dark .bg-emerald-100.text-emerald-700,
+.dark .bg-emerald-100.text-emerald-800 {
+  background-color: rgb(6 78 59) !important;
+  color: rgb(167 243 208) !important;
+}
+
+/* Gradient text - ensure visibility in dark mode */
+.dark .bg-gradient-to-r.from-slate-900.via-cyan-900.to-teal-900.bg-clip-text {
+  background-image: linear-gradient(to right, rgb(248 250 252), rgb(34 211 238), rgb(45 212 191)) !important;
+}
+
+/* Calendar day cells */
+.dark .bg-white.hover\:bg-slate-50 {
+  background-color: rgb(30 41 59) !important;
+}
+
+.dark .bg-white.hover\:bg-slate-50:hover {
+  background-color: rgb(51 65 85) !important;
+}
+
+/* Modal/Dialog backgrounds */
+.dark .bg-slate-900\/50 {
+  background-color: rgb(15 23 42 / 0.8) !important;
+}
+
+/* Card header gradients */
+.dark .bg-gradient-to-r.from-slate-50.to-white {
+  background-image: linear-gradient(to right, rgb(51 65 85), rgb(30 41 59)) !important;
+}
+
+/* Icon backgrounds */
+.dark .bg-blue-100 { background-color: rgb(30 58 138) !important; }
+.dark .bg-green-100 { background-color: rgb(20 83 45) !important; }
+.dark .bg-purple-100 { background-color: rgb(88 28 135) !important; }
+.dark .bg-emerald-100 { background-color: rgb(6 78 59) !important; }
+.dark .bg-cyan-50 { background-color: rgb(22 78 99) !important; }
+
+/* Checklist items */
+.dark .bg-slate-50.rounded-lg,
+.dark .p-2.bg-slate-50 {
+  background-color: rgb(51 65 85) !important;
+}
+
+/* Shadow adjustments for dark mode */
+.dark .shadow-lg,
+.dark .shadow-xl,
+.dark .shadow-2xl {
+  --tw-shadow-color: rgb(0 0 0 / 0.5);
+}
