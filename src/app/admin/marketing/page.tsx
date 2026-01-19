@@ -155,10 +155,6 @@ export default function MarketingPage() {
     return num.toString();
   };
 
-  const formatCurrency = (num: number) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(num);
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}

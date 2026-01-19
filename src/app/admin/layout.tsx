@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
-import { ModeToggle } from '@/components/ModeToggle';
+// ModeToggle is available for theme switching in the header component
 import { Store, Zap } from 'lucide-react';
 import { headers } from 'next/headers';
 

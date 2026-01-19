@@ -32,7 +32,7 @@ async function main() {
 
   // Get or create staff user
   const hashedStaffPassword = await bcrypt.hash('Staff2025!Ocean', 10)
-  const staff = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: 'staff@shennastudio.com' },
     update: {},
     create: {
@@ -45,25 +45,31 @@ async function main() {
   console.log('✅ Staff user ready')
 
   // ===========================
-  // GET EXISTING OR CREATE CATEGORIES
+  // PRODUCT CATEGORIES (T-Shirts and Bracelets)
   // ===========================
-  console.log('📁 Checking categories...')
+  console.log('📁 Checking product categories...')
+
+  const tshirtCategoryData = [
+    { name: 'T-Shirts', slug: 'tshirts', description: 'All ocean-inspired t-shirts and apparel' },
+    { name: 'Ocean Wave Collection', slug: 'tshirt-ocean-wave', description: 'Featuring our signature wave design' },
+    { name: 'Sea Life Collection', slug: 'tshirt-sea-life', description: 'T-shirts featuring sea turtles, dolphins, and marine life' },
+    { name: 'Conservation T-Shirts', slug: 'tshirt-conservation', description: 'Support marine causes with every purchase' },
+    { name: 'Beach Vibes', slug: 'tshirt-beach-vibes', description: 'Relaxed beach-inspired designs' },
+  ]
+
+  const braceletCategoryData = [
+    { name: 'Bracelets', slug: 'bracelets', description: 'Handcrafted ocean-inspired bracelets' },
+    { name: 'Sea Turtle Collection', slug: 'bracelet-sea-turtle', description: 'Inspired by Kemp\'s Ridley sea turtles' },
+    { name: 'Ocean Wave Collection', slug: 'bracelet-ocean-wave', description: 'Featuring our signature wave design' },
+    { name: 'Conservation Collection', slug: 'bracelet-conservation', description: 'Every purchase supports marine conservation' },
+    { name: 'Luxury Collection', slug: 'bracelet-luxury', description: 'Premium handcrafted bracelets' },
+    { name: 'Limited Edition', slug: 'bracelet-limited-edition', description: 'Exclusive limited run designs' },
+    { name: 'Gift Sets', slug: 'bracelet-gift-sets', description: 'Curated bracelet sets perfect for gifting' },
+  ]
 
   const categoryData = [
-    // Existing categories
-    { name: 'Ocean Inspired', slug: 'ocean-inspired', description: 'Bracelets inspired by the beauty of the ocean' },
-    { name: 'Conservation Collection', slug: 'conservation-collection', description: 'Every purchase supports marine conservation' },
-    { name: 'Sea Turtle Collection', slug: 'sea-turtle-collection', description: "Inspired by Kemp's Ridley sea turtles" },
-    { name: 'Luxury Collection', slug: 'luxury-collection', description: 'Premium handcrafted bracelets' },
-    { name: 'Limited Edition', slug: 'limited-edition', description: 'Exclusive limited run designs' },
-    { name: 'Gift Sets', slug: 'gift-sets', description: 'Curated bracelet sets perfect for gifting' },
-    
-    // New product categories
-    { name: 'Bracelets', slug: 'bracelets', description: 'Handcrafted ocean-inspired bracelets for all styles' },
-    { name: 'Necklaces', slug: 'necklaces', description: 'Beautiful ocean-themed necklaces and pendants' },
-    { name: 'T-Shirts', slug: 't-shirts', description: 'Comfortable ocean-inspired apparel and tees' },
-    { name: 'Pets', slug: 'pets', description: 'Ocean-themed accessories for your furry friends' },
-    { name: 'Holidays', slug: 'holidays', description: 'Special holiday-themed ocean jewelry and gifts' },
+    ...tshirtCategoryData,
+    ...braceletCategoryData,
   ]
 
   const categories = []
@@ -73,14 +79,16 @@ async function main() {
       category = await prisma.category.create({
         data: {
           ...cat,
-          image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400',
+          image: cat.slug.startsWith('tshirt') 
+            ? 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400'
+            : 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400',
         },
       })
     }
     categories.push(category)
   }
 
-  console.log(`✅ ${categories.length} categories ready\n`)
+  console.log(`✅ ${categories.length} product categories ready\n`)
 
   // ===========================
   // BRACELET SIZES

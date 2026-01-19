@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
 // Helper to parse date string safely (handles both YYYY-MM-DD and ISO formats)
-function _parseDateSafely(dateStr: string): Date {
+function parseDateSafely(dateStr: string): Date {
   // If the date already contains 'T', it's an ISO string - extract just the date part
   const dateOnly = dateStr.includes('T') ? dateStr.split('T')[0] : dateStr;
   // Trim any whitespace
@@ -19,7 +19,7 @@ function _parseDateSafely(dateStr: string): Date {
 }
 
 // Helper to normalize time string (HH:MM format)
-function _normalizeTime(time: string | null | undefined): string | null {
+function normalizeTime(time: string | null | undefined): string | null {
   if (!time || time.trim() === '') return null;
   const trimmed = time.trim();
   // Validate HH:MM format

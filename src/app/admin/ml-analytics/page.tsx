@@ -21,7 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import toast from 'react-hot-toast';
 
 interface ForecastData {
@@ -158,7 +158,8 @@ export default function MLAnalyticsPage() {
     upper: f.upper_bound
   })) || [];
 
-  const trendDistribution = Object.entries(insights?.demand_trends || {}).reduce((acc, [_, trend]) => {
+  const trendDistribution = Object.entries(insights?.demand_trends || {}).reduce((acc, entry) => {
+    const trend = entry[1];
     acc[trend] = (acc[trend] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);

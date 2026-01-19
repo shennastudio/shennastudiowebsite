@@ -56,10 +56,8 @@ export async function POST(req: NextRequest) {
       async: false,
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return NextResponse.json({ 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      rates: shipment.rates.sort((a: any, b: any) => parseFloat(a.amount) - parseFloat(b.amount)) 
+      rates: shipment.rates.sort((a, b) => parseFloat(a.amount) - parseFloat(b.amount)) 
     });
   } catch (error) {
     console.error('Error fetching rates:', error);

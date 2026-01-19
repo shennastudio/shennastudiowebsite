@@ -248,7 +248,7 @@ async function importOrder(session: Stripe.Checkout.Session): Promise<void> {
       }
       // If no match found, we still have the order but without item details
     }
-  } catch (error) {
+  } catch {
     // If we can't get line items, order is still created
     console.warn(`   ⚠️  Could not fetch line items for order, order created without item details`);
   }

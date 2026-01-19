@@ -9,11 +9,12 @@ import {
   Package,
   Tag,
   Layers,
-  Image,
+  Image as ImageIcon,
   RefreshCw,
   Sparkles,
   ArrowLeft
 } from 'lucide-react';
+import NextImage from 'next/image';
 import { useRouter } from 'next/navigation';
 import { uploadProductImage } from '@/app/actions/upload';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -23,7 +24,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
 import toast from 'react-hot-toast';
 
 const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
@@ -37,6 +37,7 @@ const COLORS = [
   { name: 'Sand', hex: '#F5E6D3', class: 'bg-amber-100' },
   { name: 'Heather Gray', hex: '#9CA3AF', class: 'bg-gray-400' },
 ];
+const COLOR_DATA = COLORS;
 
 interface VariantData {
   size: string;
@@ -71,7 +72,6 @@ export default function NewTShirtPage() {
     const newVariants: VariantData[] = [];
     selectedSizes.forEach(size => {
       selectedColors.forEach(color => {
-        const colorInfo = COLORS.find(c => c.name === color);
         const sku = `TSHIRT-${color?.substring(0, 2).toUpperCase() || 'WH'}-${size}-${Date.now().toString(36).toUpperCase()}`;
         newVariants.push({
           size,
@@ -237,7 +237,7 @@ export default function NewTShirtPage() {
                 {[
                   { id: 'details', label: 'Product Details', icon: Tag },
                   { id: 'variants', label: 'Variants', icon: Layers },
-                  { id: 'images', label: 'Images', icon: Image },
+                  { id: 'images', label: 'Images', icon: ImageIcon },
                 ].map(tab => (
                   <button
                     key={tab.id}
@@ -518,7 +518,7 @@ export default function NewTShirtPage() {
                 <Card className="bg-slate-900/50 border-purple-500/20 backdrop-blur-xl">
                   <CardHeader>
                     <CardTitle className="text-white flex items-center gap-2">
-                      <Image className="w-5 h-5 text-pink-400" />
+                      <ImageIcon className="w-5 h-5 text-pink-400" />
                       Product Images
                     </CardTitle>
                     <CardDescription className="text-slate-400">
@@ -538,7 +538,7 @@ export default function NewTShirtPage() {
                         <RefreshCw className="w-12 h-12 mx-auto text-purple-400 animate-spin" />
                       ) : imageUrl ? (
                         <div className="space-y-4">
-                          <img src={imageUrl} alt="Product" className="max-h-64 mx-auto rounded-lg" />
+                          <NextImage src={imageUrl} alt="Uploaded t-shirt product image" width={256} height={256} className="max-h-64 mx-auto rounded-lg" />
                           <p className="text-green-400">Image uploaded successfully</p>
                         </div>
                       ) : (

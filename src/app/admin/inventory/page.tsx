@@ -274,7 +274,7 @@ export default function EnhancedInventoryPage() {
       setAdjustmentReason('');
       setSelectedVariants([]);
       fetchInventory();
-    } catch (error) {
+    } catch {
       toast.error('Bulk adjustment failed');
     }
   }
@@ -305,7 +305,7 @@ export default function EnhancedInventoryPage() {
       document.body.removeChild(a);
 
       toast.success('Inventory exported successfully');
-    } catch (error) {
+    } catch {
       toast.error('Export failed');
     }
   }

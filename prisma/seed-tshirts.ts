@@ -20,7 +20,7 @@ const prisma = new PrismaClient({
   }
 });
 
-const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'];
+const SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL'] as const;
 const COLORS = [
   { name: 'White', hex: '#FFFFFF' },
   { name: 'Black', hex: '#1A1A1A' },
@@ -163,8 +163,6 @@ async function main() {
 
     // Create variants
     for (const variantData of productData.variants) {
-      const colorInfo = COLORS.find(c => c.name === variantData.color);
-
       for (const [size, stock] of Object.entries(variantData.sizes)) {
         await prisma.productVariant.create({
           data: {

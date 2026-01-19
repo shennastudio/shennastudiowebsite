@@ -62,10 +62,12 @@ export default function InvoicePage() {
 
     try {
       // Dynamically import jspdf and html2canvas for client-side only
-      const [{ default: jsPDF }, { default: html2canvas }] = await Promise.all([
-        import('jspdf'),
-        import('html2canvas'),
-      ]);
+      const html2canvasModule = await import('html2canvas');
+      const html2canvas = html2canvasModule.default || html2canvasModule;
+
+      // For jsPDF, we need to use the named export
+      const jspdfModule = await import('jspdf');
+      const { jsPDF } = jspdfModule;
 
       toast.loading('Generating PDF...');
 
@@ -74,6 +76,7 @@ export default function InvoicePage() {
         scale: 2,
         useCORS: true,
         logging: false,
+        backgroundColor: '#ffffff',
       });
 
       const imgData = canvas.toDataURL('image/png');
@@ -96,7 +99,7 @@ export default function InvoicePage() {
 
       // Add additional pages if content is longer than one page
       while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
+        position = heightLeft - imgHeight + pageHeight;
         pdf.addPage();
         pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
@@ -109,7 +112,7 @@ export default function InvoicePage() {
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast.dismiss();
-      toast.error('Failed to generate PDF');
+      toast.error('Failed to generate PDF. Please try printing instead.');
     }
   };
 

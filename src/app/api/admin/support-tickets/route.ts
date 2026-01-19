@@ -12,9 +12,6 @@ const priorityMap: Record<string, 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'> = {
   'urgent': 'URGENT'
 };
 
-// Ticket status type for TypeScript
-type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'WAITING_CUSTOMER' | 'RESOLVED' | 'CLOSED';
-
 const createTicketSchema = z.object({
   subject: z.string().min(1, 'Subject is required'),
   category: z.string().default('general'),

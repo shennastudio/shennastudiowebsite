@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Instagram, Facebook, Twitter, Sparkles, Clock, Hash } from 'lucide-react';
+import { Calendar, Instagram, Facebook, Twitter, Sparkles, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 interface GeneratedPost {
