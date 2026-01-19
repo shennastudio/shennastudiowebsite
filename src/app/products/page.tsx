@@ -61,7 +61,7 @@ function DiscountBanner({ discounts }: { discounts: DiscountCode[] }) {
   if (discounts.length === 0) return null;
 
   return (
-    <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 py-3">
+    <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-600 py-3 border-b border-amber-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-center gap-4 text-white">
           <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ function DiscountBanner({ discounts }: { discounts: DiscountCode[] }) {
           {discounts.map((discount) => (
             <div
               key={discount.code}
-              className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full"
+              className="flex items-center gap-2 bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10"
             >
               <Percent className="w-4 h-4" />
               <span className="font-mono font-bold text-sm">{discount.code}</span>
@@ -117,11 +117,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-slate-950">
       {/* Header Section */}
-      <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-16 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-cyan-900 via-blue-900 to-teal-900 py-16 relative overflow-hidden border-b border-slate-800">
         {/* Animated wave background */}
-        <div className="absolute inset-0 opacity-20">
+        <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%23ffffff%22 d=%22M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E')] bg-cover bg-bottom animate-pulse" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -140,7 +140,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {/* Bracelets / All Products */}
               <Link
                 href="/products"
-                className="group flex items-center gap-2 bg-white/95 hover:bg-white text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm"
+                className="group flex items-center gap-2 bg-slate-800 text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-700 shadow-lg border border-slate-700"
               >
                 <span className="text-xl group-hover:scale-110 transition-transform">📿</span>
                 <span>Bracelets</span>
@@ -149,7 +149,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {/* T-Shirts */}
               <Link
                 href="/products?category=t-shirts"
-                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+                className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
                 <span className="text-xl group-hover:scale-110 transition-transform">👕</span>
                 <span>T-Shirts</span>
@@ -158,7 +158,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {/* Necklaces */}
               <Link
                 href="/products?category=necklaces"
-                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+                className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
                 <span className="text-xl group-hover:scale-110 transition-transform">💎</span>
                 <span>Necklaces</span>
@@ -167,7 +167,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {/* Pets */}
               <Link
                 href="/products?category=pets"
-                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+                className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
                 <span className="text-xl group-hover:scale-110 transition-transform">🐾</span>
                 <span>Pets</span>
@@ -176,7 +176,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {/* Holidays */}
               <Link
                 href="/products?category=holidays"
-                className="group flex items-center gap-2 bg-white/20 hover:bg-white/95 text-white hover:text-blue-600 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:shadow-xl shadow-lg backdrop-blur-sm border-2 border-white/40 hover:border-transparent"
+                className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
                 <span className="text-xl group-hover:scale-110 transition-transform">🎄</span>
                 <span>Holidays</span>
@@ -204,28 +204,28 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {category && ['t-shirts', 'necklaces', 'pets', 'holidays'].includes(category.slug) ? (
                 /* Coming Soon for New Categories */
                 <div className="max-w-2xl mx-auto">
-                  <div className="bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 dark:from-cyan-950/30 dark:via-blue-950/30 dark:to-teal-950/30 border-2 border-cyan-200 dark:border-cyan-800 rounded-3xl p-12 shadow-lg">
+                  <div className="bg-gradient-to-br from-cyan-950/30 via-blue-950/30 to-teal-950/30 border-2 border-cyan-800 rounded-3xl p-12 shadow-lg">
                     <div className="text-7xl mb-6 animate-bounce">
                       {category.slug === 't-shirts' && '👕'}
                       {category.slug === 'necklaces' && '💎'}
                       {category.slug === 'pets' && '🐾'}
                       {category.slug === 'holidays' && '🎄'}
                     </div>
-                    <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-teal-600 dark:from-cyan-400 dark:to-teal-400 mb-4">
+                    <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 mb-4">
                       Coming Soon!
                     </h2>
-                    <p className="text-xl text-gray-700 dark:text-gray-300 mb-6">
+                    <p className="text-xl text-slate-300 mb-6">
                       {category.name} are on the way!
                     </p>
-                    <p className="text-gray-600 dark:text-gray-400 mb-8">
+                    <p className="text-slate-400 mb-8">
                       We&apos;re working on bringing you beautiful ocean-inspired {category.name.toLowerCase()} that support marine conservation.
-                      <span className="block mt-2 font-semibold text-teal-600 dark:text-teal-400">
+                      <span className="block mt-2 font-semibold text-teal-400">
                         Check back soon or explore our bracelet collection!
                       </span>
                     </p>
                     <Link
                       href="/products"
-                      className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-teal-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-cyan-600 hover:to-teal-600 transition-all transform hover:scale-105 shadow-lg"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-teal-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-cyan-500 hover:to-teal-500 transition-all transform hover:scale-105 shadow-lg"
                     >
                       <span>🌊</span>
                       Shop Bracelets Now
@@ -236,10 +236,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                 /* Generic No Products */
                 <>
                   <div className="text-6xl mb-4 animate-bounce">🌊</div>
-                  <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  <h2 className="text-2xl font-semibold text-slate-300 mb-2">
                     No products available yet
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-slate-400">
                     Check back soon for our beautiful ocean-inspired bracelets!
                   </p>
                 </>
@@ -250,10 +250,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               {products.map((productDisplay) => (
                 <div
                   key={productDisplay.product.id}
-                  className="stagger-child bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-teal-100 dark:border-slate-700 group hover:-translate-y-2"
+                  className="stagger-child bg-slate-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-800 hover:border-teal-700/50 group hover:-translate-y-2"
                 >
                   {/* Product Image */}
-                  <div className="relative h-64 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30 overflow-hidden">
+                  <div className="relative h-64 bg-gradient-to-br from-cyan-950/30 to-blue-950/30 overflow-hidden">
                     {productDisplay.displayImages?.[0] ? (
                       <Image
                         src={productDisplay.displayImages[0]}
@@ -270,42 +270,37 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
                     {/* Featured Badge */}
                     {productDisplay.product.featured && (
-                      <div className="absolute top-4 right-4 bg-coral-500 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse">
+                      <div className="absolute top-4 right-4 bg-rose-600 text-white px-3 py-1 rounded-full text-sm font-semibold animate-pulse shadow-lg">
                          Featured
                       </div>
                     )}
 
                     {/* Stock Badge */}
                     {productDisplay.displayStock === 0 && (
-                      <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      <div className="absolute top-4 left-4 bg-slate-800 text-slate-300 px-3 py-1 rounded-full text-sm font-semibold border border-slate-700">
                         Out of Stock
                       </div>
                     )}
-
-                    {/* Marine Life Icon */}
-                    <div className="absolute bottom-4 left-4 text-3xl opacity-0 group-hover:opacity-100 transition-opacity">
-
-                    </div>
                   </div>
 
                   {/* Product Info */}
                   <div className="p-6">
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    <h3 className="text-xl font-semibold text-white mb-2 truncate">
                       {productDisplay.product.name}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                    <p className="text-slate-400 mb-4 line-clamp-2 text-sm">
                       {productDisplay.product.description || 'Ocean-inspired handcrafted bracelet'}
                     </p>
 
                     {/* Price and Stock */}
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-2xl font-bold text-teal-600 dark:text-teal-400">
+                      <span className="text-2xl font-bold text-teal-400">
                         ${productDisplay.displayPrice.toFixed(2)}
                       </span>
-                      <span className={`text-sm px-3 py-1 rounded-full ${
+                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                         productDisplay.displayStock > 0
-                          ? 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                          : 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300'
+                          ? 'bg-emerald-900/30 text-emerald-400 border border-emerald-900/50'
+                          : 'bg-rose-900/30 text-rose-400 border border-rose-900/50'
                       }`}>
                         {productDisplay.displayStock > 0
                           ? `${productDisplay.displayStock} in stock`
@@ -315,15 +310,15 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
                     {/* Conservation Info */}
                     {productDisplay.product.conservationPercentage > 0 && (
-                      <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
-                        <div className="flex items-center gap-2 text-sm text-green-800 dark:text-green-300">
+                      <div className="mb-4 p-3 bg-teal-900/20 border border-teal-800/50 rounded-lg">
+                        <div className="flex items-center gap-2 text-sm text-teal-300">
                           <span>🪼</span>
                           <span className="font-semibold">
                             {productDisplay.product.conservationPercentage}% supports conservation
                           </span>
                         </div>
                         {productDisplay.product.conservationFocus && (
-                          <p className="text-xs text-green-700 dark:text-green-400 mt-1">
+                          <p className="text-xs text-teal-400/80 mt-1 pl-6">
                             {productDisplay.product.conservationFocus}
                           </p>
                         )}
@@ -333,7 +328,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                     {/* View Details Button */}
                     <Link
                       href={`/products/${productDisplay.product.slug}`}
-                      className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg transition-all transform hover:scale-105 font-semibold"
+                      className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg transition-all transform hover:scale-105 font-semibold shadow-lg shadow-teal-900/20"
                     >
                       View Details
                     </Link>
@@ -353,7 +348,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       />
 
       {/* Conservation Info Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 py-12 relative overflow-hidden">
+      <section className="bg-slate-900 border-t border-slate-800 py-12 relative overflow-hidden">
         {/* Floating particles */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 left-10 w-16 h-16 rounded-full bg-teal-500 animate-ping" style={{ animationDuration: '4s' }} />
@@ -365,19 +360,19 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
             <div className="flex justify-center items-center gap-3 mb-4">
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.1s' }}>🐚</span>
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.2s' }}>🪼</span>
-              <h2 className="text-3xl font-bold text-teal-700 dark:text-teal-300">
+              <h2 className="text-3xl font-bold text-teal-300">
                 Every Purchase Protects Ocean Life
               </h2>
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.3s' }}>🐙</span>
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.4s' }}>🐡</span>
             </div>
-            <p className="text-lg text-gray-700 dark:text-gray-300 mb-6">
+            <p className="text-lg text-slate-300 mb-6">
               10% of every bracelet sale supports sea turtle conservation, whale protection,
               and marine ecosystem restoration in South Padre Island and Rio Grande Valley.
             </p>
             <Link
               href="/conservation"
-              className="inline-block border-2 border-teal-600 dark:border-teal-400 text-teal-600 dark:text-teal-400 px-8 py-3 rounded-full font-semibold hover:bg-teal-600 hover:text-white dark:hover:bg-teal-400 dark:hover:text-slate-900 transition-all transform hover:scale-105"
+              className="inline-block border-2 border-teal-400 text-teal-400 px-8 py-3 rounded-full font-semibold hover:bg-teal-400 hover:text-slate-900 transition-all transform hover:scale-105"
             >
               Learn About Our Conservation Mission
             </Link>

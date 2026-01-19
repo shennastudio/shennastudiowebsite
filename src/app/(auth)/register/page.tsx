@@ -70,7 +70,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex bg-slate-950">
       {/* Left Side - Coral Reef Image */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         <Image
@@ -81,7 +81,7 @@ export default function RegisterPage() {
           priority
         />
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/40 via-teal-600/30 to-cyan-600/40" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/60 via-teal-900/50 to-cyan-900/60" />
 
         {/* Branding and Benefits on Image */}
         <div className="absolute inset-0 flex flex-col justify-between p-12 text-white">
@@ -91,7 +91,7 @@ export default function RegisterPage() {
               <Waves className="h-10 w-10" />
               <h1 className="text-4xl font-bold">Shenna's Studio</h1>
             </div>
-            <p className="text-xl text-cyan-50 max-w-md">
+            <p className="text-xl text-cyan-100 max-w-md">
               Handcrafted Ocean Bracelets Supporting Marine Life
             </p>
           </div>
@@ -101,24 +101,24 @@ export default function RegisterPage() {
             <h2 className="text-3xl font-bold mb-4">Join Our Ocean Community</h2>
 
             <div className="space-y-4">
-              <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                <Gift className="h-6 w-6 flex-shrink-0 text-yellow-300" />
+              <div className="flex items-start gap-3 bg-slate-900/40 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                <Gift className="h-6 w-6 flex-shrink-0 text-yellow-400" />
                 <div>
                   <h3 className="font-semibold text-lg">100 Welcome Points</h3>
                   <p className="text-cyan-100 text-sm">Start earning rewards immediately</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                <Heart className="h-6 w-6 flex-shrink-0 text-red-300" />
+              <div className="flex items-start gap-3 bg-slate-900/40 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                <Heart className="h-6 w-6 flex-shrink-0 text-rose-400" />
                 <div>
                   <h3 className="font-semibold text-lg">Support Conservation</h3>
                   <p className="text-cyan-100 text-sm">10% of every purchase protects ocean life</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                <Sparkles className="h-6 w-6 flex-shrink-0 text-purple-300" />
+              <div className="flex items-start gap-3 bg-slate-900/40 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+                <Sparkles className="h-6 w-6 flex-shrink-0 text-purple-400" />
                 <div>
                   <h3 className="font-semibold text-lg">Exclusive Perks</h3>
                   <p className="text-cyan-100 text-sm">Early access to new designs & special offers</p>
@@ -130,38 +130,38 @@ export default function RegisterPage() {
       </div>
 
       {/* Right Side - Registration Form */}
-      <div className="flex-1 flex items-center justify-center bg-white px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 flex items-center justify-center bg-slate-950 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           {/* Mobile Logo */}
           <div className="lg:hidden text-center">
             <div className="flex justify-center items-center gap-2 mb-4">
-              <Waves className="h-10 w-10 text-cyan-600" />
-              <h1 className="text-3xl font-bold text-gray-900">Shenna's Studio</h1>
+              <Waves className="h-10 w-10 text-cyan-500" />
+              <h1 className="text-3xl font-bold text-white">Shenna's Studio</h1>
             </div>
           </div>
 
           {/* Form Header */}
           <div className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="p-4 bg-gradient-to-br from-cyan-50 to-teal-50 rounded-full">
-                <UserPlus className="h-8 w-8 text-cyan-600" />
+              <div className="p-4 bg-gradient-to-br from-cyan-900/30 to-teal-900/30 rounded-full border border-cyan-800">
+                <UserPlus className="h-8 w-8 text-cyan-400" />
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">
+            <h2 className="text-3xl font-bold text-white">
               Create Your Account
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-slate-400">
               Join our ocean-loving community today
             </p>
           </div>
 
           {/* Signup Bonus Banner - Mobile */}
-          <div className="lg:hidden bg-gradient-to-r from-yellow-50 to-orange-50 border-2 border-yellow-300 rounded-lg p-4">
+          <div className="lg:hidden bg-gradient-to-r from-yellow-900/20 to-orange-900/20 border border-yellow-700/50 rounded-lg p-4">
             <div className="flex items-center gap-3">
-              <Gift className="h-6 w-6 text-yellow-600 flex-shrink-0" />
+              <Gift className="h-6 w-6 text-yellow-500 flex-shrink-0" />
               <div>
-                <p className="text-sm font-bold text-yellow-900">100 Welcome Points!</p>
-                <p className="text-xs text-yellow-800">Get started with bonus rewards</p>
+                <p className="text-sm font-bold text-yellow-400">100 Welcome Points!</p>
+                <p className="text-xs text-yellow-500/80">Get started with bonus rewards</p>
               </div>
             </div>
           </div>
@@ -169,7 +169,7 @@ export default function RegisterPage() {
           {/* Registration Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="rounded-lg bg-red-50 border border-red-200 p-4">
+              <div className="rounded-lg bg-red-900/20 border border-red-800 p-4">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -177,14 +177,14 @@ export default function RegisterPage() {
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-red-800">{error}</p>
+                    <p className="text-sm font-medium text-red-400">{error}</p>
                   </div>
                 </div>
               </div>
             )}
 
             <div>
-              <Label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              <Label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">
                 Full Name
               </Label>
               <Input
@@ -195,12 +195,12 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="Shenna Rodriguez"
-                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                className="appearance-none block w-full px-4 py-3 border border-slate-700 bg-slate-900 rounded-lg placeholder-slate-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <Label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <Label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
                 Email Address
               </Label>
               <Input
@@ -211,12 +211,12 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="you@example.com"
-                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                className="appearance-none block w-full px-4 py-3 border border-slate-700 bg-slate-900 rounded-lg placeholder-slate-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <Label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <Label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
                 Password
               </Label>
               <Input
@@ -227,12 +227,12 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="At least 8 characters"
-                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                className="appearance-none block w-full px-4 py-3 border border-slate-700 bg-slate-900 rounded-lg placeholder-slate-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
             <div>
-              <Label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <Label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-300 mb-2">
                 Confirm Password
               </Label>
               <Input
@@ -243,7 +243,7 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 required
                 placeholder="Confirm your password"
-                className="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                className="appearance-none block w-full px-4 py-3 border border-slate-700 bg-slate-900 rounded-lg placeholder-slate-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
               />
             </div>
 
@@ -251,7 +251,7 @@ export default function RegisterPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-cyan-900/20"
               >
                 {loading ? (
                   <>
@@ -273,9 +273,9 @@ export default function RegisterPage() {
 
           {/* Already have account */}
           <div className="text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-slate-400">
               Already have an account?{' '}
-              <Link href="/login" className="text-cyan-600 hover:text-cyan-700 font-semibold transition-colors">
+              <Link href="/login" className="text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
                 Sign in
               </Link>
             </p>
@@ -283,11 +283,11 @@ export default function RegisterPage() {
 
           {/* Terms */}
           <div className="text-center">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-slate-500">
               By creating an account, you agree to our{' '}
-              <a href="#" className="text-cyan-600 hover:text-cyan-700">Terms of Service</a>
+              <a href="#" className="text-cyan-400 hover:text-cyan-300">Terms of Service</a>
               {' '}and{' '}
-              <a href="#" className="text-cyan-600 hover:text-cyan-700">Privacy Policy</a>
+              <a href="#" className="text-cyan-400 hover:text-cyan-300">Privacy Policy</a>
             </p>
           </div>
         </div>
