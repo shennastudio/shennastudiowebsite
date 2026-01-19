@@ -213,14 +213,14 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
   function getTrackingStatusColor(status: string) {
     switch (status?.toUpperCase()) {
       case 'DELIVERED':
-        return 'text-green-600 bg-green-100';
+        return 'text-green-400 bg-green-900/30';
       case 'TRANSIT':
-        return 'text-blue-600 bg-blue-100';
+        return 'text-blue-400 bg-blue-900/30';
       case 'FAILURE':
       case 'RETURNED':
-        return 'text-red-600 bg-red-100';
+        return 'text-red-400 bg-red-900/30';
       default:
-        return 'text-gray-600 bg-gray-100';
+        return 'text-slate-400 bg-slate-800';
     }
   }
 
@@ -236,28 +236,28 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Label Info */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-green-900/20 border border-green-800 rounded-lg p-4">
             <div className="flex items-center gap-2 mb-3">
-              <CheckCircle className="h-5 w-5 text-green-600" />
-              <span className="font-semibold text-green-800">Label Purchased</span>
+              <CheckCircle className="h-5 w-5 text-green-500" />
+              <span className="font-semibold text-green-400">Label Purchased</span>
             </div>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <span className="text-gray-600">Carrier:</span>
-                <p className="font-medium">{label?.carrier || order.carrier}</p>
+                <span className="text-slate-400">Carrier:</span>
+                <p className="font-medium text-white">{label?.carrier || order.carrier}</p>
               </div>
               <div>
-                <span className="text-gray-600">Service:</span>
-                <p className="font-medium">{label?.service || 'Standard'}</p>
+                <span className="text-slate-400">Service:</span>
+                <p className="font-medium text-white">{label?.service || 'Standard'}</p>
               </div>
               <div className="col-span-2">
-                <span className="text-gray-600">Tracking Number:</span>
-                <p className="font-medium font-mono">{label?.trackingNumber || order.trackingNumber}</p>
+                <span className="text-slate-400">Tracking Number:</span>
+                <p className="font-medium font-mono text-white">{label?.trackingNumber || order.trackingNumber}</p>
               </div>
               {label?.cost && (
                 <div>
-                  <span className="text-gray-600">Cost:</span>
-                  <p className="font-medium">${label.cost.toFixed(2)}</p>
+                  <span className="text-slate-400">Cost:</span>
+                  <p className="font-medium text-white">${label.cost.toFixed(2)}</p>
                 </div>
               )}
             </div>
@@ -267,6 +267,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(label.labelUrl!, '_blank')}
+                  className="border-green-800 text-green-400 hover:bg-green-900/30"
                 >
                   <Printer className="h-4 w-4 mr-2" />
                   Print Label
@@ -275,6 +276,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(label.labelUrl!, '_blank')}
+                  className="border-green-800 text-green-400 hover:bg-green-900/30"
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Download PDF
@@ -285,9 +287,9 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
 
           {/* Tracking Info */}
           {(order.trackingNumber || label?.trackingNumber) && (
-            <div className="border rounded-lg p-4">
+            <div className="border border-slate-700 rounded-lg p-4 bg-slate-900">
               <div className="flex items-center justify-between mb-3">
-                <h4 className="font-semibold flex items-center gap-2">
+                <h4 className="font-semibold flex items-center gap-2 text-white">
                   <Truck className="h-4 w-4" />
                   Tracking Updates
                 </h4>
@@ -296,6 +298,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                   size="sm"
                   onClick={fetchTracking}
                   disabled={loadingTracking}
+                  className="text-slate-400 hover:text-white hover:bg-slate-800"
                 >
                   <RefreshCw className={`h-4 w-4 ${loadingTracking ? 'animate-spin' : ''}`} />
                 </Button>
@@ -303,7 +306,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
 
               {loadingTracking ? (
                 <div className="flex items-center justify-center py-4">
-                  <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+                  <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
                 </div>
               ) : tracking ? (
                 <div className="space-y-3">
@@ -312,12 +315,12 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                     <span className={`px-2 py-1 rounded text-sm font-medium ${getTrackingStatusColor(tracking.status)}`}>
                       {tracking.status}
                     </span>
-                    <span className="text-sm text-gray-600">{tracking.statusDetails}</span>
+                    <span className="text-sm text-slate-400">{tracking.statusDetails}</span>
                   </div>
 
                   {tracking.estimatedDelivery && (
-                    <p className="text-sm text-gray-600">
-                      Estimated delivery: <span className="font-medium">{tracking.estimatedDelivery}</span>
+                    <p className="text-sm text-slate-400">
+                      Estimated delivery: <span className="font-medium text-white">{tracking.estimatedDelivery}</span>
                     </p>
                   )}
 
@@ -325,9 +328,9 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                   {tracking.events.length > 0 && (
                     <div className="mt-4 space-y-2 max-h-48 overflow-y-auto">
                       {tracking.events.slice(0, 5).map((event, index) => (
-                        <div key={index} className="text-sm border-l-2 border-gray-200 pl-3">
-                          <p className="font-medium">{event.statusDetails || event.status}</p>
-                          <p className="text-gray-500">
+                        <div key={index} className="text-sm border-l-2 border-slate-700 pl-3">
+                          <p className="font-medium text-slate-200">{event.statusDetails || event.status}</p>
+                          <p className="text-slate-500">
                             {event.location && `${event.location} • `}
                             {event.date} {event.time}
                           </p>
@@ -340,7 +343,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                     <Button
                       variant="outline"
                       size="sm"
-                      className="mt-2"
+                      className="mt-2 border-slate-700 text-slate-300 hover:bg-slate-800"
                       onClick={() => window.open(tracking.trackingUrl, '_blank')}
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />
@@ -349,7 +352,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                   )}
                 </div>
               ) : (
-                <p className="text-sm text-gray-500">Click refresh to load tracking info</p>
+                <p className="text-sm text-slate-500">Click refresh to load tracking info</p>
               )}
             </div>
           )}
@@ -360,23 +363,23 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
 
   // Show rate selection and purchase UI
   return (
-    <Card>
+    <Card className="border-slate-700 bg-slate-900">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-white">
           <Package className="h-5 w-5" />
           Create Shipping Label
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Shipping Address */}
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-medium text-sm text-gray-700 mb-2">Ship To:</h4>
-          <p className="text-sm">{order.customerName}</p>
-          <p className="text-sm text-gray-600">{order.shippingAddress}</p>
-          <p className="text-sm text-gray-600">
+        <div className="bg-slate-950 border border-slate-800 rounded-lg p-4">
+          <h4 className="font-medium text-sm text-slate-300 mb-2">Ship To:</h4>
+          <p className="text-sm text-slate-200">{order.customerName}</p>
+          <p className="text-sm text-slate-400">{order.shippingAddress}</p>
+          <p className="text-sm text-slate-400">
             {order.shippingCity}, {order.shippingState} {order.shippingZip}
           </p>
-          <p className="text-sm text-gray-600">{order.shippingCountry}</p>
+          <p className="text-sm text-slate-400">{order.shippingCountry}</p>
         </div>
 
         {/* Get Rates Button */}
@@ -384,7 +387,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
           <Button
             onClick={fetchRates}
             disabled={loadingRates}
-            className="w-full"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
             {loadingRates ? (
               <>
@@ -403,7 +406,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
         {/* Rate Selection */}
         {rates.length > 0 && (
           <div className="space-y-3">
-            <h4 className="font-medium text-sm">Select Shipping Service:</h4>
+            <h4 className="font-medium text-sm text-slate-300">Select Shipping Service:</h4>
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {rates.map((rate) => (
                 <div
@@ -411,8 +414,8 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                   onClick={() => setSelectedRate(rate)}
                   className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors ${
                     selectedRate?.id === rate.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'hover:bg-gray-50'
+                      ? 'border-blue-500 bg-blue-900/30'
+                      : 'border-slate-700 hover:bg-slate-800'
                   }`}
                 >
                   <div className="flex items-center gap-3">
@@ -420,20 +423,20 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                       type="radio"
                       checked={selectedRate?.id === rate.id}
                       onChange={() => setSelectedRate(rate)}
-                      className="text-blue-600"
+                      className="text-blue-500 bg-slate-800 border-slate-600"
                     />
                     <div>
-                      <p className="font-medium text-sm">
+                      <p className="font-medium text-sm text-white">
                         {rate.provider} {rate.servicelevel.name}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-slate-400">
                         {rate.estimated_days
                           ? `${rate.estimated_days} business day${rate.estimated_days > 1 ? 's' : ''}`
                           : rate.duration_terms || 'Delivery time varies'}
                       </p>
                     </div>
                   </div>
-                  <span className="font-semibold">${rate.amount}</span>
+                  <span className="font-semibold text-white">${rate.amount}</span>
                 </div>
               ))}
             </div>
@@ -443,7 +446,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
               <Button
                 onClick={purchaseLabel}
                 disabled={!selectedRate || purchasingLabel}
-                className="flex-1"
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
               >
                 {purchasingLabel ? (
                   <>
@@ -463,13 +466,14 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                   setRates([]);
                   setSelectedRate(null);
                 }}
+                className="border-slate-700 text-slate-300 hover:bg-slate-800"
               >
                 Cancel
               </Button>
             </div>
 
             {/* Warning */}
-            <div className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50 p-3 rounded-lg">
+            <div className="flex items-start gap-2 text-xs text-amber-400 bg-amber-900/20 border border-amber-900/50 p-3 rounded-lg">
               <AlertCircle className="h-4 w-4 flex-shrink-0 mt-0.5" />
               <p>
                 Make sure the shipping address is correct before proceeding.
@@ -481,8 +485,8 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
 
         {loadingLabel && (
           <div className="flex items-center justify-center py-4">
-            <Loader2 className="h-5 w-5 animate-spin text-gray-400" />
-            <span className="ml-2 text-sm text-gray-500">Loading label info...</span>
+            <Loader2 className="h-5 w-5 animate-spin text-slate-400" />
+            <span className="ml-2 text-sm text-slate-500">Loading label info...</span>
           </div>
         )}
       </CardContent>
