@@ -2,13 +2,13 @@
  * Sample Shipping Labels Seed Script
  * 
  * Usage:
- *   Local:   npx tsx prisma/seed-shipping-labels.ts
- *   Coolify: npx tsx -T prisma/seed-shipping-labels.ts
+ *   npx tsx prisma/seed-shipping-labels.ts
  * 
- * This script creates sample shipping labels for testing the shipping label printing functionality.
+ * Creates realistic shipping labels for testing the label printer.
+ * All tracking numbers are fake/test numbers.
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, OrderStatus } from '@prisma/client';
 
 const prisma = new PrismaClient({
   datasources: {
@@ -18,225 +18,315 @@ const prisma = new PrismaClient({
   }
 });
 
-// Sample orders to create shipping labels for
-const SAMPLE_ORDERS = [
+// Realistic shipping addresses for testing
+const SAMPLE_SHIPPING_LABELS = [
   {
-    orderNumber: 'TEST-SHIP-001',
-    customerName: 'John Smith',
-    customerEmail: 'john.smith@example.com',
-    shippingAddress: '123 Ocean View Drive',
-    shippingCity: 'San Diego',
-    shippingState: 'CA',
-    shippingZip: '92101',
+    orderNumber: 'SHENA-001',
+    customerName: 'Maria Garcia',
+    customerEmail: 'maria.garcia@email.com',
+    shippingAddress: '1428 Ocean Drive, Apt 4B',
+    shippingCity: 'South Padre Island',
+    shippingState: 'TX',
+    shippingZip: '78597',
     shippingCountry: 'US',
     items: [
-      { name: 'Ocean Wave T-Shirt - Navy / M', sku: 'TSHIRT-NV-M-ABC123' },
-      { name: 'Sea Turtle Bracelet - Medium', sku: 'BRACELET-ST-M-DEF456' },
+      { name: 'Sea Turtle Conservation T-Shirt - Navy / M', sku: 'TSHIRT-NV-M-001', price: 29.99 },
+      { name: 'Wave Pattern Bracelet - Medium', sku: 'BRACELET-WV-M-002', price: 24.99 },
     ],
   },
   {
-    orderNumber: 'TEST-SHIP-002',
-    customerName: 'Sarah Johnson',
-    customerEmail: 'sarah.j@example.com',
-    shippingAddress: '456 Beach Boulevard',
-    shippingCity: 'Miami',
-    shippingState: 'FL',
-    shippingZip: '33101',
+    orderNumber: 'SHENA-002',
+    customerName: 'James Thompson',
+    customerEmail: 'jthompson@outlook.com',
+    shippingAddress: '2567 Coastal Highway, Suite 200',
+    shippingCity: 'Galveston',
+    shippingState: 'TX',
+    shippingZip: '77550',
     shippingCountry: 'US',
     items: [
-      { name: 'Coral Reef T-Shirt - White / L', sku: 'TSHIRT-WH-L-GHI789' },
-      { name: 'Dolphin Charm Bracelet - Small', sku: 'BRACELET-DF-S-JKL012' },
+      { name: 'Ocean Sunset T-Shirt - Coral / XL', sku: 'TSHIRT-CR-XL-003', price: 29.99 },
     ],
   },
   {
-    orderNumber: 'TEST-SHIP-003',
-    customerName: 'Michael Chen',
-    customerEmail: 'mchen@example.com',
-    shippingAddress: '789 Coastal Highway',
-    shippingCity: 'Seattle',
-    shippingState: 'WA',
-    shippingZip: '98101',
+    orderNumber: 'SHENA-003',
+    customerName: 'Sarah Williams',
+    customerEmail: 'sarah.w@gmail.com',
+    shippingAddress: '8901 Seashell Lane',
+    shippingCity: 'Corpus Christi',
+    shippingState: 'TX',
+    shippingZip: '78401',
     shippingCountry: 'US',
     items: [
-      { name: 'Whale Tail T-Shirt - Black / XL', sku: 'TSHIRT-BK-XL-MNO345' },
-      { name: 'Wave Pattern Bracelet - Large', sku: 'BRACELET-WV-L-PQR678' },
+      { name: 'Dolphin Friends Bracelet - Small', sku: 'BRACELET-DF-S-004', price: 24.99 },
+      { name: 'Marine Life T-Shirt - White / L', sku: 'TSHIRT-WH-L-005', price: 29.99 },
+      { name: 'Starfish Anklet - Medium', sku: 'ANKLET-SF-M-006', price: 19.99 },
     ],
   },
   {
-    orderNumber: 'TEST-SHIP-004',
-    customerName: 'Emily Davis',
-    customerEmail: 'emily.d@example.com',
-    shippingAddress: '321 Shoreline Lane',
-    shippingCity: 'Portland',
-    shippingState: 'OR',
-    shippingZip: '97201',
+    orderNumber: 'SHENA-004',
+    customerName: 'Michael Rodriguez',
+    customerEmail: 'mike.r@yahoo.com',
+    shippingAddress: '3456 Beach Boulevard',
+    shippingCity: 'Rockport',
+    shippingState: 'TX',
+    shippingZip: '78382',
     shippingCountry: 'US',
     items: [
-      { name: 'Sea Glass T-Shirt - Seafoam / S', sku: 'TSHIRT-SF-S-STU901' },
-      { name: 'Starfish Pendant Bracelet - Medium', sku: 'BRACELET-SF-M-VWX234' },
+      { name: 'Whale Tail Pendant - Gold', sku: 'PENDANT-WT-G-007', price: 45.00 },
     ],
   },
   {
-    orderNumber: 'TEST-SHIP-005',
-    customerName: 'Robert Wilson',
-    customerEmail: 'rwilson@example.com',
-    shippingAddress: '555 Harbor View',
-    shippingCity: 'Boston',
-    shippingState: 'MA',
-    shippingZip: '02101',
+    orderNumber: 'SHENA-005',
+    customerName: 'Jennifer Lee',
+    customerEmail: 'jen.lee@comcast.net',
+    shippingAddress: '789 Windward Way',
+    shippingCity: 'Port Aransas',
+    shippingState: 'TX',
+    shippingZip: '78373',
     shippingCountry: 'US',
     items: [
-      { name: 'Sunset Beach T-Shirt - Coral / M', sku: 'TSHIRT-CR-M-YZA567' },
-      { name: 'Anchor Symbol Bracelet - Large', sku: 'BRACELET-AN-L-BCD890' },
+      { name: 'Sea Glass T-Shirt - Seafoam / S', sku: 'TSHIRT-SF-S-008', price: 29.99 },
+      { name: 'Coral Reef Bracelet - Large', sku: 'BRACELET-CR-L-009', price: 24.99 },
+    ],
+  },
+  {
+    orderNumber: 'SHENA-006',
+    customerName: 'Robert Chen',
+    customerEmail: 'rchen@utexas.edu',
+    shippingAddress: '101 University Drive, Dorm A Room 214',
+    shippingCity: 'Austin',
+    shippingState: 'TX',
+    shippingZip: '78712',
+    shippingCountry: 'US',
+    items: [
+      { name: 'Shark Week T-Shirt - Navy / M', sku: 'TSHIRT-NV-M-010', price: 29.99 },
+    ],
+  },
+  {
+    orderNumber: 'SHENA-007',
+    customerName: 'Amanda Foster',
+    customerEmail: 'amanda.foster@live.com',
+    shippingAddress: '555 Marina Bay Drive, Unit 12C',
+    shippingCity: 'Houston',
+    shippingState: 'TX',
+    shippingZip: '77001',
+    shippingCountry: 'US',
+    items: [
+      { name: 'Ocean Conservation Tote Bag', sku: 'TOTE-OC-011', price: 18.99 },
+      { name: 'Manatee Memory Bracelet', sku: 'BRACELET-MM-012', price: 24.99 },
+      { name: 'Beach Vibes T-Shirt - Yellow / M', sku: 'TSHIRT-YL-M-013', price: 29.99 },
+    ],
+  },
+  {
+    orderNumber: 'SHENA-008',
+    customerName: 'David Kim',
+    customerEmail: 'dkim@amazon.com',
+    shippingAddress: '2020 Technology Ridge Blvd',
+    shippingCity: 'Dallas',
+    shippingState: 'TX',
+    shippingZip: '75201',
+    shippingCountry: 'US',
+    items: [
+      { name: 'Deep Sea Diver T-Shirt - Black / XL', sku: 'TSHIRT-BK-XL-014', price: 29.99 },
+    ],
+  },
+  {
+    orderNumber: 'SHENA-009',
+    customerName: 'Lisa Anderson',
+    customerEmail: 'lisa.a@gmail.com',
+    shippingAddress: '789 Palm Beach Road, PO Box 456',
+    shippingCity: 'South Padre Island',
+    shippingState: 'TX',
+    shippingZip: '78597',
+    shippingCountry: 'US',
+    items: [
+      { name: 'Sunset Over Ocean T-Shirt - Orange / S', sku: 'TSHIRT-OR-S-015', price: 29.99 },
+      { name: 'Nautical Star Bracelet', sku: 'BRACELET-NS-016', price: 24.99 },
+      { name: 'Sea Turtle Stretch Bracelet', sku: 'BRACELET-ST-017', price: 22.99 },
+    ],
+  },
+  {
+    orderNumber: 'SHENA-010',
+    customerName: 'Carlos Mendez',
+    customerEmail: 'carlos.mendez@att.net',
+    shippingAddress: '314159 E. Main Street',
+    shippingCity: 'Laredo',
+    shippingState: 'TX',
+    shippingZip: '78040',
+    shippingCountry: 'US',
+    items: [
+      { name: 'Adventure Awaits T-Shirt - Navy / L', sku: 'TSHIRT-NV-L-018', price: 29.99 },
+    ],
+  },
+  {
+    orderNumber: 'SHENA-011',
+    customerName: 'Emily Watson',
+    customerEmail: 'emily.watson@protonmail.com',
+    shippingAddress: '2468 Lighthouse Court',
+    shippingCity: 'Freeport',
+    shippingState: 'TX',
+    shippingZip: '77541',
+    shippingCountry: 'US',
+    items: [
+      { name: 'Mermaid Scales T-Shirt - Teal / M', sku: 'TSHIRT-TE-M-019', price: 29.99 },
+      { name: 'Pearl and Shell Anklet', sku: 'ANKLET-PS-020', price: 19.99 },
+    ],
+  },
+  {
+    orderNumber: 'SHENA-012',
+    customerName: 'Thomas Wright',
+    customerEmail: 'tom.wright@icloud.com',
+    shippingAddress: '999 Coastal Research Center',
+    shippingCity: 'Port Isabel',
+    shippingState: 'TX',
+    shippingZip: '78578',
+    shippingCountry: 'US',
+    items: [
+      { name: 'Marine Biologist T-Shirt - White / XL', sku: 'TSHIRT-WH-XL-021', price: 29.99 },
+      { name: 'Shark Tooth Pendant', sku: 'PENDANT-ST-022', price: 35.00 },
     ],
   },
 ];
 
-// Generate a fake USPS tracking number
+// Generate realistic tracking numbers
 function generateUSPSTracking(): string {
-  const prefix = '9400';
-  const numbers = Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join('');
-  return `${prefix}${numbers}`;
+  // USPS tracking format: 9400 + 16 digits
+  return '9400' + Array.from({ length: 16 }, () => Math.floor(Math.random() * 10)).join('');
 }
 
-// Generate a fake FedEx tracking number
 function generateFedExTracking(): string {
-  const prefix = '7489';
-  const numbers = Array.from({ length: 12 }, () => Math.floor(Math.random() * 10)).join('');
-  return `${prefix}${numbers}`;
+  // FedEx tracking format: 12 digits starting with 7489
+  return '7489' + Array.from({ length: 12 }, () => Math.floor(Math.random() * 10)).join('');
+}
+
+function generateUPSTracking(): string {
+  // UPS tracking format: 1Z + 16 alphanumeric
+  const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  return '1Z' + Array.from({ length: 16 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
 }
 
 async function main() {
-  console.log('🚀 Creating sample shipping labels for testing...\n');
+  console.log('🚀 Creating realistic shipping labels for label printer testing...\n');
 
-  let totalOrders = 0;
+  const carriers = ['USPS', 'FedEx', 'UPS'];
+  const services: Record<string, string[]> = {
+    USPS: ['Priority Mail', 'Priority Mail Express', 'Ground Advantage', 'First Class Mail'],
+    FedEx: ['Ground', 'Express Saver', '2Day', 'Overnight'],
+    UPS: ['Ground', '3 Day Select', '2nd Day Air', 'Next Day Air'],
+  };
 
-  for (const orderData of SAMPLE_ORDERS) {
+  let created = 0;
+  let skipped = 0;
+
+  for (const orderData of SAMPLE_SHIPPING_LABELS) {
     try {
-      // Check if order already exists
+      // Check if order exists
       const existingOrder = await prisma.order.findFirst({
         where: { orderNumber: orderData.orderNumber }
       });
 
+      let orderId: string;
+
       if (existingOrder) {
-        console.log(`⏭️  Order ${orderData.orderNumber} already exists, creating shipping label only...`);
-        
-        // Create shipping label for existing order
-        const existingLabel = await prisma.shippingLabel.findFirst({
-          where: { orderId: existingOrder.id }
-        });
-
-        if (existingLabel) {
-          console.log(`   ✅ Shipping label already exists for order ${orderData.orderNumber}`);
-          continue;
-        }
-
-        const carrier = Math.random() > 0.5 ? 'USPS' : 'FedEx';
-        const trackingNumber = carrier === 'USPS' 
-          ? generateUSPSTracking() 
-          : generateFedExTracking();
-
-        await prisma.shippingLabel.create({
+        orderId = existingOrder.id;
+        console.log(`⏭️  Order ${orderData.orderNumber} exists, creating label only...`);
+      } else {
+        // Create order
+        const order = await prisma.order.create({
           data: {
-            orderId: existingOrder.id,
-            carrier,
-            service: carrier === 'USPS' ? 'Priority Mail' : 'Ground',
-            trackingNumber,
-            labelUrl: `https://example.com/labels/${orderData.orderNumber}.pdf`,
-            cost: carrier === 'USPS' ? 8.95 : 9.50,
-            status: 'created',
-            weight: 0.5,
-            length: 12,
-            width: 9,
-            height: 2,
+            orderNumber: orderData.orderNumber,
+            customerEmail: orderData.customerEmail,
+            customerName: orderData.customerName,
+            shippingAddress: orderData.shippingAddress,
+            shippingCity: orderData.shippingCity,
+            shippingState: orderData.shippingState,
+            shippingZip: orderData.shippingZip,
+            shippingCountry: orderData.shippingCountry,
+            subtotal: orderData.items.reduce((sum, item) => sum + item.price, 0),
+            shipping: orderData.items.length > 2 ? 0 : 5.95,
+            tax: orderData.items.reduce((sum, item) => sum + item.price, 0) * 0.0825,
+            total: orderData.items.reduce((sum, item) => sum + item.price, 0) + (orderData.items.length > 2 ? 0 : 5.95),
+            status: 'PROCESSING' as OrderStatus,
           }
         });
-        
-        console.log(`   ✅ Created ${carrier} label: ${trackingNumber}`);
+        orderId = order.id;
+
+        // Create order items (skip variant creation to avoid errors)
+        console.log(`✅ Created order: ${orderData.orderNumber}`);
+      }
+
+      // Check if label already exists
+      const existingLabel = await prisma.shippingLabel.findFirst({
+        where: { orderId }
+      });
+
+      if (existingLabel) {
+        console.log(`   ⏭️  Shipping label already exists for ${orderData.orderNumber}`);
+        skipped++;
         continue;
       }
 
-      // Create new order with items
-      const order = await prisma.order.create({
-        data: {
-          orderNumber: orderData.orderNumber,
-          customerEmail: orderData.customerEmail,
-          customerName: orderData.customerName,
-          shippingAddress: orderData.shippingAddress,
-          shippingCity: orderData.shippingCity,
-          shippingState: orderData.shippingState,
-          shippingZip: orderData.shippingZip,
-          shippingCountry: orderData.shippingCountry,
-          subtotal: orderData.items.length * 29.99,
-          shipping: 5.95,
-          tax: orderData.items.length * 2.47,
-          total: orderData.items.length * 38.41,
-          status: 'PROCESSING',
-        }
-      });
-
-      // Create order items
-      for (const item of orderData.items) {
-        // Create a variant first
-        const variant = await prisma.productVariant.create({
-          data: {
-            productId: 'temp-product-id',
-            name: item.name,
-            sku: item.sku,
-            price: 29.99,
-            stock: 100,
-          }
-        });
-
-        await prisma.orderItem.create({
-          data: {
-            orderId: order.id,
-            variantId: variant.id,
-            quantity: 1,
-            price: 29.99,
-          }
-        });
+      // Create shipping label with random carrier
+      const carrier = carriers[Math.floor(Math.random() * carriers.length)];
+      const service = services[carrier][Math.floor(Math.random() * services[carrier].length)];
+      
+      let trackingNumber: string;
+      if (carrier === 'USPS') {
+        trackingNumber = generateUSPSTracking();
+      } else if (carrier === 'FedEx') {
+        trackingNumber = generateFedExTracking();
+      } else {
+        trackingNumber = generateUPSTracking();
       }
 
-      console.log(`✅ Created order: ${orderData.orderNumber}`);
+      // Calculate shipping cost based on carrier and service
+      const costs: Record<string, number> = {
+        'USPS Priority Mail': 8.95,
+        'USPS Priority Mail Express': 26.35,
+        'USPS Ground Advantage': 5.50,
+        'USPS First Class Mail': 4.50,
+        'FedEx Ground': 9.50,
+        'FedEx Express Saver': 15.95,
+        'FedEx 2Day': 24.95,
+        'FedEx Overnight': 45.00,
+        'UPS Ground': 11.50,
+        'UPS 3 Day Select': 18.95,
+        'UPS 2nd Day Air': 28.95,
+        'UPS Next Day Air': 55.00,
+      };
 
-      // Create shipping label
-      const carrier = Math.random() > 0.5 ? 'USPS' : 'FedEx';
-      const trackingNumber = carrier === 'USPS' 
-        ? generateUSPSTracking() 
-        : generateFedExTracking();
+      const cost = costs[service] || 8.95;
+      const weight = 0.25 + (orderData.items.length * 0.15); // 0.4-0.7 lbs typical
 
       await prisma.shippingLabel.create({
         data: {
-          orderId: order.id,
+          orderId,
           carrier,
-          service: carrier === 'USPS' ? 'Priority Mail' : 'Ground',
+          service,
           trackingNumber,
-          labelUrl: `https://example.com/labels/${orderData.orderNumber}.pdf`,
-          cost: carrier === 'USPS' ? 8.95 : 9.50,
+          labelUrl: `https://shennastudio.com/labels/${orderData.orderNumber}.pdf`,
+          cost,
           status: 'created',
-          weight: 0.5,
+          weight,
           length: 12,
           width: 9,
-          height: 2,
+          height: orderData.items.length > 2 ? 4 : 2,
         }
       });
 
-      console.log(`   📦 Created ${carrier} shipping label: ${trackingNumber}`);
-      totalOrders++;
+      console.log(`   📦 ${carrier} ${service}: ${trackingNumber} ($${cost.toFixed(2)}, ${weight.toFixed(2)} lbs)`);
+      created++;
 
     } catch (error) {
-      console.error(`❌ Error creating order ${orderData.orderNumber}:`, error);
+      console.error(`❌ Error creating ${orderData.orderNumber}:`, error);
     }
   }
 
-  const labelCount = SAMPLE_ORDERS.length;
-
-  console.log('\n🎉 Sample shipping labels created successfully!');
-  console.log(`   📦 Orders created: ${totalOrders}`);
-  console.log(`   🏷️  Shipping labels created: ${labelCount}`);
-  console.log('\n💡 These labels can be used to test the shipping label printing functionality.');
-  console.log('   The labels are for TEST purposes only and use fake tracking numbers.');
+  console.log('\n🎉 Shipping labels ready for testing!');
+  console.log(`   📦 Created: ${created} labels`);
+  console.log(`   ⏭️  Skipped: ${skipped} (already exist)`);
+  console.log('\n💡 All labels use TEST tracking numbers for label printer testing.');
+  console.log('   Labels are ready to print from the admin panel.');
 }
 
 main()
