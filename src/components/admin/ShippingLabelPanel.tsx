@@ -314,16 +314,47 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
 
                 {/* Label Preview */}
                 {showLabelPreview && (
-                  <div className="border border-slate-600 rounded-lg overflow-hidden bg-white">
+                  <div className="border border-slate-600 rounded-lg overflow-hidden">
                     <div className="bg-slate-800 px-3 py-2 flex items-center justify-between">
                       <span className="text-sm text-slate-300">Shipping Label Preview</span>
                       <span className="text-xs text-slate-500">4x6 Label</span>
                     </div>
-                    <iframe
-                      src={label.labelUrl}
-                      className="w-full h-96 border-0"
-                      title="Shipping Label Preview"
-                    />
+                    <div className="bg-white p-4 flex justify-center">
+                      {label.labelUrl?.includes('svg') || label.labelUrl?.includes('sample-label') ? (
+                        // SVG or sample label - render as image
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={label.labelUrl}
+                          alt="Shipping Label"
+                          className="max-w-full h-auto border border-gray-300 shadow-md"
+                          style={{ maxHeight: '500px' }}
+                        />
+                      ) : (
+                        // PDF - try to embed with fallback
+                        <object
+                          data={label.labelUrl}
+                          type="application/pdf"
+                          className="w-full h-96"
+                        >
+                          {/* Fallback if PDF can't be embedded */}
+                          <div className="flex flex-col items-center justify-center h-96 bg-slate-100 text-slate-600">
+                            <Printer className="h-12 w-12 mb-4 text-slate-400" />
+                            <p className="text-sm font-medium mb-2">PDF Preview Not Available</p>
+                            <p className="text-xs text-slate-500 mb-4 text-center px-4">
+                              Your browser cannot display this PDF inline.
+                            </p>
+                            <Button
+                              size="sm"
+                              onClick={() => window.open(label.labelUrl!, '_blank')}
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              <ExternalLink className="h-4 w-4 mr-2" />
+                              Open PDF in New Tab
+                            </Button>
+                          </div>
+                        </object>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

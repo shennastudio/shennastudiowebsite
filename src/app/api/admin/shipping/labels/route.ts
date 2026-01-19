@@ -19,11 +19,42 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // First, check if there's a ShippingLabel record for this order
+    const shippingLabel = await prisma.shippingLabel.findFirst({
+      where: { orderId },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    if (shippingLabel) {
+      // If we have a label URL from Shippo, use it
+      // Otherwise generate a sample label URL for testing
+      const labelUrl = shippingLabel.labelUrl || generateSampleLabelUrl(req, orderId, shippingLabel);
+
+      return NextResponse.json({
+        label: {
+          id: shippingLabel.id,
+          trackingNumber: shippingLabel.trackingNumber,
+          carrier: shippingLabel.carrier,
+          service: shippingLabel.service,
+          cost: shippingLabel.cost,
+          status: shippingLabel.status,
+          labelUrl,
+        }
+      });
+    }
+
+    // Fall back to checking the Order table
     const order = await prisma.order.findUnique({
       where: { id: orderId },
       select: {
+        orderNumber: true,
         trackingNumber: true,
         carrier: true,
+        customerName: true,
+        shippingAddress: true,
+        shippingCity: true,
+        shippingState: true,
+        shippingZip: true,
       },
     });
 
@@ -35,18 +66,27 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ label: null });
     }
 
-    // Since we don't store the transaction ID locally in this simple schema,
-    // we can't fetch the label URL from Shippo directly without it.
-    // However, for this MVP, we assume if we have tracking, we might want to return 
-    // what we have.
-    // In a real app, we should store the Shippo Transaction ID in the order model.
-    // For now, we'll return what we have in the DB.
+    // Generate a sample label URL for testing when no ShippingLabel record exists
+    const baseUrl = new URL(req.url).origin;
+    const labelUrl = `${baseUrl}/api/admin/shipping/sample-label?` + new URLSearchParams({
+      orderNumber: order.orderNumber || orderId.slice(0, 8),
+      customerName: order.customerName || 'Customer',
+      address: order.shippingAddress || '123 Main St',
+      city: order.shippingCity || 'City',
+      state: order.shippingState || 'TX',
+      zip: order.shippingZip || '78701',
+      carrier: order.carrier || 'USPS',
+      service: 'Priority Mail',
+      trackingNumber: order.trackingNumber,
+      format: 'svg',
+    }).toString();
 
     return NextResponse.json({
       label: {
         trackingNumber: order.trackingNumber,
         carrier: order.carrier,
-        status: 'created'
+        status: 'created',
+        labelUrl,
       }
     });
 
@@ -54,6 +94,22 @@ export async function GET(req: NextRequest) {
     console.error('Error fetching label:', error);
     return NextResponse.json({ error: 'Failed to fetch label' }, { status: 500 });
   }
+}
+
+// Helper to generate sample label URL
+function generateSampleLabelUrl(
+  req: NextRequest,
+  orderId: string,
+  label: { carrier: string; service: string; trackingNumber: string | null }
+): string {
+  const baseUrl = new URL(req.url).origin;
+  return `${baseUrl}/api/admin/shipping/sample-label?` + new URLSearchParams({
+    orderNumber: orderId.slice(0, 8),
+    carrier: label.carrier,
+    service: label.service,
+    trackingNumber: label.trackingNumber || 'SAMPLE123456789',
+    format: 'svg',
+  }).toString();
 }
 
 export async function POST(req: NextRequest) {
