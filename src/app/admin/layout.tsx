@@ -55,7 +55,6 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
             </div>
 
             <div className="flex items-center gap-2 sm:gap-3">
-              <ModeToggle />
               <Link href="/">
                 <Button
                   variant="outline"
