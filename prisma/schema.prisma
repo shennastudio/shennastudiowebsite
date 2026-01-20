@@ -64,6 +64,7 @@ model User {
   supportTickets        SupportTicket[]
   ticketMessages        TicketMessage[]
   socialMediaPosts      SocialMediaPost[]      @relation("SocialMediaPosts")
+  customerTags          CustomerTags[]
 
   @@map("users")
 }
@@ -1898,4 +1899,160 @@ model TShirtInventoryTransaction {
 
   @@index([inventoryId])
   @@map("tshirt_inventory_transactions")
+}
+
+// ============================================================================
+// CUSTOMER SEGMENTATION
+// ============================================================================
+
+model CustomerTag {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  color       String   @default("#3B82F6") // Default blue
+  description String?
+  isAutomatic Boolean  @default(false) // Auto-applied based on rules
+  
+  // Rules for automatic tagging (JSON)
+  // { "minOrders": 5, "maxOrders": null, "minSpent": 500, "lastOrderDaysAgo": 90 }
+  rules       Json?
+  
+  customerCount Int     @default(0)
+  isActive      Boolean  @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  customers   CustomerTags[]
+  
+  @@map("customer_tags")
+}
+
+model CustomerTags {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tagId     String
+  tag       CustomerTag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+  
+  @@unique([userId, tagId])
+  @@map("customer_tags_relation")
+}
+
+model CustomerSegment {
+  id     String @id @default(cuid())
+  name   String @unique
+  description String?
+  
+  // Rules defining who belongs to this segment (JSON)
+  // { "tags": ["VIP", "Repeat Buyer"], "minOrders": 5, "maxOrders": null, "minSpent": 500 }
+  rules  Json
+  
+  customerCount Int      @default(0)
+  isActive      Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("customer_segments")
+}
+
+// ============================================================================
+// REVIEW REQUEST AUTOMATION
+// ============================================================================
+
+enum ReviewRequestStatus {
+  PENDING
+  SENT
+  DELIVERED
+  OPENED
+  CLICKED
+  REVIEWED
+  FAILED
+}
+
+model ReviewRequestWorkflow {
+  id     String @id @default(cuid())
+  name   String
+  
+  // Trigger configuration
+  triggerType    String  @default("order_delivered") // order_delivered, order_completed
+  triggerDelayHours Int @default(72) // Send 3 days after trigger
+  
+  // Email template
+  subject String
+  body    String   @db.Text // HTML template with variables
+  
+  // Variables for personalization (JSON)
+  // { "includeProducts": true, "includeImages": true, "includeIncentive": true }
+  templateConfig Json   @default("{}")
+  
+  // Incentive
+  incentiveType   String? // discount, store_credit, loyalty_points
+  incentiveValue  Float?
+  incentiveMinRating Int? // Only give incentive for ratings >= X
+  
+  // Channel
+  channel String @default("email") // email, sms, both
+  
+  // Reminders
+  remindersEnabled   Boolean @default(true)
+  remindersCount     Int     @default(2)
+  remindersIntervalDays Int  @default(7)
+  
+  // Targeting
+  targetSegments   String[] @default([]) // Customer segment IDs
+  excludeSegments  String[] @default([])
+  minOrderValue    Float?
+  
+  // Stats
+  totalSent     Int     @default(0)
+  totalOpened   Int     @default(0)
+  totalClicked  Int     @default(0)
+  totalReviewed Int     @default(0)
+  
+  isActive Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  logs ReviewRequestLog[]
+  
+  @@map("review_request_workflows")
+}
+
+model ReviewRequestLog {
+  id         String              @id @default(cuid())
+  workflowId String
+  workflow   ReviewRequestWorkflow @relation(fields: [workflowId], references: [id], onDelete: Cascade)
+  
+  orderId    String
+  customerId String?
+  customerEmail String
+  
+  // Email details
+  subject    String
+  providerId String? // Resend/SendGrid message ID
+  
+  status     ReviewRequestStatus @default(PENDING)
+  
+  sentAt     DateTime?
+  openedAt   DateTime?
+  clickedAt  DateTime?
+  reviewedAt DateTime?
+  
+  // Reminder tracking
+  reminderNumber Int @default(0)
+  
+  // Error handling
+  errorMessage String?
+  retryCount   Int  @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([workflowId])
+  @@index([orderId])
+  @@index([status])
+  @@map("review_request_logs")
 }
