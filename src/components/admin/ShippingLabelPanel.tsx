@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import type { OrderDetail } from '@/types';
+import { ShippingLabel, USPSLabel, UPSLabel, FedExLabel } from '@/components/admin/ShippingLabel';
 
 interface ShippingRate {
   id: string;
@@ -265,7 +266,7 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                 </div>
               )}
             </div>
-            {label?.labelUrl && (
+            {label?.labelUrl ? (
               <div className="mt-4 space-y-3">
                 {/* Primary Print Button */}
                 <Button
@@ -354,6 +355,101 @@ export function ShippingLabelPanel({ order, onLabelPurchased }: ShippingLabelPan
                           </div>
                         </object>
                       )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* No real label URL - Show sample label using our component */
+              <div className="mt-4 space-y-3">
+                {/* Sample Label Info */}
+                <div className="bg-amber-900/20 border border-amber-800 rounded-lg p-3">
+                  <div className="flex items-center gap-2 text-amber-400">
+                    <AlertCircle className="h-5 w-5" />
+                    <span className="font-medium">Sample Label (Test Mode)</span>
+                  </div>
+                  <p className="text-sm text-slate-400 mt-1">
+                    No shipping label purchased yet. This is a sample label for testing your printer.
+                  </p>
+                </div>
+
+                {/* Primary Print Button */}
+                <Button
+                  onClick={() => setShowLabelPreview(!showLabelPreview)}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3"
+                >
+                  <Printer className="h-5 w-5 mr-2" />
+                  {showLabelPreview ? 'Hide Sample Label' : 'Show Sample Label'}
+                </Button>
+
+                {/* Label Preview */}
+                {showLabelPreview && (
+                  <div className="border border-slate-600 rounded-lg overflow-hidden">
+                    <div className="bg-slate-800 px-3 py-2 flex items-center justify-between">
+                      <span className="text-sm text-slate-300">Sample Label Preview</span>
+                      <span className="text-xs text-slate-500">4x6 Label</span>
+                    </div>
+                    <div className="bg-gray-100 p-4 flex justify-center">
+                      <div style={{ transform: 'scale(0.6)', transformOrigin: 'top center' }}>
+                        {(label?.carrier === 'UPS' || order.carrier === 'UPS') && (
+                          <UPSLabel
+                            order={{
+                              orderNumber: order.orderNumber,
+                              customerName: order.customerName,
+                              shippingAddress: order.shippingAddress,
+                              shippingCity: order.shippingCity,
+                              shippingState: order.shippingState,
+                              shippingZip: order.shippingZip,
+                              shippingCountry: order.shippingCountry,
+                            }}
+                            trackingNumber={label?.trackingNumber || order.trackingNumber || '1Z' + Math.random().toString(36).substring(2, 18).toUpperCase()}
+                            service={label?.service || order.carrier || 'Ground'}
+                            weight="0.5"
+                          />
+                        )}
+                        {(label?.carrier === 'FedEx' || order.carrier === 'FedEx') && (
+                          <FedExLabel
+                            order={{
+                              orderNumber: order.orderNumber,
+                              customerName: order.customerName,
+                              shippingAddress: order.shippingAddress,
+                              shippingCity: order.shippingCity,
+                              shippingState: order.shippingState,
+                              shippingZip: order.shippingZip,
+                              shippingCountry: order.shippingCountry,
+                            }}
+                            trackingNumber={label?.trackingNumber || order.trackingNumber || '7489' + Math.floor(Math.random() * 100000000000).toString().padStart(12, '0')}
+                            service={label?.service || order.carrier || 'Ground'}
+                            weight="0.5"
+                          />
+                        )}
+                        {(!label?.carrier && !order.carrier || label?.carrier === 'USPS' || order.carrier === 'USPS') && (
+                          <USPSLabel
+                            order={{
+                              orderNumber: order.orderNumber,
+                              customerName: order.customerName,
+                              shippingAddress: order.shippingAddress,
+                              shippingCity: order.shippingCity,
+                              shippingState: order.shippingState,
+                              shippingZip: order.shippingZip,
+                              shippingCountry: order.shippingCountry,
+                            }}
+                            trackingNumber={label?.trackingNumber || order.trackingNumber || '9400' + Math.floor(Math.random() * 10000000000000000).toString().padStart(16, '0')}
+                            service={label?.service || 'Priority Mail'}
+                            weight="0.5"
+                          />
+                        )}
+                      </div>
+                    </div>
+                    <div className="bg-slate-800 px-3 py-2 text-center">
+                      <Button
+                        size="sm"
+                        onClick={() => window.open('/admin/shipping/sample-labels', '_blank')}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        <Printer className="h-4 w-4 mr-2" />
+                        Open Sample Label Printer
+                      </Button>
                     </div>
                   </div>
                 )}

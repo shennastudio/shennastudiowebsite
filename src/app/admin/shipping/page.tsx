@@ -15,7 +15,9 @@ import {
   ChevronRight,
   AlertCircle,
   MapPin,
+  Printer as LabelPrinter,
 } from 'lucide-react';
+import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
@@ -150,6 +152,14 @@ export default function ShippingPage() {
         <div>
           <h1 className="text-2xl font-bold text-white">Shipping Management</h1>
           <p className="text-slate-400 mt-1">Create and manage shipping labels</p>
+        </div>
+        <div className="flex gap-2">
+          <Link href="/admin/shipping/sample-labels">
+            <Button variant="outline" className="border-slate-600">
+              <LabelPrinter className="w-4 h-4 mr-2" />
+              Sample Labels
+            </Button>
+          </Link>
         </div>
       </div>
 

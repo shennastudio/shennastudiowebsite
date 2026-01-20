@@ -9,6 +9,7 @@ interface InvoiceTemplateProps {
     orderNumber: string;
     customerName: string;
     customerEmail: string;
+    customerPhone?: string | null;
     shippingAddress: string;
     shippingCity: string;
     shippingState: string;
@@ -74,58 +75,65 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
         </div>
 
         {/* Bill To */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold mb-3">Bill To:</h2>
-          <div className="text-gray-700">
-            <p className="font-medium">{order.customerName}</p>
-            <p>{order.customerEmail}</p>
-            <div className="mt-2">
-              {order.shippingAddress && <p>{order.shippingAddress}</p>}
-              {(order.shippingCity || order.shippingState || order.shippingZip) && (
-                <p>
-                  {[order.shippingCity, order.shippingState].filter(Boolean).join(', ')}
-                  {(order.shippingCity || order.shippingState) && order.shippingZip ? ' ' : ''}
-                  {order.shippingZip}
-                </p>
-              )}
-              {order.shippingCountry && <p>{order.shippingCountry}</p>}
+        <div className="mb-8 grid grid-cols-2 gap-8">
+          <div>
+            <h2 className="text-lg font-bold mb-3 text-gray-900">Bill To:</h2>
+            <div className="text-gray-800">
+              <p className="font-semibold text-lg">{order.customerName}</p>
+              <p className="text-gray-700">{order.customerEmail}</p>
+              {order.customerPhone && <p className="text-gray-700">{order.customerPhone}</p>}
             </div>
-            {!order.shippingAddress && !order.shippingCity && !order.shippingState && (
-              <p className="text-gray-400 italic text-sm mt-2">Address not provided at checkout</p>
-            )}
+          </div>
+          <div>
+            <h2 className="text-lg font-bold mb-3 text-gray-900">Ship To:</h2>
+            <div className="text-gray-800">
+              <p className="font-semibold text-lg">{order.customerName}</p>
+              <div className="mt-1">
+                {order.shippingAddress && <p>{order.shippingAddress}</p>}
+                {(order.shippingCity || order.shippingState || order.shippingZip) && (
+                  <p>
+                    {[order.shippingCity, order.shippingState].filter(Boolean).join(', ')}
+                    {(order.shippingCity || order.shippingState) && order.shippingZip ? ' ' : ''}
+                    {order.shippingZip}
+                  </p>
+                )}
+                {order.shippingCountry && <p>{order.shippingCountry}</p>}
+              </div>
+              {order.customerPhone && <p className="text-gray-700 mt-1">{order.customerPhone}</p>}
+            </div>
           </div>
         </div>
 
         {/* Items Table */}
         <div className="mb-8">
-          <table className="w-full">
-            <thead className="bg-gray-100 border-y border-gray-300">
-              <tr>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Item</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">SKU</th>
-                <th className="text-left py-3 px-4 font-semibold text-gray-700">Variant</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Qty</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Price</th>
-                <th className="text-right py-3 px-4 font-semibold text-gray-700">Total</th>
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-900 border-b-2 border-gray-900">
+                <th className="text-left py-3 px-4 font-bold text-white">Item</th>
+                <th className="text-left py-3 px-4 font-bold text-white">SKU</th>
+                <th className="text-left py-3 px-4 font-bold text-white">Variant</th>
+                <th className="text-right py-3 px-4 font-bold text-white">Qty</th>
+                <th className="text-right py-3 px-4 font-bold text-white">Price</th>
+                <th className="text-right py-3 px-4 font-bold text-white">Total</th>
               </tr>
             </thead>
             <tbody>
-              {order.items.map((item, index) => (
-                <tr key={item.id} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
-                  <td className="py-3 px-4 text-gray-800">{item.variant.product.name}</td>
-                  <td className="py-3 px-4 text-gray-600 font-mono text-sm">
+              {order.items.map((item) => (
+                <tr key={item.id} className="border-b border-gray-200">
+                  <td className="py-3 px-4 text-gray-900 font-medium">{item.variant.product.name}</td>
+                  <td className="py-3 px-4 text-gray-700 font-mono text-sm">
                     {item.variant.sku}
                   </td>
-                  <td className="py-3 px-4 text-gray-600 text-sm">
+                  <td className="py-3 px-4 text-gray-700 text-sm">
                     {[item.variant.size, item.variant.color, item.variant.material]
                       .filter(Boolean)
                       .join(', ') || '-'}
                   </td>
-                  <td className="py-3 px-4 text-right text-gray-800">{item.quantity}</td>
-                  <td className="py-3 px-4 text-right text-gray-800">
+                  <td className="py-3 px-4 text-right text-gray-900 font-medium">{item.quantity}</td>
+                  <td className="py-3 px-4 text-right text-gray-900">
                     ${item.price.toFixed(2)}
                   </td>
-                  <td className="py-3 px-4 text-right font-medium text-gray-800">
+                  <td className="py-3 px-4 text-right font-bold text-gray-900">
                     ${(item.quantity * item.price).toFixed(2)}
                   </td>
                 </tr>
@@ -137,45 +145,45 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
         {/* Totals */}
         <div className="flex justify-end mb-8">
           <div className="w-80">
-            <div className="flex justify-between py-2 border-b">
-              <span className="text-gray-600">Subtotal</span>
-              <span className="font-medium">${order.subtotal.toFixed(2)}</span>
+            <div className="flex justify-between py-2 border-b border-gray-300">
+              <span className="text-gray-800 font-medium">Subtotal</span>
+              <span className="font-bold text-gray-900">${order.subtotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between py-2 border-b">
-              <span className="text-gray-600">Shipping</span>
-              <span className="font-medium">${order.shippingCost.toFixed(2)}</span>
+            <div className="flex justify-between py-2 border-b border-gray-300">
+              <span className="text-gray-800 font-medium">Shipping</span>
+              <span className="font-bold text-gray-900">${order.shippingCost.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between py-2 border-b">
-              <span className="text-gray-600">Tax</span>
-              <span className="font-medium">${order.tax.toFixed(2)}</span>
+            <div className="flex justify-between py-2 border-b border-gray-300">
+              <span className="text-gray-800 font-medium">Tax</span>
+              <span className="font-bold text-gray-900">${order.tax.toFixed(2)}</span>
             </div>
             {order.conservationDonation && (
-              <div className="flex justify-between py-2 border-b bg-green-50 px-2">
-                <span className="text-green-700 font-medium">
+              <div className="flex justify-between py-2 border-b border-green-300 bg-green-100 px-3 py-2 rounded">
+                <span className="font-semibold text-green-900">
                   Conservation Donation ({order.conservationDonation.percentage}%)
                 </span>
-                <span className="font-medium text-green-700">
+                <span className="font-semibold text-green-900">
                   ${order.conservationDonation.amount.toFixed(2)}
                 </span>
               </div>
             )}
-            <div className="flex justify-between py-3 border-b-2 border-gray-800 mt-2">
-              <span className="font-bold text-lg">Total</span>
-              <span className="font-bold text-lg">${order.total.toFixed(2)}</span>
+            <div className="flex justify-between py-3 border-b-2 border-gray-900 mt-2">
+              <span className="font-bold text-xl text-gray-900">Total</span>
+              <span className="font-bold text-xl text-gray-900">${order.total.toFixed(2)}</span>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="border-t pt-6 text-center text-gray-600 text-sm">
-          <p className="mb-2">Thank you for your purchase!</p>
+        <div className="border-t-2 border-gray-900 pt-6 text-center text-gray-800 text-sm">
+          <p className="mb-2 font-medium">Thank you for your purchase!</p>
           {order.conservationDonation && (
-            <p className="text-green-600 font-medium">
+            <p className="text-green-800 font-semibold">
               Your purchase includes a ${order.conservationDonation.amount.toFixed(2)} donation
               to marine conservation efforts.
             </p>
           )}
-          <p className="mt-4 text-xs text-gray-500">
+          <p className="mt-4 text-gray-600">
             Shenna&apos;s Studio • Protecting Our Oceans, One Bracelet at a Time
           </p>
         </div>

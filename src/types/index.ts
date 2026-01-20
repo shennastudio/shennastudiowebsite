@@ -511,6 +511,7 @@ export interface OrderDetail {
   orderNumber: string;
   customerEmail: string;
   customerName: string;
+  customerPhone?: string | null;
   status: string;
   total: number;
   subtotal: number;
