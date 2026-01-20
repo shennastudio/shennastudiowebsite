@@ -62,7 +62,62 @@ export default function Home() {
       {/* Sale Banner */}
       <SaleBanner />
       
-      {/* Ocean Hero Section */}
+      {/* Mission-First Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-cyan-950 via-slate-900 to-slate-900">
+        {/* Animated Ocean Waves Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-1/2 left-0 right-0 h-full bg-gradient-to-b from-cyan-900/20 to-transparent" />
+          {/* Wave decorations */}
+          <svg className="absolute bottom-0 left-0 right-0 h-64 text-cyan-900/20" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="currentColor" fillOpacity="0.4" d="M0,192L48,176C96,160,192,128,288,128C384,128,480,160,576,186.7C672,213,768,235,864,224C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+          </svg>
+          <svg className="absolute bottom-0 left-0 right-0 h-48 text-cyan-800/30" viewBox="0 0 1440 320" preserveAspectRatio="none">
+            <path fill="currentColor" fillOpacity="0.3" d="M0,64L48,80C96,96,192,128,288,144C384,160,480,160,576,176C672,192,768,224,864,218.7C960,213,1056,171,1152,165.3C1248,160,1344,192,1392,208L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
+          </svg>
+        </div>
+
+        <div className="max-w-5xl mx-auto px-6 relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Headline */}
+            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+              Wear the Ocean. <span className="block text-cyan-300">Protect the Ocean.</span>
+            </h1>
+            
+            {/* Sub-headline */}
+            <p className="text-xl md:text-2xl text-cyan-100 mb-12 max-w-3xl mx-auto leading-relaxed font-light" style={{ fontFamily: 'Georgia, serif' }}>
+              Hand-crafted bracelets that fund real ocean conservation.
+              <span className="block mt-3 text-cyan-400">At least 10% of every purchase supports ocean nonprofits in South Padre Island & beyond.</span>
+            </p>
+            
+            {/* CTA Button */}
+            <Link href="/products">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-block bg-gradient-to-r from-cyan-600 to-teal-600 text-white px-12 py-5 rounded-full font-bold text-lg tracking-wide hover:from-cyan-500 hover:to-teal-500 transition-all shadow-2xl shadow-cyan-500/25"
+              >
+                Shop Bracelets That Give Back
+              </motion.button>
+            </Link>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div 
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white/50 flex flex-col items-center gap-2"
+        >
+          <span className="text-xs uppercase tracking-widest font-medium">Scroll</span>
+          <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent" />
+        </motion.div>
+      </section>
+
+      {/* Ocean Hero Section - Original */}
       <section ref={heroRef} className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-slate-900">
         <motion.div 
           style={{ y: y1 }}
