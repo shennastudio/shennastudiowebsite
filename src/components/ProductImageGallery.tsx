@@ -92,6 +92,8 @@ export default function ProductImageGallery({
                   fill
                   className="object-cover"
                   sizes="(max-width: 640px) 25vw, 10vw"
+                  loading={idx === 0 ? "eager" : "lazy"}
+                  priority={idx === 0}
                   onError={() => handleImageError(img)}
                 />
               ) : (

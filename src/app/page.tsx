@@ -56,17 +56,22 @@ export default function Home() {
       {/* Hero Section with Image */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/90 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/50 to-slate-900 z-10" />
           <Image
             src="/images/aboutpageparallax.jpg"
-            alt="Ocean background"
+            alt="Ocean background - Wear the Ocean, Protect the Ocean"
             fill
-            className="object-cover opacity-60"
             priority
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k="
+            sizes="100vw"
+            quality={85}
+            className="object-cover opacity-60"
+            style={{ objectPosition: 'center center' }}
           />
         </div>
 
-        <div className="max-w-5xl mx-auto px-6 relative z-20 text-center">
+        <div className="max-w-5xl mx-auto px-6 relative z-20 text-center w-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

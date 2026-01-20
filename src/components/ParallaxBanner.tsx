@@ -23,9 +23,9 @@ function ParallaxBanner({ src, alt, text }: { src: string; alt: string, text?: s
           alt={alt}
           fill
           sizes="100vw"
-          quality={75}
-          className="object-cover opacity-90"
+          quality={80}
           priority={false}
+          className="object-cover opacity-90"
         />
         {/* Dark overlay to ensure the glowing text is readable */}
         <div className="absolute inset-0 bg-black/60" />
