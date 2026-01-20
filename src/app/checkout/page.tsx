@@ -11,6 +11,7 @@ import { Loader2, ShoppingBag, ArrowLeft, Truck, Tag, X, CheckCircle } from 'luc
 import Link from 'next/link';
 import CartItemImage from '@/components/CartItemImage';
 import CheckoutFeaturedProducts from '@/components/CheckoutFeaturedProducts';
+import { TrustBadges } from '@/components/TrustBadges';
 
 // Static USPS shipping rates
 const USPS_SHIPPING_RATES = [
@@ -454,6 +455,7 @@ export default function CheckoutPage() {
                       `Proceed to Payment - $${finalTotal.toFixed(2)}`
                     )}
                   </Button>
+                  <TrustBadges />
                 </form>
               </CardContent>
             </Card>

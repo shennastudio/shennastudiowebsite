@@ -23,42 +23,72 @@ interface ShippingLabelProps {
 
 /**
  * 4x6 Shipping Label Component
- * Designed for thermal bluetooth printers
- * @see https://www.shippinglabels.com/4x6-shipping-label-specs
+ * Designed for thermal bluetooth printers with scannable barcode
  */
 export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps>(
   ({ order, carrier, trackingNumber, service, weight, date }, ref) => {
-    // Carrier-specific colors and logos
+    // Carrier-specific configuration
     const carrierConfig = {
       USPS: {
         name: 'USPS',
-        color: '#333',
-        bgColor: '#fff',
-        barColor: '#004B87',
+        color: '#333333',
+        barColor: '#000000',
         serviceName: service || 'PRIORITY MAIL',
+        logoText: '📮',
       },
       UPS: {
         name: 'UPS',
-        color: '#351c15',
-        bgColor: '#FFB500',
-        barColor: '#351c15',
+        color: '#351C15',
+        barColor: '#000000',
         serviceName: service || 'GROUND',
+        logoText: 'UPS',
       },
       FedEx: {
         name: 'FEDEX',
         color: '#4D148C',
-        bgColor: '#fff',
-        barColor: '#4D148C',
+        barColor: '#000000',
         serviceName: service || 'GROUND',
+        logoText: '✈️',
       },
     };
 
     const config = carrierConfig[carrier];
+    const barHeight = 48;
+    
+    // Generate barcode bars (Code128 style)
+    const generateBarcodeBars = (data: string): {x: number; width: number}[] => {
+      const bars: {x: number; width: number}[] = [];
+      let x = 0;
+      const barW = 2;
+      const spaceW = 1;
+      
+      // Start pattern
+      bars.push({ x, width: barW * 2 });
+      x += barW * 2 + spaceW * 2;
+      
+      for (let i = 0; i < data.length; i++) {
+        const charCode = data.charCodeAt(i);
+        const value = ((charCode - 32 + i) % 90) + 1;
+        
+        for (let j = 0; j < 3; j++) {
+          const w = ((value >> (j * 2)) & 3) + 1;
+          bars.push({ x, width: w * barW });
+          x += w * barW + spaceW;
+        }
+      }
+      
+      // Stop pattern
+      bars.push({ x, width: barW * 3 });
+      
+      return bars;
+    };
+
+    const barcodeBars = generateBarcodeBars(trackingNumber);
 
     return (
       <div
         ref={ref}
-        className="bg-white"
+        className="bg-white relative"
         style={{
           width: '6in',
           height: '4in',
@@ -68,30 +98,34 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
       >
         {/* Header with Carrier */}
         <div
-          className="flex justify-between items-start mb-2"
-          style={{ borderBottom: `2px solid ${config.color}`, paddingBottom: '8px' }}
+          className="flex justify-between items-start mb-1"
+          style={{ 
+            borderBottom: `3px solid ${config.color}`, 
+            paddingBottom: '6px' 
+          }}
         >
           <div>
             <div
               className="font-bold"
               style={{
-                fontSize: '28px',
+                fontSize: '32px',
                 color: config.color,
                 letterSpacing: '2px',
+                fontWeight: '900',
               }}
             >
-              {config.name}
+              {config.logoText} {config.name}
             </div>
-            <div style={{ fontSize: '10px', color: config.color, marginTop: '2px' }}>
+            <div style={{ fontSize: '11px', color: config.color, marginTop: '2px', fontWeight: 'bold' }}>
               {config.serviceName}
             </div>
           </div>
           <div className="text-right">
-            <div style={{ fontSize: '9px', color: '#666' }}>Tracking #</div>
+            <div style={{ fontSize: '9px', color: '#666', fontWeight: 'bold' }}>TRACKING #</div>
             <div
               className="font-mono font-bold"
               style={{
-                fontSize: '14px',
+                fontSize: '13px',
                 color: config.color,
                 letterSpacing: '1px',
               }}
@@ -102,19 +136,19 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
         </div>
 
         {/* From Address */}
-        <div className="mb-3">
+        <div className="mb-2">
           <div
             className="font-bold"
             style={{
-              fontSize: '11px',
+              fontSize: '10px',
               color: '#666',
-              marginBottom: '4px',
+              marginBottom: '2px',
             }}
           >
             FROM:
           </div>
-          <div style={{ fontSize: '14px', color: '#000', lineHeight: '1.3' }}>
-            <div className="font-bold">Shenna Studio</div>
+          <div style={{ fontSize: '13px', color: '#000', lineHeight: '1.3' }}>
+            <div className="font-bold" style={{ fontSize: '14px' }}>Shenna Studio</div>
             <div>PO Box 1234</div>
             <div>South Padre Island, TX 78597</div>
           </div>
@@ -122,11 +156,11 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
 
         {/* To Address - Large and Clear */}
         <div
-          className="mb-3"
+          className="mb-2"
           style={{
-            border: `2px solid ${config.color}`,
-            borderRadius: '4px',
-            padding: '12px',
+            border: `3px solid ${config.color}`,
+            borderRadius: '3px',
+            padding: '10px',
             backgroundColor: '#fff',
           }}
         >
@@ -135,23 +169,23 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
             style={{
               fontSize: '10px',
               color: config.color,
-              marginBottom: '6px',
+              marginBottom: '4px',
               textTransform: 'uppercase',
             }}
           >
             To:
           </div>
-          <div style={{ fontSize: '18px', color: '#000', lineHeight: '1.4', fontWeight: 'bold' }}>
-            <div>{order.customerName}</div>
+          <div style={{ fontSize: '16px', color: '#000', lineHeight: '1.35', fontWeight: 'bold' }}>
+            <div style={{ fontSize: '18px' }}>{order.customerName}</div>
             <div>{order.shippingAddress}</div>
             {order.shippingAddress2 && <div>{order.shippingAddress2}</div>}
             <div>
               {order.shippingCity}, {order.shippingState} {order.shippingZip}
             </div>
-            <div style={{ fontSize: '14px', color: '#666' }}>{order.shippingCountry}</div>
+            <div style={{ fontSize: '13px', color: '#666' }}>{order.shippingCountry}</div>
           </div>
           {order.customerPhone && (
-            <div style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
+            <div style={{ fontSize: '11px', color: '#666', marginTop: '6px' }}>
               Phone: {order.customerPhone}
             </div>
           )}
@@ -159,61 +193,100 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
 
         {/* Bottom Section: Barcode and Info */}
         <div className="flex justify-between items-end">
-          {/* Barcode */}
-          <div>
+          {/* Scannable Barcode */}
+          <div style={{ flex: 1 }}>
             <div
               style={{
-                backgroundColor: config.barColor,
-                padding: '8px 12px',
+                backgroundColor: '#fff',
+                border: `2px solid ${config.color}`,
                 borderRadius: '4px',
+                padding: '8px',
               }}
             >
-              <div className="flex gap-0.5">
-                {[...Array(35)].map((_, i) => (
+              {/* Barcode Visual */}
+              <div style={{ position: 'relative', height: barHeight }}>
+                {barcodeBars.map((bar, i) => (
                   <div
                     key={i}
-                    className="bg-white"
                     style={{
-                      width: `${2 + Math.random() * 3}px`,
-                      height: '40px',
+                      position: 'absolute',
+                      left: bar.x,
+                      top: 0,
+                      width: bar.width,
+                      height: barHeight,
+                      backgroundColor: config.barColor,
                     }}
                   />
                 ))}
               </div>
+              
+              {/* Human readable tracking below barcode */}
               <div
-                className="font-mono text-center mt-1"
+                className="font-mono text-center"
                 style={{
-                  fontSize: '12px',
-                  color: '#fff',
-                  letterSpacing: '3px',
+                  fontSize: '11px',
+                  color: config.color,
+                  letterSpacing: '2px',
+                  marginTop: '4px',
+                  fontWeight: 'bold',
                 }}
               >
                 {trackingNumber}
               </div>
+              
+              {/* Service Type Barcode for USPS */}
+              {carrier === 'USPS' && (
+                <div style={{ fontSize: '8px', color: '#666', textAlign: 'center', marginTop: '2px' }}>
+                  USPS DELIVERY CONFIRMATION
+                </div>
+              )}
             </div>
           </div>
 
           {/* Service and Weight Info */}
-          <div className="text-right" style={{ fontSize: '11px', color: '#666' }}>
-            {weight && <div>WT: {weight} LB</div>}
+          <div className="text-right ml-4" style={{ fontSize: '11px', color: '#666', minWidth: '100px' }}>
+            {weight && <div style={{ fontWeight: 'bold' }}>WT: {weight} LB</div>}
             <div>{date || new Date().toLocaleDateString()}</div>
-            <div className="font-bold" style={{ color: config.color }}>
+            <div style={{ fontWeight: 'bold', color: config.color, fontSize: '14px' }}>
               {order.shippingZip}
             </div>
+            {carrier === 'USPS' && (
+              <div style={{ fontSize: '9px', marginTop: '2px' }}>
+                <div>PS FORM 3877</div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Order Number */}
         <div
-          className="text-center mt-2"
+          className="text-center"
           style={{
             fontSize: '10px',
             color: '#666',
-            borderTop: '1px solid #ddd',
+            borderTop: `1px solid ${config.color}`,
             paddingTop: '4px',
+            marginTop: '4px',
           }}
         >
-          Order #: {order.orderNumber}
+          Order #: {order.orderNumber} | {carrier} {config.serviceName}
+        </div>
+
+        {/* Carrier-specific footer */}
+        <div
+          className="text-center"
+          style={{
+            position: 'absolute',
+            bottom: '4px',
+            left: '0.125in',
+            right: '0.125in',
+            fontSize: '8px',
+            color: '#999',
+          }}
+        >
+          {carrier === 'USPS' && 'United States Postal Service - Domestic Mail Manual Compliant'}
+          {carrier === 'UPS' && 'UPS - United Parcel Service - Brown'}
+          {carrier === 'FedEx' && 'FedEx Corporation - Federal Express'}
         </div>
       </div>
     );

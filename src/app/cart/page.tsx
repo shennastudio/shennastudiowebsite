@@ -10,6 +10,7 @@ import CartItemImage from '@/components/CartItemImage'
 import { Tag, X, Loader2, Minus, Plus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { TrustBadges } from '@/components/TrustBadges'
 
 export default function CartPage() {
   const { state, clearCart, updateQuantity, removeItem, applyDiscount, removeDiscount } = useCart();
@@ -324,19 +325,20 @@ export default function CartPage() {
               )}
 
               {/* Action Buttons */}
-              <div className="space-y-2 sm:space-y-3">
-                <button
-                  onClick={handleCheckout}
-                  className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base shadow-lg shadow-teal-900/20"
-                >
-                  Proceed to Checkout
-                </button>
-                <button
-                  onClick={clearCart}
-                  className="w-full border border-slate-700 text-slate-300 hover:bg-slate-800 py-2 rounded-lg transition-colors text-sm sm:text-base"
-                >
-                  Clear Cart
-                </button>
+                <div className="space-y-2 sm:space-y-3">
+                  <button
+                    onClick={handleCheckout}
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base shadow-lg shadow-teal-900/20"
+                  >
+                    Proceed to Checkout
+                  </button>
+                  <TrustBadges />
+                  <button
+                    onClick={clearCart}
+                    className="w-full border border-slate-700 text-slate-300 hover:bg-slate-800 py-2 rounded-lg transition-colors text-sm sm:text-base"
+                  >
+                    Clear Cart
+                  </button>
                 <Link
                   href="/products"
                   className="block text-center text-teal-400 hover:text-teal-300 py-2 text-sm sm:text-base"
