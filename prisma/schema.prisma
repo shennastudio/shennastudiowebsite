@@ -1763,3 +1763,139 @@ model BraceletSize {
   @@index([displayOrder])
   @@map("bracelet_sizes")
 }
+
+// ============================================================================
+// T-SHIRT INVENTORY MANAGEMENT
+// ============================================================================
+
+// T-shirt categories for organizing products
+model TShirtCategory {
+  id          String  @id @default(cuid())
+  name        String  // e.g., "Ocean Theme", "Conservation", "Marine Life"
+  slug        String  @unique
+  description String?
+  imageUrl    String?
+  isActive    Boolean @default(true)
+  displayOrder Int    @default(0)
+
+  products TShirtProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([displayOrder])
+  @@map("tshirt_categories")
+}
+
+// Available T-shirt colors
+model TShirtColor {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g., "White", "Navy", "Seafoam", "Coral", "Black"
+  hexCode     String? // Hex color code for UI display
+  isActive    Boolean @default(true)
+  displayOrder Int    @default(0)
+
+  inventory TShirtInventory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([displayOrder])
+  @@map("tshirt_colors")
+}
+
+// T-shirt sizes
+model TShirtSize {
+  id          String  @id @default(cuid())
+  name        String  @unique // e.g., "XS", "S", "M", "L", "XL", "XXL", "3XL"
+  label       String  // e.g., "Extra Small", "Small", "Medium", etc.
+  chestWidth  String? // e.g., "34-36", "36-38", etc.
+  length      String? // e.g., "26", "28", etc.
+  isActive    Boolean @default(true)
+  displayOrder Int    @default(0)
+
+  inventory TShirtInventory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([displayOrder])
+  @@map("tshirt_sizes")
+}
+
+// T-shirt products
+model TShirtProduct {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  description String?
+  basePrice   Float
+  imageUrl    String?
+  isActive    Boolean @default(true)
+
+  categoryId String?
+  category   TShirtCategory? @relation(fields: [categoryId], references: [id])
+
+  inventory TShirtInventory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([slug])
+  @@map("tshirt_products")
+}
+
+// T-shirt inventory - tracks stock levels
+model TShirtInventory {
+  id          String  @id @default(cuid())
+  
+  productId   String
+  product     TShirtProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  colorId     String
+  color       TShirtColor @relation(fields: [colorId], references: [id])
+  
+  sizeId      String
+  size        TShirtSize @relation(fields: [sizeId], references: [id])
+  
+  stock       Int      @default(0)
+  price       Float    @default(0)
+  sku         String?  @unique
+  
+  reorderPoint Int     @default(10)
+  safetyStock  Int     @default(5)
+  
+  // Tracking
+  lastRestockAt DateTime?
+  lastSaleAt    DateTime?
+  
+  // Relations
+  transactions TShirtInventoryTransaction[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, colorId, sizeId])
+  @@index([productId])
+  @@index([colorId])
+  @@index([sizeId])
+  @@index([stock])
+  @@map("tshirt_inventory")
+}
+
+// T-shirt inventory transactions (for audit trail)
+model TShirtInventoryTransaction {
+  id          String         @id @default(cuid())
+  inventoryId String
+  inventory   TShirtInventory @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  
+  type        TransactionType
+  quantity    Int
+  reason      String?
+  
+  createdAt DateTime @default(now())
+
+  @@index([inventoryId])
+  @@map("tshirt_inventory_transactions")
+}

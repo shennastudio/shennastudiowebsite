@@ -8,7 +8,8 @@ import {
   Edit,
   Search,
   RefreshCw,
-  Shirt
+  Shirt,
+  Link,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
@@ -226,6 +227,13 @@ export default function TShirtInventoryPage() {
           >
             {autoRefresh ? 'Pause' : 'Resume'}
           </Button>
+
+          <Link href="/admin/inventory/tshirts/manage">
+            <Button variant="outline" size="sm">
+              <Edit className="w-4 h-4 mr-2" />
+              Manage Inventory
+            </Button>
+          </Link>
         </div>
       </div>
 
