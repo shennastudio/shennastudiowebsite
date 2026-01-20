@@ -14,7 +14,11 @@ import {
   Heart,
   Star,
   Mail,
-  Truck
+  Truck,
+  Users2,
+  MessageSquare,
+  BarChart3,
+  AlertCircle
 } from 'lucide-react';
 import Link from 'next/link';
 import { LowStockWidget } from '@/components/admin/LowStockWidget';
@@ -396,6 +400,58 @@ export default async function AdminDashboard() {
               <div className="text-center sm:text-left">
                 <p className="font-semibold text-slate-100 group-hover:text-teal-400 transition-colors text-xs sm:text-sm">Conservation</p>
                 <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Track impact</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/customers/segments"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700 hover:shadow-lg hover:border-violet-700/50 transition-all duration-200"
+            >
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-violet-500/20 to-purple-500/20 rounded-lg group-hover:scale-110 transition-transform">
+                <Users2 className="w-4 h-4 sm:w-5 sm:h-5 text-violet-400" />
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-100 group-hover:text-violet-400 transition-colors text-xs sm:text-sm">Segmentation</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Customer tags</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/reviews/automation"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700 hover:shadow-lg hover:border-pink-700/50 transition-all duration-200"
+            >
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-pink-500/20 to-rose-500/20 rounded-lg group-hover:scale-110 transition-transform">
+                <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400" />
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-100 group-hover:text-pink-400 transition-colors text-xs sm:text-sm">Reviews</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Automation</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/abandoned-carts"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700 hover:shadow-lg hover:border-orange-700/50 transition-all duration-200"
+            >
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-orange-500/20 to-amber-500/20 rounded-lg group-hover:scale-110 transition-transform">
+                <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-100 group-hover:text-orange-400 transition-colors text-xs sm:text-sm">Abandoned</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Cart recovery</p>
+              </div>
+            </Link>
+
+            <Link
+              href="/admin/analytics"
+              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-slate-800/50 rounded-xl border border-slate-700 hover:shadow-lg hover:border-cyan-700/50 transition-all duration-200"
+            >
+              <div className="p-2 sm:p-3 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-lg group-hover:scale-110 transition-transform">
+                <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="font-semibold text-slate-100 group-hover:text-cyan-400 transition-colors text-xs sm:text-sm">Analytics</p>
+                <p className="text-[10px] sm:text-xs text-slate-500 hidden sm:block">Sales & stats</p>
               </div>
             </Link>
           </div>
