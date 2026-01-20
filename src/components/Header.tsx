@@ -117,9 +117,6 @@ export default function Header() {
             {/* Search Bar */}
             <SearchBar />
 
-            {/* Language Selector */}
-            <LanguageSelector />
-
             {/* Social Media Share Buttons */}
             <SocialMediaButtons />
 
@@ -177,6 +174,9 @@ export default function Header() {
                 </motion.div>
               </div>
             )}
+
+            {/* Language Selector - Far Right */}
+            <LanguageSelector />
           </div>
 
           {/* Mobile menu button */}
@@ -236,6 +236,11 @@ export default function Header() {
                 >
                   Cart {cart.items.length > 0 && `(${cart.items.length})`}
                 </Link>
+
+                {/* Mobile Language Selector */}
+                <div className="pt-2 px-4">
+                  <LanguageSelector />
+                </div>
 
                 {/* Mobile User Actions */}
                 <div className="pt-4 px-4 space-y-2 border-t border-teal-100/50 mt-4">

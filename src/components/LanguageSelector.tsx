@@ -2,98 +2,121 @@
 
 import { useEffect, useState, useRef } from 'react';
 
+const languages = [
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'es', name: 'Español', flag: '🇲🇽' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', name: 'Português', flag: '🇧🇷' },
+  { code: 'zh-CN', name: '中文', flag: '🇨🇳' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+];
+
 export function LanguageSelector() {
   const [mounted, setMounted] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState('en');
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
+    
+    const checkCurrentLang = setInterval(() => {
+      const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+      if (select && select.value) {
+        setCurrentLang(select.value);
+        clearInterval(checkCurrentLang);
+      }
+    }, 500);
 
-    const initGoogleTranslate = () => {
-      if (typeof window !== 'undefined' && (window as any).google?.translate) {
-        const existingCombo = document.querySelector('.goog-te-combo');
-        if (existingCombo) {
-          existingCombo.remove();
-        }
-
-        const existingBar = document.querySelector('.goog-te-banner-frame');
-        if (existingBar) {
-          existingBar.remove();
-        }
-
-        try {
-          new (window as any).google.translate.TranslateElement({
-            pageLanguage: 'en',
-            includedLanguages: 'en,es,fr,de,it,pt,zh-CN,ja,ko,ar,ru,nl,pl,tr,vi,th,hi,uk,he',
-            layout: (window as any).google.translate.TranslateElement.InlineLayout.HORIZONTAL,
-            autoDisplay: false,
-            multilanguagePage: true,
-          }, 'google_translate_element');
-        } catch (error) {
-          console.error('Error initializing Google Translate:', error);
-        }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
       }
     };
 
-    const checkGoogleLoaded = setInterval(() => {
-      if (typeof window !== 'undefined' && (window as any).google?.translate) {
-        clearInterval(checkGoogleLoaded);
-        setTimeout(initGoogleTranslate, 100);
-      }
-    }, 50);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      clearInterval(checkGoogleLoaded);
+      clearInterval(checkCurrentLang);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleLanguageChange = (langCode: string) => {
+    setCurrentLang(langCode);
+    setIsOpen(false);
+
+    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+    if (select) {
+      select.value = langCode;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+  };
+
+  const currentLanguage = languages.find(l => l.code === currentLang) || languages[0];
 
   if (!mounted) {
     return (
       <div className="flex items-center">
-        <div className="w-32 h-9 bg-slate-100 rounded-lg animate-pulse" />
+        <div className="w-28 h-9 bg-slate-100 rounded-lg animate-pulse" />
       </div>
     );
   }
 
   return (
-    <div className="flex items-center relative" ref={containerRef}>
-      <div 
-        id="google_translate_element" 
-        className="flex items-center min-w-[160px]"
-      />
-      
-      <style jsx global>{`
-        .goog-te-banner-frame {
-          display: none !important;
-        }
-        .goog-te-menu-value:hover {
-          text-decoration: none;
-        }
-        .goog-te-combo {
-          padding: 6px 12px;
-          border-radius: 6px;
-          border: 1px solid #e2e8f0;
-          background-color: white;
-          font-size: 14px;
-          color: #0f766e;
-          cursor: pointer;
-          min-width: 150px;
-        }
-        .goog-te-combo:focus {
-          outline: none;
-          border-color: #0d9488;
-          box-shadow: 0 0 0 2px rgba(13, 148, 136, 0.2);
-        }
-        body {
-          top: 0 !important;
-        }
-        .skiptranslate {
-          display: inline !important;
-        }
-        .goog-te-spinner {
-          display: none !important;
-        }
-      `}</style>
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors shadow-sm text-sm"
+      >
+        <span className="text-lg">{currentLanguage.flag}</span>
+        <span className="text-gray-700 font-medium hidden sm:inline">{currentLanguage.name}</span>
+        <svg 
+          className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <>
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden max-h-80 overflow-y-auto">
+            <div className="p-2">
+              {languages.map((lang) => (
+                <button
+                  key={lang.code}
+                  onClick={() => handleLanguageChange(lang.code)}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left ${
+                    currentLang === lang.code 
+                      ? 'bg-teal-50 text-teal-700' 
+                      : 'text-gray-700 hover:bg-slate-100'
+                  }`}
+                >
+                  <span className="text-lg">{lang.flag}</span>
+                  <span className="font-medium">{lang.name}</span>
+                  {currentLang === lang.code && (
+                    <svg className="w-4 h-4 ml-auto text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
