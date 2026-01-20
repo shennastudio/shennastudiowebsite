@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import { useReactToPrint } from 'react-to-print';
+import { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { USPSLabel, UPSLabel, FedExLabel } from '@/components/admin/ShippingLabel';
 import { Printer, Download, Package, Truck, Package as PackageIcon } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 // Sample test data for label printing
 const SAMPLE_ORDERS = [
@@ -48,10 +48,11 @@ const SAMPLE_ORDERS = [
 export default function SampleLabelsPage() {
   const [selectedCarrier, setSelectedCarrier] = useState<'USPS' | 'UPS' | 'FedEx'>('USPS');
   const [selectedOrder, setSelectedOrder] = useState(SAMPLE_ORDERS[0]);
-  const labelRef = useRef<HTMLDivElement>(null);
+  const [isPrinting, setIsPrinting] = useState(false);
+  const printContainerRef = useRef<HTMLDivElement>(null);
 
   // Generate sample tracking numbers
-  const generateTracking = (carrier: string) => {
+  const generateTracking = useCallback((carrier: string) => {
     if (carrier === 'USPS') {
       return '9400' + Math.floor(Math.random() * 10000000000000000).toString().padStart(16, '0');
     } else if (carrier === 'FedEx') {
@@ -60,30 +61,110 @@ export default function SampleLabelsPage() {
       const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       return '1Z' + Array.from({ length: 16 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
     }
-  };
+  }, []);
 
   const trackingNumber = generateTracking(selectedCarrier);
 
-  const handlePrint = useReactToPrint({
-    contentRef: labelRef,
-    documentTitle: `${selectedCarrier}-Label-${selectedOrder.orderNumber}`,
-    pageStyle: `
-      @page {
-        size: 4in 6in;
-        margin: 0;
-      }
-      @media print {
-        body {
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
-        }
-        @page {
-          size: 4in 6in;
-          margin: 0;
-        }
-      }
-    `,
-  });
+  const handlePrint = useCallback(() => {
+    setIsPrinting(true);
+    // Create a temporary print window
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      toast.error('Please allow popups to print');
+      setIsPrinting(false);
+      return;
+    }
+
+    const labelContent = printContainerRef.current?.innerHTML || '';
+    
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>${selectedCarrier} Label</title>
+          <style>
+            @page {
+              size: 4in 6in;
+              margin: 0;
+            }
+            @media print {
+              body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                margin: 0;
+                padding: 0;
+              }
+              @page {
+                size: 4in 6in;
+                margin: 0;
+              }
+            }
+            body {
+              margin: 0;
+              padding: 0;
+              width: 4in;
+              height: 6in;
+            }
+            .label-container {
+              width: 4in !important;
+              height: 6in !important;
+              overflow: hidden;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="label-container">
+            ${labelContent}
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+              window.onafterprint = function() {
+                window.close();
+              };
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    
+    printWindow.document.close();
+    setIsPrinting(false);
+  }, [selectedCarrier]);
+
+  const handleDownloadSVG = useCallback(() => {
+    // Create a simple SVG-based label for download
+    const svgContent = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+        <rect width="600" height="400" fill="white" stroke="black" stroke-width="2"/>
+        <text x="300" y="40" text-anchor="middle" font-family="Arial" font-size="32" font-weight="bold">${selectedCarrier}</text>
+        <text x="300" y="65" text-anchor="anchor="middle" font-family="Arial" font-size="14">${selectedCarrier === 'USPS' ? 'PRIORITY MAIL' : selectedCarrier === 'UPS' ? 'GROUND' : 'GROUND'}</text>
+        <line x1="20" y1="80" x2="580" y2="80" stroke="black" stroke-width="2"/>
+        <text x="30" y="110" font-family="Arial" font-size="16" font-weight="bold">FROM:</text>
+        <text x="30" y="135" font-family="Arial" font-size="14">Shenna Studio</text>
+        <text x="30" y="155" font-family="Arial" font-size="14">PO Box 1234</text>
+        <text x="30" y="175" font-family="Arial" font-size="14">South Padre Island, TX 78597</text>
+        <rect x="20" y="200" width="560" height="140" fill="none" stroke="black" stroke-width="2" rx="5"/>
+        <text x="35" y="225" font-family="Arial" font-size="12" font-weight="bold">TO:</text>
+        <text x="35" y="250" font-family="Arial" font-size="18" font-weight="bold">${selectedOrder.customerName}</text>
+        <text x="35" y="275" font-family="Arial" font-size="16">${selectedOrder.shippingAddress}</text>
+        ${selectedOrder.shippingAddress2 ? `<text x="35" y="295" font-family="Arial" font-size="16">${selectedOrder.shippingAddress2}</text>` : ''}
+        <text x="35" y="320" font-family="Arial" font-size="16">${selectedOrder.shippingCity}, ${selectedOrder.shippingState} ${selectedOrder.shippingZip}</text>
+        <text x="35" y="340" font-family="Arial" font-size="14">${selectedOrder.shippingCountry}</text>
+        ${selectedOrder.customerPhone ? `<text x="35" y="360" font-family="Arial" font-size="12">Phone: ${selectedOrder.customerPhone}</text>` : ''}
+        <rect x="20" y="350" width="560" height="45" fill="black"/>
+        <text x="300" y="375" fill="white" text-anchor="middle" font-family="Courier" font-size="14" letter-spacing="3">${trackingNumber}</text>
+      </svg>
+    `;
+    
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${selectedCarrier}-label-${selectedOrder.orderNumber}.svg`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [selectedCarrier, selectedOrder, trackingNumber]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
@@ -92,7 +173,6 @@ export default function SampleLabelsPage() {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Sample Shipping Labels</h1>
           <p className="text-gray-600">
             Generate and print sample 4x6 shipping labels for testing your bluetooth printer.
-            These labels are sized for thermal printers.
           </p>
         </div>
 
@@ -163,28 +243,18 @@ export default function SampleLabelsPage() {
                 <p className="font-mono text-xs break-all">{trackingNumber}</p>
               </div>
               <Button
-                onClick={() => handlePrint?.()}
+                onClick={handlePrint}
                 className="w-full"
                 variant="default"
+                disabled={isPrinting}
               >
                 <Printer className="h-4 w-4 mr-2" />
-                Print 4x6 Label
+                {isPrinting ? 'Opening...' : 'Print 4x6 Label'}
               </Button>
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => {
-                  // Create SVG data URL for download
-                  const svgContent = document.getElementById('label-svg-container')?.innerHTML;
-                  if (svgContent) {
-                    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${selectedCarrier}-label-${selectedOrder.orderNumber}.svg`;
-                    a.click();
-                  }
-                }}
+                onClick={handleDownloadSVG}
               >
                 <Download className="h-4 w-4 mr-2" />
                 Download SVG
@@ -202,42 +272,9 @@ export default function SampleLabelsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex justify-center bg-gray-200 p-8 rounded-lg">
-              {/* Hidden reference for printing */}
-              <div ref={labelRef} style={{ display: 'none' }}>
-                {selectedCarrier === 'USPS' && (
-                  <USPSLabel
-                    order={selectedOrder}
-                    trackingNumber={trackingNumber}
-                    service="Priority Mail"
-                    weight="0.5"
-                  />
-                )}
-                {selectedCarrier === 'UPS' && (
-                  <UPSLabel
-                    order={selectedOrder}
-                    trackingNumber={trackingNumber}
-                    service="Ground"
-                    weight="0.5"
-                  />
-                )}
-                {selectedCarrier === 'FedEx' && (
-                  <FedExLabel
-                    order={selectedOrder}
-                    trackingNumber={trackingNumber}
-                    service="Ground"
-                    weight="0.5"
-                  />
-                )}
-              </div>
-
-              {/* Visible preview (scaled) */}
-              <div
-                style={{
-                  transform: 'scale(0.5)',
-                  transformOrigin: 'top center',
-                }}
-              >
+            <div className="flex justify-center bg-gray-200 p-8 rounded-lg print-preview-container">
+              {/* This is the label that gets printed */}
+              <div ref={printContainerRef} className="print-label">
                 {selectedCarrier === 'USPS' && (
                   <USPSLabel
                     order={selectedOrder}
@@ -267,7 +304,7 @@ export default function SampleLabelsPage() {
 
             <div className="mt-4 text-center text-sm text-gray-500">
               <p>
-                Preview shown at 50% scale. Actual print size: 4&quot; x 6&quot;
+                Preview shown above. Click &quot;Print 4x6 Label&quot; to print.
               </p>
               <p className="mt-1">
                 Configure your printer to use 4x6 inch label size with no margins.
@@ -307,6 +344,25 @@ export default function SampleLabelsPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Print styles */}
+      <style jsx global>{`
+        @media print {
+          .print-preview-container {
+            display: none !important;
+          }
+        }
+        .print-label {
+          width: 6in;
+          height: 4in;
+        }
+        @media screen {
+          .print-label {
+            transform: scale(0.5);
+            transform-origin: top center;
+          }
+        }
+      `}</style>
     </div>
   );
 }
