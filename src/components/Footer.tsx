@@ -21,7 +21,7 @@ export default function Footer() {
               Handcrafted custom bracelets in Brownsville, TX. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
             </p>
             <div className="text-cyan-200 text-sm mt-4">
-              <p className="font-semibold text-white">Shenna's Studio</p>
+              <p className="font-semibold text-white">Shenna&apos;s Studio</p>
               <p>2436 Pablo Kisel Blvd</p>
               <p>Brownsville, TX 78520</p>
               <p className="mt-2 text-cyan-300">📍 Brownsville, Texas</p>
@@ -218,7 +218,7 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-cyan-700">
           <div className="max-w-4xl mx-auto text-center mb-6">
             <p className="text-cyan-200 text-sm leading-relaxed">
-              <strong className="text-white">Shenna's Studio</strong> - Your trusted source for 
+              <strong className="text-white">Shenna&apos;s Studio</strong> - Your trusted source for 
               <span className="text-white font-semibold"> custom bracelets in Brownsville, TX</span>. 
               Handcrafted ocean-inspired bracelets, jewelry, and apparel that make a difference. 
               Shop eco-friendly beaded bracelets, artisan jewelry, and sustainable t-shirts in the Rio Grande Valley. 
@@ -228,7 +228,7 @@ export default function Footer() {
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center text-cyan-300 text-sm gap-4">
             <p className="text-center md:text-left">
-              © 2025 Shenna's Studio™. All Rights Reserved. <br className="md:hidden" />
+              © 2025 Shenna&apos;s Studio™. All Rights Reserved. <br className="md:hidden" />
               Handcrafted in Brownsville, Texas since March 2025.
             </p>
             <div className="flex items-center gap-4">

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface ShippingLabelProps {
   order: {
@@ -54,7 +55,7 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
 
     const config = carrierConfig[carrier];
     const barHeight = 48;
-    
+
     // Generate barcode bars (Code128 style)
     const generateBarcodeBars = (data: string): {x: number; width: number}[] => {
       const bars: {x: number; width: number}[] = [];
@@ -95,45 +96,56 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
           padding: '0.125in',
           fontFamily: 'Arial, Helvetica, sans-serif',
         }}
-      >
-        {/* Header with Carrier */}
-        <div
-          className="flex justify-between items-start mb-1"
-          style={{ 
-            borderBottom: `3px solid ${config.color}`, 
-            paddingBottom: '6px' 
-          }}
         >
-          <div>
-            <div
-              className="font-bold"
-              style={{
-                fontSize: '32px',
-                color: config.color,
-                letterSpacing: '2px',
-                fontWeight: '900',
-              }}
-            >
-              {config.logoText} {config.name}
+          {/* Header with Carrier */}
+          <div
+            className="flex justify-between items-start mb-1"
+            style={{ 
+              borderBottom: `3px solid ${config.color}`, 
+              paddingBottom: '6px' 
+            }}
+          >
+            <div>
+              <div
+                className="font-bold"
+                style={{
+                  fontSize: '32px',
+                  color: config.color,
+                  letterSpacing: '2px',
+                  fontWeight: '900',
+                }}
+              >
+                {carrier === 'UPS' ? config.name : `${config.logoText} ${config.name}`}
+              </div>
+              <div style={{ fontSize: '11px', color: config.color, marginTop: '2px', fontWeight: 'bold' }}>
+                {config.serviceName}
+              </div>
             </div>
-            <div style={{ fontSize: '11px', color: config.color, marginTop: '2px', fontWeight: 'bold' }}>
-              {config.serviceName}
+            <div className="flex items-center gap-3">
+              {/* Shenna Studio Logo */}
+              <div style={{ width: '60px', height: '30px', position: 'relative' }}>
+                <Image
+                  src="/images/shenna-studio-logo.png"
+                  alt="Shenna Studio"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
+              <div className="text-right">
+                <div style={{ fontSize: '9px', color: '#666', fontWeight: 'bold' }}>TRACKING #</div>
+                <div
+                  className="font-mono font-bold"
+                  style={{
+                    fontSize: '13px',
+                    color: config.color,
+                    letterSpacing: '1px',
+                  }}
+                >
+                  {trackingNumber}
+                </div>
+              </div>
             </div>
           </div>
-          <div className="text-right">
-            <div style={{ fontSize: '9px', color: '#666', fontWeight: 'bold' }}>TRACKING #</div>
-            <div
-              className="font-mono font-bold"
-              style={{
-                fontSize: '13px',
-                color: config.color,
-                letterSpacing: '1px',
-              }}
-            >
-              {trackingNumber}
-            </div>
-          </div>
-        </div>
 
         {/* From Address */}
         <div className="mb-2">

@@ -11,6 +11,7 @@ import { ShoppingCart, Menu, X } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ModeToggle } from '@/components/ModeToggle'
 
 interface SiteSettings {
   siteName: string;
@@ -115,6 +116,14 @@ export default function Header() {
             {/* Search Bar */}
             <SearchBar />
 
+            {/* Language Selector */}
+            <div className="language-selector" dangerouslySetInnerHTML={{ __html: `
+              <div id="google_translate_element" class="flex items-center"></div>
+            ` }} />
+
+            {/* Mode Toggle */}
+            <ModeToggle />
+
             {/* Cart with MiniCart on hover */}
             <div
               className="relative"
@@ -182,6 +191,9 @@ export default function Header() {
                 </span>
               )}
             </Link>
+
+            {/* Mobile Mode Toggle */}
+            <ModeToggle />
 
             {/* Hamburger Menu */}
             <button

@@ -64,6 +64,43 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <SEOSchemas />
+        <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              function googleTranslateElementInit() {
+                new google.translate.TranslateElement({
+                  pageLanguage: 'en',
+                  includedLanguages: 'en,es,fr,de,it,pt,zh,ja,ko,ar,ru',
+                  layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                  autoDisplay: false
+                }, 'google_translate_element');
+              }
+            `,
+          }}
+        />
+        {/* Pinterest Tag */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              !function(e){if(!window.pintrk){window.pintrk=function(){
+              window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
+              n=window.pintrk;n.queue=[],n.version="3.0";n.baseURL="https://s.pinimg.com/";n.loaded=!1;
+              e.attachEvent?e.attachEvent("onload",n.loaded):e.addEventListener("load",n.loaded,false)}(document,window,"script");
+              pintrk('load', 'YOUR_PINTEREST_TAG_ID_HERE');
+              pintrk('pageview');
+            `,
+          }}
+        />
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: 'none' }}
+            src="https://ct.pinterest.com/v1/?tid=YOUR_PINTEREST_TAG_ID_HERE&noscript=1"
+            alt=""
+          />
+        </noscript>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${greatVibes.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-primary/30 overflow-x-hidden w-full`}
@@ -73,8 +110,7 @@ export default function RootLayout({
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
-          enableSystem={false}
-          forcedTheme="light"
+          enableSystem={true}
           storageKey="theme"
           disableTransitionOnChange
         >
