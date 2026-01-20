@@ -149,8 +149,8 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
           </div>
           <div style={{ fontSize: '13px', color: '#000', lineHeight: '1.3' }}>
             <div className="font-bold" style={{ fontSize: '14px' }}>Shenna Studio</div>
-            <div>PO Box 1234</div>
-            <div>South Padre Island, TX 78597</div>
+            <div>2436 Pablo Kisel Blvd</div>
+            <div>Brownsville, TX 78520</div>
           </div>
         </div>
 

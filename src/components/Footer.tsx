@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-br from-blue-900 via-teal-900 to-cyan-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-          {/* Brand */}
+          {/* Brand & Address */}
           <div className="space-y-4">
             <div className="flex items-center">
               <Image
@@ -18,13 +18,19 @@ export default function Footer() {
               />
             </div>
             <p className="text-cyan-200 leading-relaxed">
-              Handcrafted bracelets inspired by the ocean. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
+              Handcrafted custom bracelets in Brownsville, TX. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
             </p>
+            <div className="text-cyan-200 text-sm mt-4">
+              <p className="font-semibold text-white">Shenna's Studio</p>
+              <p>2436 Pablo Kisel Blvd</p>
+              <p>Brownsville, TX 78520</p>
+              <p className="mt-2 text-cyan-300">📍 Brownsville, Texas</p>
+            </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-coral-400">Ocean Collection</h3>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-300">Custom Bracelets</h3>
             <ul className="space-y-2 text-cyan-200">
               <li>
                 <Link href="/products" className="hover:text-white transition-colors">
@@ -51,12 +57,17 @@ export default function Footer() {
                   Crystal Beads
                 </Link>
               </li>
+              <li>
+                <Link href="/tshirts" className="hover:text-white transition-colors">
+                  Custom T-Shirts
+                </Link>
+              </li>
             </ul>
           </div>
 
           {/* Conservation */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-coral-400">Ocean Conservation</h3>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-300">Ocean Conservation</h3>
             <ul className="space-y-2 text-cyan-200">
               <li>
                 <Link href="/conservation" className="hover:text-white transition-colors">
@@ -83,7 +94,7 @@ export default function Footer() {
 
           {/* Support */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-coral-400">Support</h3>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-300">Support</h3>
             <ul className="space-y-2 text-cyan-200">
               <li>
                 <Link href="/contact" className="hover:text-white transition-colors">
@@ -115,7 +126,7 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-coral-400">Legal</h3>
+            <h3 className="text-lg font-semibold mb-4 text-cyan-300">Legal</h3>
             <ul className="space-y-2 text-cyan-200">
               <li>
                 <Link href="/privacy" className="hover:text-white transition-colors">
@@ -150,7 +161,7 @@ export default function Footer() {
         <div className="mt-12 pt-8 border-t border-cyan-700">
           <div className="text-center">
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-coral-400 mb-4">Follow Our Ocean Journey</h3>
+              <h3 className="text-lg font-semibold text-cyan-300 mb-4">Follow Our Ocean Journey</h3>
               <div className="flex justify-center items-center gap-4 mb-6">
                 <a
                   href="https://www.instagram.com/shennastudio"
@@ -166,10 +177,10 @@ export default function Footer() {
               </div>
             </div>
             <div className="mb-4">
-              <span className="text-xl font-bold text-coral-400">10% Donated to Marine Conservation</span>
+              <span className="text-xl font-bold text-cyan-300">10% Donated to Marine Conservation</span>
             </div>
             <p className="text-cyan-200 mb-4">
-              Every purchase supports marine life conservation in Rio Grande Valley and South Padre Island
+              Every purchase supports marine life conservation in Brownsville, South Padre Island & Rio Grande Valley
             </p>
             <div className="flex justify-center items-center gap-8 text-sm text-cyan-300">
               <span>Sea Turtle Protection</span>
@@ -185,12 +196,12 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-cyan-700">
           <div className="bg-gradient-to-r from-cyan-800/40 to-blue-800/40 rounded-xl p-6 backdrop-blur-sm">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-coral-400 mb-2">Website Developed By</h3>
+              <h3 className="text-lg font-semibold text-cyan-300 mb-2">Website Developed By</h3>
               <a
                 href="https://softwarepros.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-xl font-bold text-white hover:text-coral-400 transition-colors mb-3"
+                className="inline-block text-xl font-bold text-white hover:text-cyan-300 transition-colors mb-3"
               >
                 SoftwarePros.org →
               </a>
@@ -207,28 +218,30 @@ export default function Footer() {
         <div className="mt-8 pt-8 border-t border-cyan-700">
           <div className="max-w-4xl mx-auto text-center mb-6">
             <p className="text-cyan-200 text-sm leading-relaxed">
-              <strong className="text-white">Shenna&apos;s Studio</strong> - Your trusted source for handcrafted ocean-inspired bracelets,
-              jewelry, and apparel that make a difference. Shop eco-friendly beaded bracelets, artisan jewelry, and sustainable
-              t-shirts while supporting marine conservation efforts in South Padre Island, Texas. Every purchase helps protect
-              sea turtles, whales, dolphins, and ocean ecosystems in the Rio Grande Valley. Join our mission to preserve marine
-              life through conscious shopping and environmental advocacy.
+              <strong className="text-white">Shenna's Studio</strong> - Your trusted source for 
+              <span className="text-white font-semibold"> custom bracelets in Brownsville, TX</span>. 
+              Handcrafted ocean-inspired bracelets, jewelry, and apparel that make a difference. 
+              Shop eco-friendly beaded bracelets, artisan jewelry, and sustainable t-shirts in the Rio Grande Valley. 
+              Every purchase helps protect sea turtles, whales, dolphins, and ocean ecosystems. 
+              Join our mission to preserve marine life through conscious shopping.
             </p>
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center text-cyan-300 text-sm gap-4">
             <p className="text-center md:text-left">
-              © 2025 Shenna&apos;s Studio™. All Rights Reserved. <br className="md:hidden" />
-              Handcrafted in South Padre Island, Texas since March 2025.
+              © 2025 Shenna's Studio™. All Rights Reserved. <br className="md:hidden" />
+              Handcrafted in Brownsville, Texas since March 2025.
             </p>
             <div className="flex items-center gap-4">
-              <span>Protecting Oceans, One Bracelet at a Time</span>
+              <span>Protecting Oceans</span>
               <span>•</span>
-              <span>10% to Marine Conservation</span>
+              <span>10% to Conservation</span>
             </div>
           </div>
           <div className="mt-4 text-center text-xs text-cyan-400">
             <p>
-              Keywords: Ocean bracelets, marine conservation jewelry, eco-friendly bracelets, handmade beaded jewelry,
-              sea turtle protection, sustainable fashion, Texas artisan jewelry, coastal conservation, marine life advocacy
+              Custom bracelets Brownsville TX, handmade jewelry, ocean conservation, marine life protection, 
+              sea turtle jewelry, artisan bracelets Texas, eco-friendly fashion, coastal jewelry, 
+              South Padre Island bracelets, Rio Grande Valley gifts
             </p>
           </div>
         </div>

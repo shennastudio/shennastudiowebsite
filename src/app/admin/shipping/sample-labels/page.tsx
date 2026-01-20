@@ -142,8 +142,8 @@ export default function SampleLabelsPage() {
         <line x1="20" y1="80" x2="580" y2="80" stroke="black" stroke-width="2"/>
         <text x="30" y="110" font-family="Arial" font-size="16" font-weight="bold">FROM:</text>
         <text x="30" y="135" font-family="Arial" font-size="14">Shenna Studio</text>
-        <text x="30" y="155" font-family="Arial" font-size="14">PO Box 1234</text>
-        <text x="30" y="175" font-family="Arial" font-size="14">South Padre Island, TX 78597</text>
+        <text x="30" y="155" font-family="Arial" font-size="14">2436 Pablo Kisel Blvd</text>
+        <text x="30" y="175" font-family="Arial" font-size="14">Brownsville, TX 78520</text>
         <rect x="20" y="200" width="560" height="140" fill="none" stroke="black" stroke-width="2" rx="5"/>
         <text x="35" y="225" font-family="Arial" font-size="12" font-weight="bold">TO:</text>
         <text x="35" y="250" font-family="Arial" font-size="18" font-weight="bold">${selectedOrder.customerName}</text>

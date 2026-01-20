@@ -26,8 +26,20 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: "Shenna's Studio - Ocean-Themed Handcrafted Bracelets | Marine Conservation",
-  description: 'Handcrafted ocean-inspired bracelets supporting marine life conservation in South Padre Island and Rio Grande Valley. 10% of every purchase protects sea turtles, whales, and ocean ecosystems.',
+  title: "Shenna's Studio | Custom Bracelets Brownsville TX - Ocean-Inspired Handcrafted Jewelry",
+  description: 'Custom handcrafted bracelets in Brownsville, TX. Shop ocean-inspired jewelry, artisan bracelets, and sustainable apparel. 10% of every purchase supports marine conservation in South Padre Island. Visit our store at 2436 Pablo Kisel Blvd.',
+  keywords: 'custom bracelets Brownsville TX, handmade bracelets Texas, ocean jewelry Brownsville, artisan bracelets Rio Grande Valley, marine conservation jewelry, sea turtle bracelets, handcrafted jewelry South Padre Island, sustainable fashion Brownsville TX',
+  openGraph: {
+    title: "Shenna's Studio | Custom Bracelets Brownsville TX",
+    description: 'Custom handcrafted bracelets in Brownsville, TX. Ocean-inspired jewelry supporting marine conservation.',
+    type: 'website',
+    locale: 'en_US',
+  },
+  other: {
+    'geo.position': '25.9018;-97.4975',
+    'geo.placename': 'Brownsville, TX',
+    'geo.region': 'US-TX',
+  },
   icons: {
     icon: '/favicon.png',
     apple: '/apple-touch-icon.png',

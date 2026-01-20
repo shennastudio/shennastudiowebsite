@@ -1,10 +1,10 @@
 export default function SEOSchemas() {
-  // Organization Schema
+  // Organization Schema with Brownsville address
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Shenna's Studio",
-    "description": "Handcrafted ocean-inspired bracelets and jewelry supporting marine conservation in South Padre Island, Texas",
+    "description": "Custom handcrafted bracelets and ocean-inspired jewelry in Brownsville, TX. 10% supports marine conservation in South Padre Island and Rio Grande Valley.",
     "url": "https://shennastudio.com",
     "logo": "https://shennastudio.com/images/shenna-studio-logo.png",
     "foundingDate": "2025-03",
@@ -14,9 +14,15 @@ export default function SEOSchemas() {
     },
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "South Padre Island",
+      "streetAddress": "2436 Pablo Kisel Blvd",
+      "addressLocality": "Brownsville",
       "addressRegion": "TX",
+      "postalCode": "78520",
       "addressCountry": "US"
+    },
+    "areaServed": {
+      "@type": "Place",
+      "name": "Brownsville, TX and surrounding areas including South Padre Island, Rio Grande Valley"
     },
     "sameAs": [
       "https://facebook.com/shennastudio",
@@ -29,28 +35,29 @@ export default function SEOSchemas() {
     }
   };
 
-  // Local Business Schema
+  // Local Business Schema with Brownsville address
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Shenna's Studio",
+    "name": "Shenna's Studio - Custom Bracelets Brownsville TX",
     "image": "https://shennastudio.com/images/shenna-studio-logo.png",
-    "description": "Artisan jewelry studio creating handcrafted ocean-inspired bracelets. 10% of proceeds support marine conservation efforts for sea turtles, whales, and ocean ecosystems in the Rio Grande Valley.",
+    "description": "Premier custom bracelet shop in Brownsville, TX. Handcrafted ocean-inspired jewelry, artisan bracelets, and marine conservation jewelry. 10% of all purchases support sea turtle and ocean conservation.",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "South Padre Island",
+      "streetAddress": "2436 Pablo Kisel Blvd",
+      "addressLocality": "Brownsville",
       "addressRegion": "TX",
-      "postalCode": "78597",
+      "postalCode": "78520",
       "addressCountry": "US"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "26.0739",
-      "longitude": "-97.1605"
+      "latitude": "25.9018",
+      "longitude": "-97.4975"
     },
     "url": "https://shennastudio.com",
     "telephone": "+1-956-XXX-XXXX",
-    "priceRange": "$15-$75",
+    "priceRange": "$$",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": [
@@ -62,18 +69,22 @@ export default function SEOSchemas() {
         "Saturday",
         "Sunday"
       ],
-      "opens": "00:00",
-      "closes": "23:59"
+      "opens": "09:00",
+      "closes": "18:00"
     },
-    "paymentAccepted": "Credit Card, Debit Card",
-    "currenciesAccepted": "USD"
+    "paymentAccepted": "Credit Card, Debit Card, Cash, Apple Pay, Cash App",
+    "currenciesAccepted": "USD",
+    "areaServed": {
+      "@type": "Place",
+      "name": "Brownsville, TX, South Padre Island, McAllen, Harlingen, Rio Grande Valley"
+    }
   };
 
   // Website Schema with Search Action
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Shenna's Studio",
+    "name": "Shenna's Studio - Custom Bracelets Brownsville TX",
     "url": "https://shennastudio.com",
     "potentialAction": {
       "@type": "SearchAction",
@@ -89,13 +100,21 @@ export default function SEOSchemas() {
   const ecommerceSchema = {
     "@context": "https://schema.org",
     "@type": "Store",
-    "name": "Shenna's Studio Online Store",
-    "description": "Shop handcrafted ocean-inspired bracelets, jewelry, and apparel. Every purchase supports marine conservation in South Padre Island and protects sea turtles, whales, and ocean life.",
+    "name": "Shenna's Studio - Custom Bracelets & Ocean Jewelry",
+    "description": "Shop custom handcrafted bracelets in Brownsville, TX. Ocean-inspired jewelry, artisan bracelets, and sustainable t-shirts. Every purchase donates 10% to marine conservation.",
     "url": "https://shennastudio.com",
     "image": "https://shennastudio.com/images/shenna-studio-logo.png",
     "brand": {
       "@type": "Brand",
       "name": "Shenna's Studio"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "2436 Pablo Kisel Blvd",
+      "addressLocality": "Brownsville",
+      "addressRegion": "TX",
+      "postalCode": "78520",
+      "addressCountry": "US"
     },
     "offers": {
       "@type": "AggregateOffer",
@@ -106,30 +125,38 @@ export default function SEOSchemas() {
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Ocean-Inspired Jewelry Collection",
+      "name": "Custom Bracelets Collection",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Handcrafted Ocean Bracelets",
-            "description": "Eco-friendly beaded bracelets supporting marine conservation"
+            "name": "Custom Bracelets Brownsville TX",
+            "description": "Handcrafted custom bracelets made in Brownsville, Texas"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Marine Conservation Jewelry",
-            "description": "Artisan jewelry with 10% proceeds donated to ocean protection"
+            "name": "Ocean Conservation Bracelets",
+            "description": "Artisan bracelets with 10% donated to marine conservation"
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Sustainable T-Shirts",
-            "description": "Eco-friendly apparel supporting sea turtle and whale conservation"
+            "name": "Custom T-Shirts Brownsville",
+            "description": "Sustainable custom t-shirts supporting sea turtle conservation"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Marine Life Jewelry",
+            "description": "Handcrafted sea turtle, whale, and dolphin inspired jewelry"
           }
         }
       ]
@@ -140,13 +167,13 @@ export default function SEOSchemas() {
   const nonprofitSchema = {
     "@context": "https://schema.org",
     "@type": "DonateAction",
-    "name": "Marine Conservation Donation",
-    "description": "10% of every purchase is donated to marine life conservation efforts in the Rio Grande Valley and South Padre Island",
+    "name": "Marine Conservation Donation - Brownsville TX",
+    "description": "10% of every custom bracelet purchase in Brownsville, TX is donated to marine life conservation efforts in South Padre Island and the Rio Grande Valley",
     "recipient": {
       "@type": "Organization",
       "name": "Shenna's Studio Marine Conservation Fund"
     },
-    "cause": "Marine Life Protection and Ocean Ecosystem Preservation"
+    "cause": "Marine Life Protection, Sea Turtle Conservation, and Ocean Ecosystem Preservation in South Padre Island and Rio Grande Valley"
   };
 
   return (
