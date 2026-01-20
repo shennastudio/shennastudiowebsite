@@ -10,11 +10,9 @@ import {
   Palette,
   Ruler,
   Save,
-  X,
   RefreshCw,
   Check,
   AlertTriangle,
-  ChevronDown,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
@@ -69,18 +67,6 @@ interface TShirtInventoryItem {
   product?: { id: string; name: string; basePrice: number };
   color?: TShirtColor;
   size?: TShirtSize;
-}
-
-interface ProductWithInventory {
-  id: string;
-  name: string;
-  slug: string;
-  description: string | null;
-  basePrice: number;
-  imageUrl: string | null;
-  categoryId: string | null;
-  category?: TShirtCategory;
-  inventory: TShirtInventoryItem[];
 }
 
 export default function TShirtInventoryManagementPage() {
@@ -175,7 +161,7 @@ export default function TShirtInventoryManagementPage() {
       setEditingCategory(null);
       setCategoryForm({ name: '', description: '', slug: '', isActive: true, displayOrder: 0 });
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to save category');
     }
   }
@@ -187,7 +173,7 @@ export default function TShirtInventoryManagementPage() {
       if (!res.ok) throw new Error('Failed to delete');
       toast.success('Category deleted');
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete category');
     }
   }
@@ -212,7 +198,7 @@ export default function TShirtInventoryManagementPage() {
       setEditingColor(null);
       setColorForm({ name: '', hexCode: '#000000', isActive: true, displayOrder: 0 });
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to save color');
     }
   }
@@ -224,7 +210,7 @@ export default function TShirtInventoryManagementPage() {
       if (!res.ok) throw new Error('Failed to delete');
       toast.success('Color deleted');
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete color');
     }
   }
@@ -249,7 +235,7 @@ export default function TShirtInventoryManagementPage() {
       setEditingSize(null);
       setSizeForm({ name: '', label: '', chestWidth: '', length: '', isActive: true, displayOrder: 0 });
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to save size');
     }
   }
@@ -261,7 +247,7 @@ export default function TShirtInventoryManagementPage() {
       if (!res.ok) throw new Error('Failed to delete');
       toast.success('Size deleted');
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete size');
     }
   }
@@ -298,7 +284,7 @@ export default function TShirtInventoryManagementPage() {
       setShowInventoryDialog(false);
       setEditingInventory(null);
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to save inventory');
     }
   }
@@ -330,7 +316,7 @@ export default function TShirtInventoryManagementPage() {
       setAdjustingItem(null);
       setAdjustmentForm({ type: 'add', quantity: 0, reason: '' });
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to adjust stock');
     }
   }
@@ -342,7 +328,7 @@ export default function TShirtInventoryManagementPage() {
       if (!res.ok) throw new Error('Failed to delete');
       toast.success('Inventory deleted');
       fetchData(true);
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete inventory');
     }
   }

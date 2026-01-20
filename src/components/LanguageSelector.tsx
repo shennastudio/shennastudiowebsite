@@ -24,12 +24,16 @@ export function LanguageSelector() {
 
   useEffect(() => {
     setMounted(true);
-    
-    const checkCurrentLang = setInterval(() => {
+
+    // Poll for Google Translate to be ready - it loads asynchronously
+    const checkGoogleTranslate = setInterval(() => {
       const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-      if (select && select.value) {
-        setCurrentLang(select.value);
-        clearInterval(checkCurrentLang);
+      if (select) {
+        // Google Translate is ready
+        if (select.value) {
+          setCurrentLang(select.value || 'en');
+        }
+        // Keep checking for language changes made via the hidden dropdown
       }
     }, 500);
 
@@ -42,7 +46,7 @@ export function LanguageSelector() {
     document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      clearInterval(checkCurrentLang);
+      clearInterval(checkGoogleTranslate);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
@@ -51,10 +55,26 @@ export function LanguageSelector() {
     setCurrentLang(langCode);
     setIsOpen(false);
 
-    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-    if (select) {
-      select.value = langCode;
-      select.dispatchEvent(new Event('change', { bubbles: true }));
+    // Try to change the language immediately
+    const attemptLanguageChange = () => {
+      const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+      if (select) {
+        select.value = langCode;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+        return true;
+      }
+      return false;
+    };
+
+    // If the select doesn't exist yet, retry a few times
+    if (!attemptLanguageChange()) {
+      let attempts = 0;
+      const retryInterval = setInterval(() => {
+        attempts++;
+        if (attemptLanguageChange() || attempts >= 10) {
+          clearInterval(retryInterval);
+        }
+      }, 200);
     }
   };
 

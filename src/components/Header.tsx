@@ -57,7 +57,7 @@ export default function Header() {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Products', href: '/products' },
-    { name: 'T-Shirts', href: '/tshirts' },
+    { name: 'Apparel', href: '/tshirts' },
     { name: 'Conservation', href: '/conservation' },
     { name: 'Blog', href: '/blog' },
     { name: 'About', href: '/about' },
@@ -66,7 +66,7 @@ export default function Header() {
 
   return (
     <header className="bg-gradient-to-r from-cyan-50/95 via-white/95 to-teal-50/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-teal-100/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <div className="flex justify-between items-center h-28">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
@@ -90,13 +90,13 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
+          <nav className="hidden md:flex items-center space-x-5 lg:space-x-7 xl:space-x-10">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 className={cn(
-                  "relative py-2 text-gray-700 hover:text-teal-600 transition-colors font-medium group",
+                  "relative py-2 text-gray-700 hover:text-teal-600 transition-colors font-semibold tracking-wide group",
                   pathname === link.href && "text-teal-600"
                 )}
               >

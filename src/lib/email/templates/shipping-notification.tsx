@@ -11,6 +11,13 @@ import {
   Img,
 } from '@react-email/components';
 
+interface UpsellProduct {
+  name: string;
+  price: number;
+  imageUrl: string;
+  slug: string;
+}
+
 interface ShippingNotificationEmailProps {
   customerName: string;
   orderNumber: string;
@@ -22,6 +29,7 @@ interface ShippingNotificationEmailProps {
     quantity: number;
   }>;
   shippingAddress: string;
+  upsellProducts?: UpsellProduct[];
 }
 
 export const ShippingNotificationEmail = ({
@@ -32,6 +40,7 @@ export const ShippingNotificationEmail = ({
   estimatedDelivery,
   items,
   shippingAddress,
+  upsellProducts = [],
 }: ShippingNotificationEmailProps) => {
   const trackingUrl = getTrackingUrl(carrier, trackingNumber);
 
@@ -109,6 +118,53 @@ export const ShippingNotificationEmail = ({
             <Text style={infoText}>
               💡 <strong>Tip:</strong> Make sure someone is available to receive your package. If you&apos;re not
               home, the carrier may leave a notice with instructions for pickup or redelivery.
+            </Text>
+          </Section>
+
+          {/* Upsell Products */}
+          {upsellProducts.length > 0 && (
+            <>
+              <Hr style={hr} />
+              <Section style={upsellSection}>
+                <Heading style={h2}>You Might Also Love 🌊</Heading>
+                <Text style={upsellText}>
+                  While you wait for your order, check out these ocean-inspired treasures:
+                </Text>
+                <div style={productsGrid}>
+                  {upsellProducts.map((product, index) => (
+                    <Link
+                      key={index}
+                      href={`https://shennastudio.com/products/${product.slug}`}
+                      style={productLink}
+                    >
+                      <div style={productCard}>
+                        <Img
+                          src={product.imageUrl}
+                          width="120"
+                          height="120"
+                          alt={product.name}
+                          style={productImage}
+                        />
+                        <Text style={productName}>{product.name}</Text>
+                        <Text style={productPrice}>${product.price.toFixed(2)}</Text>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div style={buttonContainer}>
+                  <Link href="https://shennastudio.com/products" style={shopButton}>
+                    Shop All Products
+                  </Link>
+                </div>
+              </Section>
+            </>
+          )}
+
+          {/* Conservation Message */}
+          <Section style={conservationSection}>
+            <Text style={conservationText}>
+              🐢 <strong>Thank you for supporting ocean conservation!</strong> A portion of your purchase
+              helps protect sea turtles and marine life in South Padre Island.
             </Text>
           </Section>
 
@@ -281,6 +337,83 @@ const copyright = {
   fontSize: '12px',
   color: '#9ca3af',
   margin: '16px 0 0 0',
+};
+
+// Upsell styles
+const upsellSection = {
+  margin: '20px',
+  textAlign: 'center' as const,
+};
+
+const upsellText = {
+  fontSize: '14px',
+  color: '#6b7280',
+  margin: '8px 0 24px 0',
+};
+
+const productsGrid: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  gap: '16px',
+  flexWrap: 'wrap' as const,
+};
+
+const productLink = {
+  textDecoration: 'none',
+  color: 'inherit',
+};
+
+const productCard: React.CSSProperties = {
+  textAlign: 'center' as const,
+  padding: '12px',
+  borderRadius: '8px',
+  border: '1px solid #e5e7eb',
+  backgroundColor: '#f9fafb',
+  width: '140px',
+};
+
+const productImage = {
+  borderRadius: '8px',
+  marginBottom: '8px',
+};
+
+const productName = {
+  fontSize: '14px',
+  fontWeight: '600',
+  color: '#1f2937',
+  margin: '8px 0 4px 0',
+};
+
+const productPrice = {
+  fontSize: '16px',
+  fontWeight: 'bold',
+  color: '#14b8a6',
+  margin: '0',
+};
+
+const shopButton = {
+  backgroundColor: '#14b8a6',
+  color: '#ffffff',
+  padding: '12px 24px',
+  borderRadius: '6px',
+  textDecoration: 'none',
+  fontWeight: '600',
+  fontSize: '14px',
+  display: 'inline-block',
+};
+
+const conservationSection = {
+  margin: '20px',
+  padding: '16px',
+  backgroundColor: '#ecfdf5',
+  borderRadius: '8px',
+  borderLeft: '4px solid #14b8a6',
+};
+
+const conservationText = {
+  fontSize: '14px',
+  color: '#047857',
+  margin: 0,
 };
 
 export default ShippingNotificationEmail;

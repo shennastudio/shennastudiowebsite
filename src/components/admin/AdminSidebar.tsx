@@ -36,6 +36,7 @@ import {
   Megaphone,
   Shirt,
   Zap,
+  Shield,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -114,6 +115,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       items: [
         { href: '/admin/staff', label: 'Staff', icon: UserCog, color: 'from-blue-500 to-indigo-400' },
         { href: '/admin/bracelet-sizes', label: 'Bracelet Sizes', icon: Ruler, color: 'from-amber-500 to-orange-400' },
+        { href: '/admin/data-cleanup', label: 'Data Cleanup', icon: Shield, color: 'from-red-500 to-orange-400' },
         { href: '/admin/settings', label: 'Settings', icon: Settings, color: 'from-slate-500 to-gray-400' },
       ]
     }

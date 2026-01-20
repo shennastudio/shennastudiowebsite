@@ -9,8 +9,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-quicksand);
+  --font-serif: var(--font-playfair);
+  --font-script: var(--font-great-vibes);
+  --font-elegant: var(--font-cormorant);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -217,8 +219,10 @@
   --spacing-safe-right: var(--spacing-safe-right);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-quicksand);
+  --font-serif: var(--font-playfair);
+  --font-script: var(--font-great-vibes);
+  --font-elegant: var(--font-cormorant);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -263,11 +267,34 @@
   }
   body {
     @apply bg-background text-foreground overflow-x-hidden w-full;
+    font-family: var(--font-quicksand), 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
-  
+
+  /* Heading fonts - elegant Playfair */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  }
+
   /* Enforce 16px min font size for inputs to prevent Safari zoom */
   input, select, textarea, button {
     font-size: 16px !important;
+  }
+
+  /* Font utility classes */
+  .font-heading {
+    font-family: var(--font-playfair), 'Playfair Display', Georgia, serif;
+  }
+
+  .font-body {
+    font-family: var(--font-quicksand), 'Quicksand', -apple-system, sans-serif;
+  }
+
+  .font-script {
+    font-family: var(--font-great-vibes), 'Great Vibes', cursive;
+  }
+
+  .font-elegant {
+    font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   }
 }
 
@@ -296,13 +323,6 @@
 
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-
   /* Force dark mode for admin section */
   .admin-dark {
     --background: oklch(0.06 0 0);
