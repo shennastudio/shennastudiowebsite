@@ -40,7 +40,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: 'cover',
-  themeColor: '#0f172a',
+  themeColor: '#F9FBFC',
 };
 
 export default function RootLayout({
@@ -49,20 +49,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <SEOSchemas />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${greatVibes.variable} antialiased min-h-screen flex flex-col bg-slate-950 text-slate-50 touch-manipulation selection:bg-teal-500/30 overflow-x-hidden w-full`}
+        className={`${geistSans.variable} ${geistMono.variable} ${greatVibes.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-primary/30 overflow-x-hidden w-full`}
       >
         <ScrollProgress />
         <AnalyticsProvider />
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="light"
           enableSystem={false}
-          forcedTheme="dark"
+          forcedTheme="light"
           storageKey="theme"
           disableTransitionOnChange
         >

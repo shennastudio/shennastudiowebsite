@@ -30,7 +30,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 relative overflow-hidden transition-colors duration-300">
+    <div className="min-h-screen bg-slate-950 text-slate-50 relative overflow-hidden transition-colors duration-300 dark">
       <Toaster
         position="top-right"
         toastOptions={{
