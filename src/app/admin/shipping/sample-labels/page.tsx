@@ -138,7 +138,7 @@ export default function SampleLabelsPage() {
       <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
         <rect width="600" height="400" fill="white" stroke="black" stroke-width="2"/>
         <text x="300" y="40" text-anchor="middle" font-family="Arial" font-size="32" font-weight="bold">${selectedCarrier}</text>
-        <text x="300" y="65" text-anchor="anchor="middle" font-family="Arial" font-size="14">${selectedCarrier === 'USPS' ? 'PRIORITY MAIL' : selectedCarrier === 'UPS' ? 'GROUND' : 'GROUND'}</text>
+        <text x="300" y="65" text-anchor="middle" font-family="Arial" font-size="14">${selectedCarrier === 'USPS' ? 'PRIORITY MAIL' : selectedCarrier === 'UPS' ? 'GROUND' : 'GROUND'}</text>
         <line x1="20" y1="80" x2="580" y2="80" stroke="black" stroke-width="2"/>
         <text x="30" y="110" font-family="Arial" font-size="16" font-weight="bold">FROM:</text>
         <text x="30" y="135" font-family="Arial" font-size="14">Shenna Studio</text>
