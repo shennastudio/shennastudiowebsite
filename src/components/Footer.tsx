@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { VCardQRCode } from '@/components/VCardQRCode'
 
 export default function Footer() {
   return (
@@ -236,6 +237,7 @@ export default function Footer() {
               <span>•</span>
               <span>10% to Conservation</span>
             </div>
+            <VCardQRCode size={100} />
           </div>
           <div className="mt-4 text-center text-xs text-cyan-400">
             <p>
