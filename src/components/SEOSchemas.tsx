@@ -131,32 +131,108 @@ export default function SEOSchemas() {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Custom Bracelets Brownsville TX",
-            "description": "Handcrafted custom bracelets made in Brownsville, Texas"
+            "name": "Handcrafted Ocean Bracelets",
+            "description": "Eco-friendly beaded bracelets supporting marine conservation",
+            "brand": {
+              "@type": "Brand",
+              "name": "Shenna's Studio"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "USD",
+              "lowPrice": "15.00",
+              "highPrice": "45.00",
+              "availability": "https://schema.org/InStock",
+              "offerCount": "20"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "reviewCount": "47",
+              "bestRating": "5",
+              "worstRating": "1"
+            }
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Ocean Conservation Bracelets",
-            "description": "Artisan bracelets with 10% donated to marine conservation"
+            "name": "Marine Conservation Jewelry",
+            "description": "Artisan jewelry with 10% proceeds donated to ocean protection",
+            "brand": {
+              "@type": "Brand",
+              "name": "Shenna's Studio"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "USD",
+              "lowPrice": "20.00",
+              "highPrice": "75.00",
+              "availability": "https://schema.org/InStock",
+              "offerCount": "25"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "reviewCount": "32",
+              "bestRating": "5",
+              "worstRating": "1"
+            }
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Custom T-Shirts Brownsville",
-            "description": "Sustainable custom t-shirts supporting sea turtle conservation"
+            "name": "Sustainable T-Shirts",
+            "description": "Eco-friendly apparel supporting sea turtle and whale conservation",
+            "brand": {
+              "@type": "Brand",
+              "name": "Shenna's Studio"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "USD",
+              "lowPrice": "25.00",
+              "highPrice": "45.00",
+              "availability": "https://schema.org/InStock",
+              "offerCount": "15"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.7",
+              "reviewCount": "18",
+              "bestRating": "5",
+              "worstRating": "1"
+            }
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Marine Life Jewelry",
-            "description": "Handcrafted sea turtle, whale, and dolphin inspired jewelry"
+            "name": "Sea Turtle Bracelet Collection",
+            "description": "Handcrafted sea turtle inspired bracelets from South Padre Island",
+            "brand": {
+              "@type": "Brand",
+              "name": "Shenna's Studio"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "USD",
+              "lowPrice": "18.00",
+              "highPrice": "55.00",
+              "availability": "https://schema.org/InStock",
+              "offerCount": "12"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "5.0",
+              "reviewCount": "24",
+              "bestRating": "5",
+              "worstRating": "1"
+            }
           }
         }
       ]
