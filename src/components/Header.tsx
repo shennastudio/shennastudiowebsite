@@ -12,6 +12,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { LanguageSelector } from '@/components/LanguageSelector'
+import { SocialMediaButtons } from '@/components/SocialMediaButtons'
 
 interface SiteSettings {
   siteName: string;
@@ -119,8 +120,8 @@ export default function Header() {
             {/* Language Selector */}
             <LanguageSelector />
 
-            {/* Mode Toggle - Remove from public site, only admin has dark mode */}
-            {/* <ModeToggle /> */}
+            {/* Social Media Share Buttons */}
+            <SocialMediaButtons />
 
             {/* Cart with MiniCart on hover */}
             <div
