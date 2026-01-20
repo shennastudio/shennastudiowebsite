@@ -1,10 +1,9 @@
 'use client'
 
 import { TestimonialSection } from '@/components/TestimonialSection'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
-import { ArrowRight, Waves, Anchor, ShieldCheck } from 'lucide-react'
-import { SplitText } from '@/components/SplitText'
+import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { Waves, Anchor, ShieldCheck, ArrowRight } from 'lucide-react'
 import ShimmerButton from '@/components/magicui/ShimmerButton'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -29,14 +28,6 @@ export default function Home() {
     displayImages: string[];
   }[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  });
-
-  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   useEffect(() => {
     let isMounted = true;
@@ -62,35 +53,34 @@ export default function Home() {
       {/* Sale Banner */}
       <SaleBanner />
       
-      {/* Mission-First Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-cyan-950 via-slate-900 to-slate-900">
-        {/* Animated Ocean Waves Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-1/2 left-0 right-0 h-full bg-gradient-to-b from-cyan-900/20 to-transparent" />
-          {/* Wave decorations */}
-          <svg className="absolute bottom-0 left-0 right-0 h-64 text-cyan-900/20" viewBox="0 0 1440 320" preserveAspectRatio="none">
-            <path fill="currentColor" fillOpacity="0.4" d="M0,192L48,176C96,160,192,128,288,128C384,128,480,160,576,186.7C672,213,768,235,864,224C960,213,1056,171,1152,149.3C1248,128,1344,128,1392,128L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
-          </svg>
-          <svg className="absolute bottom-0 left-0 right-0 h-48 text-cyan-800/30" viewBox="0 0 1440 320" preserveAspectRatio="none">
-            <path fill="currentColor" fillOpacity="0.3" d="M0,64L48,80C96,96,192,128,288,144C384,160,480,160,576,176C672,192,768,224,864,218.7C960,213,1056,171,1152,165.3C1248,160,1344,192,1392,208L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" />
-          </svg>
+      {/* Hero Section with Image */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/90 z-10" />
+          <Image
+            src="/images/aboutpageparallax.jpg"
+            alt="Ocean background"
+            fill
+            className="object-cover opacity-60"
+            priority
+          />
         </div>
 
-        <div className="max-w-5xl mx-auto px-6 relative z-10 text-center">
+        <div className="max-w-5xl mx-auto px-6 relative z-20 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Headline */}
-            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-wide" style={{ fontFamily: 'Georgia, serif' }}>
+            {/* Headline with Festive Font */}
+            <h1 className="font-festive text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 tracking-wide">
               Wear the Ocean. <span className="block text-cyan-300">Protect the Ocean.</span>
             </h1>
             
             {/* Sub-headline */}
-            <p className="text-xl md:text-2xl text-cyan-100 mb-12 max-w-3xl mx-auto leading-relaxed font-light" style={{ fontFamily: 'Georgia, serif' }}>
+            <p className="text-xl md:text-2xl text-cyan-100 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
               Hand-crafted bracelets that fund real ocean conservation.
-              <span className="block mt-3 text-cyan-400">At least 10% of every purchase supports ocean nonprofits in South Padre Island & beyond.</span>
+              <span className="block mt-3 text-cyan-400 font-medium">At least 10% of every purchase supports ocean nonprofits in South Padre Island & beyond.</span>
             </p>
             
             {/* CTA Button */}
@@ -108,78 +98,6 @@ export default function Home() {
 
         {/* Scroll indicator */}
         <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white/50 flex flex-col items-center gap-2"
-        >
-          <span className="text-xs uppercase tracking-widest font-medium">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent" />
-        </motion.div>
-      </section>
-
-      {/* Ocean Hero Section - Original */}
-      <section ref={heroRef} className="relative h-[90vh] flex items-center justify-center overflow-hidden bg-slate-900">
-        <motion.div 
-          style={{ y: y1 }}
-          className="absolute inset-0 z-0"
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/80 z-10" />
-          <Image
-            src="/images/aboutpageparallax.jpg"
-            alt="Ocean background"
-            fill
-            className="object-cover opacity-60"
-            priority
-          />
-        </motion.div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 text-center">
-          <div className="flex flex-col items-center">
-            <SplitText 
-              text="Shenna's Studio Ocean Collection"
-              className="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter justify-center text-center leading-tight"
-            />
-            
-            <motion.p 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.8 }}
-              className="text-xl md:text-2xl text-cyan-100 mb-10 max-w-3xl mx-auto leading-relaxed font-light"
-            >
-              Handcrafted bracelets inspired by the beauty of South Padre Island. 
-              <span className="block mt-2 font-medium text-teal-300">Each purchase protects marine life.</span>
-            </motion.p>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.5 }}
-              className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-            >
-              <Link href="/products">
-                <ShimmerButton className="shadow-2xl">
-                  <span className="group flex items-center gap-2 whitespace-pre-wrap text-center text-sm font-bold leading-none tracking-tighter text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
-                    Shop Collection
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </ShimmerButton>
-              </Link>
-              
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/conservation"
-                  className="inline-block border-2 border-white/30 backdrop-blur-sm text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-slate-900 transition-all"
-                >
-                Our Mission
-                </Link>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <motion.div 
-          style={{ opacity }}
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white/50 flex flex-col items-center gap-2"

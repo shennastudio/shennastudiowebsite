@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { Globe, ChevronDown } from 'lucide-react';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -20,34 +21,21 @@ export function LanguageSelector() {
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
-  const [googleTranslateReady, setGoogleTranslateReady] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const selectRef = useRef<HTMLSelectElement>(null);
 
-  // Find Google Translate dropdown
-  const findGoogleTranslateSelect = useCallback((): HTMLSelectElement | null => {
-    return document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
-  }, []);
-
-  // Attempt to change language via Google Translate
-  const attemptLanguageChange = useCallback((langCode: string): boolean => {
-    const select = findGoogleTranslateSelect();
+  // Handle language change from Google Translate
+  const handleLanguageChange = useCallback((langCode: string) => {
+    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
     if (select) {
       select.value = langCode;
       select.dispatchEvent(new Event('change', { bubbles: true }));
-      return true;
     }
-    return false;
-  }, [findGoogleTranslateSelect]);
-
-  // Handle language change
-  const handleLanguageChange = useCallback((langCode: string) => {
+    
     setCurrentLang(langCode);
     setIsOpen(false);
 
     const selectedLang = languages.find(l => l.code === langCode);
-
-    // Apply RTL for Arabic
     if (selectedLang?.dir === 'rtl') {
       document.documentElement.dir = 'rtl';
       document.documentElement.lang = langCode;
@@ -55,89 +43,48 @@ export function LanguageSelector() {
       document.documentElement.dir = 'ltr';
       document.documentElement.lang = langCode;
     }
-
-    // Try to change via Google Translate immediately
-    if (!attemptLanguageChange(langCode)) {
-      // Retry with exponential backoff
-      let attempts = 0;
-      const maxAttempts = 10;
-      const baseDelay = 100;
-
-      const retry = () => {
-        attempts++;
-        const delay = Math.min(baseDelay * Math.pow(1.5, attempts - 1), 1000);
-
-        if (attemptLanguageChange(langCode)) {
-          console.log(`[LanguageSelector] Successfully changed to ${langCode} on attempt ${attempts}`);
-          return;
-        }
-
-        if (attempts < maxAttempts) {
-          retryTimeoutRef.current = setTimeout(retry, delay);
-        } else {
-          console.warn(`[LanguageSelector] Failed to change language to ${langCode} after ${maxAttempts} attempts`);
-        }
-      };
-
-      retryTimeoutRef.current = setTimeout(retry, baseDelay);
+    
+    // Save preference
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('preferredLanguage', langCode);
     }
-  }, [attemptLanguageChange, findGoogleTranslateSelect]);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
 
-    // Poll for Google Translate to be ready
-    const checkGoogleTranslate = setInterval(() => {
-      const select = findGoogleTranslateSelect();
-      if (select && !googleTranslateReady) {
-        setGoogleTranslateReady(true);
-        // Sync current language from Google Translate
-        if (select.value) {
-          setCurrentLang(select.value);
-        }
-      }
-    }, 200);
+    // Load saved language preference
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang) {
+      setCurrentLang(savedLang);
+    }
 
-    // Listen for language changes made via Google Translate widget
-    const handleGoogleTranslateChange = () => {
-      const select = findGoogleTranslateSelect();
+    // Check if Google Translate is ready and set current language
+    const checkGoogleTranslate = setInterval(() => {
+      const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
       if (select && select.value) {
         setCurrentLang(select.value);
-        const selectedLang = languages.find(l => l.code === select.value);
-        if (selectedLang?.dir === 'rtl') {
-          document.documentElement.dir = 'rtl';
-          document.documentElement.lang = select.value;
-        } else {
-          document.documentElement.dir = 'ltr';
-          document.documentElement.lang = select.value;
+        clearInterval(checkGoogleTranslate);
+      }
+    }, 500);
+
+    // Observe for Google Translate widget loading
+    const observer = new MutationObserver(() => {
+      const select = document.querySelector('.goog-te-combo') as HTMLSelectElement | null;
+      if (select) {
+        if (savedLang) {
+          select.value = savedLang;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
         }
       }
-    };
-
-    // Observe for new elements being added (Google Translate loads dynamically)
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1) {
-            const element = node as Element;
-            if (element.classList?.contains('goog-te-combo')) {
-              setGoogleTranslateReady(true);
-              // Try to sync language
-              const select = element as HTMLSelectElement;
-              if (select.value) {
-                setCurrentLang(select.value);
-              }
-            }
-          }
-        });
-      });
     });
 
-    document.body && observer.observe(document.body, { childList: true, subtree: true });
+    const googleTranslateElement = document.getElementById('google_translate_element');
+    if (googleTranslateElement) {
+      observer.observe(googleTranslateElement, { childList: true, subtree: true });
+    }
 
-    // Also listen to the select's change event
-    document.addEventListener('mouseup', handleGoogleTranslateChange);
-
+    // Handle clicks outside
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
@@ -148,21 +95,17 @@ export function LanguageSelector() {
 
     return () => {
       clearInterval(checkGoogleTranslate);
-      if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current);
-      }
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('mouseup', handleGoogleTranslateChange);
       observer.disconnect();
     };
-  }, [findGoogleTranslateSelect, googleTranslateReady]);
+  }, []);
 
   const currentLanguage = languages.find(l => l.code === currentLang) || languages[0];
 
   if (!mounted) {
     return (
       <div className="flex items-center">
-        <div className="w-28 h-9 bg-slate-100 rounded-lg animate-pulse" />
+        <div className="w-32 h-10 bg-slate-100 rounded-lg animate-pulse" />
       </div>
     );
   }
@@ -172,18 +115,12 @@ export function LanguageSelector() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors shadow-sm text-sm"
-        aria-label={`Current language: ${currentLanguage.name}. Click to change language.`}
+        aria-label={`Language: ${currentLanguage.name}`}
       >
+        <Globe className="w-4 h-4 text-gray-500" />
         <span className="text-lg">{currentLanguage.flag}</span>
-        <span className="text-gray-700 font-medium hidden sm:inline">{currentLanguage.name}</span>
-        <svg
-          className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <span className="text-gray-700 font-medium hidden md:inline">{currentLanguage.name}</span>
+        <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
@@ -192,8 +129,8 @@ export function LanguageSelector() {
             className="fixed inset-0 z-40 cursor-default"
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden max-h-80 overflow-y-auto">
-            <div className="p-2">
+          <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden">
+            <div className="p-2 max-h-80 overflow-y-auto">
               {languages.map((lang) => (
                 <button
                   key={lang.code}
@@ -217,6 +154,9 @@ export function LanguageSelector() {
           </div>
         </>
       )}
+      
+      {/* Google Translate widget - hidden but functional */}
+      <div id="google_translate_element" className="hidden" />
     </div>
   );
 }

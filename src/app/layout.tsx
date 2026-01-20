@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Quicksand, Great_Vibes, Cormorant_Garamond } from "next/font/google";
+import { Playfair_Display, Quicksand, Great_Vibes, Cormorant_Garamond, Festive } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { CartProvider } from "@/context/CartContext";
@@ -35,6 +35,13 @@ const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
+});
+
+// Festive font for handwritten style
+const festive = Festive({
+  variable: "--font-festive",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -199,7 +206,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body
-        className={`${playfairDisplay.variable} ${quicksand.variable} ${greatVibes.variable} ${cormorant.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-primary/30 overflow-x-hidden w-full`}
+        className={`${playfairDisplay.variable} ${quicksand.variable} ${greatVibes.variable} ${cormorant.variable} ${festive.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-primary/30 overflow-x-hidden w-full`}
       >
         {/* Hidden Google Translate element - required for the API to work */}
         <div id="google_translate_element" className="hidden" />
