@@ -155,7 +155,8 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              function googleTranslateElementInit() {
+              // Define Google Translate callback BEFORE the script loads
+              window.googleTranslateElementInit = function() {
                 if (typeof google !== 'undefined' && google.translate) {
                   new google.translate.TranslateElement({
                     pageLanguage: 'en',
@@ -164,12 +165,13 @@ export default function RootLayout({
                     autoDisplay: false
                   }, 'google_translate_element');
                 }
-              }
+              };
             `,
           }}
         />
         <script
           async
+          defer
           src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
         />
         {/* Pinterest Tag */}
