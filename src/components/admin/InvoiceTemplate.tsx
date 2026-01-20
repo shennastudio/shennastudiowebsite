@@ -57,19 +57,19 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
             <div className="mb-4">
               <Image
                 src="/images/shenna-studio-logo.png"
-                alt="Shenna&apos;s Studio"
+                alt="Shenna's Studio"
                 width={120}
                 height={120}
                 className="object-contain"
               />
             </div>
-            <div className="text-sm">
-              <p className="font-semibold">Invoice #</p>
-              <p className="text-gray-600">{order.orderNumber}</p>
-              <p className="font-semibold mt-2">Date</p>
-              <p className="text-gray-600">
-                {new Date(order.createdAt).toLocaleDateString()}
-              </p>
+            <div className="text-sm space-y-1">
+              <p className="font-semibold">INVOICE NUMBER: {order.orderNumber}</p>
+              <p className="font-semibold">DATE: {new Date(order.createdAt).toLocaleDateString('en-US', {
+                month: 'numeric',
+                day: 'numeric',
+                year: 'numeric'
+              })}</p>
             </div>
           </div>
         </div>
