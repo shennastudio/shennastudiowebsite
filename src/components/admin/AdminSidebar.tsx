@@ -73,7 +73,6 @@ export function AdminSidebar({}: AdminSidebarProps) {
       items: [
         { href: '/admin/orders', label: 'Orders', icon: ShoppingCart, color: 'from-[#001F3F] to-cyan-400' },
         { href: '/admin/customers', label: 'Customers', icon: Users, color: 'from-teal-500 to-cyan-400' },
-        { href: '/admin/subscriptions', label: 'Subscriptions', icon: Repeat, color: 'from-violet-500 to-purple-400' },
         { href: '/admin/abandoned-carts', label: 'Abandoned Carts', icon: ShoppingBag, color: 'from-orange-500 to-amber-400' },
         { href: '/admin/payments', label: 'Payments', icon: CreditCard, color: 'from-indigo-500 to-blue-400' },
         { href: '/admin/discounts', label: 'Discounts', icon: Ticket, color: 'from-fuchsia-500 to-pink-400' },
