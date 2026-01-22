@@ -345,7 +345,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
       {/* Fishing Parallax Banner */}
       <ParallaxBanner 
-        src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80" 
+        src="https://images.unsplash.com/photo-1676395245813-9cd304454501?w=1920&q=80" 
         alt="Fishing boat"
         text="Built for the Catch" 
       />

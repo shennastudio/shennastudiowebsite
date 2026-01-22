@@ -74,7 +74,7 @@ export default function RegisterPage() {
       {/* Left Side - Image */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80"
+          src="https://images.unsplash.com/photo-1676395245813-9cd304454501?w=1920&q=80"
           alt="Fishing boat at sunrise"
           fill
           className="object-cover"
