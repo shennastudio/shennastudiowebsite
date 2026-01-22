@@ -1,23 +1,31 @@
 import Link from 'next/link'
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection'
 import ParallaxBanner from '@/components/ParallaxBanner'
+import { Anchor, Fish, Sun, Shield, Truck, Users } from 'lucide-react'
+
+export const metadata = {
+  title: 'Our Story | La Pesqueria Outfitters - McAllen TX Fishing Apparel',
+  description: 'At La Pesqueria Outfitters, we build gear for the long haul. Born from the salt and the spray, we create T-shirts that work as hard as a deckhand but feel like a weekend staple.',
+}
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F8FAFC]">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-cyan-400 via-blue-500 to-teal-600 py-20 relative overflow-hidden">
-        {/* Animated wave background */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1440 320%22%3E%3Cpath fill=%22%23ffffff%22 d=%22M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z%22%3E%3C/path%3E%3C/svg%3E')] bg-cover bg-bottom animate-pulse" />
+      <section className="bg-[#001F3F] py-20 relative overflow-hidden">
+        {/* Subtle pattern overlay */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 304 304%22 width=%22304%22 height=%22304%22%3E%3Cpath fill=%22%23FFFFFF%22 d=%22M44.1 224a5 5 0 1 1 0 2H0v-2h44.1zm160 48a5 5 0 1 1 0 2H82v-2h122.1z%22/%3E%3C/svg%3E')] bg-repeat" />
         </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <AnimatedSection animation="fadeInDown">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">
-              Our Ocean Conservation Mission
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight uppercase">
+              Our Story
             </h1>
-            <p className="text-xl text-cyan-100 mb-8 max-w-4xl mx-auto leading-relaxed">
-              Shenna&apos;s Studio was born from love of ocean and commitment to protecting marine life in Rio Grande Valley and South Padre Island.
+            <p className="text-xl text-white/80 mb-8 max-w-4xl mx-auto leading-relaxed">
+              At La Pesqueria Outfitters, we build gear for the long haul. Born from the salt and the spray,
+              we create T-shirts that work as hard as a deckhand but feel like a weekend staple.
+              Every stitch honors the tradition of the sea.
             </p>
           </AnimatedSection>
         </div>
@@ -28,36 +36,39 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <AnimatedSection animation="fadeInLeft">
-              <h2 className="text-3xl font-bold text-teal-700 mb-6">
-               How Shenna&apos;s Studio Began
+              <h2 className="text-3xl font-black text-[#001F3F] mb-6 uppercase">
+                How La Pesqueria Began
               </h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed">
+              <div className="space-y-4 text-[#494949] leading-relaxed">
                 <p>
-                   Founded in 2025, Shenna&apos;s Studio started as a small family business creating handmade bracelets in our home studio in South Texas.
-                  What began as a creative outlet quickly evolved into a mission-driven enterprise when we witnessed firsthand 
-                  the impact of plastic pollution and climate change on our local marine ecosystems.
+                  La Pesqueria Outfitters was born in the Rio Grande Valley, where the water meets the land
+                  and fishing isn&apos;t just a hobby—it&apos;s a way of life. We started with a simple idea:
+                  create apparel that could handle the demands of serious anglers while looking good enough
+                  to wear anywhere.
                 </p>
                 <p>
-                  Living near South Padre Island, we&apos;ve seen the beauty of sea turtle nesting grounds, the majesty of 
-                  dolphins playing in the Gulf, and the vital importance of coral reef preservation. Each bracelet we create 
-                  tells a story of these ocean treasures we&apos;re fighting to protect.
+                  Our founders spent years on the water, from the bays of South Padre Island to the
+                  offshore runs in the Gulf. They knew what worked and what didn&apos;t. Too many shirts
+                  faded after a few washes. Too many hats couldn&apos;t stand up to the salt. That had to change.
                 </p>
                 <p>
-                  <strong className="text-teal-600">10% of every purchase</strong> goes directly to marine conservation 
-                  organizations working in Rio Grande Valley and South Padre Island. We&apos;ve partnered with local groups 
-                  protecting nesting sea turtles, researching whale migration patterns, and restoring coral reefs.
+                  <strong className="text-[#FF4500]">Today, we&apos;re proud to offer premium fishing apparel</strong> designed
+                  for the modern angler. UPF 50+ protection, moisture-wicking fabric, salt-resistant materials—all
+                  built to last and styled for the lifestyle we love.
                 </p>
               </div>
             </AnimatedSection>
             <AnimatedSection animation="fadeInRight" delay={200}>
-              <div className="bg-gradient-to-br from-cyan-100 to-blue-100 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="bg-[#001F3F] rounded-lg p-8 shadow-lg">
                 <div className="text-center">
-                  <div className="text-6xl mb-4 animate-bounce">🐙</div>
-                  <div className="text-2xl font-bold text-teal-700 mb-2">
-                    Every Bracelet Makes a Difference
+                  <div className="w-20 h-20 bg-[#FF4500]/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Anchor className="w-10 h-10 text-[#FF4500]" />
                   </div>
-                  <div className="text-lg text-gray-600">
-                    Supporting Ocean Conservation
+                  <div className="text-2xl font-black text-white mb-2 uppercase">
+                    Built for the Water
+                  </div>
+                  <div className="text-lg text-white/70">
+                    4400 N 23rd St Suite 135, McAllen, TX
                   </div>
                 </div>
               </div>
@@ -66,119 +77,125 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Dolphin Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/dolphin.jpg" 
-        alt="Dolphin swimming" 
-        text="Protecting Our Dolphins" 
+      {/* Parallax Banner */}
+      <ParallaxBanner
+        src="/images/aboutpageparallax.jpg"
+        alt="Fishing at sunrise"
+        text="Born on the Water"
       />
 
-      {/* Our Impact Section */}
+      {/* What We Offer Section */}
       <section className="bg-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection animation="fadeInUp" className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Our Conservation Impact
+            <h2 className="text-3xl md:text-4xl font-black text-[#001F3F] mb-4 uppercase">
+              What Sets Us Apart
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Together with our customers, we&apos;re making real difference for marine life in Texas Gulf Coast.
+            <p className="text-xl text-[#494949] max-w-3xl mx-auto">
+              Premium fishing apparel engineered for performance and built to last.
             </p>
           </AnimatedSection>
 
           <StaggeredChildren className="grid grid-cols-1 md:grid-cols-3 gap-8" staggerDelay={150}>
-            <div className="stagger-child text-center bg-gradient-to-br from-cyan-50 to-blue-50 p-8 rounded-xl border border-cyan-100 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="text-4xl mb-4">🌊🪼</div>
-              <h3 className="text-xl font-bold text-teal-700 mb-2">
-                Sea Turtle Protection
+            <div className="stagger-child text-center bg-[#F8FAFC] p-8 rounded-lg border border-gray-200 hover:shadow-lg transition-all hover:-translate-y-1">
+              <div className="w-16 h-16 bg-[#FF4500]/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Sun className="w-8 h-8 text-[#FF4500]" />
+              </div>
+              <h3 className="text-xl font-bold text-[#001F3F] mb-2">
+                UPF 50+ Protection
               </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Supporting nesting beach protection and hatchling release programs in South Padre Island. 
-                Funding research on leatherback and Kemps Ridley sea turtles.
+              <p className="text-[#494949] leading-relaxed">
+                Maximum sun protection that blocks 98% of harmful UV rays.
+                Stay protected during those long days chasing the big one.
               </p>
             </div>
 
-            <div className="stagger-child text-center bg-gradient-to-br from-blue-50 to-cyan-50 p-8 rounded-xl border border-blue-100 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="text-4xl mb-4">🐙</div>
-              <h3 className="text-xl font-bold text-teal-700 mb-2">
-                Whale Conservation
+            <div className="stagger-child text-center bg-[#F8FAFC] p-8 rounded-lg border border-gray-200 hover:shadow-lg transition-all hover:-translate-y-1">
+              <div className="w-16 h-16 bg-blue-500/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Fish className="w-8 h-8 text-blue-500" />
+              </div>
+              <h3 className="text-xl font-bold text-[#001F3F] mb-2">
+                Moisture Wicking
               </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Supporting marine mammal research and protection programs in the Gulf of Mexico.
-                Helping track whale migration and protect critical feeding grounds.
+              <p className="text-[#494949] leading-relaxed">
+                Advanced fabric technology pulls sweat away from your body,
+                keeping you cool and dry even in the Texas heat.
               </p>
             </div>
 
-            <div className="stagger-child text-center bg-gradient-to-br from-cyan-50 to-teal-50 p-8 rounded-xl border border-teal-100 hover:shadow-lg transition-all hover:-translate-y-1">
-              <div className="text-4xl mb-4">🦈</div>
-              <h3 className="text-xl font-bold text-teal-700 mb-2">
-                Ocean Ecosystem Health
+            <div className="stagger-child text-center bg-[#F8FAFC] p-8 rounded-lg border border-gray-200 hover:shadow-lg transition-all hover:-translate-y-1">
+              <div className="w-16 h-16 bg-cyan-500/10 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-cyan-500" />
+              </div>
+              <h3 className="text-xl font-bold text-[#001F3F] mb-2">
+                Salt-Resistant Fabric
               </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Funding coral reef restoration, beach cleanup initiatives, and ocean education programs
-                throughout Rio Grande Valley communities.
+              <p className="text-[#494949] leading-relaxed">
+                Engineered to withstand saltwater, sun, and the rigors
+                of serious fishing without fading or breaking down.
               </p>
             </div>
           </StaggeredChildren>
         </div>
       </section>
 
-      {/* Coral Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/coral.jpg" 
-        alt="Coral reef" 
-        text="Restoring Our Reefs" 
+      {/* Parallax Banner */}
+      <ParallaxBanner
+        src="/images/plug.jpg"
+        alt="Fishing gear"
+        text="Gear Up for Adventure"
       />
 
       {/* Values Section */}
-      <section className="bg-gradient-to-r from-gray-50 to-cyan-50 py-16">
+      <section className="bg-[#001F3F] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection animation="fadeInUp" className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-teal-700 mb-4">
-              Our Values
+            <h2 className="text-3xl font-black text-white mb-4 uppercase">
+              Our Commitment
             </h2>
-            <p className="text-gray-600 max-w-3xl mx-auto">
-              Every decision we make is guided by our commitment to ocean conservation and sustainable practices.
+            <p className="text-white/70 max-w-3xl mx-auto">
+              Every piece of gear we make reflects our values: quality, durability, and a deep respect for the water.
             </p>
           </AnimatedSection>
 
           <StaggeredChildren className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" staggerDelay={100}>
             <div className="stagger-child text-center group">
-              <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🌊</span>
+              <div className="w-16 h-16 bg-[#FF4500]/20 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Anchor className="w-8 h-8 text-[#FF4500]" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Ocean First</h3>
-              <p className="text-gray-600">
-                Every business decision prioritizes ocean health and marine conservation.
+              <h3 className="text-xl font-semibold text-white mb-2">Quality First</h3>
+              <p className="text-white/60">
+                Premium materials and construction that stands up to real-world use.
               </p>
             </div>
 
             <div className="stagger-child text-center group">
-              <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🤝</span>
+              <div className="w-16 h-16 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Users className="w-8 h-8 text-blue-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Transparency</h3>
-              <p className="text-gray-600">
-                We track and share exactly how your purchases support conservation efforts.
+              <h3 className="text-xl font-semibold text-white mb-2">Local Pride</h3>
+              <p className="text-white/60">
+                Proudly serving the Rio Grande Valley and anglers everywhere.
               </p>
             </div>
 
             <div className="stagger-child text-center group">
-              <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">♻️</span>
+              <div className="w-16 h-16 bg-cyan-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Truck className="w-8 h-8 text-cyan-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Sustainability</h3>
-              <p className="text-gray-600">
-                Eco-friendly materials and minimal waste packaging in everything we create.
+              <h3 className="text-xl font-semibold text-white mb-2">Fast Shipping</h3>
+              <p className="text-white/60">
+                Quick delivery so you can get on the water sooner.
               </p>
             </div>
 
             <div className="stagger-child text-center group">
-              <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                <span className="text-2xl">🌍</span>
+              <div className="w-16 h-16 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                <Shield className="w-8 h-8 text-green-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Community</h3>
-              <p className="text-gray-600">
-                Supporting local conservation groups and educating our communities about marine protection.
+              <h3 className="text-xl font-semibold text-white mb-2">Satisfaction Guaranteed</h3>
+              <p className="text-white/60">
+                If you&apos;re not happy, we&apos;ll make it right. Period.
               </p>
             </div>
           </StaggeredChildren>
@@ -186,34 +203,27 @@ export default function AboutPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="bg-gradient-to-r from-teal-600 via-blue-600 to-cyan-700 py-16 relative overflow-hidden">
-        {/* Animated particles */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-20 h-20 rounded-full bg-white animate-ping" style={{ animationDuration: '3s' }} />
-          <div className="absolute top-1/2 right-20 w-16 h-16 rounded-full bg-white animate-ping" style={{ animationDuration: '4s', animationDelay: '1s' }} />
-          <div className="absolute bottom-20 left-1/3 w-12 h-12 rounded-full bg-white animate-ping" style={{ animationDuration: '5s', animationDelay: '2s' }} />
-        </div>
+      <section className="bg-[#F8FAFC] py-16 relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <AnimatedSection animation="fadeInUp">
-            <h2 className="text-3xl font-bold text-white mb-4">
-              Join Our Ocean Conservation Mission
+            <h2 className="text-3xl font-black text-[#001F3F] mb-4 uppercase">
+              Ready to Gear Up?
             </h2>
-            <p className="text-xl text-cyan-100 mb-8">
-              Every bracelet you purchase helps protect the marine life we all love.
-              Shop our ocean collection and be part of the solution.
+            <p className="text-xl text-[#494949] mb-8">
+              Shop our collection of premium fishing apparel and experience the La Pesqueria difference.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/products"
-                className="inline-block bg-white text-teal-600 px-8 py-3 rounded-full font-semibold hover:bg-cyan-50 transition-all transform hover:scale-110 shadow-lg hover:shadow-xl"
+                className="inline-block bg-[#FF4500] text-white px-8 py-3 rounded font-bold hover:bg-[#FF5722] transition-all transform hover:scale-105 shadow-lg uppercase"
               >
-                Shop Ocean Collection
+                Shop Collection
               </Link>
               <Link
-                href="/conservation"
-                className="inline-block border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-teal-600 transition-all hover:scale-105"
+                href="/contact"
+                className="inline-block border-2 border-[#001F3F] text-[#001F3F] px-8 py-3 rounded font-bold hover:bg-[#001F3F] hover:text-white transition-all uppercase"
               >
-               Learn About Conservation
+                Visit Our Store
               </Link>
             </div>
           </AnimatedSection>

@@ -1,61 +1,57 @@
 export default function SEOSchemas() {
-  // Organization Schema with Brownsville address
+  // Organization Schema with McAllen address
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Shenna's Studio",
-    "description": "Custom handcrafted bracelets and ocean-inspired jewelry in Brownsville, TX. 10% supports marine conservation in South Padre Island and Rio Grande Valley.",
-    "url": "https://shennastudio.com",
-    "logo": "https://shennastudio.com/images/shenna-studio-logo.png",
-    "foundingDate": "2025-03",
-    "founder": {
-      "@type": "Person",
-      "name": "Shenna"
-    },
+    "name": "La Pesqueria Outfitters",
+    "description": "Premium fishing apparel and gear in McAllen, TX. High-performance T-shirts, hats, and coastal gear for the modern angler.",
+    "url": "https://lapesqueriaoutfitters.com",
+    "logo": "https://lapesqueriaoutfitters.com/images/lapescerialogo.png",
+    "foundingDate": "2025",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "2436 Pablo Kisel Blvd",
-      "addressLocality": "Brownsville",
+      "streetAddress": "4400 N 23rd St Suite 135",
+      "addressLocality": "McAllen",
       "addressRegion": "TX",
-      "postalCode": "78520",
+      "postalCode": "78504",
       "addressCountry": "US"
     },
     "areaServed": {
       "@type": "Place",
-      "name": "Brownsville, TX and surrounding areas including South Padre Island, Rio Grande Valley"
+      "name": "McAllen, TX and surrounding areas including South Padre Island, Rio Grande Valley"
     },
     "sameAs": [
-      "https://facebook.com/shennastudio",
-      "https://instagram.com/shennastudio"
+      "https://facebook.com/lapesqueriaoutfitters",
+      "https://instagram.com/lapesqueriaoutfitters"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "Customer Service",
-      "email": "info@shennastudio.com"
+      "email": "info@lapesqueriaoutfitters.com"
     }
   };
 
-  // Local Business Schema with Brownsville address
+  // Local Business Schema with McAllen address
   const localBusinessSchema = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Shenna's Studio - Custom Bracelets Brownsville TX",
-    "image": "https://shennastudio.com/images/shenna-studio-logo.png",
-    "description": "Premier custom bracelet shop in Brownsville, TX. Handcrafted ocean-inspired jewelry, artisan bracelets, and marine conservation jewelry. 10% of all purchases support sea turtle and ocean conservation.",
+    "name": "La Pesqueria Outfitters - Fishing Apparel McAllen TX",
+    "image": "https://lapesqueriaoutfitters.com/images/lapescerialogo.png",
+    "description": "Premier fishing apparel store in McAllen, TX. Premium performance T-shirts, hats, and gear for anglers. UPF 50+ protection, moisture-wicking, and salt-resistant apparel.",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "2436 Pablo Kisel Blvd",
-      "addressLocality": "Brownsville",
+      "streetAddress": "4400 N 23rd St Suite 135",
+      "addressLocality": "McAllen",
       "addressRegion": "TX",
-      "postalCode": "78520",
+      "postalCode": "78504",
       "addressCountry": "US"
     },
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "25.9018",
-      "longitude": "-97.4975"
+      "latitude": "26.2453",
+      "longitude": "-98.2531"
     },
-    "url": "https://shennastudio.com",
+    "url": "https://lapesqueriaoutfitters.com",
     "telephone": "+1-956-XXX-XXXX",
     "priceRange": "$$",
     "openingHoursSpecification": {
@@ -66,17 +62,16 @@ export default function SEOSchemas() {
         "Wednesday",
         "Thursday",
         "Friday",
-        "Saturday",
-        "Sunday"
+        "Saturday"
       ],
-      "opens": "09:00",
-      "closes": "18:00"
+      "opens": "10:00",
+      "closes": "19:00"
     },
-    "paymentAccepted": "Credit Card, Debit Card, Cash, Apple Pay, Cash App",
+    "paymentAccepted": "Credit Card, Debit Card, Cash, Apple Pay",
     "currenciesAccepted": "USD",
     "areaServed": {
       "@type": "Place",
-      "name": "Brownsville, TX, South Padre Island, McAllen, Harlingen, Rio Grande Valley"
+      "name": "McAllen, TX, South Padre Island, Harlingen, Brownsville, Rio Grande Valley"
     }
   };
 
@@ -84,13 +79,13 @@ export default function SEOSchemas() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Shenna's Studio - Custom Bracelets Brownsville TX",
-    "url": "https://shennastudio.com",
+    "name": "La Pesqueria Outfitters - Fishing Apparel McAllen TX",
+    "url": "https://lapesqueriaoutfitters.com",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://shennastudio.com/search?q={search_term_string}"
+        "urlTemplate": "https://lapesqueriaoutfitters.com/search?q={search_term_string}"
       },
       "query-input": "required name=search_term_string"
     }
@@ -100,48 +95,48 @@ export default function SEOSchemas() {
   const ecommerceSchema = {
     "@context": "https://schema.org",
     "@type": "Store",
-    "name": "Shenna's Studio - Custom Bracelets & Ocean Jewelry",
-    "description": "Shop custom handcrafted bracelets in Brownsville, TX. Ocean-inspired jewelry, artisan bracelets, and sustainable t-shirts. Every purchase donates 10% to marine conservation.",
-    "url": "https://shennastudio.com",
-    "image": "https://shennastudio.com/images/shenna-studio-logo.png",
+    "name": "La Pesqueria Outfitters - Fishing Apparel & Gear",
+    "description": "Shop premium fishing apparel in McAllen, TX. Performance T-shirts with UPF 50+ protection, moisture-wicking hats, and salt-resistant gear for serious anglers.",
+    "url": "https://lapesqueriaoutfitters.com",
+    "image": "https://lapesqueriaoutfitters.com/images/lapescerialogo.png",
     "brand": {
       "@type": "Brand",
-      "name": "Shenna's Studio"
+      "name": "La Pesqueria Outfitters"
     },
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "2436 Pablo Kisel Blvd",
-      "addressLocality": "Brownsville",
+      "streetAddress": "4400 N 23rd St Suite 135",
+      "addressLocality": "McAllen",
       "addressRegion": "TX",
-      "postalCode": "78520",
+      "postalCode": "78504",
       "addressCountry": "US"
     },
     "offers": {
       "@type": "AggregateOffer",
       "priceCurrency": "USD",
-      "lowPrice": "15.00",
-      "highPrice": "75.00",
+      "lowPrice": "24.99",
+      "highPrice": "89.99",
       "offerCount": "50"
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Custom Bracelets Collection",
+      "name": "Fishing Apparel Collection",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Handcrafted Ocean Bracelets",
-            "description": "Eco-friendly beaded bracelets supporting marine conservation",
+            "name": "Performance Fishing T-Shirts",
+            "description": "UPF 50+ sun protection, moisture-wicking, salt-resistant fishing shirts",
             "brand": {
               "@type": "Brand",
-              "name": "Shenna's Studio"
+              "name": "La Pesqueria Outfitters"
             },
             "offers": {
               "@type": "AggregateOffer",
               "priceCurrency": "USD",
-              "lowPrice": "15.00",
-              "highPrice": "45.00",
+              "lowPrice": "29.99",
+              "highPrice": "49.99",
               "availability": "https://schema.org/InStock",
               "offerCount": "20"
             },
@@ -158,19 +153,19 @@ export default function SEOSchemas() {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Marine Conservation Jewelry",
-            "description": "Artisan jewelry with 10% proceeds donated to ocean protection",
+            "name": "Fishing Hats & Caps",
+            "description": "Performance fishing hats with sun protection and moisture management",
             "brand": {
               "@type": "Brand",
-              "name": "Shenna's Studio"
+              "name": "La Pesqueria Outfitters"
             },
             "offers": {
               "@type": "AggregateOffer",
               "priceCurrency": "USD",
-              "lowPrice": "20.00",
-              "highPrice": "75.00",
+              "lowPrice": "24.99",
+              "highPrice": "44.99",
               "availability": "https://schema.org/InStock",
-              "offerCount": "25"
+              "offerCount": "15"
             },
             "aggregateRating": {
               "@type": "AggregateRating",
@@ -185,19 +180,19 @@ export default function SEOSchemas() {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Sustainable T-Shirts",
-            "description": "Eco-friendly apparel supporting sea turtle and whale conservation",
+            "name": "Fishing Gear & Accessories",
+            "description": "Essential fishing accessories and coastal gear for anglers",
             "brand": {
               "@type": "Brand",
-              "name": "Shenna's Studio"
+              "name": "La Pesqueria Outfitters"
             },
             "offers": {
               "@type": "AggregateOffer",
               "priceCurrency": "USD",
-              "lowPrice": "25.00",
-              "highPrice": "45.00",
+              "lowPrice": "14.99",
+              "highPrice": "89.99",
               "availability": "https://schema.org/InStock",
-              "offerCount": "15"
+              "offerCount": "25"
             },
             "aggregateRating": {
               "@type": "AggregateRating",
@@ -207,49 +202,9 @@ export default function SEOSchemas() {
               "worstRating": "1"
             }
           }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Product",
-            "name": "Sea Turtle Bracelet Collection",
-            "description": "Handcrafted sea turtle inspired bracelets from South Padre Island",
-            "brand": {
-              "@type": "Brand",
-              "name": "Shenna's Studio"
-            },
-            "offers": {
-              "@type": "AggregateOffer",
-              "priceCurrency": "USD",
-              "lowPrice": "18.00",
-              "highPrice": "55.00",
-              "availability": "https://schema.org/InStock",
-              "offerCount": "12"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "5.0",
-              "reviewCount": "24",
-              "bestRating": "5",
-              "worstRating": "1"
-            }
-          }
         }
       ]
     }
-  };
-
-  // Non-Profit Action Schema (for conservation)
-  const nonprofitSchema = {
-    "@context": "https://schema.org",
-    "@type": "DonateAction",
-    "name": "Marine Conservation Donation - Brownsville TX",
-    "description": "10% of every custom bracelet purchase in Brownsville, TX is donated to marine life conservation efforts in South Padre Island and the Rio Grande Valley",
-    "recipient": {
-      "@type": "Organization",
-      "name": "Shenna's Studio Marine Conservation Fund"
-    },
-    "cause": "Marine Life Protection, Sea Turtle Conservation, and Ocean Ecosystem Preservation in South Padre Island and Rio Grande Valley"
   };
 
   return (
@@ -276,12 +231,6 @@ export default function SEOSchemas() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(ecommerceSchema) }}
-      />
-
-      {/* Non-Profit Donation Schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(nonprofitSchema) }}
       />
     </>
   );

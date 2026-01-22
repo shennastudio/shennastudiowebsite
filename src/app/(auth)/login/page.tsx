@@ -2,12 +2,14 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Anchor } from 'lucide-react';
 
 function LoginForm() {
   const router = useRouter();
@@ -59,17 +61,23 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 via-blue-50 to-teal-50 py-12 px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] py-12 px-4">
+      <Card className="w-full max-w-md border-gray-200">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <span className="text-5xl">🌊</span>
+            <Image
+              src="/images/lapescerialogo.png"
+              alt="La Pesqueria Outfitters"
+              width={120}
+              height={120}
+              className="object-contain"
+            />
           </div>
-          <CardTitle className="text-3xl font-bold text-teal-700">
-            Welcome Back!
+          <CardTitle className="text-3xl font-black text-[#001F3F] uppercase">
+            Welcome Back
           </CardTitle>
-          <p className="text-gray-600 mt-2">
-            Sign in to track orders and earn rewards
+          <p className="text-[#494949] mt-2">
+            Sign in to track orders and access your account
           </p>
         </CardHeader>
         <CardContent>
@@ -96,6 +104,7 @@ function LoginForm() {
                 onChange={handleChange}
                 required
                 placeholder="you@example.com"
+                className="border-gray-300"
               />
             </div>
 
@@ -109,12 +118,13 @@ function LoginForm() {
                 onChange={handleChange}
                 required
                 placeholder="Your password"
+                className="border-gray-300"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-teal-600 hover:bg-teal-700"
+              className="w-full bg-[#FF4500] hover:bg-[#FF5722] text-white font-bold uppercase"
               disabled={loading}
             >
               {loading ? 'Signing in...' : 'Sign In'}
@@ -122,18 +132,21 @@ function LoginForm() {
           </form>
 
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#494949]">
               Don&apos;t have an account?{' '}
-              <Link href="/register" className="text-teal-600 hover:text-teal-700 font-semibold">
+              <Link href="/register" className="text-[#FF4500] hover:text-[#FF5722] font-bold">
                 Create one now
               </Link>
             </p>
           </div>
 
-          <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-teal-50 rounded-lg border border-teal-200">
-            <p className="text-sm text-teal-900 text-center">
-              <strong>Member Benefits:</strong> Earn points, win prizes, and support ocean conservation!
-            </p>
+          <div className="mt-6 p-4 bg-[#001F3F] rounded-lg">
+            <div className="flex items-center gap-3">
+              <Anchor className="w-6 h-6 text-[#FF4500]" />
+              <p className="text-sm text-white">
+                <strong className="text-[#FF4500]">Member Benefits:</strong> Track orders, save addresses, and get exclusive offers!
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>

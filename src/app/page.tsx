@@ -3,8 +3,7 @@
 import { TestimonialSection } from '@/components/TestimonialSection'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { Waves, Anchor, ShieldCheck, ArrowRight } from 'lucide-react'
-import ShimmerButton from '@/components/magicui/ShimmerButton'
+import { Fish, Anchor, ShieldCheck, ArrowRight, Sun, Droplets, Shirt } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
@@ -31,7 +30,7 @@ export default function Home() {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     fetchFeaturedProducts(6).then((products) => {
       if (isMounted) {
         setFeaturedProducts(products);
@@ -49,24 +48,24 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-[#F8FAFC]">
       {/* Sale Banner */}
       <SaleBanner />
-      
+
       {/* Hero Section with Image */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#001F3F]">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/50 to-slate-900 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#001F3F]/70 to-[#001F3F] z-10" />
           <Image
             src="/images/aboutpageparallax.jpg"
-            alt="Ocean background - Wear the Ocean, Protect the Ocean"
+            alt="Fishing at sunrise - Born on the Water, Built for the Catch"
             fill
             priority
             placeholder="blur"
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k="
             sizes="100vw"
             quality={85}
-            className="object-cover opacity-60"
+            className="object-cover opacity-50"
             style={{ objectPosition: 'center center' }}
           />
         </div>
@@ -77,32 +76,32 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Headline with Festive Font */}
-            <h1 className="font-festive text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 tracking-wide">
-              Wear the Ocean. <span className="block text-cyan-300">Protect the Ocean.</span>
+            {/* Headline */}
+            <h1 className="font-heading text-5xl md:text-7xl lg:text-8xl font-black text-white mb-8 tracking-tight uppercase">
+              Born on the Water. <span className="block text-[#FF4500]">Built for the Catch.</span>
             </h1>
-            
+
             {/* Sub-headline */}
-            <p className="text-xl md:text-2xl text-cyan-100 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-              Hand-crafted bracelets that fund real ocean conservation.
-              <span className="block mt-3 text-cyan-400 font-medium">At least 10% of every purchase supports ocean nonprofits in South Padre Island & beyond.</span>
+            <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-body">
+              High-performance apparel for the modern angler.
+              <span className="block mt-3 text-[#FF4500] font-semibold">Premium fishing shirts, hats, and coastal gear at 4400 N 23rd St Suite 135, McAllen TX.</span>
             </p>
-            
+
             {/* CTA Button */}
             <Link href="/products">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="inline-block bg-gradient-to-r from-cyan-600 to-teal-600 text-white px-12 py-5 rounded-full font-bold text-lg tracking-wide hover:from-cyan-500 hover:to-teal-500 transition-all shadow-2xl shadow-cyan-500/25"
+                className="inline-block bg-[#FF4500] text-white px-12 py-5 rounded-md font-bold text-lg tracking-wide hover:bg-[#FF5722] transition-all shadow-2xl shadow-[#FF4500]/25 uppercase"
               >
-                Shop Bracelets That Give Back
+                Shop the Collection
               </motion.button>
             </Link>
           </motion.div>
         </div>
 
         {/* Scroll indicator */}
-        <motion.div 
+        <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white/50 flex flex-col items-center gap-2"
@@ -112,45 +111,45 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-24 bg-slate-900 relative">
+      {/* Featured Products - T-shirts Grid */}
+      <section className="py-24 bg-[#F8FAFC] relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative z-10 text-4xl md:text-5xl font-black text-white mb-4 tracking-tight"
+              className="relative z-10 text-4xl md:text-5xl font-black text-[#001F3F] mb-4 tracking-tight uppercase"
             >
-              Ocean Treasures
+              Featured Collection
             </motion.h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Handpicked bracelets inspired by sea turtles, whales, and marine life
+            <p className="text-xl text-[#494949] max-w-2xl mx-auto">
+              Performance fishing apparel built for long days on the water
             </p>
           </div>
 
           {isLoading && featuredProducts.length === 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-slate-800 rounded-3xl shadow-sm border border-slate-700 overflow-hidden animate-pulse">
-                  <div className="h-80 bg-slate-700" />
+                <div key={i} className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden animate-pulse">
+                  <div className="h-80 bg-gray-200" />
                   <div className="p-8 space-y-4">
-                    <div className="h-6 bg-slate-700 rounded w-3/4" />
-                    <div className="h-4 bg-slate-600 rounded w-full" />
-                    <div className="h-4 bg-slate-600 rounded w-2/3" />
+                    <div className="h-6 bg-gray-200 rounded w-3/4" />
+                    <div className="h-4 bg-gray-100 rounded w-full" />
+                    <div className="h-4 bg-gray-100 rounded w-2/3" />
                     <div className="flex justify-between items-center">
-                      <div className="h-8 bg-slate-700 rounded w-20" />
-                      <div className="h-6 bg-slate-600 rounded w-16" />
+                      <div className="h-8 bg-gray-200 rounded w-20" />
+                      <div className="h-6 bg-gray-100 rounded w-16" />
                     </div>
-                    <div className="h-12 bg-slate-700 rounded-2xl" />
+                    <div className="h-12 bg-gray-200 rounded" />
                   </div>
                 </div>
               ))}
             </div>
           ) : featuredProducts.length === 0 ? (
             <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">🌊</div>
-              <p className="text-slate-400 text-lg">No featured products yet</p>
+              <div className="text-6xl mb-4"><Fish className="w-16 h-16 mx-auto text-[#001F3F]" /></div>
+              <p className="text-[#494949] text-lg">New collection coming soon</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -162,7 +161,7 @@ export default function Home() {
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -10 }}
-                className="bg-slate-800 rounded-3xl shadow-sm border border-slate-700 overflow-hidden group transition-all hover:shadow-2xl hover:shadow-teal-500/10"
+                className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden group transition-all hover:shadow-xl"
               >
                 <div className="relative h-80 overflow-hidden">
                   {productDisplay.displayImages?.[0] ? (
@@ -174,39 +173,44 @@ export default function Home() {
                       className="object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-700">
-                      <div className="w-20 h-20 bg-teal-900/50 rounded-full flex items-center justify-center">
-                        <Waves className="w-10 h-10 text-teal-400" />
+                    <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                      <div className="w-20 h-20 bg-[#001F3F]/10 rounded-full flex items-center justify-center">
+                        <Shirt className="w-10 h-10 text-[#001F3F]" />
                       </div>
                     </div>
                   )}
                   {productDisplay.product?.featured && (
-                    <div className="absolute top-6 right-6 bg-teal-500 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
+                    <div className="absolute top-6 right-6 bg-[#FF4500] text-white px-4 py-1.5 rounded text-xs font-bold uppercase tracking-widest shadow-lg">
                       Featured
                     </div>
                   )}
+                  {/* Technical Badges */}
+                  <div className="absolute bottom-4 left-4 flex gap-2">
+                    <span className="bg-white/90 backdrop-blur-sm text-[#001F3F] px-2 py-1 rounded text-xs font-bold">UPF 50+</span>
+                    <span className="bg-white/90 backdrop-blur-sm text-[#001F3F] px-2 py-1 rounded text-xs font-bold">Moisture Wicking</span>
+                  </div>
                 </div>
                 <div className="p-8">
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-teal-400 transition-colors">
+                  <h3 className="text-2xl font-bold text-[#001F3F] mb-3 group-hover:text-[#FF4500] transition-colors">
                     {productDisplay.product?.name || 'Product'}
                   </h3>
-                  <p className="text-slate-400 mb-6 line-clamp-2 leading-relaxed">
-                    {productDisplay.product?.description || 'Ocean-inspired bracelet'}
+                  <p className="text-[#494949] mb-6 line-clamp-2 leading-relaxed">
+                    {productDisplay.product?.description || 'Performance fishing apparel'}
                   </p>
                   <div className="flex items-center justify-between mb-8">
-                    <span className="text-3xl font-black text-white">
+                    <span className="text-3xl font-black text-[#001F3F]">
                       ${productDisplay.displayPrice}
                     </span>
                     <span className={cn(
-                      "text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider",
-                      productDisplay.displayStock > 0 ? "bg-emerald-900/50 text-emerald-400" : "bg-rose-900/50 text-red-400"
+                      "text-xs font-bold px-3 py-1 rounded uppercase tracking-wider",
+                      productDisplay.displayStock > 0 ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
                     )}>
                       {productDisplay.displayStock > 0 ? 'In Stock' : 'Sold Out'}
                     </span>
                   </div>
                   <Link
-                    href={`/products/${productDisplay.product?.slug || 'ocean-wave-bracelet'}`}
-                    className="block w-full text-center bg-teal-600 text-white py-4 rounded-2xl font-bold transition-all hover:bg-teal-500 hover:shadow-xl hover:shadow-teal-500/20 active:scale-95"
+                    href={`/products/${productDisplay.product?.slug || 'fishing-shirt'}`}
+                    className="block w-full text-center bg-[#001F3F] text-white py-4 rounded font-bold transition-all hover:bg-[#002D5C] active:scale-95"
                   >
                     View Details
                   </Link>
@@ -219,7 +223,7 @@ export default function Home() {
           <div className="text-center mt-20">
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 text-teal-400 font-bold text-lg hover:gap-4 transition-all"
+              className="inline-flex items-center gap-2 text-[#FF4500] font-bold text-lg hover:gap-4 transition-all uppercase"
             >
               View All Products <ArrowRight className="w-5 h-5" />
             </Link>
@@ -231,55 +235,58 @@ export default function Home() {
       <SubscriptionBanner />
 
       {/* Mission Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/plug.jpg" 
-        alt="Support Our Mission" 
-        text="Support Our Mission" 
+      <ParallaxBanner
+        src="/images/plug.jpg"
+        alt="Gear Up for the Catch"
+        text="Gear Up for the Catch"
       />
 
-      {/* Ocean Features Section */}
-      <section className="bg-slate-950 py-24">
+      {/* Why Choose La Pesqueria Features Section */}
+      <section className="bg-[#001F3F] py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
-              Why Choose Shenna&apos;s Studio?
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight uppercase">
+              Why Choose La Pesqueria?
             </h2>
+            <p className="text-xl text-white/70 max-w-2xl mx-auto">
+              Built by anglers, for anglers. Every stitch honors the tradition of the sea.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Sea Turtle Conservation",
-                desc: "Each purchase directly supports sea turtle protection programs in South Padre Island nesting grounds.",
-                icon: ShieldCheck,
-                color: "text-emerald-400",
-                bg: "bg-emerald-900/30"
+                title: "UPF 50+ Protection",
+                desc: "Maximum sun protection for long days on the water. Our fabric blocks 98% of harmful UV rays.",
+                icon: Sun,
+                color: "text-[#FF4500]",
+                bg: "bg-[#FF4500]/10"
               },
               {
-                title: "Ocean-Quality Materials",
-                desc: "Premium, sustainably sourced materials that honor marine life and coastal ecosystems.",
-                icon: Anchor,
+                title: "Moisture Wicking",
+                desc: "Advanced moisture management keeps you cool and dry, even in the most demanding conditions.",
+                icon: Droplets,
                 color: "text-blue-400",
-                bg: "bg-blue-900/30"
+                bg: "bg-blue-500/10"
               },
               {
-                title: "Shark Research Support",
-                desc: "10% of every sale funds important shark research and ocean conservation efforts.",
-                icon: Waves,
+                title: "Salt-Resistant Fabric",
+                desc: "Engineered to withstand saltwater, sun, and the rigors of serious fishing adventures.",
+                icon: Anchor,
                 color: "text-cyan-400",
-                bg: "bg-cyan-900/30"
+                bg: "bg-cyan-500/10"
               }
             ].map((feature, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -10, scale: 1.02 }}
-                className="text-center bg-slate-900 p-10 rounded-3xl shadow-sm border border-slate-800 hover:shadow-2xl transition-all"
+                className="text-center bg-white/5 backdrop-blur-sm p-10 rounded-lg border border-white/10 hover:border-[#FF4500]/50 transition-all"
               >
-                <div className={cn("w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-8", feature.bg)}>
+                <div className={cn("w-20 h-20 mx-auto rounded-lg flex items-center justify-center mb-8", feature.bg)}>
                   <feature.icon className={cn("w-10 h-10", feature.color)} />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
-                <p className="text-slate-400 leading-relaxed">{feature.desc}</p>
+                <p className="text-white/70 leading-relaxed">{feature.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -289,68 +296,124 @@ export default function Home() {
       {/* Testimonials */}
       <TestimonialSection />
 
-      {/* Ocean Conservation CTA Section */}
-      <section className="bg-slate-900 py-24 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tight">
-              Protect Ocean Life with Every Bracelet
+      {/* Shop Categories CTA Section */}
+      <section className="bg-[#F8FAFC] py-24 relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-[#001F3F] mb-4 tracking-tight uppercase">
+              Shop by Category
             </h2>
-            <p className="text-xl text-cyan-100 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-              Each purchase directly supports sea turtle conservation, whale protection, and marine ecosystem restoration in Rio Grande Valley and South Padre Island.
+            <p className="text-xl text-[#494949] max-w-2xl mx-auto">
+              Everything you need for your next fishing adventure
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/products"
-                  className="inline-block bg-teal-500 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/20"
-                >
-                  Shop Ocean Collection
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/conservation"
-                  className="inline-block border-2 border-white/30 backdrop-blur-sm text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-slate-900 transition-all"
-                >
-                 Learn Our Mission
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-          
-          {/* Conservation Stats */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { label: "Donated to Conservation", val: "10%", color: "text-teal-400" },
-              { label: "Rio Grande Valley Focus", val: "RGV", color: "text-blue-400" },
-              { label: "South Padre Island", val: "SPI", color: "text-cyan-400" }
-            ].map((stat, i) => (
-              <motion.div 
+              {
+                title: "T-Shirts",
+                desc: "Performance fishing shirts with UPF 50+ protection",
+                href: "/products?category=tshirts",
+                icon: Shirt
+              },
+              {
+                title: "Hats",
+                desc: "Sun protection and style for the serious angler",
+                href: "/products?category=hats",
+                icon: ShieldCheck
+              },
+              {
+                title: "Gear",
+                desc: "Essential fishing accessories and equipment",
+                href: "/products?category=gear",
+                icon: Anchor
+              }
+            ].map((category, i) => (
+              <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10"
+                whileHover={{ y: -10 }}
+                className="group"
               >
-                <div className={cn("text-4xl font-black mb-2", stat.color)}>{stat.val}</div>
-                <div className="text-white font-medium tracking-wide">{stat.label}</div>
+                <Link href={category.href}>
+                  <div className="bg-white p-10 rounded-lg border-2 border-gray-200 hover:border-[#FF4500] transition-all shadow-md hover:shadow-xl">
+                    <div className="w-16 h-16 bg-[#001F3F] rounded-lg flex items-center justify-center mb-6 group-hover:bg-[#FF4500] transition-colors">
+                      <category.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#001F3F] mb-3 group-hover:text-[#FF4500] transition-colors">{category.title}</h3>
+                    <p className="text-[#494949] mb-6">{category.desc}</p>
+                    <span className="inline-flex items-center gap-2 text-[#FF4500] font-bold uppercase text-sm group-hover:gap-4 transition-all">
+                      Shop Now <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Turtle Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/turtleparallax.jpg" 
-        alt="Sea Turtle Swimming" 
-        text="Protect Our Turtles" 
+      {/* Final CTA Section */}
+      <section className="bg-[#001F3F] py-24 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tight uppercase">
+              Gear That Works as Hard as You Do
+            </h2>
+            <p className="text-xl text-white/80 mb-12 max-w-3xl mx-auto leading-relaxed">
+              At La Pesqueria Outfitters, we build gear for the long haul. Born from the salt and the spray, we create apparel that works as hard as a deckhand but feels like a weekend staple.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  href="/products"
+                  className="inline-block bg-[#FF4500] text-white px-10 py-4 rounded font-bold text-lg hover:bg-[#FF5722] transition-all shadow-lg shadow-[#FF4500]/20 uppercase"
+                >
+                  Shop All Products
+                </Link>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Link
+                  href="/about"
+                  className="inline-block border-2 border-white/30 backdrop-blur-sm text-white px-10 py-4 rounded font-bold text-lg hover:bg-white hover:text-[#001F3F] transition-all uppercase"
+                >
+                  Our Story
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Store Info */}
+          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { label: "Visit Our Store", val: "McAllen, TX", color: "text-[#FF4500]" },
+              { label: "Address", val: "4400 N 23rd St #135", color: "text-white" },
+              { label: "Follow Us", val: "@lapesqueriaoutfitters", color: "text-cyan-400" }
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white/5 backdrop-blur-md p-8 rounded-lg border border-white/10"
+              >
+                <div className={cn("text-2xl font-black mb-2", stat.color)}>{stat.val}</div>
+                <div className="text-white/70 font-medium tracking-wide">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Fishing Parallax Banner */}
+      <ParallaxBanner
+        src="/images/turtleparallax.jpg"
+        alt="Fishing at Sunset"
+        text="The Catch Awaits"
       />
     </div>
   );
