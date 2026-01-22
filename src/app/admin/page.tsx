@@ -19,8 +19,6 @@ import {
   MessageSquare,
   BarChart3,
   AlertCircle,
-  Anchor,
-  Fish,
 } from 'lucide-react';
 import Link from 'next/link';
 import { LowStockWidget } from '@/components/admin/LowStockWidget';

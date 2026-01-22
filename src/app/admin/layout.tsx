@@ -6,7 +6,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ModeToggle } from '@/components/ModeToggle';
-import { Store, Anchor, Fish } from 'lucide-react';
+import { Store, Fish } from 'lucide-react';
 import { headers } from 'next/headers';
 
 interface AdminLayoutProps {
