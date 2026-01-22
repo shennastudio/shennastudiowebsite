@@ -26,8 +26,8 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showMiniCart, setShowMiniCart] = useState(false);
   const [settings, setSettings] = useState<SiteSettings>({
-    siteName: "Shenna's Studio",
-    logo: '/images/shenna-studio-logo.png',
+    siteName: "La Pesqueria Outfitters",
+    logo: '/images/lapescerialogo.png',
   });
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function Header() {
       .then(data => {
         if (data && data.logo) {
           setSettings({
-            siteName: data.siteName || "Shenna's Studio",
+            siteName: data.siteName || "La Pesqueria Outfitters",
             logo: data.logo,
           });
         }
@@ -58,19 +58,20 @@ export default function Header() {
     { name: 'Home', href: '/' },
     { name: 'Products', href: '/products' },
     { name: 'Apparel', href: '/tshirts' },
-    { name: 'Conservation', href: '/conservation' },
+    { name: 'Hats', href: '/products?category=hats' },
+    { name: 'Gear', href: '/products?category=gear' },
     { name: 'Blog', href: '/blog' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
   ];
 
   return (
-    <header className="bg-gradient-to-r from-cyan-50/95 via-white/95 to-teal-50/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-teal-100/50">
+    <header className="bg-gradient-to-r from-slate-50/95 via-white/95 to-orange-50/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-200/50">
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
         <div className="flex justify-between items-center h-28">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold text-teal-600 flex items-center gap-2 hover:text-teal-700 transition-colors">
+            <Link href="/" className="text-2xl font-bold text-[#001F3F] flex items-center gap-2 hover:text-orange-500 transition-colors">
               {settings.logo ? (
                 <Image
                   src={settings.logo}

@@ -1,4 +1,4 @@
-// ShennaStudio E-Commerce Platform - Prisma Schema
+// La Pesqueria Outfitters E-Commerce Platform - Prisma Schema
 // Self-hosted admin panel with full type safety
 
 generator client {
@@ -329,13 +329,13 @@ model ConservationDonation {
 
 model SiteSettings {
   id           String   @id @default(cuid())
-  siteName     String   @default("ShennaStudio")
+  siteName     String   @default("La Pesqueria Outfitters")
   logo         String?
   tagline      String?
-  primaryColor String   @default("#3B82F6")
+  primaryColor String   @default("#001F3F")
   email        String?
   phone        String?
-  address      String?
+  address      String   @default("4400 N 23rd St Suite 135, McAllen, TX")
   facebook     String?
   instagram    String?
   twitter      String?
@@ -1020,7 +1020,7 @@ model SubscriptionPlan {
   stripePriceId String?          @unique
 
   // Plan benefits
-  braceletsPerMonth  Int     @default(1)
+  apparelPerMonth    Int     @default(1)
   exclusiveDiscounts Boolean @default(false)
   earlyAccess        Boolean @default(false)
   limitedEditions    Boolean @default(false)

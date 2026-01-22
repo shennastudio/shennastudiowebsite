@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display, Quicksand, Great_Vibes, Cormorant_Garamond, Festive } from "next/font/google";
+import { Inter, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { CartProvider } from "@/context/CartContext";
@@ -9,111 +9,78 @@ import { ThemeProvider } from "@/components/theme-provider";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 import ScrollProgress from "@/components/ScrollProgress";
 
-// Primary heading font - elegant and feminine
-const playfairDisplay = Playfair_Display({
-  variable: "--font-playfair",
+// Primary heading font - bold, masculine sans-serif
+const robotoCondensed = Roboto_Condensed({
+  variable: "--font-heading",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-// Body font - clean and friendly
-const quicksand = Quicksand({
-  variable: "--font-quicksand",
+// Body font - clean, highly readable sans-serif
+const inter = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-});
-
-// Script font for decorative elements
-const greatVibes = Great_Vibes({
-  variable: "--font-great-vibes",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-// Secondary serif for elegant accents
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-// Festive font for handwritten style
-const festive = Festive({
-  variable: "--font-festive",
-  subsets: ["latin"],
-  weight: "400",
 });
 
 export const metadata: Metadata = {
-  title: "Shenna's Studio | Custom Made Bracelets Brownsville TX - Handcrafted Ocean Jewelry",
-  description: 'Custom made bracelets & handcrafted ocean-inspired jewelry in Brownsville, TX. Shop unique beaded bracelets, sea turtle jewelry, whale bracelets & sustainable accessories. 10% of every purchase supports marine conservation in South Padre Island & Rio Grande Valley.',
+  title: "La Pesqueria Outfitters | Fishing Gear, Apparel & Hats - McAllen TX",
+  description: 'Premium fishing gear, apparel, T-shirts and hats in McAllen, TX. Shop high-quality fishing shirts, performance hats, outdoor apparel, and coastal gear at 4400 N 23rd St Suite 135.',
   keywords: [
-    // High-volume primary keywords
-    'custom made bracelets',
-    'handmade bracelets',
-    'beaded bracelets',
-    'custom bracelets',
-    'handcrafted jewelry',
-    'ocean jewelry',
-    'beach bracelets',
-    'sea turtle jewelry',
-    'whale bracelet',
-    'boho bracelets',
-    'bohemian jewelry',
-    'friendship bracelets',
-    'personalized bracelets',
-    'unique bracelets',
-    'artisan jewelry',
-    // Location-specific keywords
-    'custom bracelets Brownsville TX',
-    'handmade jewelry Texas',
-    'Brownsville jewelry store',
-    'South Padre Island jewelry',
-    'Rio Grande Valley bracelets',
-    'Texas artisan bracelets',
-    // Conservation keywords
-    'ocean conservation jewelry',
-    'marine conservation bracelets',
-    'sea turtle conservation',
-    'eco-friendly jewelry',
-    'sustainable bracelets',
-    'charity bracelets',
+    // Primary keywords
+    'fishing gear',
+    'fishing apparel',
+    'fishing hats',
+    'fishing shirts',
+    'fishing t-shirts',
+    'fishing outfitters',
+    'outdoor apparel',
+    'angler gear',
+    'coastal clothing',
+    // Location keywords
+    'fishing gear McAllen TX',
+    'fishing apparel Texas',
+    'fishing outfitters Rio Grande Valley',
+    'McAllen fishing store',
+    'South Texas fishing gear',
     // Style keywords
-    'shell bracelets',
-    'coral jewelry',
-    'wave bracelet',
-    'surf jewelry',
-    'coastal jewelry',
-    'nautical bracelets',
-    'tropical jewelry',
-    'mermaid bracelet',
+    'saltwater fishing gear',
+    'offshore fishing apparel',
+    'deep sea fishing hats',
+    'sport fishing clothing',
+    'performance fishing hats',
+    'UV protection fishing gear',
+    // Material keywords
+    'performance poly shirts',
+    'moisture wicking fishing shirts',
+    'quick dry fishing apparel',
+    'breathable fishing gear',
     // Gift keywords
-    'bracelet gift',
-    'unique gift for her',
-    'ocean lover gift',
-    'beach lover gift',
-    'meaningful jewelry',
+    'fishing gifts',
+    'gifts for fishermen',
+    'angler gifts',
+    'outdoor enthusiast gifts',
   ].join(', '),
   openGraph: {
-    title: "Shenna's Studio | Custom Made Bracelets & Ocean Jewelry Brownsville TX",
-    description: 'Shop unique handcrafted ocean-inspired bracelets. Sea turtle, whale & beach jewelry supporting marine conservation.',
+    title: "La Pesqueria Outfitters | Fishing Gear & Apparel - McAllen TX",
+    description: 'Premium fishing gear, apparel, T-shirts and hats. Visit us at 4400 N 23rd St Suite 135, McAllen, TX.',
     type: 'website',
     locale: 'en_US',
-    siteName: "Shenna's Studio",
+    siteName: "La Pesqueria Outfitters",
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: '/images/lapescerialogo.png',
         width: 1200,
         height: 630,
-        alt: "Shenna's Studio Ocean Jewelry Collection",
+        alt: "La Pesqueria Outfitters - Premium Fishing Gear & Apparel",
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Shenna's Studio | Custom Made Bracelets",
-    description: 'Handcrafted ocean jewelry supporting marine conservation',
-    images: ['/images/og-image.jpg'],
+    title: "La Pesqueria Outfitters | Fishing Gear & Apparel",
+    description: 'Premium fishing gear, apparel and hats - McAllen, TX',
+    images: ['/images/lapescerialogo.png'],
   },
   robots: {
     index: true,
@@ -127,13 +94,12 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://shennastudio.com',
+    canonical: 'https://lapesqueriaoutfitters.com',
   },
   other: {
-    'geo.position': '25.9018;-97.4975',
-    'geo.placename': 'Brownsville, TX',
+    'geo.position': '26.2466;-98.2461',
+    'geo.placename': 'McAllen, TX',
     'geo.region': 'US-TX',
-    'google-site-verification': 'YXZ1OQCD7RZo8w2wNd7IwUpAw9m9JfbTZ8gMsJl7_20',
   },
   icons: {
     icon: '/favicon.png',
@@ -206,7 +172,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body
-        className={`${playfairDisplay.variable} ${quicksand.variable} ${greatVibes.variable} ${cormorant.variable} ${festive.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-primary/30 overflow-x-hidden w-full`}
+        className={`${robotoCondensed.variable} ${inter.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-accent/30 overflow-x-hidden w-full`}
       >
         {/* Hidden Google Translate element - required for the API to work */}
         <div id="google_translate_element" className="hidden" />

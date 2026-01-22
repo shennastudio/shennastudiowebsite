@@ -4,18 +4,18 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:16-alpine
-    container_name: shennastudio-db
+    container_name: lapesqueria-db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER:-shennastudio}
+      POSTGRES_USER: ${DB_USER:-lapesqueria}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME:-shennastudio}
+      POSTGRES_DB: ${DB_NAME:-lapesqueria}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-shennastudio}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-lapesqueria}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,14 +25,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: shennastudio-app
+    container_name: lapesqueria-app
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
     environment:
       # Database
-      DATABASE_URL: postgresql://${DB_USER:-shennastudio}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-shennastudio}
+      DATABASE_URL: postgresql://${DB_USER:-lapesqueria}:${DB_PASSWORD}@postgres:5432/${DB_NAME:-lapesqueria}
 
       # NextAuth
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}

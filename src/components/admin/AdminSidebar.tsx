@@ -114,7 +114,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       title: 'System',
       items: [
         { href: '/admin/staff', label: 'Staff', icon: UserCog, color: 'from-blue-500 to-indigo-400' },
-        { href: '/admin/bracelet-sizes', label: 'Bracelet Sizes', icon: Ruler, color: 'from-amber-500 to-orange-400' },
+        { href: '/admin/apparel-sizes', label: 'Apparel Sizes', icon: Ruler, color: 'from-amber-500 to-orange-400' },
         { href: '/admin/data-cleanup', label: 'Data Cleanup', icon: Shield, color: 'from-red-500 to-orange-400' },
         { href: '/admin/settings', label: 'Settings', icon: Settings, color: 'from-slate-500 to-gray-400' },
       ]
@@ -143,12 +143,12 @@ export function AdminSidebar({}: AdminSidebarProps) {
         <div className="flex h-full flex-col bg-slate-900 border-r border-slate-800 pt-safe-top pb-safe-bottom">
           <div className="flex h-16 items-center justify-between px-6 border-b border-slate-800">
             <Link href="/admin" className="flex items-center gap-3 group">
-              <div className="relative h-10 w-10 rounded-xl bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-                <Zap className="h-5 w-5 text-cyan-400" />
+              <div className="relative h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+                <Zap className="h-5 w-5 text-orange-400" />
               </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-bold text-white font-serif italic">Shenna&apos;s Studio</span>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">Admin Panel</span>
+                  <span className="text-sm font-bold text-white">La Pesqueria</span>
+                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">Outfitters Admin</span>
                 </div>
             </Link>
             <button
@@ -184,11 +184,11 @@ export function AdminSidebar({}: AdminSidebarProps) {
                           <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${item.color} opacity-10`} />
                         )}
                         <div className="relative z-10 flex items-center gap-3">
-                          <Icon className={cn("h-5 w-5 transition-transform", active ? "text-teal-400" : "group-hover:scale-110")} />
+                          <Icon className={cn("h-5 w-5 transition-transform", active ? "text-orange-400" : "group-hover:scale-110")} />
                           <span>{item.label}</span>
                         </div>
                         {active && (
-                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-teal-400 shadow-[0_0_8px_rgba(45,212,191,0.6)]" />
+                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-orange-400 shadow-[0_0_8px_rgba(255,69,0,0.6)]" />
                         )}
                       </Link>
                     );
@@ -199,14 +199,14 @@ export function AdminSidebar({}: AdminSidebarProps) {
           </nav>
 
           <div className="p-4 border-t border-slate-800">
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-teal-500/5 border border-teal-500/10">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-500/5 border border-orange-500/10">
               <div className="relative">
-                <Heart className="h-5 w-5 text-teal-500" />
-                <div className="absolute inset-0 h-5 w-5 text-teal-500 animate-ping opacity-20" />
+                <Heart className="h-5 w-5 text-orange-500" />
+                <div className="absolute inset-0 h-5 w-5 text-orange-500 animate-ping opacity-20" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-white uppercase tracking-tight">Conservation</p>
-                <p className="text-[10px] text-teal-500/80 font-medium">10% Impact Fund</p>
+                <p className="text-xs font-bold text-white uppercase tracking-tight">La Pesqueria</p>
+                <p className="text-[10px] text-orange-500/80 font-medium">Outfitters</p>
               </div>
             </div>
           </div>

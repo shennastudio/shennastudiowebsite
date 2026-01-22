@@ -38,9 +38,9 @@ export function AdminLayout({ children, title = "Admin Dashboard", description }
 // Sample dashboard component demonstrating shadcn/ui components
 export function AdminDashboard() {
   return (
-    <AdminLayout 
-      title="Shenna's Studio Admin" 
-      description="Manage your ocean-themed bracelet store"
+    <AdminLayout
+      title="La Pesqueria Outfitters Admin"
+      description="Manage your fishing apparel store"
     >
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {/* Stats Cards */}
@@ -99,29 +99,29 @@ export function AdminDashboard() {
               <TableRow>
                 <TableCell className="font-medium">#ORD-001</TableCell>
                 <TableCell>Jane Doe</TableCell>
-                <TableCell>Ocean Wave Bracelet</TableCell>
+                <TableCell>Performance Fishing Shirt - Navy</TableCell>
                 <TableCell>
                   <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
                     Shipped
                   </span>
                 </TableCell>
-                <TableCell className="text-right">$29.99</TableCell>
+                <TableCell className="text-right">$39.99</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">#ORD-002</TableCell>
                 <TableCell>John Smith</TableCell>
-                <TableCell>Coral Reef Collection</TableCell>
+                <TableCell>Offshore Fishing Hat - Orange</TableCell>
                 <TableCell>
                   <span className="inline-flex items-center rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-700">
                     Processing
                   </span>
                 </TableCell>
-                <TableCell className="text-right">$45.99</TableCell>
+                <TableCell className="text-right">$29.99</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-medium">#ORD-003</TableCell>
                 <TableCell>Sarah Johnson</TableCell>
-                <TableCell>Sea Turtle Bracelet</TableCell>
+                <TableCell>Deep Sea T-Shirt - XL</TableCell>
                 <TableCell>
                   <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
                     Pending
@@ -147,7 +147,7 @@ export function AdminDashboard() {
 // Sample form component demonstrating form components
 export function AdminProductForm() {
   return (
-    <AdminLayout title="Add New Product" description="Create a new bracelet product">
+    <AdminLayout title="Add New Product" description="Create a new apparel product">
       <Card className="max-w-2xl">
         <CardHeader>
           <CardTitle>Product Details</CardTitle>
@@ -157,18 +157,18 @@ export function AdminProductForm() {
           <form className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="name">Product Name</Label>
-              <Input id="name" placeholder="Ocean Wave Bracelet" />
+              <Input id="name" placeholder="Performance Fishing Shirt" />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Input id="description" placeholder="Handcrafted ocean-themed bracelet..." />
+              <Input id="description" placeholder="High-performance fishing apparel..." />
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="price">Price</Label>
-                <Input id="price" type="number" placeholder="29.99" />
+                <Input id="price" type="number" placeholder="39.99" />
               </div>
 
               <div className="space-y-2">
@@ -177,9 +177,16 @@ export function AdminProductForm() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="conservation">Conservation Percentage</Label>
-              <Input id="conservation" type="number" placeholder="10" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="size">Size</Label>
+                <Input id="size" placeholder="S, M, L, XL, XXL" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="material">Material</Label>
+                <Input id="material" placeholder="Performance Poly, Cotton Blend" />
+              </div>
             </div>
 
             <div className="flex gap-4">
