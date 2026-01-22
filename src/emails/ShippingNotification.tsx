@@ -45,7 +45,7 @@ export default function ShippingNotificationEmail({
         <div style={shippingIcon}>📦</div>
         <Heading style={h1}>Your Order is On Its Way!</Heading>
         <Text style={heroText}>
-          Hi {customerName}, your ocean bracelets have been shipped and are heading your way!
+          Hi {customerName}, your fishing gear order has been shipped and is heading your way!
         </Text>
       </Section>
 
@@ -83,23 +83,23 @@ export default function ShippingNotificationEmail({
 
       {/* Care instructions */}
       <Section style={careSection}>
-        <Heading style={h2}>🌊 Caring for Your Ocean Bracelets</Heading>
+        <Heading style={h2}>🎣 Caring for Your Fishing Apparel</Heading>
         <Text style={bodyText}>
-          To keep your handcrafted bracelets looking beautiful:
+          To keep your fishing apparel looking great:
         </Text>
         <Text style={bodyText}>
-          • Remove before swimming or showering<br />
-          • Store in a cool, dry place<br />
-          • Clean gently with a soft cloth<br />
-          • Avoid harsh chemicals and perfumes
+          • Machine wash cold with like colors<br />
+          • Tumble dry low or hang dry<br />
+          • Do not use fabric softener on performance shirts<br />
+          • Rinse salt-resistant hats with fresh water after saltwater use
         </Text>
       </Section>
 
       {/* Thank you */}
       <Section style={section}>
         <Text style={thankYouText}>
-          Thank you for your order! We hope you love your new ocean-inspired bracelets.
-          Remember, 10% of your purchase is supporting marine conservation efforts! 🐢
+          Thank you for your order! We hope you love your new fishing gear.
+          Remember, 10% of your purchase supports local marine conservation! 🎣
         </Text>
       </Section>
     </OceanEmailLayout>

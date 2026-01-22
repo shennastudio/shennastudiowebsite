@@ -24,9 +24,9 @@ export default function OceanEmailLayout({ children, preview }: OceanEmailLayout
         <Container style={container}>
           {/* Header with ocean wave theme */}
           <Section style={header}>
-            <Text style={headerTitle}>🌊 Shenna&apos;s Studio</Text>
+            <Text style={headerTitle}>🎣 La Pesqueria Outfitters</Text>
             <Text style={headerSubtitle}>
-              Ocean-Inspired Handcrafted Bracelets
+              Premium Fishing Apparel & Gear
             </Text>
           </Section>
 
@@ -37,11 +37,10 @@ export default function OceanEmailLayout({ children, preview }: OceanEmailLayout
 
           {/* Conservation message */}
           <Section style={conservationBox}>
-            <Text style={conservationTitle}>🐢 Marine Conservation</Text>
+            <Text style={conservationTitle}>🐟 Local Conservation</Text>
             <Text style={conservationText}>
-              10% of every purchase supports marine life conservation in South Padre Island
-              and the Rio Grande Valley. Together, we&apos;re protecting sea turtles, whales,
-              and ocean ecosystems.
+              10% of every purchase supports marine conservation and habitat restoration
+              in South Padre Island and the Rio Grande Valley.
             </Text>
           </Section>
 
@@ -49,23 +48,23 @@ export default function OceanEmailLayout({ children, preview }: OceanEmailLayout
           <Hr style={hr} />
           <Section style={footer}>
             <Text style={footerText}>
-              <Link href="https://shennastudio.com" style={link}>
+              <Link href="https://lapesqueria.com" style={link}>
                 Visit Our Store
               </Link>
               {' · '}
-              <Link href="https://shennastudio.com/conservation" style={link}>
+              <Link href="https://lapesqueria.com/conservation" style={link}>
                 Conservation Impact
               </Link>
               {' · '}
-              <Link href="https://shennastudio.com/contact" style={link}>
+              <Link href="https://lapesqueria.com/contact" style={link}>
                 Contact Us
               </Link>
             </Text>
             <Text style={footerText}>
-              © {new Date().getFullYear()} Shenna&apos;s Studio. All rights reserved.
+              © {new Date().getFullYear()} La Pesqueria Outfitters. All rights reserved.
             </Text>
             <Text style={footerTextSmall}>
-              South Padre Island, Texas · Rio Grande Valley
+              McAllen, Texas · Rio Grande Valley
             </Text>
           </Section>
         </Container>

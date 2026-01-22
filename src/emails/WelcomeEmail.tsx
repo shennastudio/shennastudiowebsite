@@ -13,22 +13,21 @@ interface WelcomeEmailProps {
 
 export default function WelcomeEmail({ customerName }: WelcomeEmailProps) {
   return (
-    <OceanEmailLayout preview="Welcome to Shenna&apos;s Studio - Start your ocean conservation journey!">
+    <OceanEmailLayout preview="Welcome to La Pesqueria Outfitters - Your fishing apparel destination!">
       {/* Hero section */}
       <Section style={heroSection}>
-        <div style={waveIcon}>🌊</div>
-        <Heading style={h1}>Welcome to Shenna&apos;s Studio!</Heading>
+        <div style={waveIcon}>🎣</div>
+        <Heading style={h1}>Welcome to La Pesqueria Outfitters!</Heading>
         <Text style={heroText}>
-          Hi {customerName}, thank you for joining our ocean conservation community!
+          Hi {customerName}, thank you for joining our fishing community!
         </Text>
       </Section>
 
       {/* Introduction */}
       <Section style={section}>
         <Text style={bodyText}>
-          Every handcrafted bracelet you purchase helps protect marine life in South Padre Island
-          and the Rio Grande Valley. We donate 10% of every sale to ocean conservation efforts,
-          supporting sea turtles, whales, and coastal ecosystems.
+          Welcome to La Pesqueria Outfitters - your destination for premium fishing apparel and gear.
+          Every purchase supports local marine conservation and habitat restoration efforts.
         </Text>
       </Section>
 
@@ -36,11 +35,11 @@ export default function WelcomeEmail({ customerName }: WelcomeEmailProps) {
       <Section style={highlightSection}>
         <Heading style={h2}>What to Expect</Heading>
         <div style={benefitItem}>
-          <Text style={benefitIcon}>🎨</Text>
+          <Text style={benefitIcon}>🎣</Text>
           <div>
-            <Text style={benefitTitle}>Handcrafted Ocean-Inspired Designs</Text>
+            <Text style={benefitTitle}>Premium Fishing Apparel</Text>
             <Text style={benefitText}>
-              Each bracelet is carefully handmade with ocean-themed beads and materials
+              UPF 50+ performance shirts, salt-resistant hats, and comfortable fishing gear
             </Text>
           </div>
         </div>
@@ -49,7 +48,7 @@ export default function WelcomeEmail({ customerName }: WelcomeEmailProps) {
           <div>
             <Text style={benefitTitle}>Support Marine Conservation</Text>
             <Text style={benefitText}>
-              10% of every purchase goes directly to protecting marine ecosystems
+              10% of every purchase goes directly to protecting local marine ecosystems
             </Text>
           </div>
         </div>
@@ -99,11 +98,11 @@ export default function WelcomeEmail({ customerName }: WelcomeEmailProps) {
       <Section style={ctaSection}>
         <Heading style={h2}>Ready to Shop?</Heading>
         <Text style={bodyText}>
-          Browse our collection of ocean-inspired bracelets and start making a difference today!
+          Browse our collection of fishing apparel and gear - perfect for your next adventure on the water!
         </Text>
         <div style={buttonContainer}>
-          <Button style={button} href="https://shennastudio.com/products">
-            Shop Ocean Collection
+          <Button style={button} href="https://lapesqueria.com/products">
+            Shop Fishing Gear
           </Button>
         </div>
       </Section>
@@ -111,8 +110,8 @@ export default function WelcomeEmail({ customerName }: WelcomeEmailProps) {
       {/* Thank you */}
       <Section style={section}>
         <Text style={thankYouText}>
-          Thank you for being part of our mission to protect our oceans.
-          Together, we&apos;re making waves of change! 🐢🌊
+          Thank you for being part of our fishing community.
+          Tight lines and fair winds! 🎣🌊
         </Text>
       </Section>
     </OceanEmailLayout>

@@ -156,11 +156,11 @@ export default function OrderConfirmationEmail({
       {/* Impact boxes */}
       <Section style={impactSection}>
         <div style={impactBox}>
-          <Text style={impactEmoji}>🌊</Text>
+          <Text style={impactEmoji}>🐟</Text>
           <Text style={impactAmount}>${conservationAmount.toFixed(2)}</Text>
           <Text style={impactLabel}>Conservation Donation</Text>
           <Text style={impactText}>
-            Your purchase is helping protect sea turtles and marine life!
+            Your purchase is helping protect local marine life and habitats!
           </Text>
         </div>
       </Section>
@@ -178,10 +178,10 @@ export default function OrderConfirmationEmail({
 
       {/* Next steps */}
       <Section style={section}>
-        <Heading style={h2}>What&apos;s Next?</Heading>
+        <Heading style={h2}>What's Next?</Heading>
         <Text style={bodyText}>
-          1. We&apos;re preparing your order with love and care<br />
-          2. You&apos;ll receive a shipping confirmation when your order ships<br />
+          1. We're preparing your order with care<br />
+          2. You'll receive a shipping confirmation when your order ships<br />
           3. Track your order status in your account dashboard
         </Text>
       </Section>
@@ -189,7 +189,7 @@ export default function OrderConfirmationEmail({
       {/* Thank you */}
       <Section style={section}>
         <Text style={thankYouText}>
-          Thank you for supporting ocean conservation! Every bracelet you purchase
+          Thank you for supporting local marine conservation! Every purchase
           helps protect marine ecosystems in South Padre Island and the Rio Grande Valley.
         </Text>
       </Section>

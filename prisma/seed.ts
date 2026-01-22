@@ -45,32 +45,19 @@ async function main() {
   console.log('✅ Staff user ready')
 
   // ===========================
-  // PRODUCT CATEGORIES (T-Shirts and Bracelets)
+  // PRODUCT CATEGORIES (T-Shirts, Hats, and Fishing Gear)
   // ===========================
   console.log('📁 Checking product categories...')
 
   const tshirtCategoryData = [
-    { name: 'T-Shirts', slug: 'tshirts', description: 'All ocean-inspired t-shirts and apparel' },
-    { name: 'Ocean Wave Collection', slug: 'tshirt-ocean-wave', description: 'Featuring our signature wave design' },
-    { name: 'Sea Life Collection', slug: 'tshirt-sea-life', description: 'T-shirts featuring sea turtles, dolphins, and marine life' },
-    { name: 'Conservation T-Shirts', slug: 'tshirt-conservation', description: 'Support marine causes with every purchase' },
-    { name: 'Beach Vibes', slug: 'tshirt-beach-vibes', description: 'Relaxed beach-inspired designs' },
+    { name: 'T-Shirts', slug: 'tshirts', description: 'Performance fishing t-shirts and casual apparel' },
+    { name: 'Performance Shirts', slug: 'performance-shirts', description: 'UPF 50+ performance fishing shirts' },
+    { name: 'Hoodies & Sweatshirts', slug: 'hoodies', description: 'Fishing hoodies and sweatshirts for cool mornings' },
+    { name: 'Hats & Caps', slug: 'hats', description: 'Fishing caps, hats, and sun protection' },
+    { name: 'Polos', slug: 'polos', description: 'Performance fishing polos' },
   ]
 
-  const braceletCategoryData = [
-    { name: 'Bracelets', slug: 'bracelets', description: 'Handcrafted ocean-inspired bracelets' },
-    { name: 'Sea Turtle Collection', slug: 'bracelet-sea-turtle', description: 'Inspired by Kemp\'s Ridley sea turtles' },
-    { name: 'Ocean Wave Collection', slug: 'bracelet-ocean-wave', description: 'Featuring our signature wave design' },
-    { name: 'Conservation Collection', slug: 'bracelet-conservation', description: 'Every purchase supports marine conservation' },
-    { name: 'Luxury Collection', slug: 'bracelet-luxury', description: 'Premium handcrafted bracelets' },
-    { name: 'Limited Edition', slug: 'bracelet-limited-edition', description: 'Exclusive limited run designs' },
-    { name: 'Gift Sets', slug: 'bracelet-gift-sets', description: 'Curated bracelet sets perfect for gifting' },
-  ]
-
-  const categoryData = [
-    ...tshirtCategoryData,
-    ...braceletCategoryData,
-  ]
+  const categoryData = [...tshirtCategoryData]
 
   const categories = []
   for (const cat of categoryData) {
@@ -91,27 +78,51 @@ async function main() {
   console.log(`✅ ${categories.length} product categories ready\n`)
 
   // ===========================
-  // BRACELET SIZES
+  // T-SHIRT SIZES
   // ===========================
-  console.log('📏 Checking bracelet sizes...')
+  console.log('📏 Checking t-shirt sizes...')
   const defaultSizes = [
-    { name: 'XS', label: 'Extra Small (6\"', inches: '6', numericSize: 6, description: 'Size 6 - For petite wrists', displayOrder: 1 },
-    { name: 'S', label: 'Small (6.5\"', inches: '6.5', numericSize: 6, description: 'Size 6.5 - For smaller wrists', displayOrder: 2 },
-    { name: 'M', label: 'Medium (7\"', inches: '7', numericSize: 7, description: 'Size 7 - Standard women\'s size', displayOrder: 3 },
-    { name: 'M+', label: 'Medium Plus (7.5\"', inches: '7.5', numericSize: 7, description: 'Size 7.5 - Between medium and large', displayOrder: 4 },
-    { name: 'L', label: 'Large (8\"', inches: '8', numericSize: 8, description: 'Size 8 - Standard men\'s size', displayOrder: 5 },
-    { name: 'L+', label: 'Large Plus (8.5\"', inches: '8.5', numericSize: 8, description: 'Size 8.5 - Between large and extra large', displayOrder: 6 },
-    { name: 'XL', label: 'Extra Large (9\"', inches: '9', numericSize: 9, description: 'Size 9 - For larger men\'s wrists', displayOrder: 7 },
+    { name: 'XS', label: 'Extra Small', chestWidth: '34-36', length: '26', displayOrder: 1 },
+    { name: 'S', label: 'Small', chestWidth: '36-38', length: '27', displayOrder: 2 },
+    { name: 'M', label: 'Medium', chestWidth: '38-40', length: '28', displayOrder: 3 },
+    { name: 'L', label: 'Large', chestWidth: '40-42', length: '29', displayOrder: 4 },
+    { name: 'XL', label: 'Extra Large', chestWidth: '42-44', length: '30', displayOrder: 5 },
+    { name: '2XL', label: '2X Large', chestWidth: '44-46', length: '31', displayOrder: 6 },
+    { name: '3XL', label: '3X Large', chestWidth: '46-48', length: '32', displayOrder: 7 },
   ]
 
   for (const sizeData of defaultSizes) {
-    await prisma.braceletSize.upsert({
+    await prisma.tShirtSize.upsert({
       where: { name: sizeData.name },
       update: {},
       create: { ...sizeData, isActive: true },
     })
   }
-  console.log('✅ Bracelet sizes ready\n')
+  console.log('✅ T-shirt sizes ready\n')
+
+  // ===========================
+  // T-SHIRT COLORS
+  // ===========================
+  console.log('🎨 Checking t-shirt colors...')
+  const defaultColors = [
+    { name: 'Navy', hexCode: '#001F3F', displayOrder: 1 },
+    { name: 'White', hexCode: '#FFFFFF', displayOrder: 2 },
+    { name: 'Heather Blue', hexCode: '#6B8E9F', displayOrder: 3 },
+    { name: 'Sage Green', hexCode: '#9CAF88', displayOrder: 4 },
+    { name: 'Sand', hexCode: '#D4C4A8', displayOrder: 5 },
+    { name: 'Charcoal', hexCode: '#36454F', displayOrder: 6 },
+    { name: 'Coral', hexCode: '#FF7F50', displayOrder: 7 },
+    { name: 'Deep Ocean', hexCode: '#1B3A5F', displayOrder: 8 },
+  ]
+
+  for (const colorData of defaultColors) {
+    await prisma.tShirtColor.upsert({
+      where: { name: colorData.name },
+      update: {},
+      create: { ...colorData, isActive: true },
+    })
+  }
+  console.log('✅ T-shirt colors ready\n')
 
   // ===========================
   // CONSERVATION PARTNERS (for map)

@@ -49,15 +49,15 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
         <div className="flex justify-between items-start mb-8 border-b pb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h1>
-            <p className="text-gray-600">Shenna&apos;s Studio</p>
-            <p className="text-gray-600">Ocean-Inspired Handcrafted Jewelry</p>
-            <p className="text-gray-600">support@shennastudio.com</p>
+            <p className="text-gray-600">La Pesqueria Outfitters</p>
+            <p className="text-gray-600">Premium Fishing Apparel & Gear</p>
+            <p className="text-gray-600">support@lapesqueria.com</p>
           </div>
           <div className="text-right">
             <div className="mb-4">
               <Image
-                src="/images/shenna-studio-logo.png"
-                alt="Shenna's Studio"
+                src="/images/lapescerialogo.png"
+                alt="La Pesqueria Outfitters"
                 width={120}
                 height={120}
                 className="object-contain"
@@ -180,11 +180,11 @@ export const InvoiceTemplate = React.forwardRef<HTMLDivElement, InvoiceTemplateP
           {order.conservationDonation && (
             <p className="text-green-800 font-semibold">
               Your purchase includes a ${order.conservationDonation.amount.toFixed(2)} donation
-              to marine conservation efforts.
+              to local marine conservation efforts.
             </p>
           )}
           <p className="mt-4 text-gray-600">
-            Shenna&apos;s Studio • Protecting Our Oceans, One Bracelet at a Time
+            La Pesqueria Outfitters • Premium Fishing Apparel & Gear • McAllen, Texas
           </p>
         </div>
       </div>

@@ -18,7 +18,7 @@ interface ProductCategory {
   slug: string;
   description: string | null;
   image: string | null;
-  type: 'tshirt' | 'bracelet';
+  type: 'tshirt' | 'hat';
   productCount?: number;
 }
 
@@ -34,7 +34,7 @@ export default function CategoriesPage() {
     slug: '',
     description: '',
     image: '',
-    type: 'tshirt' as 'tshirt' | 'bracelet',
+    type: 'tshirt' as 'tshirt' | 'hat',
   });
 
   useEffect(() => {
@@ -51,11 +51,11 @@ export default function CategoriesPage() {
         ...cat,
         type: cat.slug.includes('tshirt') || cat.name.toLowerCase().includes('t-shirt') 
           ? 'tshirt' as const 
-          : cat.slug.includes('bracelet') || cat.name.toLowerCase().includes('bracelet')
-            ? 'bracelet' as const
+          : cat.slug.includes('hat') || cat.name.toLowerCase().includes('hat')
+            ? 'hat' as const
             : cat.name.toLowerCase().includes('shirt')
               ? 'tshirt' as const
-              : 'bracelet' as const,
+              : 'hat' as const,
       }));
       
       setCategories(typedCategories);
@@ -75,15 +75,15 @@ export default function CategoriesPage() {
       const baseSlug = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
       const slug = formData.type === 'tshirt'
         ? `tshirt-${baseSlug}`
-        : `bracelet-${baseSlug}`;
+        : `hat-${baseSlug}`;
       setFormData(prev => ({ ...prev, slug }));
     }
   };
 
-  const handleTypeChange = (type: 'tshirt' | 'bracelet') => {
+  const handleTypeChange = (type: 'tshirt' | 'hat') => {
     setFormData(current => {
       const nameSlug = current.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      const newSlug = type === 'tshirt' ? `tshirt-${nameSlug}` : `bracelet-${nameSlug}`;
+      const newSlug = type === 'tshirt' ? `tshirt-${nameSlug}` : `hat-${nameSlug}`;
       return { ...current, type, slug: newSlug };
     });
   };
@@ -151,13 +151,13 @@ export default function CategoriesPage() {
   };
 
   const resetForm = () => {
-    setFormData({ name: '', slug: '', description: '', image: '', type: activeTab as 'tshirt' | 'bracelet' });
+    setFormData({ name: '', slug: '', description: '', image: '', type: activeTab as 'tshirt' | 'hat' });
     setEditingId(null);
     setShowForm(false);
   };
 
   const tshirtCategories = categories.filter(c => c.type === 'tshirt');
-  const braceletCategories = categories.filter(c => c.type === 'bracelet');
+  const hatCategories = categories.filter(c => c.type === 'hat');
 
   const CategoryCard = ({ category }: { category: ProductCategory }) => (
     <div className="border rounded-lg p-4 hover:shadow-md transition-shadow bg-white">
@@ -226,7 +226,7 @@ export default function CategoriesPage() {
         {!showForm && (
           <Button onClick={() => {
             setShowForm(true);
-            setFormData(prev => ({ ...prev, type: activeTab as 'tshirt' | 'bracelet' }));
+            setFormData(prev => ({ ...prev, type: activeTab as 'tshirt' | 'hat' }));
           }}>
             <Plus className="h-4 w-4 mr-2" />
             Add Category
@@ -264,8 +264,8 @@ export default function CategoriesPage() {
                     <input
                       type="radio"
                       name="type"
-                      checked={formData.type === 'bracelet'}
-                      onChange={() => handleTypeChange('bracelet')}
+                      checked={formData.type === 'hat'}
+                      onChange={() => handleTypeChange('hat')}
                       className="w-4 h-4"
                     />
                     <Gem className="w-4 h-4 text-purple-600" />
@@ -337,7 +337,7 @@ export default function CategoriesPage() {
       <Tabs value={activeTab} onValueChange={(v) => {
         setActiveTab(v);
         if (!showForm) {
-          setFormData(prev => ({ ...prev, type: v as 'tshirt' | 'bracelet' }));
+          setFormData(prev => ({ ...prev, type: v as 'tshirt' | 'hat' }));
         }
       }}>
         <TabsList>
@@ -345,9 +345,9 @@ export default function CategoriesPage() {
             <Shirt className="w-4 h-4" />
             T-Shirts ({tshirtCategories.length})
           </TabsTrigger>
-          <TabsTrigger value="bracelet" className="flex items-center gap-2">
+          <TabsTrigger value="hat" className="flex items-center gap-2">
             <Gem className="w-4 h-4" />
-            Bracelets ({braceletCategories.length})
+            Bracelets ({hatCategories.length})
           </TabsTrigger>
         </TabsList>
 
@@ -386,7 +386,7 @@ export default function CategoriesPage() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="bracelet" className="mt-6">
+        <TabsContent value="hat" className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -397,14 +397,14 @@ export default function CategoriesPage() {
             <CardContent>
               {loading ? (
                 <div className="text-center py-8">Loading...</div>
-              ) : braceletCategories.length === 0 ? (
+              ) : hatCategories.length === 0 ? (
                 <div className="text-center py-12">
                   <Package className="w-12 h-12 mx-auto text-gray-400 mb-4" />
                   <p className="text-gray-500 mb-4">No Bracelet categories yet</p>
                   <Button onClick={() => {
-                    setActiveTab('bracelet');
+                    setActiveTab('hat');
                     setShowForm(true);
-                    setFormData(prev => ({ ...prev, type: 'bracelet', slug: 'bracelet-' }));
+                    setFormData(prev => ({ ...prev, type: 'hat', slug: 'hat-' }));
                   }}>
                     <Plus className="h-4 w-4 mr-2" />
                     Create your first Bracelet category
@@ -412,7 +412,7 @@ export default function CategoriesPage() {
                 </div>
               ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {braceletCategories.map((category) => (
+                  {hatCategories.map((category) => (
                     <CategoryCard key={category.id} category={category} />
                   ))}
                 </div>

@@ -39,12 +39,12 @@ export const PackingSlipTemplate = React.forwardRef<HTMLDivElement, PackingSlipT
         <div className="flex justify-between items-start mb-8 border-b-2 border-gray-800 pb-6">
           <div>
             <h1 className="text-4xl font-bold text-gray-900 mb-2">PACKING SLIP</h1>
-            <p className="text-gray-600 text-lg">Shenna&apos;s Studio</p>
+            <p className="text-gray-600 text-lg">La Pesqueria Outfitters</p>
           </div>
           <div className="text-right">
             <Image
-              src="/images/shenna-studio-logo.png"
-              alt="Shenna&apos;s Studio"
+              src="/images/lapescerialogo.png"
+              alt="La Pesqueria Outfitters"
               width={100}
               height={100}
               className="object-contain mb-2"

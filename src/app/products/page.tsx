@@ -137,49 +137,49 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
             {/* Category Navigation Buttons */}
             <div className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto">
-              {/* Bracelets / All Products */}
+              {/* All Products */}
               <Link
                 href="/products"
                 className="group flex items-center gap-2 bg-slate-800 text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-700 shadow-lg border border-slate-700"
               >
-                <span className="text-xl group-hover:scale-110 transition-transform">📿</span>
-                <span>Bracelets</span>
+                <span className="text-xl group-hover:scale-110 transition-transform">🎣</span>
+                <span>All Products</span>
               </Link>
 
               {/* T-Shirts */}
               <Link
-                href="/products?category=t-shirts"
+                href="/products?category=tshirts"
                 className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
                 <span className="text-xl group-hover:scale-110 transition-transform">👕</span>
                 <span>T-Shirts</span>
               </Link>
 
-              {/* Necklaces */}
+              {/* Performance Shirts */}
               <Link
-                href="/products?category=necklaces"
+                href="/products?category=performance-shirts"
                 className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
-                <span className="text-xl group-hover:scale-110 transition-transform">💎</span>
-                <span>Necklaces</span>
+                <span className="text-xl group-hover:scale-110 transition-transform">🏃</span>
+                <span>Performance</span>
               </Link>
 
-              {/* Pets */}
+              {/* Hats */}
               <Link
-                href="/products?category=pets"
+                href="/products?category=hats"
                 className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
-                <span className="text-xl group-hover:scale-110 transition-transform">🐾</span>
-                <span>Pets</span>
+                <span className="text-xl group-hover:scale-110 transition-transform">🧢</span>
+                <span>Hats</span>
               </Link>
 
-              {/* Holidays */}
+              {/* Hoodies */}
               <Link
-                href="/products?category=holidays"
+                href="/products?category=hoodies"
                 className="group flex items-center gap-2 bg-slate-800/50 text-slate-300 hover:text-teal-400 px-6 py-3 rounded-full font-bold text-sm sm:text-base transition-all duration-300 hover:scale-105 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50"
               >
-                <span className="text-xl group-hover:scale-110 transition-transform">🎄</span>
-                <span>Holidays</span>
+                <span className="text-xl group-hover:scale-110 transition-transform">🧥</span>
+                <span>Hoodies</span>
               </Link>
             </div>
           </AnimatedSection>
@@ -201,16 +201,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {products.length === 0 ? (
             <AnimatedSection animation="fadeInUp" className="text-center py-20">
-              {category && ['t-shirts', 'necklaces', 'pets', 'holidays'].includes(category.slug) ? (
+              {category && ['tshirts', 'performance-shirts', 'hats', 'hoodies', 'polos'].includes(category.slug) ? (
                 /* Coming Soon for New Categories */
                 <div className="max-w-2xl mx-auto">
                   <div className="bg-gradient-to-br from-cyan-950/30 via-blue-950/30 to-teal-950/30 border-2 border-cyan-800 rounded-3xl p-12 shadow-lg">
-                    <div className="text-7xl mb-6 animate-bounce">
-                      {category.slug === 't-shirts' && '👕'}
-                      {category.slug === 'necklaces' && '💎'}
-                      {category.slug === 'pets' && '🐾'}
-                      {category.slug === 'holidays' && '🎄'}
-                    </div>
+                    <div className="text-7xl mb-6 animate-bounce">🎣</div>
                     <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-teal-400 mb-4">
                       Coming Soon!
                     </h2>
@@ -218,29 +213,29 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       {category.name} are on the way!
                     </p>
                     <p className="text-slate-400 mb-8">
-                      We&apos;re working on bringing you beautiful ocean-inspired {category.name.toLowerCase()} that support marine conservation.
+                      We're working on bringing you quality fishing apparel and gear that support our local angling community.
                       <span className="block mt-2 font-semibold text-teal-400">
-                        Check back soon or explore our bracelet collection!
+                        Check back soon or explore our other products!
                       </span>
                     </p>
                     <Link
                       href="/products"
                       className="inline-flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-teal-600 text-white px-8 py-4 rounded-full font-bold text-lg hover:from-cyan-500 hover:to-teal-500 transition-all transform hover:scale-105 shadow-lg"
                     >
-                      <span>🌊</span>
-                      Shop Bracelets Now
+                      <span>🎣</span>
+                      Shop All Products
                     </Link>
                   </div>
                 </div>
               ) : (
                 /* Generic No Products */
                 <>
-                  <div className="text-6xl mb-4 animate-bounce">🌊</div>
+                  <div className="text-6xl mb-4 animate-bounce">🎣</div>
                   <h2 className="text-2xl font-semibold text-slate-300 mb-2">
                     No products available yet
                   </h2>
                   <p className="text-slate-400">
-                    Check back soon for our beautiful ocean-inspired bracelets!
+                    Check back soon for our fishing apparel and gear!
                   </p>
                 </>
               )}
@@ -292,7 +287,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       {productDisplay.product.name}
                     </h3>
                     <p className="text-slate-400 mb-4 line-clamp-2 text-sm">
-                      {productDisplay.product.description || 'Ocean-inspired handcrafted bracelet'}
+                      {productDisplay.product.description || 'Premium fishing apparel and gear for the modern angler'}
                     </p>
 
                     {/* Price and Stock */}
@@ -370,8 +365,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
               <span className="text-3xl animate-bounce" style={{ animationDelay: '0.4s' }}>🐡</span>
             </div>
             <p className="text-lg text-slate-300 mb-6">
-              10% of every bracelet sale supports sea turtle conservation, whale protection,
-              and marine ecosystem restoration in South Padre Island and Rio Grande Valley.
+              10% of every purchase supports local fishing conservation, marine habitat restoration,
+              and youth angling programs in South Padre Island and Rio Grande Valley.
             </p>
             <Link
               href="/conservation"
