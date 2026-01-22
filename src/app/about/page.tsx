@@ -79,8 +79,8 @@ export default function AboutPage() {
 
       {/* Parallax Banner */}
       <ParallaxBanner
-        src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80"
-        alt="Fishing gear and equipment"
+        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80"
+        alt="Fishing at sunrise"
         text="Born on the Water"
       />
 
@@ -141,8 +141,8 @@ export default function AboutPage() {
 
       {/* Parallax Banner */}
       <ParallaxBanner
-        src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80"
-        alt="Fishing gear"
+        src="https://images.unsplash.com/photo-1534590227743-096882d2d300?w=1920&q=80"
+        alt="Fishing gear and equipment"
         text="Gear Up for Adventure"
       />
 

@@ -8,7 +8,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import ParallaxBanner from '@/components/ParallaxBanner'
-import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
 import { SaleBanner } from '@/components/SaleBanner'
 import { fetchFeaturedProducts } from './actions'
 
@@ -230,13 +229,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Subscription Banner */}
-      <SubscriptionBanner />
-
       {/* Mission Parallax Banner */}
       <ParallaxBanner
-        src="https://images.unsplash.com/photo-1534590227743-096882d2d300?w=1920&q=80"
-        alt="Fishing gear and equipment"
+        src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80"
+        alt="Fishing boat at sunrise - Born on the Water, Built for the Catch"
         text="Gear Up for the Catch"
       />
 
@@ -410,7 +406,7 @@ export default function Home() {
 
       {/* Fishing Parallax Banner */}
       <ParallaxBanner
-        src="/images/turtleparallax.jpg"
+        src="https://images.unsplash.com/photo-1559825481-12a05cc00344?w=1920&q=80"
         alt="Fishing at Sunset"
         text="The Catch Awaits"
       />

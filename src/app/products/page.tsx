@@ -189,11 +189,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       {/* Discount Codes Banner */}
       <DiscountBanner discounts={discounts} />
 
-      {/* Whale Parallax Banner */}
+      {/* Fishing Parallax Banner */}
       <ParallaxBanner
-        src="/images/shennawhale.jpg"
-        alt="Majestic Whale"
-        text="Majestic Whale Sharks"
+        src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80"
+        alt="Fishing at sunrise"
+        text="Premium Fishing Gear"
       />
 
       {/* Products Grid */}
@@ -343,11 +343,11 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         </div>
       </section>
 
-      {/* Whale Shark Parallax Banner */}
+      {/* Fishing Parallax Banner */}
       <ParallaxBanner 
-        src="/images/whaleshark.jpg" 
-        alt="Gentle Whale Shark" 
-        text="Gentle Giants" 
+        src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80" 
+        alt="Fishing boat"
+        text="Built for the Catch" 
       />
 
       {/* Conservation Info Section */}

@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Anchor, Fish } from 'lucide-react';
 
 export default function NewsletterSignup() {
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
@@ -20,22 +20,21 @@ export default function NewsletterSignup() {
       const response = await fetch('/api/newsletter/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name }),
+        body: JSON.stringify({ email, name: '' }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Thanks for subscribing! Check your email for ocean updates.');
+        setMessage('🎣 Welcome aboard! Your 10% discount is in your inbox!');
         setIsSuccess(true);
         setEmail('');
-        setName('');
       } else {
-        setMessage(data.error || 'Failed to subscribe');
+        setMessage(data.error || 'Failed to subscribe. Try again!');
         setIsSuccess(false);
       }
     } catch {
-      setMessage('Something went wrong. Please try again.');
+      setMessage('Something went wrong. Give it another cast!');
       setIsSuccess(false);
     } finally {
       setLoading(false);
@@ -43,27 +42,28 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-teal-600 to-blue-600 py-12">
+    <div className="bg-[#001F3F] py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6">
-          <div className="flex justify-center items-center gap-2 mb-3">
-            <span className="text-3xl">📧</span>
-            <h2 className="text-3xl font-bold text-white">
-              Join Our Ocean Family
+          <div className="flex justify-center items-center gap-3 mb-3">
+            <Anchor className="w-8 h-8 text-[#FF4500]" />
+            <h2 className="text-3xl font-black text-white uppercase tracking-tight">
+              Join the Crew
             </h2>
-            <span className="text-3xl">🌊</span>
+            <Fish className="w-8 h-8 text-[#FF4500]" />
           </div>
-          <p className="text-cyan-100 text-lg">
-            Get exclusive deals, new product alerts, and marine conservation updates!
+          <p className="text-white/70 text-lg">
+            Get 10% off + early access to new fishing gear drops!
           </p>
         </div>
 
         {message && (
-          <div className={`mb-4 p-4 rounded-lg text-center ${
+          <div className={`mb-4 p-4 rounded-lg text-center flex items-center justify-center gap-2 ${
             isSuccess
               ? 'bg-green-100 border border-green-300 text-green-800'
               : 'bg-red-100 border border-red-300 text-red-800'
           }`}>
+            {isSuccess && <Fish className="w-5 h-5" />}
             {message}
           </div>
         )}
@@ -71,30 +71,23 @@ export default function NewsletterSignup() {
         <form onSubmit={handleSubmit} className="max-w-md mx-auto">
           <div className="flex flex-col sm:flex-row gap-3">
             <Input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Your name (optional)"
-              className="bg-white/90 border-white/50"
-            />
-            <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               placeholder="your@email.com"
-              className="bg-white/90 border-white/50"
+              className="bg-white border-white/20 text-white placeholder:text-white/50"
             />
             <Button
               type="submit"
               disabled={loading}
-              className="bg-white text-teal-600 hover:bg-gray-100 font-semibold whitespace-nowrap"
+              className="bg-[#FF4500] hover:bg-[#FF5722] text-white font-bold whitespace-nowrap"
             >
-              {loading ? 'Subscribing...' : 'Subscribe'}
+              {loading ? 'Casting...' : 'Get 10% OFF'}
             </Button>
           </div>
-          <p className="text-xs text-cyan-100 mt-3 text-center">
-            We respect your privacy. Unsubscribe anytime.
+          <p className="text-xs text-white/50 mt-3 text-center">
+            No spam, just catches! Unsubscribe anytime.
           </p>
         </form>
       </div>
