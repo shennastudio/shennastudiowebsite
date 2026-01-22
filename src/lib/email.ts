@@ -7,8 +7,8 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 export const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
 export const EMAIL_CONFIG = {
-  from: process.env.FROM_EMAIL || "Shenna's Studio <orders@shennastudio.com>",
-  replyTo: process.env.REPLY_TO_EMAIL || 'support@shennastudio.com',
+  from: process.env.FROM_EMAIL || "La Pesqueria <orders@lapesqueria.com>",
+  replyTo: process.env.REPLY_TO_EMAIL || 'support@lapesqueria.com',
 } as const;
 
 interface SendEmailParams {

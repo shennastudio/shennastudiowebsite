@@ -35,8 +35,9 @@ import {
   Ruler,
   Megaphone,
   Shirt,
-  Zap,
-  Shield,
+  Anchor,
+  Fish,
+  Ship,
 } from 'lucide-react';
 
 interface AdminSidebarProps {
@@ -51,7 +52,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
     {
       title: 'Overview',
       items: [
-        { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, color: 'from-cyan-500 to-cyan-400' },
+        { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, color: 'from-[#FF4500] to-orange-400' },
         { href: '/admin/analytics', label: 'Analytics', icon: TrendingUp, color: 'from-emerald-500 to-teal-400' },
         { href: '/admin/reports', label: 'Reports', icon: BarChart3, color: 'from-violet-500 to-purple-400' },
         { href: '/admin/calendar', label: 'Calendar', icon: Calendar, color: 'from-pink-500 to-rose-400' },
@@ -60,7 +61,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
     {
       title: 'Catalog',
       items: [
-        { href: '/admin/products', label: 'Products', icon: Package, color: 'from-emerald-500 to-green-400' },
+        { href: '/admin/products', label: 'Products', icon: Package, color: 'from-[#001F3F] to-blue-400' },
         { href: '/admin/inventory', label: 'Inventory', icon: Boxes, color: 'from-amber-500 to-orange-400' },
         { href: '/admin/inventory/tshirts', label: 'T-Shirts', icon: Shirt, color: 'from-purple-500 to-pink-400' },
         { href: '/admin/inventory-forecast', label: 'Forecasting', icon: LineChart, color: 'from-cyan-500 to-blue-400' },
@@ -70,7 +71,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
     {
       title: 'Sales',
       items: [
-        { href: '/admin/orders', label: 'Orders', icon: ShoppingCart, color: 'from-blue-500 to-cyan-400' },
+        { href: '/admin/orders', label: 'Orders', icon: ShoppingCart, color: 'from-[#001F3F] to-cyan-400' },
         { href: '/admin/customers', label: 'Customers', icon: Users, color: 'from-teal-500 to-cyan-400' },
         { href: '/admin/subscriptions', label: 'Subscriptions', icon: Repeat, color: 'from-violet-500 to-purple-400' },
         { href: '/admin/abandoned-carts', label: 'Abandoned Carts', icon: ShoppingBag, color: 'from-orange-500 to-amber-400' },
@@ -115,7 +116,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       items: [
         { href: '/admin/staff', label: 'Staff', icon: UserCog, color: 'from-blue-500 to-indigo-400' },
         { href: '/admin/apparel-sizes', label: 'Apparel Sizes', icon: Ruler, color: 'from-amber-500 to-orange-400' },
-        { href: '/admin/data-cleanup', label: 'Data Cleanup', icon: Shield, color: 'from-red-500 to-orange-400' },
+        { href: '/admin/data-cleanup', label: 'Data Cleanup', icon: Ship, color: 'from-red-500 to-orange-400' },
         { href: '/admin/settings', label: 'Settings', icon: Settings, color: 'from-slate-500 to-gray-400' },
       ]
     }
@@ -132,7 +133,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
     <>
       <button
         onClick={() => setSidebarOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-3 rounded-xl bg-slate-900/90 backdrop-blur-md text-white shadow-lg border border-slate-800 active:scale-95 transition-transform"
+        className="lg:hidden fixed top-4 left-4 z-50 p-3 rounded-xl bg-[#001F3F]/90 backdrop-blur-md text-white shadow-lg border border-white/10 active:scale-95 transition-transform"
       >
         <Menu className="h-6 w-6" />
       </button>
@@ -140,20 +141,20 @@ export function AdminSidebar({}: AdminSidebarProps) {
       <aside className={`fixed left-0 top-0 z-40 h-screen w-72 transform transition-all duration-300 ease-in-out lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex h-full flex-col bg-slate-900 border-r border-slate-800 pt-safe-top pb-safe-bottom">
-          <div className="flex h-16 items-center justify-between px-6 border-b border-slate-800">
+        <div className="flex h-full flex-col bg-[#001F3F] border-r border-white/10 pt-safe-top pb-safe-bottom">
+          <div className="flex h-16 items-center justify-between px-6 border-b border-white/10">
             <Link href="/admin" className="flex items-center gap-3 group">
-              <div className="relative h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                <Zap className="h-5 w-5 text-orange-400" />
+              <div className="relative h-10 w-10 rounded-xl bg-[#FF4500]/10 flex items-center justify-center border border-[#FF4500]/20">
+                <Anchor className="h-5 w-5 text-[#FF4500]" />
               </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-bold text-white">La Pesqueria</span>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider">Outfitters Admin</span>
+                  <span className="text-[10px] text-white/60 uppercase tracking-wider">Outfitters Admin</span>
                 </div>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="lg:hidden p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors"
             >
               <X className="h-6 w-6" />
             </button>
@@ -162,7 +163,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
           <nav className="flex-1 overflow-y-auto px-4 py-6 space-y-6 scrollbar-hide">
             {navSections.map((section) => (
               <div key={section.title}>
-                <h3 className="px-3 mb-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">
+                <h3 className="px-3 mb-3 text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">
                   {section.title}
                 </h3>
                 <div className="space-y-1">
@@ -177,18 +178,18 @@ export function AdminSidebar({}: AdminSidebarProps) {
                         className={`group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative ${
                           active
                             ? 'text-white'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                            : 'text-white/60 hover:text-white hover:bg-white/10'
                         }`}
                       >
                         {active && (
                           <div className={`absolute inset-0 rounded-xl bg-gradient-to-r ${item.color} opacity-10`} />
                         )}
                         <div className="relative z-10 flex items-center gap-3">
-                          <Icon className={cn("h-5 w-5 transition-transform", active ? "text-orange-400" : "group-hover:scale-110")} />
+                          <Icon className={cn("h-5 w-5 transition-transform", active ? "text-[#FF4500]" : "group-hover:scale-110")} />
                           <span>{item.label}</span>
                         </div>
                         {active && (
-                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-orange-400 shadow-[0_0_8px_rgba(255,69,0,0.6)]" />
+                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-[#FF4500] shadow-[0_0_8px_rgba(255,69,0,0.6)]" />
                         )}
                       </Link>
                     );
@@ -198,15 +199,15 @@ export function AdminSidebar({}: AdminSidebarProps) {
             ))}
           </nav>
 
-          <div className="p-4 border-t border-slate-800">
-            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-orange-500/5 border border-orange-500/10">
+          <div className="p-4 border-t border-white/10">
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#FF4500]/5 border border-[#FF4500]/10">
               <div className="relative">
-                <Heart className="h-5 w-5 text-orange-500" />
-                <div className="absolute inset-0 h-5 w-5 text-orange-500 animate-ping opacity-20" />
+                <Fish className="h-5 w-5 text-[#FF4500]" />
+                <div className="absolute inset-0 h-5 w-5 text-[#FF4500] animate-ping opacity-20" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-white uppercase tracking-tight">La Pesqueria</p>
-                <p className="text-[10px] text-orange-500/80 font-medium">Outfitters</p>
+                <p className="text-[10px] text-[#FF4500]/80 font-medium">Outfitters</p>
               </div>
             </div>
           </div>
@@ -216,7 +217,7 @@ export function AdminSidebar({}: AdminSidebarProps) {
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-30 bg-slate-950/80 backdrop-blur-sm lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm lg:hidden transition-opacity duration-300"
         />
       )}
     </>

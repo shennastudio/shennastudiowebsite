@@ -57,12 +57,12 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#001F3F]/70 to-[#001F3F] z-10" />
           <Image
-            src="/images/aboutpageparallax.jpg"
-            alt="Fishing at sunrise - Born on the Water, Built for the Catch"
+            src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80"
+            alt="Fishing boat at sunrise - Born on the Water, Built for the Catch"
             fill
             priority
             placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k="
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k="
             sizes="100vw"
             quality={85}
             className="object-cover opacity-50"
@@ -84,7 +84,6 @@ export default function Home() {
             {/* Sub-headline */}
             <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-body">
               High-performance apparel for the modern angler.
-              <span className="block mt-3 text-[#FF4500] font-semibold">Premium fishing shirts, hats, and coastal gear at 4400 N 23rd St Suite 135, McAllen TX.</span>
             </p>
 
             {/* CTA Button */}
@@ -236,8 +235,8 @@ export default function Home() {
 
       {/* Mission Parallax Banner */}
       <ParallaxBanner
-        src="/images/plug.jpg"
-        alt="Gear Up for the Catch"
+        src="https://images.unsplash.com/photo-1534590227743-096882d2d300?w=1920&q=80"
+        alt="Fishing gear and equipment"
         text="Gear Up for the Catch"
       />
 

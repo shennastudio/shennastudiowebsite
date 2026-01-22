@@ -52,10 +52,10 @@ export const ShippingNotificationEmail = ({
           {/* Header */}
           <Section style={header}>
             <Img
-              src="https://shennastudio.com/images/shenna-studio-logo.png"
+              src="https://lapesqueria.com/images/lapescerialogo.png"
               width="150"
               height="150"
-              alt="Shenna's Studio"
+              alt="La Pesqueria Outfitters"
               style={logo}
             />
             <Heading style={h1}>Your Order Has Shipped! 📦</Heading>
@@ -126,15 +126,15 @@ export const ShippingNotificationEmail = ({
             <>
               <Hr style={hr} />
               <Section style={upsellSection}>
-                <Heading style={h2}>You Might Also Love 🌊</Heading>
+                <Heading style={h2}>You Might Also Like 🎣</Heading>
                 <Text style={upsellText}>
-                  While you wait for your order, check out these ocean-inspired treasures:
+                  While you wait for your order, check out more fishing gear:
                 </Text>
                 <div style={productsGrid}>
                   {upsellProducts.map((product, index) => (
                     <Link
                       key={index}
-                      href={`https://shennastudio.com/products/${product.slug}`}
+                      href={`https://lapesqueria.com/products/${product.slug}`}
                       style={productLink}
                     >
                       <div style={productCard}>
@@ -152,7 +152,7 @@ export const ShippingNotificationEmail = ({
                   ))}
                 </div>
                 <div style={buttonContainer}>
-                  <Link href="https://shennastudio.com/products" style={shopButton}>
+                  <Link href="https://lapesqueria.com/products" style={shopButton}>
                     Shop All Products
                   </Link>
                 </div>
@@ -160,25 +160,17 @@ export const ShippingNotificationEmail = ({
             </>
           )}
 
-          {/* Conservation Message */}
-          <Section style={conservationSection}>
-            <Text style={conservationText}>
-              🐢 <strong>Thank you for supporting ocean conservation!</strong> A portion of your purchase
-              helps protect sea turtles and marine life in South Padre Island.
-            </Text>
-          </Section>
-
           {/* Footer */}
           <Section style={footer}>
             <Text style={footerText}>
               Questions about your shipment? Contact us at{' '}
-              <Link href="mailto:support@shennastudio.com">support@shennastudio.com</Link>
+              <Link href="mailto:support@lapesqueria.com">support@lapesqueria.com</Link>
             </Text>
             <Text style={footerText}>
-              View your order: <Link href="https://shennastudio.com/account">My Account</Link>
+              View your order: <Link href="https://lapesqueria.com/account">My Account</Link>
             </Text>
             <Text style={copyright}>
-              © {new Date().getFullYear()} Shenna&apos;s Studio. Protecting Our Oceans, One Bracelet at a Time.
+              © {new Date().getFullYear()} La Pesqueria Outfitters. Premium Fishing Apparel & Gear.
             </Text>
           </Section>
         </Container>
@@ -221,7 +213,7 @@ const logo = {
 };
 
 const h1 = {
-  color: '#1f2937',
+  color: '#001F3F',
   fontSize: '28px',
   fontWeight: 'bold',
   margin: '16px 0',
@@ -229,7 +221,7 @@ const h1 = {
 };
 
 const h2 = {
-  color: '#1f2937',
+  color: '#001F3F',
   fontSize: '20px',
   fontWeight: 'bold',
   margin: '24px 0 12px',
@@ -268,7 +260,7 @@ const trackingValue = {
 
 const trackingNumberStyle: React.CSSProperties = {
   fontSize: '18px',
-  color: '#2563eb',
+  color: '#FF4500',
   fontFamily: 'monospace',
   fontWeight: 'bold',
   margin: '0 0 12px 0',
@@ -280,7 +272,7 @@ const buttonContainer = {
 };
 
 const button = {
-  backgroundColor: '#2563eb',
+  backgroundColor: '#FF4500',
   color: '#ffffff',
   padding: '12px 32px',
   borderRadius: '6px',
@@ -313,12 +305,12 @@ const infoSection = {
   padding: '16px',
   backgroundColor: '#eff6ff',
   borderRadius: '8px',
-  borderLeft: '4px solid #2563eb',
+  borderLeft: '4px solid #001F3F',
 };
 
 const infoText = {
   fontSize: '14px',
-  color: '#1e40af',
+  color: '#001F3F',
   margin: 0,
 };
 
@@ -387,12 +379,12 @@ const productName = {
 const productPrice = {
   fontSize: '16px',
   fontWeight: 'bold',
-  color: '#14b8a6',
+  color: '#FF4500',
   margin: '0',
 };
 
 const shopButton = {
-  backgroundColor: '#14b8a6',
+  backgroundColor: '#001F3F',
   color: '#ffffff',
   padding: '12px 24px',
   borderRadius: '6px',
@@ -400,20 +392,6 @@ const shopButton = {
   fontWeight: '600',
   fontSize: '14px',
   display: 'inline-block',
-};
-
-const conservationSection = {
-  margin: '20px',
-  padding: '16px',
-  backgroundColor: '#ecfdf5',
-  borderRadius: '8px',
-  borderLeft: '4px solid #14b8a6',
-};
-
-const conservationText = {
-  fontSize: '14px',
-  color: '#047857',
-  margin: 0,
 };
 
 export default ShippingNotificationEmail;

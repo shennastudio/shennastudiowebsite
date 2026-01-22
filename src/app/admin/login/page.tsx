@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Lock } from 'lucide-react'
+import { Lock, Anchor } from 'lucide-react'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -40,50 +40,50 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-950">
-      {/* Left Side - Ocean Sharks Image */}
+    <div className="min-h-screen flex bg-[#001F3F]">
+      {/* Left Side - Fishing Image */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1560275619-4662e36fa65c?w=1200&q=80"
-          alt="Sharks swimming in the ocean"
+          src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80"
+          alt="Fishing boat at sunrise"
           fill
           className="object-cover"
           priority
         />
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/60 via-blue-900/50 to-teal-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#001F3F]/80 via-[#001F3F]/60 to-[#001F3F]/90" />
 
         {/* Branding on Image */}
         <div className="absolute inset-0 flex flex-col justify-end p-12 text-white">
           <div className="flex items-center gap-4 mb-6">
             <Image
-              src="/images/shenna-studio-logo.png"
-              alt="Shenna's Studio"
+              src="/images/lapescerialogo.png"
+              alt="La Pesqueria Outfitters"
               width={200}
               height={200}
-              className="object-contain h-16 w-auto"
+              className="object-contain h-20 w-auto"
               priority
             />
           </div>
-          <p className="text-2xl font-light mb-2">Ocean-Inspired Bracelets</p>
-          <p className="text-lg text-cyan-100 max-w-md">
-            Every piece supports marine conservation and ocean life protection
+          <p className="text-2xl font-light mb-2">Premium Fishing Apparel</p>
+          <p className="text-lg text-white/80 max-w-md">
+            High-performance gear for the modern angler. UPF 50+ protection, moisture-wicking technology.
           </p>
         </div>
       </div>
 
       {/* Right Side - Login Form */}
-      <div className="flex-1 flex items-center justify-center bg-slate-950 px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 flex items-center justify-center bg-[#F8FAFC] px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-4">
             <div className="flex justify-center">
               <Image
-                src="/images/shenna-studio-logo.png"
-                alt="Shenna's Studio"
+                src="/images/lapescerialogo.png"
+                alt="La Pesqueria Outfitters"
                 width={180}
                 height={180}
-                className="object-contain h-12 w-auto"
+                className="object-contain h-16 w-auto"
                 priority
               />
             </div>
@@ -92,30 +92,30 @@ export default function AdminLoginPage() {
           {/* Form Header */}
           <div className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="p-4 bg-gradient-to-br from-cyan-900/30 to-blue-900/30 rounded-full border border-cyan-800">
-                <Lock className="h-8 w-8 text-cyan-400" />
+              <div className="p-4 bg-[#001F3F] rounded-full">
+                <Anchor className="h-8 w-8 text-[#FF4500]" />
               </div>
             </div>
-            <h2 className="text-3xl font-bold text-white">
+            <h2 className="text-3xl font-black text-[#001F3F] uppercase">
               Admin Portal
             </h2>
-            <p className="mt-2 text-sm text-slate-400">
-              Sign in to manage your ocean bracelet store
+            <p className="mt-2 text-sm text-gray-600">
+              Sign in to manage your fishing apparel store
             </p>
           </div>
 
           {/* Login Form */}
           <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             {error && (
-              <div className="rounded-lg bg-red-900/20 border border-red-800 p-4">
+              <div className="rounded-lg bg-red-50 border border-red-200 p-4">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <svg className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                     </svg>
                   </div>
                   <div className="ml-3">
-                    <p className="text-sm font-medium text-red-400">{error}</p>
+                    <p className="text-sm font-medium text-red-600">{error}</p>
                   </div>
                 </div>
               </div>
@@ -123,7 +123,7 @@ export default function AdminLoginPage() {
 
             <div className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
                   Email Address
                 </label>
                 <input
@@ -132,8 +132,8 @@ export default function AdminLoginPage() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none block w-full px-4 py-3 border border-slate-700 bg-slate-900 rounded-lg placeholder-slate-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
-                  placeholder="admin@shennastudio.com"
+                  className="appearance-none block w-full px-4 py-3 border border-gray-300 bg-white rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent transition-all"
+                  placeholder="admin@lapesqueria.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={isLoading}
@@ -141,7 +141,7 @@ export default function AdminLoginPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+                <label htmlFor="password" className="block text-sm font-bold text-gray-700 mb-2 uppercase tracking-wide">
                   Password
                 </label>
                 <input
@@ -150,7 +150,7 @@ export default function AdminLoginPage() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="appearance-none block w-full px-4 py-3 border border-slate-700 bg-slate-900 rounded-lg placeholder-slate-500 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all"
+                  className="appearance-none block w-full px-4 py-3 border border-gray-300 bg-white rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent transition-all"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -163,7 +163,7 @@ export default function AdminLoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-cyan-900/20"
+                className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-lg text-white bg-[#001F3F] hover:bg-[#002D5C] focus:outline-none focus:ring-2 focus:ring-[#001F3F] disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg uppercase tracking-wide"
               >
                 {isLoading ? (
                   <>
@@ -187,7 +187,7 @@ export default function AdminLoginPage() {
           <div className="text-center">
             <Link
               href="/"
-              className="text-sm text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
+              className="text-sm text-[#001F3F] hover:text-[#FF4500] font-medium transition-colors"
             >
               ← Back to Store
             </Link>

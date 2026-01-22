@@ -51,10 +51,10 @@ export const OrderConfirmationEmail = ({
         {/* Header */}
         <Section style={header}>
           <Img
-            src="https://shennastudio.com/images/shenna-studio-logo.png"
+            src="https://lapesqueria.com/images/lapescerialogo.png"
             width="150"
             height="150"
-            alt="Shenna's Studio"
+            alt="La Pesqueria Outfitters"
             style={logo}
           />
           <Heading style={h1}>Order Confirmation</Heading>
@@ -113,11 +113,11 @@ export const OrderConfirmationEmail = ({
             <Text style={totalValue}>${tax.toFixed(2)}</Text>
           </div>
           {conservationDonation && (
-            <div style={{ ...totalRow, backgroundColor: '#dcfce7', padding: '8px' }}>
-              <Text style={{ ...totalLabel, color: '#15803d' }}>
-                Conservation Donation ({conservationDonation.percentage}%):
+            <div style={{ ...totalRow, backgroundColor: '#e0f2fe', padding: '8px' }}>
+              <Text style={{ ...totalLabel, color: '#0369a1' }}>
+                Donation ({conservationDonation.percentage}%):
               </Text>
-              <Text style={{ ...totalValue, color: '#15803d' }}>
+              <Text style={{ ...totalValue, color: '#0369a1' }}>
                 ${conservationDonation.amount.toFixed(2)}
               </Text>
             </div>
@@ -138,29 +138,19 @@ export const OrderConfirmationEmail = ({
           <Text style={text}>{shippingAddress}</Text>
         </Section>
 
-        {/* Conservation Message */}
-        {conservationDonation && (
-          <Section style={conservationSection}>
-            <Text style={conservationText}>
-              🌊 Thank you for supporting marine conservation! Your ${conservationDonation.amount.toFixed(2)} donation
-              will help protect endangered sea turtles and ocean ecosystems.
-            </Text>
-          </Section>
-        )}
-
         <Hr style={hr} />
 
         {/* Footer */}
         <Section style={footer}>
           <Text style={footerText}>
             Questions about your order? Reply to this email or contact us at{' '}
-            <Link href="mailto:support@shennastudio.com">support@shennastudio.com</Link>
+            <Link href="mailto:support@lapesqueria.com">support@lapesqueria.com</Link>
           </Text>
           <Text style={footerText}>
-            Track your order: <Link href="https://shennastudio.com/account">View Order Status</Link>
+            Track your order: <Link href="https://lapesqueria.com/account">View Order Status</Link>
           </Text>
           <Text style={copyright}>
-            © {new Date().getFullYear()} Shenna&apos;s Studio. Protecting Our Oceans, One Bracelet at a Time.
+            © {new Date().getFullYear()} La Pesqueria Outfitters. Premium Fishing Apparel & Gear.
           </Text>
         </Section>
       </Container>
@@ -191,7 +181,7 @@ const logo = {
 };
 
 const h1 = {
-  color: '#1f2937',
+  color: '#001F3F',
   fontSize: '28px',
   fontWeight: 'bold',
   margin: '16px 0',
@@ -199,7 +189,7 @@ const h1 = {
 };
 
 const h2 = {
-  color: '#1f2937',
+  color: '#001F3F',
   fontSize: '20px',
   fontWeight: 'bold',
   margin: '24px 0 12px',
@@ -275,20 +265,6 @@ const totalValue = {
   color: '#1f2937',
   fontWeight: '600',
   margin: 0,
-};
-
-const conservationSection = {
-  margin: '20px',
-  padding: '16px',
-  backgroundColor: '#dcfce7',
-  borderRadius: '8px',
-};
-
-const conservationText = {
-  fontSize: '14px',
-  color: '#15803d',
-  margin: 0,
-  textAlign: 'center' as const,
 };
 
 const footer = {

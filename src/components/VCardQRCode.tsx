@@ -15,21 +15,21 @@ export function VCardQRCode({ size = 120 }: VCardQRCodeProps) {
 
   const vCardData = `BEGIN:VCARD
 VERSION:3.0
-FN:Shenna Studio
-ORG:Shenna's Studio
-TITLE:Custom Bracelets & Marine Conservation
+FN:La Pesqueria Outfitters
+ORG:La Pesqueria Outfitters
+TITLE:Premium Fishing Apparel & Gear
 TEL:+1-956-555-0123
-URL:https://shennastudio.com
-ADR:;;2436 Pablo Kisel Blvd;Brownsville;TX;78520;USA
-EMAIL:info@shennastudio.com
-NOTE:Handcrafted ocean-inspired bracelets. 10% of every purchase supports marine conservation in South Padre Island.
+URL:https://lapesqueria.com
+ADR:;;4400 N 23rd St Suite 135;McAllen;TX;78504;USA
+EMAIL:info@lapesqueria.com
+NOTE:Premium fishing apparel and gear for the modern angler. UPF 50+ protection, moisture-wicking technology.
 END:VCARD`;
 
   return (
     <div className="relative">
       <button
         onClick={() => setShowQR(!showQR)}
-        className="flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-teal-600 text-white px-4 py-2 rounded-lg font-semibold hover:from-cyan-700 hover:to-teal-700 transition-all shadow-md text-sm"
+        className="flex items-center gap-2 bg-[#001F3F] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#002D5C] transition-all shadow-md text-sm"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
@@ -39,7 +39,7 @@ END:VCARD`;
 
       {showQR && (
         <div className="absolute z-50 bottom-full left-1/2 transform -translate-x-1/2 mb-3">
-          <div className="bg-white p-4 rounded-xl shadow-2xl border-2 border-cyan-200">
+          <div className="bg-white p-4 rounded-xl shadow-2xl border-2 border-[#001F3F]">
             <div className="text-center mb-2">
               <p className="text-sm font-semibold text-gray-800">Scan to Save Contact</p>
               <p className="text-xs text-gray-500">Works on iPhone & Android</p>
@@ -67,7 +67,7 @@ END:VCARD`;
                     ctx?.drawImage(img, 0, 0);
                     const pngFile = canvas.toDataURL('image/png');
                     const downloadLink = document.createElement('a');
-                    downloadLink.download = 'shenna-studio-contact.png';
+                    downloadLink.download = 'lapesqueria-contact.png';
                     downloadLink.href = pngFile;
                     downloadLink.click();
                   };
