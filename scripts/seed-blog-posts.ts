@@ -279,7 +279,7 @@ const blogPosts = [
 <li>UPF 50+ rating</li>
 <li>Quick-dry nylon construction</li>
 <li>Ventilated crown</li>
-<li>Adjustable chin strap</p>
+<li>Adjustable chin strap</li>
 <li>Embroidered logo (no scratchy transfers)</li>
 </ul>
 <p><a href="https://lapesqueria.com/products?category=hats">Shop fishing hats →</a></p>
