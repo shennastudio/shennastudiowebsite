@@ -390,7 +390,7 @@ export default function Home() {
             {[
               { label: "Visit Our Store", val: "McAllen, TX", color: "text-[#FF4500]" },
               { label: "Address", val: "4400 N 23rd St #135", color: "text-white" },
-              { label: "Follow Us", val: "@lapesqueriaoutfitters", color: "text-cyan-400" }
+              { label: "Follow Us", val: "@lapesqueria", color: "text-cyan-400" }
             ].map((stat, i) => (
               <motion.div
                 key={i}

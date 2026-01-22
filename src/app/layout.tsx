@@ -94,7 +94,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://lapesqueriaoutfitters.com',
+    canonical: 'https://lapesqueria.com',
   },
   other: {
     'geo.position': '26.2466;-98.2461',

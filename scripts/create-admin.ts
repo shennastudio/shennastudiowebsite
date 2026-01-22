@@ -7,10 +7,10 @@ async function main() {
   const hashedPassword = await bcrypt.hash('lapesqueria2026', 12);
 
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@lapesqueriaoutfitters.com' },
+    where: { email: 'admin@lapesqueria.com' },
     update: {},
     create: {
-      email: 'admin@lapesqueriaoutfitters.com',
+      email: 'admin@lapesqueria.com',
       name: 'La Pesqueria Admin',
       password: hashedPassword,
       role: 'ADMIN',
@@ -20,7 +20,7 @@ async function main() {
   console.log('\n===========================================');
   console.log('  LA PESQUERIA OUTFITTERS - ADMIN LOGIN');
   console.log('===========================================\n');
-  console.log('  Email:    admin@lapesqueriaoutfitters.com');
+  console.log('  Email:    admin@lapesqueria.com');
   console.log('  Password: lapesqueria2026');
   console.log('  Role:     ADMIN');
   console.log('\n  Admin ID:', adminUser.id);
@@ -30,10 +30,10 @@ async function main() {
   // Also create a staff user
   const staffPassword = await bcrypt.hash('lapesqueria2026', 12);
   const staffUser = await prisma.user.upsert({
-    where: { email: 'staff@lapesqueriaoutfitters.com' },
+    where: { email: 'staff@lapesqueria.com' },
     update: {},
     create: {
-      email: 'staff@lapesqueriaoutfitters.com',
+      email: 'staff@lapesqueria.com',
       name: 'La Pesqueria Staff',
       password: staffPassword,
       role: 'STAFF',
@@ -41,7 +41,7 @@ async function main() {
   });
 
   console.log('  STAFF ACCOUNT (optional):');
-  console.log('  Email:    staff@lapesqueriaoutfitters.com');
+  console.log('  Email:    staff@lapesqueria.com');
   console.log('  Password: lapesqueria2026');
   console.log('  Role:     STAFF');
   console.log('  Staff ID:', staffUser.id);

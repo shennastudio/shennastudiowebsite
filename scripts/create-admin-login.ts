@@ -8,10 +8,10 @@ async function main() {
   const adminPassword = await bcrypt.hash('Lapesqueria2026!@#', 12);
 
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@lapesqueriaoutfitters.com' },
+    where: { email: 'admin@lapesqueria.com' },
     update: {},
     create: {
-      email: 'admin@lapesqueriaoutfitters.com',
+      email: 'admin@lapesqueria.com',
       name: 'La Pesqueria Admin',
       password: adminPassword,
       role: 'ADMIN',
@@ -22,10 +22,10 @@ async function main() {
   const staffPassword = await bcrypt.hash('Lapesqueria2026!@#', 12);
 
   const staffUser = await prisma.user.upsert({
-    where: { email: 'staff@lapesqueriaoutfitters.com' },
+    where: { email: 'staff@lapesqueria.com' },
     update: {},
     create: {
-      email: 'staff@lapesqueriaoutfitters.com',
+      email: 'staff@lapesqueria.com',
       name: 'La Pesqueria Staff',
       password: staffPassword,
       role: 'STAFF',
@@ -38,7 +38,7 @@ async function main() {
   console.log('  ┌────────────────────────────────────────┐');
   console.log('  │         ADMIN CREDENTIALS             │');
   console.log('  ├────────────────────────────────────────┤');
-  console.log(`  │  Email:    admin@lapesqueriaoutfitters.com │`);
+  console.log(`  │  Email:    admin@lapesqueria.com │`);
   console.log(`  │  Password: Lapesqueria2026!@#            │`);
   console.log('  │  Role:     ADMIN                       │');
   console.log('  └────────────────────────────────────────┘\n');
@@ -48,7 +48,7 @@ async function main() {
   console.log('  ┌────────────────────────────────────────┐');
   console.log('  │         STAFF CREDENTIALS (Optional)   │');
   console.log('  ├────────────────────────────────────────┤');
-  console.log(`  │  Email:    staff@lapesqueriaoutfitters.com │`);
+  console.log(`  │  Email:    staff@lapesqueria.com │`);
   console.log(`  │  Password: Lapesqueria2026!@#            │`);
   console.log('  │  Role:     STAFF                        │');
   console.log('  └────────────────────────────────────────┘\n');
@@ -62,7 +62,7 @@ async function main() {
     where: { id: 'default' },
     update: {
       siteName: 'La Pesqueria Outfitters',
-      contactEmail: 'info@lapesqueriaoutfitters.com',
+      contactEmail: 'info@lapesqueria.com',
       contactPhone: '(956) 555-0123',
       address: '4400 N 23rd St Suite 135, McAllen, TX 78504',
       updatedAt: new Date(),
@@ -70,7 +70,7 @@ async function main() {
     create: {
       id: 'default',
       siteName: 'La Pesqueria Outfitters',
-      contactEmail: 'info@lapesqueriaoutfitters.com',
+      contactEmail: 'info@lapesqueria.com',
       contactPhone: '(956) 555-0123',
       address: '4400 N 23rd St Suite 135, McAllen, TX 78504',
     },

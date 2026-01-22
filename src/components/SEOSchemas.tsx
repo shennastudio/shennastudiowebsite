@@ -5,8 +5,8 @@ export default function SEOSchemas() {
     "@type": "Organization",
     "name": "La Pesqueria Outfitters",
     "description": "Premium fishing apparel and gear in McAllen, TX. High-performance T-shirts, hats, and coastal gear for the modern angler.",
-    "url": "https://lapesqueriaoutfitters.com",
-    "logo": "https://lapesqueriaoutfitters.com/images/lapescerialogo.png",
+    "url": "https://lapesqueria.com",
+    "logo": "https://lapesqueria.com/images/lapescerialogo.png",
     "foundingDate": "2025",
     "address": {
       "@type": "PostalAddress",
@@ -27,7 +27,7 @@ export default function SEOSchemas() {
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "Customer Service",
-      "email": "info@lapesqueriaoutfitters.com"
+      "email": "info@lapesqueria.com"
     }
   };
 
@@ -36,7 +36,7 @@ export default function SEOSchemas() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "La Pesqueria Outfitters - Fishing Apparel McAllen TX",
-    "image": "https://lapesqueriaoutfitters.com/images/lapescerialogo.png",
+    "image": "https://lapesqueria.com/images/lapescerialogo.png",
     "description": "Premier fishing apparel store in McAllen, TX. Premium performance T-shirts, hats, and gear for anglers. UPF 50+ protection, moisture-wicking, and salt-resistant apparel.",
     "address": {
       "@type": "PostalAddress",
@@ -80,12 +80,12 @@ export default function SEOSchemas() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "La Pesqueria Outfitters - Fishing Apparel McAllen TX",
-    "url": "https://lapesqueriaoutfitters.com",
+    "url": "https://lapesqueria.com",
     "potentialAction": {
       "@type": "SearchAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://lapesqueriaoutfitters.com/search?q={search_term_string}"
+        "urlTemplate": "https://lapesqueria.com/search?q={search_term_string}"
       },
       "query-input": "required name=search_term_string"
     }
@@ -97,8 +97,8 @@ export default function SEOSchemas() {
     "@type": "Store",
     "name": "La Pesqueria Outfitters - Fishing Apparel & Gear",
     "description": "Shop premium fishing apparel in McAllen, TX. Performance T-shirts with UPF 50+ protection, moisture-wicking hats, and salt-resistant gear for serious anglers.",
-    "url": "https://lapesqueriaoutfitters.com",
-    "image": "https://lapesqueriaoutfitters.com/images/lapescerialogo.png",
+    "url": "https://lapesqueria.com",
+    "image": "https://lapesqueria.com/images/lapescerialogo.png",
     "brand": {
       "@type": "Brand",
       "name": "La Pesqueria Outfitters"

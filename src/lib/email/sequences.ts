@@ -118,7 +118,7 @@ export const postPurchaseSequence: EmailSequence[] = [
       
       <p>🎯 Quality fishing gear for your next adventure. Check out what else we have:</p>
       
-      <p>Follow us on Instagram @lapesqueriaoutfitters to see more gear releases!</p>
+      <p>Follow us on Instagram @lapesqueria to see more gear releases!</p>
     `
   },
   {
