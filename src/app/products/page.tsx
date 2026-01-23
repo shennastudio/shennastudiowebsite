@@ -213,7 +213,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       {category.name} are on the way!
                     </p>
                     <p className="text-slate-400 mb-8">
-                      We're working on bringing you quality fishing apparel and gear that support our local angling community.
+                      We are working on bringing you quality fishing apparel and gear that support our local angling community.
                       <span className="block mt-2 font-semibold text-teal-400">
                         Check back soon or explore our other products!
                       </span>

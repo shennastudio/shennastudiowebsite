@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Shirt, Ruler, Check, Copy, Printer, Download } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -114,9 +114,9 @@ export default function ApparelSizesPage() {
                   {tShirtSizes.map((size) => (
                     <TableRow key={size.size}>
                       <TableCell className="font-medium">{size.size}</TableCell>
-                      <TableCell>{size.chest}"</TableCell>
-                      <TableCell>{size.length}"</TableCell>
-                      <TableCell>{size.sleeve}"</TableCell>
+                      <TableCell>{size.chest}&quot;</TableCell>
+                      <TableCell>{size.length}&quot;</TableCell>
+                      <TableCell>{size.sleeve}&quot;</TableCell>
                       <TableCell>
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                           size.fit === 'Fitted' ? 'bg-blue-100 text-blue-700' :
@@ -172,7 +172,7 @@ export default function ApparelSizesPage() {
                     <TableRow key={size.size}>
                       <TableCell className="font-medium">{size.size}</TableCell>
                       <TableCell>{size.cm} cm</TableCell>
-                      <TableCell>{size.inches}"</TableCell>
+                      <TableCell>{size.inches}&quot;</TableCell>
                       <TableCell>{size.adjustment}</TableCell>
                       <TableCell>
                         <Button
@@ -211,7 +211,7 @@ export default function ApparelSizesPage() {
               <ul className="space-y-2 text-sm text-white/80">
                 <li>• For a relaxed fit, go up one size from your chest measurement</li>
                 <li>• All measurements are approximate and may vary slightly</li>
-                <li>• If you're between sizes, we recommend choosing the larger size</li>
+                <li>• If you are between sizes, we recommend choosing the larger size</li>
                 <li>• Contact us for custom sizing options for teams or groups</li>
               </ul>
             </div>

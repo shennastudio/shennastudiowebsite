@@ -92,9 +92,9 @@ export default function FAQPage() {
       {/* Contact CTA */}
       <section className="py-16 bg-[#001F3F] border-t border-slate-800">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">Didn't Find Your Answer?</h2>
+          <h2 className="text-3xl font-bold text-white mb-6">Did not Find Your Answer?</h2>
           <p className="text-lg text-cyan-100 mb-8">
-            We're here to help with any questions about our fishing apparel or conservation efforts.
+            We are here to help with any questions about our fishing apparel or conservation efforts.
           </p>
           <Link
             href="/contact"

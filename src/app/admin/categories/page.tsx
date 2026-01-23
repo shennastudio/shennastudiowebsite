@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   Plus, Edit2, Trash2, Search, ChevronRight, ChevronDown, 
   Folder, FolderOpen, Tag, GripVertical, RefreshCw
@@ -76,11 +76,7 @@ export default function CategoriesPage() {
     icon: 'default',
   });
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const response = await fetch('/api/admin/categories');
       const data = await response.json();
@@ -94,7 +90,11 @@ export default function CategoriesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const buildHierarchy = (flatCategories: Category[]): Category[] => {
     const categoryMap = new Map<string, Category>();

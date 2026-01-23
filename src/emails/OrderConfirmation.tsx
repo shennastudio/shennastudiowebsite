@@ -178,12 +178,12 @@ export default function OrderConfirmationEmail({
 
       {/* Next steps */}
       <Section style={section}>
-        <Heading style={h2}>What's Next?</Heading>
-        <Text style={bodyText}>
-          1. We're preparing your order with care<br />
-          2. You'll receive a shipping confirmation when your order ships<br />
-          3. Track your order status in your account dashboard
-        </Text>
+          <Heading style={h2}>What is Next?</Heading>
+          <Text style={bodyText}>
+            1. We are preparing your order with care<br />
+            2. You will receive a shipping confirmation when your order ships<br />
+            3. Track your order status in your account dashboard
+          </Text>
       </Section>
 
       {/* Thank you */}
