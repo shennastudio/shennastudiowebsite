@@ -60,7 +60,7 @@ export default function SearchBar() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search bracelets..."
+            placeholder="Search fishing gear, apparel & more..."
             className="w-56 xl:w-64 pl-10 pr-10 py-2 border border-gray-300 dark:border-slate-600 rounded-full bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
           />
           {query && (
@@ -93,7 +93,7 @@ export default function SearchBar() {
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search bracelets..."
+                  placeholder="Search fishing gear, apparel & more..."
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
                   autoFocus
                 />
@@ -105,7 +105,7 @@ export default function SearchBar() {
           <div className="p-4">
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">Popular Searches</p>
             <div className="flex flex-wrap gap-2">
-              {['Sea Turtle', 'Ocean Wave', 'Blue Beads', 'Conservation'].map((suggestion) => (
+              {['Fishing Hats', 'Apparel', 'T-Shirts', 'Outdoor Gear'].map((suggestion) => (
                 <button
                   key={suggestion}
                   onClick={() => {
