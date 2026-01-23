@@ -125,57 +125,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <SEOSchemas />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // Define Google Translate callback BEFORE the script loads
-              window.googleTranslateElementInit = function() {
-                if (typeof google !== 'undefined' && google.translate) {
-                  new google.translate.TranslateElement({
-                    pageLanguage: 'en',
-                    includedLanguages: 'en,es,fr,de,it,pt,zh-CN,ja,ko,ar,ru',
-                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                    autoDisplay: false
-                  }, 'google_translate_element');
-                }
-              };
-            `,
-          }}
-        />
-        <script
-          async
-          defer
-          src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-        />
-        {/* Pinterest Tag */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              !function(e){if(!window.pintrk){window.pintrk=function(){
-              window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
-              n=window.pintrk;n.queue=[],n.version="3.0";n.baseURL="https://s.pinimg.com/";n.loaded=!1;
-              e.attachEvent?e.attachEvent("onload",n.loaded):e.addEventListener("load",n.loaded,false)}(document,window,"script");
-              pintrk('load', 'YOUR_PINTEREST_TAG_ID_HERE');
-              pintrk('pageview');
-            `,
-          }}
-        />
-        <noscript>
-          {/* eslint-disable-next-line @next/next/no-img-element -- tracking pixel in noscript doesn't benefit from Next.js Image optimization */}
-          <img
-            height="1"
-            width="1"
-            style={{ display: 'none' }}
-            src="https://ct.pinterest.com/v1/?tid=YOUR_PINTEREST_TAG_ID_HERE&noscript=1"
-            alt=""
-          />
-        </noscript>
       </head>
       <body
         className={`${robotoCondensed.variable} ${inter.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-accent/30 overflow-x-hidden w-full`}
       >
-        {/* Hidden Google Translate element - required for the API to work */}
-        <div id="google_translate_element" className="hidden" />
         <ScrollProgress />
         <AnalyticsProvider />
         <ThemeProvider
