@@ -1,6 +1,7 @@
 'use client'
 
 import { TestimonialSection } from '@/components/TestimonialSection'
+import { TideWidget } from '@/components/TideWidget'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Fish, Anchor, ShieldCheck, ArrowRight, Sun, Droplets, Shirt } from 'lucide-react'
@@ -283,6 +284,13 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Tide Information Widget for Fishermen */}
+      <section className="py-12 bg-gradient-to-b from-[#001F3F] to-[#0a2a4a]">
+        <div className="max-w-6xl mx-auto px-4">
+          <TideWidget />
         </div>
       </section>
 

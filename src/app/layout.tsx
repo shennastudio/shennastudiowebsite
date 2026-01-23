@@ -8,6 +8,7 @@ import SEOSchemas from "@/components/SEOSchemas";
 import { ThemeProvider } from "@/components/theme-provider";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 import ScrollProgress from "@/components/ScrollProgress";
+import Script from "next/script";
 
 // Primary heading font - bold, masculine sans-serif
 const robotoCondensed = Roboto_Condensed({
@@ -125,6 +126,29 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <SEOSchemas />
+        {/* Google Translate Widget */}
+        <Script
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          strategy="afterInteractive"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              function googleTranslateElementInit() {
+                try {
+                  new google.translate.TranslateElement({
+                    pageLanguage: 'en',
+                    includedLanguages: 'en,es,fr,de,it,pt,zh-CN,ja,ko,ar,ru',
+                    layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                    autoDisplay: false
+                  }, 'google_translate_element');
+                } catch (e) {
+                  console.warn('Google Translate initialization skipped:', e);
+                }
+              }
+            `,
+          }}
+        />
       </head>
       <body
         className={`${robotoCondensed.variable} ${inter.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-accent/30 overflow-x-hidden w-full`}
