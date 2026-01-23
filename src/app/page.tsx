@@ -1,7 +1,7 @@
 'use client'
 
 import { TestimonialSection } from '@/components/TestimonialSection'
-import { TideWidget } from '@/components/TideWidget'
+import TideWidget from '@/components/TideWidget'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Fish, Anchor, ShieldCheck, ArrowRight, Sun, Droplets, Shirt } from 'lucide-react'
