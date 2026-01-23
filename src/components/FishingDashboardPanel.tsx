@@ -264,7 +264,6 @@ const FishingDashboardPanel: React.FC = () => {
     }
   };
 
-  // Fetch NOAA tide data
   const fetchTideData = async () => {
     try {
       setLoading(true);
@@ -307,7 +306,6 @@ const FishingDashboardPanel: React.FC = () => {
 
       setTideData(tideDataArray);
 
-      // Fetch marine data
       const marineResponse = await fetch(
         `${MARINE_API_URL}?latitude=${CENTER_LAT}&longitude=${CENTER_LNG}&hourly=wave_height,wave_direction,wave_period,swell_wave_height,swell_wave_direction,swell_wave_period&forecast_days=2`
       );
@@ -325,7 +323,6 @@ const FishingDashboardPanel: React.FC = () => {
         });
       }
 
-      // Fetch weather data
       const weatherResponse = await fetch(
         `${FORECAST_API_URL}?latitude=${CENTER_LAT}&longitude=${CENTER_LNG}&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m,temperature_2m,precipitation&forecast_days=2&wind_speed_unit=kmh`
       );
@@ -371,7 +368,6 @@ const FishingDashboardPanel: React.FC = () => {
     { type: 'Minor', start: '12:00', end: '14:00', activity: 50 },
   ], []);
 
-  // Current tide calculation
   const currentTide = useMemo(() => {
     const now = new Date();
     const todayStr = now.toISOString().split('T')[0];
@@ -413,7 +409,6 @@ const FishingDashboardPanel: React.FC = () => {
     };
   }, []);
 
-  // Simple tide chart component
   const TideChart: React.FC<{ data: TideData[] }> = ({ data }) => {
     return (
       <Box sx={{ height: 200, display: 'flex', alignItems: 'end', gap: 1 }}>
@@ -479,25 +474,21 @@ const FishingDashboardPanel: React.FC = () => {
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
 
-      // Clear canvas
       ctx.fillStyle = '#001233';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Draw vessels
       vessels.forEach(vessel => {
         const x = ((vessel.lng + 98.5) / (96.5 + 98.5)) * canvas.width;
         const y = ((27.5 - vessel.lat) / (27.5 - 24.5)) * canvas.height;
 
-        let color = '#20B2AA'; // default blue
-        if (vessel.risk === 'caution') color = '#FFD700'; // yellow
-        if (vessel.risk === 'danger') color = '#FF4444'; // red
+        let color = '#20B2AA';         if (vessel.risk === 'caution') color = '#FFD700';
+        if (vessel.risk === 'danger') color = '#FF4444';
 
         ctx.fillStyle = color;
         ctx.beginPath();
         ctx.arc(x, y, 4, 0, 2 * Math.PI);
         ctx.fill();
 
-        // Draw heading line
         const headingRad = (vessel.heading * Math.PI) / 180;
         ctx.strokeStyle = color;
         ctx.lineWidth = 2;
@@ -507,7 +498,6 @@ const FishingDashboardPanel: React.FC = () => {
         ctx.stroke();
       });
 
-      // Draw center point
       ctx.fillStyle = '#00D4FF';
       ctx.beginPath();
       ctx.arc(canvas.width / 2, canvas.height / 2, 6, 0, 2 * Math.PI);
@@ -578,7 +568,6 @@ const FishingDashboardPanel: React.FC = () => {
         },
       }}
     >
-      {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3, pb: 2, borderBottom: '1px solid rgba(0,212,255,0.2)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Box
@@ -623,7 +612,6 @@ const FishingDashboardPanel: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Collision Alerts */}
       {collisionAlerts.length > 0 && (
         <Stack spacing={1} sx={{ mb: 2 }}>
           {collisionAlerts.map(alert => (
@@ -648,7 +636,6 @@ const FishingDashboardPanel: React.FC = () => {
         </Alert>
       )}
 
-      {/* Tabs */}
       <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue as number)} sx={{ bgcolor: 'transparent' }}>
         <TabList
           sx={{
