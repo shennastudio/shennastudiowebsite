@@ -1,17 +1,38 @@
 "use server";
 import sharp from 'sharp';
-import { put } from '@vercel/blob';
+import { v2 as cloudinary } from 'cloudinary';
 
-// Support both BLOB_READ_WRITE_TOKEN (Vercel standard) and IMAGES_READ_WRITE_TOKEN (legacy)
-const getBlobToken = () => process.env.BLOB_READ_WRITE_TOKEN || process.env.IMAGES_READ_WRITE_TOKEN;
+// Configure Cloudinary from CLOUDINARY_URL or individual env vars
+const getCloudinaryConfig = () => {
+  const cloudinaryUrl = process.env.CLOUDINARY_URL;
+  
+  if (cloudinaryUrl) {
+    // Parse cloudinary://cloud_name:api_key:api_secret@cloud_name format
+    const match = cloudinaryUrl.match(/cloudinary:\/\/(?:([^:]+):([^@]+)@)?(.+)/);
+    if (match) {
+      return {
+        cloud_name: match[3],
+        api_key: match[1] || '',
+        api_secret: match[2] || '',
+      };
+    }
+  }
+  
+  return {
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  };
+};
+
+const cloudConfig = getCloudinaryConfig();
+cloudinary.config(cloudConfig);
 
 export async function uploadProductImage(formData: FormData) {
   try {
-    // Check for Vercel Blob token first
-    const blobToken = getBlobToken();
-    if (!blobToken) {
-      console.error('BLOB_READ_WRITE_TOKEN is not configured');
-      return { success: false, error: 'Image upload is not configured. Please set BLOB_READ_WRITE_TOKEN in environment variables.' };
+    if (!cloudConfig.cloud_name || cloudConfig.cloud_name === 'your-cloud-name') {
+      console.error('Cloudinary is not configured');
+      return { success: false, error: 'Image upload is not configured. Please configure Cloudinary in environment variables.' };
     }
 
     const file = formData.get('file') as File;
@@ -19,13 +40,11 @@ export async function uploadProductImage(formData: FormData) {
       return { success: false, error: 'No file provided' };
     }
 
-    // Validate file type (including HEIC/HEIF for iPhone photos)
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif', 'image/heic', 'image/heif'];
     if (!validTypes.includes(file.type)) {
       return { success: false, error: 'Invalid file type. Only JPEG, PNG, WebP, GIF, and HEIC are allowed.' };
     }
 
-    // Validate file size (max 50MB for 4K photos)
     const maxSize = 50 * 1024 * 1024;
     if (file.size > maxSize) {
       return { success: false, error: 'File too large. Maximum size is 50MB.' };
@@ -33,13 +52,10 @@ export async function uploadProductImage(formData: FormData) {
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    // Convert to WebP and compress for SEO optimization
-    // Quality 90 preserves detail for high-res iPhone photos
-    // 5000x5000 max supports iPhone 17 Pro Max resolution
-    let compressedBuffer: Buffer;
+    let processedBuffer: Buffer;
     try {
-      compressedBuffer = await sharp(buffer)
-        .rotate() // Auto-rotate based on EXIF orientation
+      processedBuffer = await sharp(buffer)
+        .rotate()
         .webp({ quality: 90 })
         .resize(5000, 5000, {
           fit: 'inside',
@@ -51,21 +67,32 @@ export async function uploadProductImage(formData: FormData) {
       return { success: false, error: 'Failed to process image. Please try a different image format.' };
     }
 
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.webp`;
-
-    // Upload to Vercel Blob Storage
     try {
-      const blob = await put(fileName, compressedBuffer, {
-        access: 'public',
-        addRandomSuffix: true,
-        contentType: 'image/webp',
-        token: blobToken,
+      const uploadResult = await new Promise<{ public_id: string; secure_url: string; width: number; height: number }>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: 'lapesqueria/products',
+            resource_type: 'image',
+            transformation: [
+              { quality: 'auto:best', fetch_format: 'auto' }
+            ],
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result!);
+          }
+        );
+        uploadStream.end(processedBuffer);
       });
 
-      return { success: true, url: blob.url };
-    } catch (blobError) {
-      console.error('Blob upload error:', blobError);
-      return { success: false, error: 'Failed to upload to storage. Please check your connection and try again.' };
+      return { 
+        success: true, 
+        url: uploadResult.secure_url,
+        publicId: uploadResult.public_id
+      };
+    } catch (cloudinaryError) {
+      console.error('Cloudinary upload error:', cloudinaryError);
+      return { success: false, error: 'Failed to upload to Cloudinary. Please check your connection and try again.' };
     }
   } catch (error) {
     console.error('Image upload error:', error);
