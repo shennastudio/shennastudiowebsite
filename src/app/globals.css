@@ -431,7 +431,7 @@ body:has(.admin-section) {
   --foreground: oklch(0.985 0 0);
 }
 
-/* Modern Colorful Scrollbar */
+/* Modern Scrollbar - La Pesqueria Theme */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -440,9 +440,9 @@ body:has(.admin-section) {
 ::-webkit-scrollbar-track {
   background: linear-gradient(
     180deg,
-    rgba(99, 102, 241, 0.1) 0%,
-    rgba(139, 92, 246, 0.1) 50%,
-    rgba(20, 184, 166, 0.1) 100%
+    rgba(0, 31, 63, 0.1) 0%,
+    rgba(0, 45, 92, 0.1) 50%,
+    rgba(255, 69, 0, 0.05) 100%
   );
   border-radius: 8px;
 }
@@ -450,11 +450,9 @@ body:has(.admin-section) {
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(
     180deg,
-    #6366f1 0%,
-    #8b5cf6 25%,
-    #a855f7 50%,
-    #14b8a6 75%,
-    #0d9488 100%
+    #001F3F 0%,
+    #002D5C 50%,
+    #FF4500 100%
   );
   border-radius: 8px;
   border: 2px solid transparent;
@@ -464,11 +462,9 @@ body:has(.admin-section) {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     180deg,
-    #4f46e5 0%,
-    #7c3aed 25%,
-    #9333ea 50%,
-    #0d9488 75%,
-    #0f766e 100%
+    #002D5C 0%,
+    #003D7A 50%,
+    #FF5722 100%
   );
   background-clip: padding-box;
 }
@@ -477,20 +473,20 @@ body:has(.admin-section) {
 .dark ::-webkit-scrollbar-track {
   background: linear-gradient(
     180deg,
-    rgba(99, 102, 241, 0.15) 0%,
-    rgba(139, 92, 246, 0.15) 50%,
-    rgba(20, 184, 166, 0.15) 100%
+    rgba(0, 31, 63, 0.2) 0%,
+    rgba(0, 45, 92, 0.2) 50%,
+    rgba(255, 69, 0, 0.1) 100%
   );
 }
 
 /* Firefox scrollbar support */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #8b5cf6 rgba(139, 92, 246, 0.1);
+  scrollbar-color: #001F3F rgba(0, 31, 63, 0.1);
 }
 
 .dark * {
-  scrollbar-color: #a855f7 rgba(139, 92, 246, 0.15);
+  scrollbar-color: #002D5C rgba(0, 31, 63, 0.2);
 }
 
 /* TipTap Editor Styles */

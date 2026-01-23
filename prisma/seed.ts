@@ -17,28 +17,28 @@ async function main() {
   // ===========================
   console.log('👤 Checking admin user...')
 
-  const hashedAdminPassword = await bcrypt.hash('Sh3nn@R0ng3l!2025$Ocean#Admin', 10)
+  const hashedAdminPassword = await bcrypt.hash('LaPesqueria@2026!Admin', 10)
   const admin = await prisma.user.upsert({
-    where: { email: 'shenna.rangel@yahoo.com' },
+    where: { email: 'admin@lapesqueriaoutfitters.com' },
     update: {},
     create: {
-      email: 'shenna.rangel@yahoo.com',
+      email: 'admin@lapesqueriaoutfitters.com',
       password: hashedAdminPassword,
-      name: 'Shenna Rangel',
+      name: 'La Pesqueria Admin',
       role: 'ADMIN',
     },
   })
   console.log('✅ Admin user ready')
 
   // Get or create staff user
-  const hashedStaffPassword = await bcrypt.hash('Staff2025!Ocean', 10)
+  const hashedStaffPassword = await bcrypt.hash('LaPesqueria@2026!Staff', 10)
   await prisma.user.upsert({
     where: { email: 'staff@lapesqueriaoutfitters.com' },
     update: {},
     create: {
       email: 'staff@lapesqueriaoutfitters.com',
       password: hashedStaffPassword,
-      name: 'Maria Santos',
+      name: 'Staff Member',
       role: 'STAFF',
     },
   })
