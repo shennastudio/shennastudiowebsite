@@ -19,6 +19,7 @@ import {
   MessageSquare,
   BarChart3,
   AlertCircle,
+  Database,
 } from 'lucide-react';
 import Link from 'next/link';
 import { LowStockWidget } from '@/components/admin/LowStockWidget';
@@ -390,18 +391,31 @@ export default async function AdminDashboard() {
               </div>
             </Link>
 
-            <Link
-              href="/admin/conservation"
-              className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl border border-gray-100 hover:shadow-lg hover:border-teal-500/20 transition-all duration-200"
-            >
-              <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-500/10 to-emerald-500/10 rounded-lg group-hover:scale-110 transition-transform">
-                <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-teal-500" />
-              </div>
-              <div className="text-center sm:text-left">
-                <p className="font-semibold text-[#001F3F] group-hover:text-teal-500 transition-colors text-xs sm:text-sm">Conservation</p>
-                <p className="text-[10px] sm:text-xs text-gray-400 hidden sm:block">Track impact</p>
-              </div>
-            </Link>
+             <Link
+               href="/admin/conservation"
+               className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl border border-gray-100 hover:shadow-lg hover:border-teal-500/20 transition-all duration-200"
+             >
+               <div className="p-2 sm:p-3 bg-gradient-to-br from-teal-500/10 to-emerald-500/10 rounded-lg group-hover:scale-110 transition-transform">
+                 <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-teal-500" />
+               </div>
+               <div className="text-center sm:text-left">
+                 <p className="font-semibold text-[#001F3F] group-hover:text-teal-500 transition-colors text-xs sm:text-sm">Conservation</p>
+                 <p className="text-[10px] sm:text-xs text-gray-400 hidden sm:block">Track impact</p>
+               </div>
+             </Link>
+
+             <Link
+               href="/admin/clover-sync"
+               className="group flex flex-col sm:flex-row items-center sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-xl border border-gray-100 hover:shadow-lg hover:border-indigo-500/20 transition-all duration-200"
+             >
+               <div className="p-2 sm:p-3 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-lg group-hover:scale-110 transition-transform">
+                 <Database className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-500" />
+               </div>
+               <div className="text-center sm:text-left">
+                 <p className="font-semibold text-[#001F3F] group-hover:text-indigo-500 transition-colors text-xs sm:text-sm">Clover Sync</p>
+                 <p className="text-[10px] sm:text-xs text-gray-400 hidden sm:block">Import POS data</p>
+               </div>
+             </Link>
 
             <Link
               href="/admin/customers/segments"
