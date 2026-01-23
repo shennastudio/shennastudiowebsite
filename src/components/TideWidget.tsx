@@ -19,7 +19,8 @@ import {
   Compass,
   Navigation,
   CloudSun,
-  Gauge
+  Gauge,
+  Fish
 } from 'lucide-react';
 
 const LOCATIONS = {
@@ -76,10 +77,31 @@ interface WeatherData {
   windSpeed?: number;
   windDirection?: number;
   waveHeight?: number;
-  waveDirection?: number;
   wavePeriod?: number;
-  currentSpeed?: number;
-  currentDirection?: number;
+  airTemperature?: number;
+  humidity?: number;
+  visibility?: number;
+  pressure?: number;
+  precipitation?: number;
+  cloudCover?: number;
+  uvIndex?: number;
+  dewPoint?: number;
+  feelsLike?: number;
+  waveDirection?: number;
+}
+
+interface FishingConditions {
+  overallRating: 'excellent' | 'good' | 'fair' | 'poor';
+  bestTimes: string[];
+  species: string[];
+  techniques: string[];
+  warnings: string[];
+  moonPhase: string;
+  solunarPeriods: Array<{
+    start: string;
+    end: string;
+    type: 'major' | 'minor';
+  }>;
 }
 
 interface BioData {
@@ -113,6 +135,93 @@ interface ElevationData {
 }
 
 // FREE API FUNCTIONS - No API keys required!
+
+// Calculate fishing conditions based on weather and tide data
+function calculateFishingConditions(
+  weather: WeatherData,
+  tides: TideData[],
+  astronomy: AstronomyData
+): FishingConditions {
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  // Determine overall rating based on multiple factors
+  let rating: 'excellent' | 'good' | 'fair' | 'poor' = 'fair';
+  let score = 0;
+
+  // Weather factors
+  if (weather.windSpeed && weather.windSpeed < 10) score += 25; // Calm winds
+  if (weather.precipitation === 0) score += 20; // No rain
+  if (weather.visibility && weather.visibility > 5) score += 15; // Good visibility
+  if (weather.uvIndex && weather.uvIndex < 8) score += 10; // Safe UV
+  if (weather.cloudCover && weather.cloudCover < 70) score += 10; // Partly cloudy
+  if (weather.waveHeight && weather.waveHeight < 2) score += 10; // Calm seas
+
+  // Tide factors
+  const upcomingTides = tides.filter(tide =>
+    new Date(tide.time) > now && new Date(tide.time) < new Date(now.getTime() + 24 * 60 * 60 * 1000)
+  );
+  if (upcomingTides.length > 0) score += 10; // Tide data available
+
+  if (score >= 80) rating = 'excellent';
+  else if (score >= 60) rating = 'good';
+  else if (score >= 40) rating = 'fair';
+  else rating = 'poor';
+
+  // Best fishing times (dawn, dusk, tide changes)
+  const bestTimes = [];
+  if (astronomy.sunrise) {
+    const sunrise = new Date(astronomy.sunrise);
+    bestTimes.push(`${sunrise.getHours() - 1}:00 - ${sunrise.getHours() + 1}:00 (Dawn)`);
+  }
+  if (astronomy.sunset) {
+    const sunset = new Date(astronomy.sunset);
+    bestTimes.push(`${sunset.getHours() - 1}:00 - ${sunset.getHours() + 1}:00 (Dusk)`);
+  }
+
+  // Tide change times
+  upcomingTides.slice(0, 2).forEach(tide => {
+    const tideTime = new Date(tide.time);
+    bestTimes.push(`${tideTime.getHours()}:00 (${tide.type} tide)`);
+  });
+
+  // Recommended species and techniques
+  const species = ['Redfish', 'Speckled Trout', 'Flounder', 'Black Drum', 'Snook'];
+  const techniques = ['Live bait fishing', 'Topwater lures', 'Bottom fishing', 'Fly fishing', 'Casting from shore'];
+
+  // Generate warnings
+  const warnings = [];
+  if (weather.windSpeed && weather.windSpeed > 20) {
+    warnings.push('High winds - difficult fishing conditions');
+  }
+  if (weather.precipitation && weather.precipitation > 0) {
+    warnings.push('Rain expected - may affect fishing');
+  }
+  if (weather.uvIndex && weather.uvIndex > 8) {
+    warnings.push('High UV index - wear sun protection');
+  }
+
+  // Moon phase
+  const moonPhase = astronomy.moonPhase?.current?.text || 'Unknown';
+
+  // Solunar periods (simplified - major feeding times)
+  const solunarPeriods = [
+    { start: '06:00', end: '08:00', type: 'major' as const },
+    { start: '18:00', end: '20:00', type: 'major' as const },
+    { start: '00:00', end: '02:00', type: 'minor' as const },
+    { start: '12:00', end: '14:00', type: 'minor' as const },
+  ];
+
+  return {
+    overallRating: rating,
+    bestTimes,
+    species,
+    techniques,
+    warnings,
+    moonPhase,
+    solunarPeriods,
+  };
+}
 
 async function fetchTideData(lat: number, lng: number, stationId?: string): Promise<TideData[]> {
   try {
@@ -266,14 +375,23 @@ async function fetchMarineData(lat: number, lng: number): Promise<{ weather: Wea
       currentWeather = weatherData.current_weather || {};
     }
 
-    const weather: WeatherData = {
-      waterTemperature: currentWeather.temperature || 75,
-      windSpeed: currentWeather.windspeed || 8,
-      windDirection: currentWeather.winddirection || 180,
-      waveHeight: data.hourly?.wave_height?.[0] || 1.2,
-      waveDirection: data.hourly?.wave_direction?.[0] || 90,
-      wavePeriod: data.hourly?.wave_period?.[0] || 6,
-    };
+      const weather: WeatherData = {
+        waterTemperature: currentWeather.temperature || 75,
+        windSpeed: currentWeather.windspeed || 8,
+        windDirection: currentWeather.winddirection || 180,
+        waveHeight: data.hourly?.wave_height?.[0] || 1.2,
+        wavePeriod: data.hourly?.wave_period?.[0] || 6,
+        waveDirection: data.hourly?.wave_direction?.[0] || 180,
+        airTemperature: currentWeather.temperature_2m || 78,
+        humidity: currentWeather.relative_humidity_2m || 65,
+        visibility: 10, // Default good visibility
+        pressure: 1013, // Default standard pressure
+        precipitation: currentWeather.precipitation || 0,
+        cloudCover: currentWeather.cloud_cover || 20,
+        uvIndex: currentWeather.uv_index || 6,
+        dewPoint: 70, // Approximate
+        feelsLike: currentWeather.temperature_2m || 78,
+      };
 
     const bio: BioData = {
       chlorophyll: Math.random() * 2 + 0.5,
@@ -786,9 +904,27 @@ function DashboardFrame({ children, title }: { children: React.ReactNode; title:
       {/* Header */}
       <div className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-white/10">
         <div className="flex items-center gap-4">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            {/* Logo */}
+            <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center overflow-hidden">
+              <img
+                src="/images/lapescerialogo.png"
+                alt="La Pesqueria Outfitters"
+                className="w-8 h-8 object-contain"
+                onError={(e) => {
+                  // Fallback to text if logo fails to load
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    parent.innerHTML = '<span class="text-white font-bold text-xs">LPO</span>';
+                  }
+                }}
+              />
+            </div>
+
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             className="p-2 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30"
           >
             <Waves className="w-6 h-6 text-cyan-400" />
@@ -973,7 +1109,7 @@ function WeatherDashboard({ weather, title }: { weather: WeatherData; title: str
 }
 
 // Astronomy Panel with 3D Celestial Bodies
-function AstronomyPanel({ astronomy }: { astronomy: AstronomyData }) {
+function AstronomyPanel({ astronomy, title = "Celestial Data" }: { astronomy: AstronomyData; title?: string }) {
   const isNight = new Date().getHours() >= 19 || new Date().getHours() < 6;
 
   return (
@@ -983,7 +1119,7 @@ function AstronomyPanel({ astronomy }: { astronomy: AstronomyData }) {
           {isNight ? <Moon className="w-5 h-5 text-slate-300" /> : <Sun className="w-5 h-5 text-amber-400" />}
         </div>
         <div>
-          <h4 className="text-white font-bold text-sm">Celestial Data</h4>
+          <h4 className="text-white font-bold text-sm">{title}</h4>
           <p className="text-slate-400 text-xs">Sun & Moon Information</p>
         </div>
       </div>
@@ -1050,6 +1186,144 @@ function AstronomyPanel({ astronomy }: { astronomy: AstronomyData }) {
   );
 }
 
+// Fishing Conditions Card Component
+function FishingConditionsCard({
+  conditions,
+  weather,
+  tides,
+  title
+}: {
+  conditions: FishingConditions | null;
+  weather: WeatherData;
+  tides: TideData[];
+  title: string;
+}) {
+  if (!conditions) {
+    return (
+      <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-xl p-5">
+        <h4 className="text-white font-bold text-sm mb-4">{title}</h4>
+        <p className="text-slate-400 text-sm">Loading fishing conditions...</p>
+      </div>
+    );
+  }
+
+  const getRatingColor = (rating: string) => {
+    switch (rating) {
+      case 'excellent': return 'text-emerald-400';
+      case 'good': return 'text-blue-400';
+      case 'fair': return 'text-yellow-400';
+      case 'poor': return 'text-red-400';
+      default: return 'text-slate-400';
+    }
+  };
+
+  const getRatingBg = (rating: string) => {
+    switch (rating) {
+      case 'excellent': return 'bg-emerald-500/20 border-emerald-500/30';
+      case 'good': return 'bg-blue-500/20 border-blue-500/30';
+      case 'fair': return 'bg-yellow-500/20 border-yellow-500/30';
+      case 'poor': return 'bg-red-500/20 border-red-500/30';
+      default: return 'bg-slate-500/20 border-slate-500/30';
+    }
+  };
+
+  return (
+    <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-xl p-5">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-500/30">
+          <Fish className="w-5 h-5 text-cyan-400" />
+        </div>
+        <div>
+          <h4 className="text-white font-bold text-sm">{title}</h4>
+          <p className="text-slate-400 text-xs">Fishing Conditions</p>
+        </div>
+      </div>
+
+      {/* Overall Rating */}
+      <div className={`p-4 rounded-xl ${getRatingBg(conditions.overallRating)} border mb-4`}>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-white text-sm font-medium">Overall Rating</span>
+          <span className={`text-sm font-bold capitalize ${getRatingColor(conditions.overallRating)}`}>
+            {conditions.overallRating}
+          </span>
+        </div>
+        <div className="w-full bg-slate-700 rounded-full h-2">
+          <div
+            className={`h-2 rounded-full transition-all duration-500 ${
+              conditions.overallRating === 'excellent' ? 'bg-emerald-500 w-full' :
+              conditions.overallRating === 'good' ? 'bg-blue-500 w-3/4' :
+              conditions.overallRating === 'fair' ? 'bg-yellow-500 w-1/2' :
+              'bg-red-500 w-1/4'
+            }`}
+          />
+        </div>
+      </div>
+
+      {/* Best Fishing Times */}
+      <div className="mb-4">
+        <h5 className="text-white text-sm font-medium mb-2 flex items-center gap-2">
+          <Clock className="w-4 h-4 text-cyan-400" />
+          Best Fishing Times
+        </h5>
+        <div className="space-y-1">
+          {conditions.bestTimes.slice(0, 3).map((time, index) => (
+            <div key={index} className="text-xs text-slate-300 bg-slate-700/50 px-2 py-1 rounded">
+              {time}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recommended Species */}
+      <div className="mb-4">
+        <h5 className="text-white text-sm font-medium mb-2 flex items-center gap-2">
+          <Fish className="w-4 h-4 text-cyan-400" />
+          Target Species
+        </h5>
+        <div className="flex flex-wrap gap-1">
+          {conditions.species.slice(0, 4).map((species, index) => (
+            <span key={index} className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">
+              {species}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Current Conditions */}
+      <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="bg-slate-700/50 p-3 rounded-lg">
+          <div className="text-xs text-slate-400">Water Temp</div>
+          <div className="text-sm font-bold text-white">{weather.waterTemperature?.toFixed(1)}°F</div>
+        </div>
+        <div className="bg-slate-700/50 p-3 rounded-lg">
+          <div className="text-xs text-slate-400">Wind Speed</div>
+          <div className="text-sm font-bold text-white">{weather.windSpeed?.toFixed(1)} mph</div>
+        </div>
+        <div className="bg-slate-700/50 p-3 rounded-lg">
+          <div className="text-xs text-slate-400">Wave Height</div>
+          <div className="text-sm font-bold text-white">{weather.waveHeight?.toFixed(1)} ft</div>
+        </div>
+        <div className="bg-slate-700/50 p-3 rounded-lg">
+          <div className="text-xs text-slate-400">Moon Phase</div>
+          <div className="text-sm font-bold text-white">{conditions.moonPhase}</div>
+        </div>
+      </div>
+
+      {/* Warnings */}
+      {conditions.warnings.length > 0 && (
+        <div className="bg-yellow-500/10 border border-yellow-500/20 p-3 rounded-lg">
+          <h5 className="text-yellow-400 text-sm font-medium mb-2">⚠️ Warnings</h5>
+          <ul className="text-xs text-yellow-200 space-y-1">
+            {conditions.warnings.map((warning, index) => (
+              <li key={index}>• {warning}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // Main TideWidget Component
 export function TideWidget() {
   const [southPadreTides, setSouthPadreTides] = useState<TideData[]>([]);
@@ -1057,8 +1331,11 @@ export function TideWidget() {
   const [southPadreWeather, setSouthPadreWeather] = useState<WeatherData>({});
   const [portMansfieldWeather, setPortMansfieldWeather] = useState<WeatherData>({});
   const [southPadreAstronomy, setSouthPadreAstronomy] = useState<AstronomyData>({});
+  const [portMansfieldAstronomy, setPortMansfieldAstronomy] = useState<AstronomyData>({});
+  const [southPadreConditions, setSouthPadreConditions] = useState<FishingConditions | null>(null);
+  const [portMansfieldConditions, setPortMansfieldConditions] = useState<FishingConditions | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'tides' | 'weather' | 'astronomy' | 'cameras'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'tides' | 'weather' | 'conditions' | 'astronomy' | 'cameras'>('overview');
   const [activeCamera, setActiveCamera] = useState(0);
 
   useEffect(() => {
@@ -1070,12 +1347,14 @@ export function TideWidget() {
           southPadreMarineData,
           portMansfieldMarineData,
           southPadreAstronomyData,
-          ] = await Promise.all([
-            fetchTideData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng, LOCATIONS.southPadre.stationId),
-            fetchTideData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng, LOCATIONS.portMansfield.stationId),
+          portMansfieldAstronomyData,
+        ] = await Promise.all([
+          fetchTideData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng, LOCATIONS.southPadre.stationId),
+          fetchTideData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng, LOCATIONS.portMansfield.stationId),
           fetchMarineData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng),
           fetchMarineData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng),
           fetchAstronomyData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng),
+          fetchAstronomyData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng),
         ]);
 
         setSouthPadreTides(southPadreTidesData);
@@ -1083,6 +1362,22 @@ export function TideWidget() {
         setSouthPadreWeather(southPadreMarineData.weather);
         setPortMansfieldWeather(portMansfieldMarineData.weather);
         setSouthPadreAstronomy(southPadreAstronomyData);
+        setPortMansfieldAstronomy(portMansfieldAstronomyData);
+
+        // Calculate fishing conditions
+        const southPadreConditions = calculateFishingConditions(
+          southPadreMarineData.weather,
+          southPadreTidesData,
+          southPadreAstronomyData
+        );
+        const portMansfieldConditions = calculateFishingConditions(
+          portMansfieldMarineData.weather,
+          portMansfieldTidesData,
+          portMansfieldAstronomyData
+        );
+
+        setSouthPadreConditions(southPadreConditions);
+        setPortMansfieldConditions(portMansfieldConditions);
       } catch (error) {
         console.error('Error fetching marine data:', error);
       } finally {
@@ -1109,6 +1404,7 @@ export function TideWidget() {
     { key: 'overview', label: 'Overview', icon: Gauge },
     { key: 'tides', label: 'Tides', icon: Waves },
     { key: 'weather', label: 'Weather', icon: Wind },
+    { key: 'conditions', label: 'Fishing', icon: Fish },
     { key: 'astronomy', label: 'Astronomy', icon: Sun },
     { key: 'cameras', label: 'Live Cams', icon: Camera },
   ];
@@ -1175,14 +1471,41 @@ export function TideWidget() {
             </motion.div>
           )}
 
+          {activeTab === 'conditions' && (
+            <motion.div
+              key="conditions"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="space-y-6"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <FishingConditionsCard
+                  conditions={southPadreConditions}
+                  weather={southPadreWeather}
+                  tides={southPadreTides}
+                  title="South Padre Island"
+                />
+                <FishingConditionsCard
+                  conditions={portMansfieldConditions}
+                  weather={portMansfieldWeather}
+                  tides={portMansfieldTides}
+                  title="Port Mansfield"
+                />
+              </div>
+            </motion.div>
+          )}
+
           {activeTab === 'astronomy' && (
             <motion.div
               key="astronomy"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-6"
             >
-              <AstronomyPanel astronomy={southPadreAstronomy} />
+              <AstronomyPanel astronomy={southPadreAstronomy} title="South Padre Island" />
+              <AstronomyPanel astronomy={portMansfieldAstronomy} title="Port Mansfield" />
             </motion.div>
           )}
 
