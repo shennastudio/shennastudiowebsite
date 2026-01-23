@@ -73,6 +73,7 @@
     "gray-matter": "^4.0.3",
     "highlight.js": "^11.11.1",
     "html2canvas": "^1.4.1",
+    "indexnow-submitter": "^1.3.1",
     "ioredis": "^5.9.2",
     "jspdf": "^4.0.0",
     "jspdf-autotable": "^5.0.7",
