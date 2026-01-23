@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 // import { useTranslations } from 'next-intl'; // Not available, using direct strings
 import axios from 'axios';
 // import SunCalc from 'suncalc'; // Not available, using simplified calculations
@@ -60,9 +61,15 @@ export default function TideWidget() {
       const end = endDate.toISOString().split('T')[0];
 
       // Tide extremes for 10 days
+      const apiKey = process.env.STORMGLASS_API_KEY;
+      if (!apiKey) {
+        console.warn('Storm Glass API key not found, using mock data');
+        throw new Error('API key not configured');
+      }
+
       const extremesRes = await axios.get(
         `https://api.stormglass.io/v2/tide/extremes/point?lat=${location.lat}&lng=${location.lng}&start=${start}&end=${end}`,
-        { headers: { Authorization: process.env.STORMGLASS_API_KEY! } }
+        { headers: { Authorization: apiKey } }
       );
       const allExtremes = extremesRes.data.extremes || [];
       const dailyTides: Record<string, TideData[]> = {};
@@ -113,7 +120,34 @@ export default function TideWidget() {
       setData(newData);
       localStorage.setItem(CACHE_KEY, JSON.stringify({ data: newData, timestamp: Date.now() }));
     } catch (err) {
-      setError('Error fetching data');
+      console.error('API Error:', err);
+      // Provide mock data for development/demo purposes
+      const mockData: WidgetData = {
+        todayTides: [
+          { time: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), height: 1.2, type: 'high' },
+          { time: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(), height: 0.3, type: 'low' },
+          { time: new Date(Date.now() + 14 * 60 * 60 * 1000).toISOString(), height: 1.4, type: 'high' },
+          { time: new Date(Date.now() + 20 * 60 * 60 * 1000).toISOString(), height: 0.2, type: 'low' },
+        ],
+        tomorrowTides: [
+          { time: new Date(Date.now() + 26 * 60 * 60 * 1000).toISOString(), height: 1.1, type: 'high' },
+          { time: new Date(Date.now() + 32 * 60 * 60 * 1000).toISOString(), height: 0.4, type: 'low' },
+        ],
+        dailyTides: {},
+        currentTide: 0.8,
+        weather: { temp: 72, windSpeed: 8, windDir: 180, precip: 0 },
+        marine: { waveHeight: 1.2, currentSpeed: 0.5, waterTemp: 74 },
+        astro: { sunrise: '06:30', sunset: '18:45', moonPhase: 'Waxing Gibbous' },
+        solunar: [
+          { type: 'Major', start: '06:00', end: '08:00' },
+          { type: 'Major', start: '18:00', end: '20:00' },
+          { type: 'Minor', start: '00:00', end: '02:00' },
+          { type: 'Minor', start: '12:00', end: '14:00' },
+        ],
+      };
+
+      setData(mockData);
+      setError('Using demo data - API temporarily unavailable');
     } finally {
       setLoading(false);
     }
@@ -125,7 +159,33 @@ export default function TideWidget() {
     return () => clearInterval(interval);
   }, [location]);
 
-  if (loading || error) return <div className="p-8 text-center text-gray-400">{loading ? 'Loading...' : error}</div>;
+  if (loading) return (
+    <div className="flex items-center justify-center py-16">
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        className="w-16 h-16 rounded-full border-4 border-cyan-500/30 border-t-cyan-500"
+      />
+    </div>
+  );
+
+  if (error && !data) return (
+    <div className="bg-slate-800/60 backdrop-blur-md rounded-2xl p-8 border border-red-500/30 text-center">
+      <div className="text-red-400 mb-4">
+        <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+        </svg>
+        <h3 className="text-xl font-semibold mb-2">Unable to Load Tide Data</h3>
+        <p className="text-sm text-red-300">Marine conditions temporarily unavailable</p>
+      </div>
+      <button
+        onClick={() => fetchData(true)}
+        className="mt-4 px-6 py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg transition-colors"
+      >
+        Try Again
+      </button>
+    </div>
+  );
 
   return (
     <div className="relative mx-auto max-w-4xl w-full px-4 sm:px-6 lg:px-8 my-12">
@@ -207,7 +267,11 @@ export default function TideWidget() {
         <div className="pt-32 pb-24 px-6 overflow-y-auto h-[620px] scrollbar-hide">
           {activeTab === 'now' && (
             <div className="space-y-6">
-              <div className="text-center"><h2 className="text-3xl font-bold text-white mb-2">Current Conditions</h2><p className="text-teal-300">Brownsville Area • Updated {new Date().toLocaleTimeString()}</p></div>
+              <div className="text-center">
+                <h2 className="text-3xl font-bold text-white mb-2">Current Conditions</h2>
+                <p className="text-teal-300">Brownsville Area • Updated {new Date().toLocaleTimeString()}</p>
+                {error && <p className="text-yellow-400 text-sm mt-1">⚠️ Demo Data - Live API Unavailable</p>}
+              </div>
               <div className="bg-slate-800/60 backdrop-blur-md rounded-2xl p-6 border border-teal-500/30 shadow-lg flex items-center justify-between">
                 <div><p className="text-lg text-gray-300">Current Tide Level</p><p className="text-4xl font-bold text-white">{data?.currentTide.toFixed(2)} m</p></div>
                 <div className="text-6xl text-green-400">↑</div> {/* Tide direction */}
