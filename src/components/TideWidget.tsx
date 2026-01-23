@@ -23,35 +23,45 @@ import {
 } from 'lucide-react';
 
 const LOCATIONS = {
-  southPadre: { lat: 26.0786, lng: -97.1681, name: 'South Padre Island' },
-  portMansfield: { lat: 26.5594, lng: -97.4258, name: 'Port Mansfield' }
+  southPadre: {
+    lat: 26.07310,
+    lng: -97.16750,
+    name: 'South Padre Island',
+    stationId: '8779748' // NOAA tide station ID
+  },
+  portMansfield: {
+    lat: 26.5594,
+    lng: -97.4258,
+    name: 'Port Mansfield',
+    stationId: '8778490' // NOAA tide station ID
+  }
 };
 
 // Free webcam feeds for South Padre Island
 const WEBCAMS = [
   {
+    id: 'spi-causeway',
+    name: 'Queen Isabella Causeway',
+    location: 'Causeway Bridge',
+    url: 'https://visitsouthpadreisland.com/live-webcams/queen-isabella-causeway/',
+    embedUrl: 'https://visitsouthpadreisland.com/live-webcams/queen-isabella-causeway/',
+    thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80'
+  },
+  {
     id: 'spi-beach',
     name: 'South Padre Beach',
     location: 'Beach View',
-    url: 'https://www.sopadre.com/south-padre-island-webcams/',
-    embedUrl: 'https://g1.ipcamlive.com/player/player.php?alias=5f5e4c4b4e415a&autoplay=1',
+    url: 'https://visitsouthpadreisland.com/live-webcams/',
+    embedUrl: 'https://visitsouthpadreisland.com/live-webcams/',
     thumbnail: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80'
   },
   {
-    id: 'spi-pier',
-    name: 'Fishing Pier',
-    location: 'Pier View',
-    url: 'https://www.sopadre.com/south-padre-island-webcams/',
-    embedUrl: 'https://g1.ipcamlive.com/player/player.php?alias=southpadreisland2&autoplay=1',
-    thumbnail: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=400&q=80'
-  },
-  {
-    id: 'spi-bay',
-    name: 'Laguna Madre Bay',
-    location: 'Bay Side',
-    url: 'https://www.sopadre.com/south-padre-island-webcams/',
-    embedUrl: 'https://g1.ipcamlive.com/player/player.php?alias=southpadreisland&autoplay=1',
-    thumbnail: 'https://images.unsplash.com/photo-1559825481-12a05cc00344?w=400&q=80'
+    id: 'spi-dolphin',
+    name: 'Dolphin Cam',
+    location: 'Marina View',
+    url: 'https://visitsouthpadreisland.com/live-webcams/',
+    embedUrl: 'https://visitsouthpadreisland.com/live-webcams/',
+    thumbnail: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80'
   }
 ];
 
@@ -104,8 +114,55 @@ interface ElevationData {
 
 // FREE API FUNCTIONS - No API keys required!
 
-async function fetchTideData(lat: number, lng: number): Promise<TideData[]> {
+async function fetchTideData(lat: number, lng: number, stationId?: string): Promise<TideData[]> {
   try {
+    // If we have a specific station ID, use it directly (more reliable)
+    if (stationId) {
+      const now = new Date();
+      const startDate = now.toISOString().split('T')[0].replace(/-/g, '');
+      const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      const endDate = tomorrow.toISOString().split('T')[0].replace(/-/g, '');
+
+      const tideResponse = await fetch(
+        `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=${startDate}&end_date=${endDate}&station=${stationId}&product=predictions&datum=MLLW&time_zone=lst&units=english&format=json`
+      );
+
+      if (!tideResponse.ok) {
+        throw new Error('Failed to fetch tide predictions');
+      }
+
+      const tideData = await tideResponse.json();
+      const predictions = tideData.predictions || [];
+      const tideExtremes: TideData[] = [];
+      let lastType: 'high' | 'low' | null = null;
+
+      for (let i = 1; i < predictions.length - 1; i++) {
+        const prev = predictions[i - 1];
+        const current = predictions[i];
+        const next = predictions[i + 1];
+        const prevHeight = parseFloat(prev.v);
+        const currentHeight = parseFloat(current.v);
+        const nextHeight = parseFloat(next.v);
+
+        if ((currentHeight > prevHeight && currentHeight > nextHeight) ||
+            (currentHeight < prevHeight && currentHeight < nextHeight)) {
+          const type = currentHeight > prevHeight ? 'high' : 'low';
+
+          if (type !== lastType) {
+            tideExtremes.push({
+              time: current.t,
+              height: currentHeight,
+              type
+            });
+          }
+          lastType = type;
+        }
+      }
+
+      return tideExtremes.slice(0, 4);
+    }
+
+    // Fallback: Find closest station if no specific station ID provided
     const stationResponse = await fetch(
       `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?type=tidepredictions&units=english`
     );
@@ -1013,9 +1070,9 @@ export function TideWidget() {
           southPadreMarineData,
           portMansfieldMarineData,
           southPadreAstronomyData,
-        ] = await Promise.all([
-          fetchTideData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng),
-          fetchTideData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng),
+          ] = await Promise.all([
+            fetchTideData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng, LOCATIONS.southPadre.stationId),
+            fetchTideData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng, LOCATIONS.portMansfield.stationId),
           fetchMarineData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng),
           fetchMarineData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng),
           fetchAstronomyData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng),

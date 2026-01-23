@@ -6,6 +6,8 @@ import { CartProvider } from "@/context/CartContext";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import SEOSchemas from "@/components/SEOSchemas";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { FishermanChatbot } from "@/components/FishermanChatbot";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 import ScrollProgress from "@/components/ScrollProgress";
 import Script from "next/script";
@@ -153,13 +155,14 @@ export default function RootLayout({
       <body
         className={`${robotoCondensed.variable} ${inter.variable} antialiased min-h-screen flex flex-col bg-background text-foreground touch-manipulation selection:bg-accent/30 overflow-x-hidden w-full`}
       >
+        <ThemeToggle />
+        <FishermanChatbot />
         <ScrollProgress />
         <AnalyticsProvider />
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          forcedTheme="light"
+          defaultTheme="system"
+          enableSystem={true}
           storageKey="theme"
           disableTransitionOnChange
         >

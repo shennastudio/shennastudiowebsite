@@ -30,10 +30,7 @@ const nextConfig: NextConfig = {
   },
   // Enable standalone output for Docker deployment
   output: 'standalone',
-  // Ignore ESLint errors during build for now
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+
   typescript: {
     ignoreBuildErrors: true,
   },
