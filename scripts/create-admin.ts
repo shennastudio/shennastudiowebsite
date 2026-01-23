@@ -4,53 +4,52 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  const hashedPassword = await bcrypt.hash('lapesqueria2026', 12);
+  console.log('Creating admin user...\n');
 
+  // Hash the password
+  const hashedPassword = await bcrypt.hash('Lapesqueria2026!@#', 12);
+
+  // Create or update admin user
   const adminUser = await prisma.user.upsert({
     where: { email: 'admin@lapesqueria.com' },
-    update: {},
+    update: {
+      password: hashedPassword,
+      name: 'La Pesqueria Admin',
+      role: 'ADMIN',
+    },
     create: {
       email: 'admin@lapesqueria.com',
-      name: 'La Pesqueria Admin',
       password: hashedPassword,
+      name: 'La Pesqueria Admin',
       role: 'ADMIN',
     },
   });
 
-  console.log('\n===========================================');
-  console.log('  LA PESQUERIA OUTFITTERS - ADMIN LOGIN');
+  console.log('===========================================');
+  console.log('  ADMIN USER CREATED/UPDATED');
   console.log('===========================================\n');
-  console.log('  Email:    admin@lapesqueria.com');
-  console.log('  Password: lapesqueria2026');
-  console.log('  Role:     ADMIN');
-  console.log('\n  Admin ID:', adminUser.id);
-  console.log('  Created:', adminUser.createdAt);
+  console.log(`  ID:    ${adminUser.id}`);
+  console.log(`  Email: ${adminUser.email}`);
+  console.log(`  Role:  ${adminUser.role}`);
   console.log('\n===========================================\n');
 
-  // Also create a staff user
-  const staffPassword = await bcrypt.hash('lapesqueria2026', 12);
-  const staffUser = await prisma.user.upsert({
-    where: { email: 'staff@lapesqueria.com' },
-    update: {},
-    create: {
-      email: 'staff@lapesqueria.com',
-      name: 'La Pesqueria Staff',
-      password: staffPassword,
-      role: 'STAFF',
-    },
+  // Verify by reading back
+  const verify = await prisma.user.findUnique({
+    where: { email: 'admin@lapesqueria.com' },
+    select: { id: true, email: true, role: true, password: true }
   });
 
-  console.log('  STAFF ACCOUNT (optional):');
-  console.log('  Email:    staff@lapesqueria.com');
-  console.log('  Password: lapesqueria2026');
-  console.log('  Role:     STAFF');
-  console.log('  Staff ID:', staffUser.id);
-  console.log('\n');
+  if (verify) {
+    console.log('✅ Admin user verified in database');
+    console.log(`   Password hash starts with: ${verify.password.substring(0, 7)}...`);
+  } else {
+    console.log('❌ Admin user NOT found after creation');
+  }
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('Error:', e.message);
     process.exit(1);
   })
   .finally(async () => {
