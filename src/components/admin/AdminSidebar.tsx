@@ -93,12 +93,6 @@ export function AdminSidebar({}: AdminSidebarProps) {
       ]
     },
     {
-      title: 'Impact',
-      items: [
-        { href: '/admin/conservation', label: 'Conservation', icon: Heart, color: 'from-teal-500 to-emerald-400' },
-      ]
-    },
-    {
       title: 'Intelligence',
       items: [
         { href: '/admin/ai-features', label: 'AI Tools', icon: Sparkles, color: 'from-amber-500 to-yellow-400' },
