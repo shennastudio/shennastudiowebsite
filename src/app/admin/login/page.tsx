@@ -44,8 +44,8 @@ export default function AdminLoginPage() {
       {/* Left Side - Fishing Image */}
       <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1516934024742-b461fba47600?w=1920&q=80"
-          alt="Fishing boat at sunrise"
+          src="/images/fishing.jpg"
+          alt="Fishing gear and equipment"
           fill
           className="object-cover"
           priority
