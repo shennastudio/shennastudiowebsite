@@ -56,7 +56,7 @@ export default function Home() {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#001F3F]/70 to-[#001F3F] z-10" />
           <Image
-            src="https://images.unsplash.com/photo-1533050487297-09b450131914?w=1920&q=80"
+            src="/fishing.avif"
             alt="Fishing gear and equipment"
             fill
             priority
