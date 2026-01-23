@@ -102,8 +102,8 @@ export const metadata: Metadata = {
     'geo.region': 'US-TX',
   },
   icons: {
-    icon: '/favicon.png',
-    apple: '/apple-touch-icon.png',
+    icon: '/images/lapescerialogo.png',
+    apple: '/images/lapescerialogo.png',
   },
 };
 
