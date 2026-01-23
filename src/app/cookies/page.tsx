@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Shenna's Studio",
-  description: "Cookie Policy for Shenna's Studio. Learn how we use cookies and similar technologies on our website.",
+  title: "Cookie Policy | La Pesqueria's Studio",
+  description: "Cookie Policy for La Pesqueria's Studio. Learn how we use cookies and similar technologies on our website.",
 };
 
 export default function CookiesPage() {
@@ -165,7 +165,7 @@ export default function CookiesPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Contact Us</h2>
               <p>
-                If you have questions about our use of cookies, please contact us at info@shennastudio.com.
+                If you have questions about our use of cookies, please contact us at info@lapesqueria.com.
               </p>
             </div>
 

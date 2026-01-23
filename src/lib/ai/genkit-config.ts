@@ -1,5 +1,5 @@
 /**
- * Genkit AI Configuration for Shenna's Studio
+ * Genkit AI Configuration for La Pesqueria Outfitters
  * Product recommendation engine setup
  */
 
@@ -56,8 +56,8 @@ export function getRecommendationPrompt(productData: {
   attributes?: string[];
 }): string {
   return `
-You are a product recommendation AI for Shenna's Studio, an ocean-themed bracelet store
-supporting marine conservation.
+You are a product recommendation AI for La Pesqueria Outfitters, a fishing apparel and outdoor gear store
+based in McAllen, TX.
 
 Given this product:
 - Name: ${productData.name}
@@ -67,6 +67,6 @@ Given this product:
 - Attributes: ${productData.attributes?.join(', ') || 'N/A'}
 
 Recommend similar products that customers who bought this would also like.
-Consider ocean themes, conservation focus, price range, and style.
+Consider fishing themes, outdoor activities, price range, and functionality.
   `.trim();
 }

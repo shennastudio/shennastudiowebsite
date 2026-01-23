@@ -45,12 +45,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!post) {
     return {
-      title: "Post Not Found | Shenna's Studio Blog",
+      title: "Post Not Found | La Pesqueria Outfitters Blog",
     }
   }
 
   return {
-    title: `${post.title} | Shenna's Studio Blog`,
+    title: `${post.title} | La Pesqueria Outfitters Blog`,
     description: post.excerpt,
     openGraph: {
       title: post.title,

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is **ShennaStudio**, an e-commerce platform for ocean-themed handcrafted bracelets supporting marine conservation. Built with Next.js 16, Payload CMS, and PostgreSQL, the site features a dual-database architecture with both Drizzle ORM and Payload CMS collections.
+This is **La Pesqueria Outfitters**, an e-commerce platform for fishing apparel, gear, and outdoor clothing based in McAllen, TX. Built with Next.js 16, Prisma, and PostgreSQL.
 
 ## Essential Commands
 
@@ -28,7 +28,7 @@ npm run db:studio        # Open Drizzle Studio (database GUI)
 ```bash
 npm run payload:generate  # Generate TypeScript types from collections
 npm run payload:migrate   # Run Payload migrations
-npm run payload:seed      # Seed admin user (email: admin@shennastudio.com)
+npm run payload:seed      # Seed admin user (email: admin@lapesqueria.com)
 ```
 
 ## Architecture

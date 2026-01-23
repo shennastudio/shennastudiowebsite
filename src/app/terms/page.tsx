@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Shenna's Studio",
-  description: "Terms of Service for Shenna's Studio. Read our terms governing the use of our website and services.",
+  title: "Terms of Service | La Pesqueria's Studio",
+  description: "Terms of Service for La Pesqueria's Studio. Read our terms governing the use of our website and services.",
 };
 
 export default function TermsPage() {
@@ -28,7 +28,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Agreement to Terms</h2>
               <p>
-                By accessing or using Shenna&apos;s Studio&apos;s website and services, you agree to be bound by these Terms of Service.
+                By accessing or using La Pesqueria&apos;s Studio&apos;s website and services, you agree to be bound by these Terms of Service.
                 If you do not agree to these terms, please do not use our services.
               </p>
             </div>
@@ -92,7 +92,7 @@ export default function TermsPage() {
                 We want you to be completely satisfied with your purchase. If you are not satisfied, you may
                 return unused items in their original packaging within 30 days of delivery for a full refund.
                 Custom or personalized items cannot be returned unless defective. Please contact us at
-                info@shennastudio.com to initiate a return.
+                info@lapesqueria.com to initiate a return.
               </p>
             </div>
 
@@ -100,7 +100,7 @@ export default function TermsPage() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Intellectual Property</h2>
               <p>
                 All content on this website, including text, graphics, logos, images, and software, is the property
-                of Shenna&apos;s Studio and is protected by copyright and trademark laws. You may not reproduce, distribute,
+                of La Pesqueria&apos;s Studio and is protected by copyright and trademark laws. You may not reproduce, distribute,
                 or create derivative works from any content without our express written permission.
               </p>
             </div>
@@ -108,7 +108,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Limitation of Liability</h2>
               <p>
-                To the fullest extent permitted by law, Shenna&apos;s Studio shall not be liable for any indirect, incidental,
+                To the fullest extent permitted by law, La Pesqueria&apos;s Studio shall not be liable for any indirect, incidental,
                 special, consequential, or punitive damages arising out of or relating to your use of our services.
                 Our total liability shall not exceed the amount paid by you for the product or service in question.
               </p>
@@ -126,7 +126,7 @@ export default function TermsPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">11. Contact Us</h2>
               <p>
-                If you have any questions about these Terms of Service, please contact us at info@shennastudio.com.
+                If you have any questions about these Terms of Service, please contact us at info@lapesqueria.com.
               </p>
             </div>
 

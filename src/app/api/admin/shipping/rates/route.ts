@@ -14,16 +14,16 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { address, totalQuantity } = body;
 
-    // Default sender address (Shenna's Studio)
+    // Default sender address (La Pesqueria's Studio)
     // In production, this should come from settings
     const addressFrom = {
-      name: "Shenna's Studio",
+      name: "La Pesqueria's Studio",
       street1: "123 Ocean Blvd", // Placeholder
       city: "South Padre Island",
       state: "TX",
       zip: "78597",
       country: "US",
-      email: "orders@shennastudio.com",
+      email: "orders@lapesqueria.com",
     };
 
     const addressTo = {

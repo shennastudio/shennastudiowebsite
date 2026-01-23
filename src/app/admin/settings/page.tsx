@@ -29,7 +29,7 @@ export default function SettingsPage() {
 
   const [formData, setFormData] = useState<SiteSettings>({
     id: '',
-    siteName: "Shenna's Studio",
+    siteName: "La Pesqueria's Studio",
     logo: null,
     tagline: null,
     primaryColor: '#3B82F6',
@@ -81,7 +81,7 @@ export default function SettingsPage() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('Thanks beautiful Shenna I love you!');
+        setMessage('Thanks beautiful La Pesqueria I love you!');
         await fetchSettings();
 
         // Clear success message after 3 seconds
@@ -138,7 +138,7 @@ export default function SettingsPage() {
                 name="siteName"
                 value={formData.siteName}
                 onChange={handleInputChange}
-                placeholder="Shenna's Studio"
+                placeholder="La Pesqueria's Studio"
               />
             </div>
 
@@ -197,7 +197,7 @@ export default function SettingsPage() {
                 type="email"
                 value={formData.email || ''}
                 onChange={handleInputChange}
-                placeholder="hello@shennastudio.com"
+                placeholder="hello@lapesqueria.com"
               />
             </div>
 
@@ -239,7 +239,7 @@ export default function SettingsPage() {
                 name="facebook"
                 value={formData.facebook || ''}
                 onChange={handleInputChange}
-                placeholder="https://facebook.com/shennastudio"
+                placeholder="https://facebook.com/lapesqueria"
               />
             </div>
 
@@ -250,7 +250,7 @@ export default function SettingsPage() {
                 name="instagram"
                 value={formData.instagram || ''}
                 onChange={handleInputChange}
-                placeholder="https://instagram.com/shennastudio"
+                placeholder="https://instagram.com/lapesqueria"
               />
             </div>
 
@@ -261,7 +261,7 @@ export default function SettingsPage() {
                 name="twitter"
                 value={formData.twitter || ''}
                 onChange={handleInputChange}
-                placeholder="https://twitter.com/shennastudio"
+                placeholder="https://twitter.com/lapesqueria"
               />
             </div>
           </CardContent>

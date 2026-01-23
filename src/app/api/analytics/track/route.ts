@@ -333,7 +333,7 @@ function extractInternalReferrer(referer: string): string | undefined {
     // This prevents tracking users across different sites
     const isInternal =
       url.hostname === 'localhost' ||
-      url.hostname.includes('shennastudio') ||
+      url.hostname.includes('lapesqueria') ||
       url.hostname.includes('vercel.app');
 
     if (!isInternal) return undefined;

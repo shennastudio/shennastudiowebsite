@@ -154,7 +154,7 @@ export const PackingSlipTemplate = React.forwardRef<HTMLDivElement, PackingSlipT
             Thank you for supporting ocean conservation with every purchase!
           </p>
           <p className="mt-2 text-xs text-gray-500">
-            Shenna&apos;s Studio • Protecting Our Oceans, One Bracelet at a Time
+            La Pesqueria Outfitters • 4400 N 23rd St Suite 135, McAllen, TX
           </p>
           <p className="mt-4 text-xs text-gray-400">
             For packing use only - Not a customer receipt

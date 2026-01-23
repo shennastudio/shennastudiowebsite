@@ -4,8 +4,8 @@ import { Package, Truck, Users, Award, CheckCircle, ArrowRight, Store, Heart } f
 import { FaireLogo } from '@/components/FaireLogo';
 
 export const metadata: Metadata = {
-  title: "Wholesale | Shenna's Studio - Ocean-Themed Bracelets for Retailers",
-  description: "Partner with Shenna's Studio for wholesale ocean-inspired jewelry. Competitive wholesale pricing, low MOQs, and 10% of sales donated to marine conservation. Perfect for boutiques, gift shops, and retailers.",
+  title: "Wholesale | La Pesqueria's Studio - Ocean-Themed Bracelets for Retailers",
+  description: "Partner with La Pesqueria's Studio for wholesale ocean-inspired jewelry. Competitive wholesale pricing, low MOQs, and 10% of sales donated to marine conservation. Perfect for boutiques, gift shops, and retailers.",
   keywords: 'wholesale bracelets, wholesale jewelry, ocean jewelry wholesale, marine conservation products, boutique wholesale, handmade jewelry wholesale, eco-friendly wholesale',
 };
 
@@ -106,7 +106,7 @@ export default function WholesalePage() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://faire.com/brand/shennastudio"
+                href="https://faire.com/brand/lapesqueriaoutfitters"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-cyan-50 transition-all shadow-xl"
@@ -130,7 +130,7 @@ export default function WholesalePage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">
-            Why Partner With Shenna&apos;s Studio?
+            Why Partner With La Pesqueria&apos;s Studio?
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -336,7 +336,7 @@ export default function WholesalePage() {
             </button>
 
             <p className="text-center text-sm text-slate-500">
-              Prefer Faire? <a href="https://faire.com/brand/shennastudio" target="_blank" rel="noopener noreferrer" className="text-teal-600 font-semibold hover:underline">Shop on Faire</a> for easy ordering and free returns.
+              Prefer Faire? <a href="https://faire.com/brand/lapesqueriaoutfitters" target="_blank" rel="noopener noreferrer" className="text-teal-600 font-semibold hover:underline">Shop on Faire</a> for easy ordering and free returns.
             </p>
           </form>
         </div>
@@ -392,7 +392,7 @@ export default function WholesalePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://faire.com/brand/shennastudio"
+              href="https://faire.com/brand/lapesqueriaoutfitters"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white text-teal-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-cyan-50 transition-all shadow-xl"

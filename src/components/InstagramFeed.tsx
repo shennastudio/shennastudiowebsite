@@ -20,44 +20,44 @@ interface InstagramFeedProps {
 const INSTAGRAM_POSTS: InstagramPost[] = [
   {
     id: '1',
-    imageUrl: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=400&h=400&fit=crop',
-    permalink: 'https://www.instagram.com/shennastudio',
-    caption: 'Ocean-inspired bracelet collection 🌊',
+    imageUrl: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=400&h=400&fit=crop',
+    permalink: 'https://www.instagram.com/lapesqueriaoutfitters',
+    caption: 'Fresh catch of the day! 🎣',
   },
   {
     id: '2',
-    imageUrl: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop',
-    permalink: 'https://www.instagram.com/shennastudio',
-    caption: 'Handcrafted with love 💙',
+    imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=400&fit=crop',
+    permalink: 'https://www.instagram.com/lapesqueriaoutfitters',
+    caption: 'Early morning on the water 🌊',
   },
   {
     id: '3',
-    imageUrl: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=400&fit=crop',
-    permalink: 'https://www.instagram.com/shennastudio',
-    caption: 'Sea turtle conservation 🐢',
+    imageUrl: 'https://images.unsplash.com/photo-1517154421773-0529f29ea451?w=400&h=400&fit=crop',
+    permalink: 'https://www.instagram.com/lapesqueriaoutfitters',
+    caption: 'Ready for another day on the Gulf 🐟',
   },
   {
     id: '4',
-    imageUrl: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop',
-    permalink: 'https://www.instagram.com/shennastudio',
-    caption: 'Beach vibes ✨',
+    imageUrl: 'https://images.unsplash.com/photo-1510527252109-a53d708700ef?w=400&h=400&fit=crop',
+    permalink: 'https://www.instagram.com/lapesqueriaoutfitters',
+    caption: 'Reeling in the big one! 💪',
   },
   {
     id: '5',
-    imageUrl: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=400&fit=crop',
-    permalink: 'https://www.instagram.com/shennastudio',
-    caption: 'Crystal healing bracelets 💎',
+    imageUrl: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=400&fit=crop',
+    permalink: 'https://www.instagram.com/lapesqueriaoutfitters',
+    caption: 'Inshore fishing at its finest 🎣',
   },
   {
     id: '6',
-    imageUrl: 'https://images.unsplash.com/photo-1506630448388-4e683c67ddb0?w=400&h=400&fit=crop',
-    permalink: 'https://www.instagram.com/shennastudio',
-    caption: 'South Padre Island sunset 🌅',
+    imageUrl: 'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=400&h=400&fit=crop',
+    permalink: 'https://www.instagram.com/lapesqueriaoutfitters',
+    caption: 'Texas Gulf Coast sunset 🌅',
   },
 ];
 
 export default function InstagramFeed({
-  username = 'shennastudio',
+  username = 'lapesqueriaoutfitters',
   className = ''
 }: InstagramFeedProps) {
   const [posts, setPosts] = useState<InstagramPost[]>([]);

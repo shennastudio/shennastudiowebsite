@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 const SAMPLE_ORDERS = [
   {
     id: '1',
-    orderNumber: 'SHENA-001',
+    orderNumber: 'LP-001',
     customerName: 'Maria Garcia',
     shippingAddress: '1428 Ocean Drive',
     shippingAddress2: 'Apt 4B',
@@ -23,7 +23,7 @@ const SAMPLE_ORDERS = [
   },
   {
     id: '2',
-    orderNumber: 'SHENA-002',
+    orderNumber: 'LP-002',
     customerName: 'James Thompson',
     shippingAddress: '2567 Coastal Highway',
     shippingAddress2: 'Suite 200',
@@ -35,7 +35,7 @@ const SAMPLE_ORDERS = [
   },
   {
     id: '3',
-    orderNumber: 'SHENA-003',
+    orderNumber: 'LP-003',
     customerName: 'Sarah Williams',
     shippingAddress: '8901 Seashell Lane',
     shippingCity: 'Corpus Christi',
@@ -141,9 +141,9 @@ export default function SampleLabelsPage() {
         <text x="300" y="65" text-anchor="middle" font-family="Arial" font-size="14">${selectedCarrier === 'USPS' ? 'PRIORITY MAIL' : selectedCarrier === 'UPS' ? 'GROUND' : 'GROUND'}</text>
         <line x1="20" y1="80" x2="580" y2="80" stroke="black" stroke-width="2"/>
         <text x="30" y="110" font-family="Arial" font-size="16" font-weight="bold">FROM:</text>
-        <text x="30" y="135" font-family="Arial" font-size="14">Shenna Studio</text>
-        <text x="30" y="155" font-family="Arial" font-size="14">2436 Pablo Kisel Blvd</text>
-        <text x="30" y="175" font-family="Arial" font-size="14">Brownsville, TX 78520</text>
+        <text x="30" y="135" font-family="Arial" font-size="14">La Pesqueria Outfitters</text>
+        <text x="30" y="155" font-family="Arial" font-size="14">4400 N 23rd St Suite 135</text>
+        <text x="30" y="175" font-family="Arial" font-size="14">McAllen, TX 78504</text>
         <rect x="20" y="200" width="560" height="140" fill="none" stroke="black" stroke-width="2" rx="5"/>
         <text x="35" y="225" font-family="Arial" font-size="12" font-weight="bold">TO:</text>
         <text x="35" y="250" font-family="Arial" font-size="18" font-weight="bold">${selectedOrder.customerName}</text>

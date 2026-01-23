@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
         if (customerEmail) {
           await sendEmail({
             to: customerEmail,
-            subject: `Order Confirmation - Shenna's Studio #${order.id.slice(0, 8).toUpperCase()}`,
+            subject: `Order Confirmation - La Pesqueria's Studio #${order.id.slice(0, 8).toUpperCase()}`,
             react: OrderConfirmationEmail({
               orderId: order.id,
               orderNumber: `#${order.id.slice(0, 8).toUpperCase()}`,

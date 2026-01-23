@@ -16,7 +16,7 @@ export async function GET() {
     if (!settings) {
       settings = await prisma.siteSettings.create({
         data: {
-          siteName: "Shenna's Studio",
+          siteName: "La Pesqueria's Studio",
           primaryColor: '#3B82F6',
         },
       });

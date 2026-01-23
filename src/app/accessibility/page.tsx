@@ -1,8 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: "Accessibility Statement | Shenna's Studio",
-  description: "Accessibility Statement for Shenna's Studio. Our commitment to making our website accessible to everyone.",
+  title: "Accessibility Statement | La Pesqueria's Studio",
+  description: "Accessibility Statement for La Pesqueria's Studio. Our commitment to making our website accessible to everyone.",
 };
 
 export default function AccessibilityPage() {
@@ -28,7 +28,7 @@ export default function AccessibilityPage() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Our Commitment</h2>
               <p>
-                Shenna&apos;s Studio is committed to ensuring digital accessibility for people with disabilities. We are
+                La Pesqueria&apos;s Studio is committed to ensuring digital accessibility for people with disabilities. We are
                 continually improving the user experience for everyone and applying the relevant accessibility
                 standards to ensure we provide equal access to all users.
               </p>
@@ -140,7 +140,7 @@ export default function AccessibilityPage() {
                 accessibility barriers:
               </p>
               <div className="bg-gray-50 p-4 rounded-lg">
-                <p><strong>Email:</strong> accessibility@shennastudio.com</p>
+                <p><strong>Email:</strong> accessibility@lapesqueria.com</p>
                 <p><strong>Phone:</strong> (956) 555-0123</p>
                 <p><strong>Response Time:</strong> We aim to respond to accessibility feedback within 5 business days.</p>
               </div>

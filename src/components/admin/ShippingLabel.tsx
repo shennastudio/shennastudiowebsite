@@ -122,11 +122,11 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
               </div>
             </div>
             <div className="flex items-center gap-3">
-              {/* Shenna Studio Logo */}
+              {/* La Pesqueria Logo */}
               <div style={{ width: '60px', height: '30px', position: 'relative' }}>
                 <Image
-                  src="/images/shenna-studio-logo.png"
-                  alt="Shenna Studio"
+                  src="/images/lapescerialogo.png"
+                  alt="La Pesqueria Outfitters"
                   fill
                   style={{ objectFit: 'contain' }}
                 />
@@ -160,9 +160,9 @@ export const ShippingLabel = React.forwardRef<HTMLDivElement, ShippingLabelProps
             FROM:
           </div>
           <div style={{ fontSize: '13px', color: '#000', lineHeight: '1.3' }}>
-            <div className="font-bold" style={{ fontSize: '14px' }}>Shenna Studio</div>
-            <div>2436 Pablo Kisel Blvd</div>
-            <div>Brownsville, TX 78520</div>
+            <div className="font-bold" style={{ fontSize: '14px' }}>La Pesqueria Outfitters</div>
+            <div>4400 N 23rd St Suite 135</div>
+            <div>McAllen, TX 78504</div>
           </div>
         </div>
 

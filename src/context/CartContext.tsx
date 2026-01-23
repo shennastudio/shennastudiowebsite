@@ -316,7 +316,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   // Persist to localStorage after state changes
   // (TOGGLE_CART and LOAD_CART return early and don't reach this point)
   if (typeof window !== 'undefined') {
-    localStorage.setItem('shenna-cart', JSON.stringify(newState));
+    localStorage.setItem('lapesqueria-cart', JSON.stringify(newState));
   }
 
   return newState;
@@ -386,7 +386,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Load cart from localStorage on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedCart = localStorage.getItem('shenna-cart');
+      const savedCart = localStorage.getItem('lapesqueria-cart');
       if (savedCart) {
         try {
           const parsedCart: CartState = JSON.parse(savedCart);
@@ -444,7 +444,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clearCart = () => {
     dispatch({ type: 'CLEAR_CART' });
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('shenna-cart');
+      localStorage.removeItem('lapesqueria-cart');
     }
   };
 

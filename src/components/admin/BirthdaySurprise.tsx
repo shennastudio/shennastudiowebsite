@@ -105,7 +105,7 @@ export function BirthdaySurprise() {
               HAPPY BIRTHDAY
             </h1>
             <h2 className="text-5xl sm:text-7xl font-black mb-6 text-pink-600 dark:text-pink-400 drop-shadow-lg">
-              SHENNA!
+              LA PESQUERIA!
             </h2>
 
             {/* Birthday Hearts */}

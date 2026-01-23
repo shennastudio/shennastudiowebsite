@@ -33,10 +33,10 @@ async function main() {
   // Get or create staff user
   const hashedStaffPassword = await bcrypt.hash('Staff2025!Ocean', 10)
   await prisma.user.upsert({
-    where: { email: 'staff@shennastudio.com' },
+    where: { email: 'staff@lapesqueriaoutfitters.com' },
     update: {},
     create: {
-      email: 'staff@shennastudio.com',
+      email: 'staff@lapesqueriaoutfitters.com',
       password: hashedStaffPassword,
       name: 'Maria Santos',
       role: 'STAFF',

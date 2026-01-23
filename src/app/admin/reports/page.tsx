@@ -188,7 +188,7 @@ export default function ComprehensiveReportsPage() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Shenna's Studio-Financial-Report-${year}-${quarter || 'Full-Year'}.xlsx`;
+      a.download = `La Pesqueria's Studio-Financial-Report-${year}-${quarter || 'Full-Year'}.xlsx`;
       a.click();
       window.URL.revokeObjectURL(url);
 

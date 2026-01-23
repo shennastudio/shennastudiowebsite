@@ -86,7 +86,7 @@ export class BlogGenerator {
 
   private buildPrompt(params: BlogGenerationParams): string {
     return `
-      You are an expert marine conservation blogger for Shenna's Studio, a jewelry brand that supports ocean conservation.
+      You are an expert marine conservation blogger for La Pesqueria Outfitters, a fishing apparel and outdoor gear brand based in McAllen, TX.
       Your writing style is professional, engaging, and emotionally resonant.
 
       TOPIC: "${params.topic}"

@@ -587,9 +587,9 @@ export default function OrderDetailPage() {
                     <div className="flex justify-between items-start mb-8 border-b pb-6">
                       <div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h1>
-                        <p className="text-gray-600">Shenna&apos;s Studio</p>
+                        <p className="text-gray-600">La Pesqueria&apos;s Studio</p>
                         <p className="text-gray-600">Ocean-Inspired Handcrafted Jewelry</p>
-                        <p className="text-gray-600">support@shennastudio.com</p>
+                        <p className="text-gray-600">support@lapesqueria.com</p>
                       </div>
                       <div className="text-right">
                         <div className="text-sm">
@@ -692,7 +692,7 @@ export default function OrderDetailPage() {
                     <div className="flex justify-between items-start mb-8 border-b pb-6">
                       <div>
                         <h1 className="text-3xl font-bold text-gray-900 mb-2">PACKING SLIP</h1>
-                        <p className="text-gray-600">Shenna&apos;s Studio</p>
+                        <p className="text-gray-600">La Pesqueria&apos;s Studio</p>
                       </div>
                       <div className="text-right">
                         <div className="text-sm">

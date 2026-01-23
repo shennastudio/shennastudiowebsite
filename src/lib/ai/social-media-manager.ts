@@ -41,7 +41,7 @@ export async function generateSocialCaption(
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
     const prompt = `
-      You are a social media expert for Shenna's Studio, an ocean-themed jewelry business.
+      You are a social media expert for La Pesqueria Outfitters, a fishing apparel and outdoor gear business.
       Create an engaging ${platform} post for the product listed below.
 
       PRODUCT DETAILS:
@@ -54,9 +54,10 @@ export async function generateSocialCaption(
       TONE: ${tone}
 
       GUIDELINES:
-      - Highlight the ocean-inspired design and the fact that 10% supports marine conservation.
+      - Highlight the quality fishing apparel and outdoor gear for anglers and outdoor enthusiasts.
       - ${platform === 'twitter' ? 'Keep it under 280 characters.' : 'Make it engaging and story-driven.'}
       - Include a clear call-to-action to "Shop now".
+      - Focus on fishing lifestyle, outdoor adventures, and Texas Gulf Coast fishing.
 
       RESPONSE FORMAT:
       You must return ONLY a strictly valid JSON object. No preamble, no markdown.
@@ -86,17 +87,17 @@ export async function generateSocialCaption(
     
     // Fallback caption
     return {
-      caption: `✨ ${product.name} ✨\n\n${product.description}\n\n🌊 Handcrafted with love in South Padre Island\n💙 10% supports ocean conservation\n\nShop now! Link in bio 👆`,
+      caption: `🎣 ${product.name} 🎣\n\n${product.description}\n\n🌊 Quality gear for Texas anglers\n📍 Based in McAllen, TX\n\nShop now! Link in bio 👆`,
       hashtags: [
-        'oceanjewelry',
-        'handmadejewelry',
-        'beachjewelry',
-        'oceanconservation',
-        'coastalstyle',
-        'mermaidvibes',
-        'seasidestyle',
-        'handcrafted',
-        'supportoceans'
+        'fishinggear',
+        'fishingapparel',
+        'texasfishing',
+        'gulfcoastfishing',
+        'outdoorgear',
+        'anglerlife',
+        'fishinglife',
+        'catchoftheday',
+        'tightlines'
       ]
     };
   }
@@ -209,34 +210,34 @@ export async function createContentCalendar(
 }
 
 /**
- * Get trending hashtags for ocean/jewelry niche
+ * Get trending hashtags for fishing gear and apparel niche
  */
-export function getTrendingOceanHashtags(): string[] {
+export function getTrendingFishingHashtags(): string[] {
   return [
-    'oceanjewelry',
-    'beachjewelry',
-    'coastaljewelry',
-    'handmadejewelry',
-    'oceanconservation',
-    'saveouroceans',
-    'marineconservation',
-    'oceanlover',
-    'beachlife',
-    'coastalliving',
-    'mermaidlife',
-    'sealife',
-    'oceanvibes',
-    'beachstyle',
-    'coastalstyle',
-    'handcraftedjewelry',
-    'artisanjewelry',
-    'uniquejewelry',
-    'statementjewelry',
-    'southpadreisland',
-    'texasbeach',
-    'gulfcoast',
-    'beachboutique',
-    'oceaninspired',
-    'nauticaljewelry'
+    'fishinggear',
+    'fishingapparel',
+    'texasfishing',
+    'gulfcoastfishing',
+    'outdoorgear',
+    'anglerlife',
+    'fishinglife',
+    'catchoftheday',
+    'tightlines',
+    'bassfishing',
+    'saltwaterfishing',
+    'fishingshirt',
+    'fishinghat',
+    'tackleshop',
+    'fishingoutfitters',
+    'sportfishing',
+    'redfishing',
+    'trouttexas',
+    'kayakfishing',
+    'offshorefishing',
+    'inshorefishing',
+    'fishingguide',
+    'texasoutdoors',
+    'riograndevalley',
+    'mcallentx'
   ];
 }

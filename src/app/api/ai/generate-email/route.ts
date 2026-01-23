@@ -24,7 +24,7 @@ export async function POST(req: Request) {
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const prompt = `
-      You are an expert email marketing copywriter for Shenna's Studio, a jewelry brand selling handcrafted ocean-themed bracelets that supports marine conservation.
+      You are an expert email marketing copywriter for La Pesqueria Outfitters, a fishing gear and apparel brand based in McAllen, TX.
       
       Create an email campaign for the following purpose:
       Topic/Goal: "${topic}"

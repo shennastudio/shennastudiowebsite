@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
     // Create workbook
     const workbook = new ExcelJS.Workbook();
-    workbook.creator = "Shenna's Studio";
+    workbook.creator = "La Pesqueria Outfitters";
     workbook.created = new Date();
     workbook.modified = new Date();
 
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     // Sheet 1: Executive Summary
     // ============================================
     const summaryData = [
-      ['SHENNASTUDIO FINANCIAL REPORT'],
+      ['LA PESQUERIA OUTFITTERS FINANCIAL REPORT'],
       [''],
       ['Report Period:', `${reportData.reportPeriod.quarter} ${reportData.reportPeriod.year}`],
       ['Generated:', new Date(reportData.reportPeriod.generatedAt).toLocaleDateString()],
@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     const pnl = reportData.profitAndLoss;
     const pnlData = [
       ['PROFIT & LOSS STATEMENT'],
-      ["Shenna's Studio"],
+      ["La Pesqueria Outfitters"],
       [`For the Period: ${reportData.reportPeriod.quarter} ${reportData.reportPeriod.year}`],
       [''],
       ['REVENUE', '', ''],
@@ -247,7 +247,7 @@ export async function POST(req: Request) {
     const conservationData = [
       ['CONSERVATION IMPACT REPORT'],
       [''],
-      ["Shenna's Studio - Supporting Marine Conservation"],
+      ["La Pesqueria Outfitters - Supporting Marine Conservation"],
       [''],
       ['Metric', 'Value'],
       ['Total Donations', formatCurrency(reportData.conservationImpact.totalDonations)],
@@ -266,7 +266,7 @@ export async function POST(req: Request) {
     const buffer = await workbook.xlsx.writeBuffer();
 
     // Return file
-    const filename = `Shenna's Studio-Financial-Report-${reportData.reportPeriod.year}-${reportData.reportPeriod.quarter.replace(' ', '-')}.xlsx`;
+    const filename = `La Pesqueria Outfitters-Financial-Report-${reportData.reportPeriod.year}-${reportData.reportPeriod.quarter.replace(' ', '-')}.xlsx`;
 
     return new NextResponse(buffer as ArrayBuffer, {
       status: 200,

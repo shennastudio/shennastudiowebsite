@@ -34,9 +34,9 @@ function generateSampleLabelSVG(data: {
 
   <!-- FROM section -->
   <text x="15" y="170" font-family="Arial, sans-serif" font-size="10" fill="#666">FROM:</text>
-  <text x="15" y="185" font-family="Arial, sans-serif" font-size="11" fill="#333" font-weight="bold">Shenna Studio</text>
-  <text x="15" y="198" font-family="Arial, sans-serif" font-size="10" fill="#333">123 Ocean Drive</text>
-  <text x="15" y="211" font-family="Arial, sans-serif" font-size="10" fill="#333">South Padre Island, TX 78597</text>
+  <text x="15" y="185" font-family="Arial, sans-serif" font-size="11" fill="#333" font-weight="bold">La Pesqueria Outfitters</text>
+  <text x="15" y="198" font-family="Arial, sans-serif" font-size="10" fill="#333">4400 N 23rd St Suite 135</text>
+  <text x="15" y="211" font-family="Arial, sans-serif" font-size="10" fill="#333">McAllen, TX 78504</text>
 
   <!-- Divider -->
   <line x1="10" y1="225" x2="278" y2="225" stroke="#ccc" stroke-width="1"/>

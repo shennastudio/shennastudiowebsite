@@ -112,20 +112,20 @@ export default async function ProductDetailPage({
               <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 space-y-3">
                 <h3 className="font-semibold text-white flex items-center gap-2 text-lg">
                   <span>🌊</span>
-                  Why Choose Shenna&apos;s Studio
+                  Why Choose La Pesqueria Outfitters
                 </h3>
                 <ul className="space-y-2 text-sm text-slate-300">
                   <li className="flex items-start gap-2">
                     <span className="text-teal-400 mt-0.5">✓</span>
-                    <span>Handcrafted with care in South Padre Island</span>
+                    <span>UPF 50+ sun protection for long days on the water</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-teal-400 mt-0.5">✓</span>
-                    <span>10% supports marine conservation efforts</span>
+                    <span>Moisture-wicking and quick-dry fabric</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-teal-400 mt-0.5">✓</span>
-                    <span>Premium ocean-inspired materials</span>
+                    <span>Built for Texas anglers, tested on the Gulf Coast</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-teal-400 mt-0.5">✓</span>

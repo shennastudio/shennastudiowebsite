@@ -29,24 +29,24 @@ import { Label } from '@/components/ui/label';
 // Pre-built social media templates
 const SOCIAL_TEMPLATES = {
   newProduct: {
-    instagram: "✨ NEW DROP ALERT ✨\n\nIntroducing our latest ocean treasure: {productName} 🌊\n\n💙 Handcrafted with love\n🐢 10% supports marine conservation\n📍 Made in South Padre Island\n\nLink in bio to shop!\n\n#OceanJewelry #Handmade #SustainableFashion #BeachVibes #Shenna's Studio #MarineConservation #ShopSmall",
-    facebook: "🌊 NEW ARRIVAL 🌊\n\nWe're so excited to introduce our newest piece: {productName}!\n\nEach bracelet is handcrafted in South Padre Island, and 10% of every sale goes directly to marine conservation efforts. 🐢💙\n\n✨ Shop now: {shopUrl}\n\n#OceanLovers #SustainableJewelry",
-    twitter: "✨ Just dropped: {productName} 🌊\n\nHandcrafted in South Padre Island. 10% supports marine conservation 🐢\n\nShop now → {shopUrl}\n\n#OceanJewelry #ShopSmall",
+    instagram: "🎣 NEW GEAR ALERT 🎣\n\nIntroducing our latest: {productName} 🐟\n\n💪 Built for Texas anglers\n🌊 Gulf Coast tested\n📍 Based in McAllen, TX\n\nLink in bio to shop!\n\n#FishingGear #TexasFishing #LaPesqueriaOutfitters #GulfCoast #TightLines #FishingApparel",
+    facebook: "🎣 NEW ARRIVAL 🎣\n\nWe're excited to introduce our newest gear: {productName}!\n\nDesigned for serious anglers who demand quality. Perfect for those early morning trips on the Gulf Coast. 🐟💙\n\n✨ Shop now: {shopUrl}\n\n#FishingLife #TexasAngler",
+    twitter: "🎣 Just dropped: {productName}\n\nBuilt for Texas anglers. Gulf Coast approved 🐟\n\nShop now → {shopUrl}\n\n#FishingGear #TexasFishing",
   },
   sale: {
-    instagram: "🚨 SALE ALERT 🚨\n\n{discountPercent}% OFF everything this weekend! Use code: {discountCode}\n\n🌊 Handcrafted ocean treasures\n🐢 10% still goes to conservation\n🎁 Perfect for gifting\n\nDon't miss out! Link in bio 💙\n\n#Sale #BeachJewelry #SustainableFashion #ShopSmall",
-    facebook: "🎉 {discountPercent}% OFF SALE! 🎉\n\nUse code {discountCode} at checkout!\n\nEvery piece is handcrafted in South Padre Island, and even during our sale, 10% goes to marine conservation. 🐢\n\nShop now: {shopUrl}",
-    twitter: "🚨 {discountPercent}% OFF! Use code: {discountCode}\n\nHandcrafted ocean jewelry + 10% to conservation 🐢🌊\n\nShop: {shopUrl}",
+    instagram: "🚨 SALE ALERT 🚨\n\n{discountPercent}% OFF everything this weekend! Use code: {discountCode}\n\n🎣 Quality fishing gear\n🌊 Gulf Coast tested\n🎁 Perfect for anglers\n\nDon't miss out! Link in bio 💙\n\n#Sale #FishingGear #TexasFishing #TightLines",
+    facebook: "🎉 {discountPercent}% OFF SALE! 🎉\n\nUse code {discountCode} at checkout!\n\nStock up on quality fishing apparel and gear for your next trip. 🎣\n\nShop now: {shopUrl}",
+    twitter: "🚨 {discountPercent}% OFF! Use code: {discountCode}\n\nQuality fishing gear for Texas anglers 🎣🌊\n\nShop: {shopUrl}",
   },
   conservation: {
-    instagram: "🐢 CONSERVATION UPDATE 🌊\n\nThanks to YOU, we've donated ${donationAmount} to marine conservation this month!\n\nEvery bracelet you wear helps protect:\n🐢 Sea turtles\n🐋 Whales\n🪸 Coral reefs\n\nShop with purpose. Link in bio 💙\n\n#MarineConservation #SustainableFashion #OceanLove #ShopWithPurpose",
-    facebook: "🌊 Conservation Impact Update 🌊\n\nThis month, your purchases helped us donate ${donationAmount} to marine conservation in South Padre Island!\n\nThank you for being part of our mission to protect ocean life. Every bracelet makes a difference. 🐢💙\n\nShop: {shopUrl}",
-    twitter: "🌊 Impact Update: ${donationAmount} donated to marine conservation this month!\n\nThank you for shopping with purpose 🐢💙\n\n#MarineConservation #SustainableFashion",
+    instagram: "🐟 FISHING REPORT UPDATE 🌊\n\nThe bite has been HOT! Check out what our community has been catching!\n\nShare your catches with us:\n🎣 Redfish\n🐟 Speckled Trout\n🦈 Shark\n\nTag us in your photos! Link in bio 💙\n\n#TexasFishing #GulfCoastFishing #FishingReport #CatchOfTheDay",
+    facebook: "🌊 Fishing Season Update 🌊\n\nThe Gulf Coast fishing has been incredible this month!\n\nThank you for being part of the La Pesqueria community. We love seeing your catches! 🎣💙\n\nShop: {shopUrl}",
+    twitter: "🌊 Fishing Report: The bite is ON!\n\nShare your Gulf Coast catches with us 🎣💙\n\n#TexasFishing #GulfCoast",
   },
   engagement: {
-    instagram: "📸 PHOTO CONTEST 📸\n\nShow us how you style your Shenna's Studio pieces!\n\n🏆 Winner gets a FREE bracelet\n📌 Tag @shennastudio\n#️⃣ Use #MyShennaStyle\n\nContest ends {endDate}! 🌊\n\n#PhotoContest #BeachStyle #OceanJewelry #Giveaway",
-    facebook: "📸 PHOTO CONTEST! 📸\n\nWe want to see how you rock your Shenna's Studio pieces!\n\nHow to enter:\n1. Post a photo wearing your bracelet\n2. Tag @Shenna's Studio\n3. Use #MyShennaStyle\n\n🏆 Winner receives a FREE bracelet of their choice!\n\nContest ends {endDate}. Good luck! 🌊",
-    twitter: "📸 GIVEAWAY TIME!\n\nShow us your Shenna's Studio style!\n\n1. Follow @shennastudio\n2. RT this post\n3. Tag a friend\n\n🏆 Win a FREE bracelet!\nEnds {endDate} 🌊",
+    instagram: "📸 CATCH OF THE MONTH 📸\n\nShow us your best catches wearing La Pesqueria gear!\n\n🏆 Winner gets FREE fishing shirt\n📌 Tag @lapesqueriaoutfitters\n#️⃣ Use #MyLaPesqueriaStyle\n\nContest ends {endDate}! 🎣\n\n#PhotoContest #FishingLife #TexasFishing #Giveaway",
+    facebook: "📸 CATCH CONTEST! 📸\n\nWe want to see your biggest catches!\n\nHow to enter:\n1. Post a photo of your catch\n2. Tag @La Pesqueria Outfitters\n3. Use #MyLaPesqueriaStyle\n\n🏆 Winner receives FREE fishing apparel!\n\nContest ends {endDate}. Tight lines! 🎣",
+    twitter: "📸 GIVEAWAY TIME!\n\nShow us your best catch!\n\n1. Follow @lapesqueriaoutfitters\n2. RT this post\n3. Tag a fishing buddy\n\n🏆 Win FREE fishing gear!\nEnds {endDate} 🎣",
   },
 };
 
@@ -59,27 +59,27 @@ const MARKETING_TIPS = [
   },
   {
     title: "Use User-Generated Content",
-    description: "Repost customer photos (with permission) - they get 4.5x more engagement than brand posts.",
+    description: "Repost customer catch photos (with permission) - they get 4.5x more engagement than brand posts.",
     icon: Users,
   },
   {
     title: "Story Polls & Questions",
-    description: "Instagram Stories with polls get 2x more DMs. Ask 'Which color should we make next?'",
+    description: "Instagram Stories with polls get 2x more DMs. Ask 'Where are you fishing this weekend?'",
     icon: MessageSquare,
   },
   {
     title: "Behind-the-Scenes Content",
-    description: "Show the crafting process! Authenticity drives 33% more engagement.",
+    description: "Show local fishing spots and gear reviews! Authenticity drives 33% more engagement.",
     icon: Sparkles,
   },
   {
     title: "Limited Edition Drops",
-    description: "Create urgency with 'Only 10 made!' posts. Scarcity increases conversions by 332%.",
+    description: "Create urgency with 'Limited stock!' posts. Scarcity increases conversions by 332%.",
     icon: Zap,
   },
   {
-    title: "Conservation Stories",
-    description: "Share specific impacts: 'This sale helped release 3 sea turtles!' Emotional content gets 2x shares.",
+    title: "Fishing Reports",
+    description: "Share local fishing conditions and catches. Helpful content gets 2x shares.",
     icon: Target,
   },
 ];
@@ -97,12 +97,12 @@ export default function MarketingPage() {
   const [selectedPlatform, setSelectedPlatform] = useState<'instagram' | 'facebook' | 'twitter'>('instagram');
   const [copied, setCopied] = useState(false);
   const [customValues, setCustomValues] = useState({
-    productName: 'Ocean Wave Bracelet',
+    productName: 'Pro Angler Performance Shirt',
     discountPercent: '20',
-    discountCode: 'OCEAN20',
+    discountCode: 'TIGHTLINES20',
     donationAmount: '500',
     endDate: 'Sunday',
-    shopUrl: 'shennastudio.com',
+    shopUrl: 'lapesqueriaoutfitters.com',
   });
   const [analytics, setAnalytics] = useState<{
     totalOrders: number;
@@ -303,7 +303,7 @@ export default function MarketingPage() {
                     id="productName"
                     value={customValues.productName}
                     onChange={(e) => setCustomValues(v => ({ ...v, productName: e.target.value }))}
-                    placeholder="Ocean Wave Bracelet"
+                    placeholder="Pro Angler Performance Shirt"
                   />
                 </div>
               )}
@@ -324,7 +324,7 @@ export default function MarketingPage() {
                       id="discountCode"
                       value={customValues.discountCode}
                       onChange={(e) => setCustomValues(v => ({ ...v, discountCode: e.target.value }))}
-                      placeholder="OCEAN20"
+                      placeholder="TIGHTLINES20"
                     />
                   </div>
                 </>
