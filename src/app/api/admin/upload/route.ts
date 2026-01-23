@@ -1,11 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { put } from '@vercel/blob';
 import sharp from 'sharp';
+import { v2 as cloudinary } from 'cloudinary';
 
-// Support both BLOB_READ_WRITE_TOKEN (Vercel standard) and IMAGES_READ_WRITE_TOKEN (legacy)
-const getBlobToken = () => process.env.BLOB_READ_WRITE_TOKEN || process.env.IMAGES_READ_WRITE_TOKEN;
+// Configure Cloudinary from CLOUDINARY_URL or individual env vars
+const getCloudinaryConfig = () => {
+  const cloudinaryUrl = process.env.CLOUDINARY_URL;
+
+  if (cloudinaryUrl) {
+    // Parse cloudinary://api_key:api_secret@cloud_name format
+    const match = cloudinaryUrl.match(/cloudinary:\/\/(?:([^:]+):([^@]+)@)?(.+)/);
+    if (match) {
+      return {
+        cloud_name: match[3],
+        api_key: match[1] || '',
+        api_secret: match[2] || '',
+      };
+    }
+  }
+
+  return {
+    cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  };
+};
+
+const cloudConfig = getCloudinaryConfig();
+cloudinary.config(cloudConfig);
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,6 +36,13 @@ export async function POST(request: NextRequest) {
 
     if (!session || session.user.role !== 'ADMIN') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    if (!cloudConfig.cloud_name || cloudConfig.cloud_name === 'your-cloud-name') {
+      return NextResponse.json(
+        { error: 'Image upload is not configured. Please configure Cloudinary in environment variables.' },
+        { status: 500 }
+      );
     }
 
     const formData = await request.formData();
@@ -54,30 +84,27 @@ export async function POST(request: NextRequest) {
       })
       .toBuffer();
 
-    // Generate unique filename with .webp extension
-    const timestamp = Date.now();
-    const filename = `${timestamp}-${Math.random().toString(36).substring(7)}.webp`;
-
-    // Check for token
-    const blobToken = getBlobToken();
-    if (!blobToken) {
-      return NextResponse.json(
-        { error: 'Image upload is not configured. Please set BLOB_READ_WRITE_TOKEN in environment variables.' },
-        { status: 500 }
+    // Upload to Cloudinary
+    const uploadResult = await new Promise<{ public_id: string; secure_url: string; width: number; height: number }>((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'lapesqueria/products',
+          resource_type: 'image',
+          transformation: [
+            { quality: 'auto:best', fetch_format: 'auto' }
+          ],
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result!);
+        }
       );
-    }
-
-    // Upload to Vercel Blob
-    const blob = await put(filename, compressedBuffer, {
-      access: 'public',
-      addRandomSuffix: true,
-      contentType: 'image/webp',
-      token: blobToken,
+      uploadStream.end(compressedBuffer);
     });
 
     return NextResponse.json({
-      url: blob.url,
-      filename: filename,
+      url: uploadResult.secure_url,
+      publicId: uploadResult.public_id,
       originalSize: file.size,
       type: 'image/webp',
     });

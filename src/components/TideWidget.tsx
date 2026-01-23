@@ -108,8 +108,11 @@ async function fetchTideData(lat: number, lng: number): Promise<TideData[]> {
     }
 
     // Get tide predictions for the closest station
-    const startDate = new Date().toISOString().split('T')[0];
-    const endDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    // NOAA API requires dates in YYYYMMDD format (no dashes)
+    const now = new Date();
+    const startDate = now.toISOString().split('T')[0].replace(/-/g, '');
+    const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const endDate = tomorrow.toISOString().split('T')[0].replace(/-/g, '');
 
     const tideResponse = await fetch(
       `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=${startDate}&end_date=${endDate}&station=${closestStation.id}&product=predictions&datum=MLLW&time_zone=lst&units=english&format=json`
@@ -166,9 +169,9 @@ async function fetchTideData(lat: number, lng: number): Promise<TideData[]> {
 
 async function fetchMarineData(lat: number, lng: number): Promise<{ weather: WeatherData; bio: BioData; solar: SolarData }> {
   try {
-    // Using Open-Meteo API for free weather and marine data
+    // Using Open-Meteo API for free weather and marine data (with imperial length units for feet)
     const response = await fetch(
-      `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&hourly=wave_height,wave_direction,wave_period&daily=sunrise,sunset&timezone=America%2FChicago`
+      `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&hourly=wave_height,wave_direction,wave_period&daily=sunrise,sunset&timezone=America%2FChicago&length_unit=imperial`
     );
 
     if (!response.ok) {
@@ -177,9 +180,9 @@ async function fetchMarineData(lat: number, lng: number): Promise<{ weather: Wea
 
     const data = await response.json();
 
-    // Get current weather from Open-Meteo
+    // Get current weather from Open-Meteo with imperial units (Fahrenheit, mph)
     const weatherResponse = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,uv_index&current_weather=true&timezone=America%2FChicago`
+      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,uv_index&current_weather=true&timezone=America%2FChicago&temperature_unit=fahrenheit&wind_speed_unit=mph`
     );
 
     let currentWeather: any = {};
@@ -454,7 +457,7 @@ function TidePredictionCard({
                 </span>
               </div>
               <span className="text-white font-bold">
-                {prediction.height.toFixed(1)} m
+                {prediction.height.toFixed(1)} ft
               </span>
             </div>
           ))
@@ -483,7 +486,7 @@ function WeatherCard({
         {weather.waterTemperature && (
           <div className="bg-blue-500/20 rounded-lg p-3 text-center">
             <Droplets className="w-5 h-5 text-blue-300 mx-auto mb-1" />
-            <p className="text-2xl font-black text-white">{weather.waterTemperature.toFixed(1)}°C</p>
+            <p className="text-2xl font-black text-white">{weather.waterTemperature.toFixed(0)}°F</p>
             <p className="text-xs text-blue-200">Water Temp</p>
           </div>
         )}
@@ -491,13 +494,13 @@ function WeatherCard({
           <div className="bg-green-500/20 rounded-lg p-3 text-center">
             <Wind className="w-5 h-5 text-green-300 mx-auto mb-1" />
             <p className="text-2xl font-black text-white">{weather.windSpeed.toFixed(1)}</p>
-            <p className="text-xs text-green-200">Wind (m/s)</p>
+            <p className="text-xs text-green-200">Wind (mph)</p>
           </div>
         )}
         {weather.waveHeight && (
           <div className="bg-cyan-500/20 rounded-lg p-3 text-center">
             <Waves className="w-5 h-5 text-cyan-300 mx-auto mb-1" />
-            <p className="text-2xl font-black text-white">{weather.waveHeight.toFixed(1)}m</p>
+            <p className="text-2xl font-black text-white">{weather.waveHeight.toFixed(1)} ft</p>
             <p className="text-xs text-cyan-200">Wave Height</p>
           </div>
         )}
