@@ -25,6 +25,8 @@ export default function Header() {
   const { state: cart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showMiniCart, setShowMiniCart] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
+  const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const [settings, setSettings] = useState<SiteSettings>({
     siteName: "La Pesqueria Outfitters",
     logo: '/images/lapescerialogo.png',
@@ -54,15 +56,66 @@ export default function Header() {
     setIsMenuOpen(false);
   };
 
+  // Mega menu component
+  const MegaMenu = ({ isOpen }: { isOpen: boolean }) => (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+          transition={{ duration: 0.2, ease: "easeOut" }}
+          className="absolute top-full left-0 w-screen bg-white shadow-2xl border-t-4 border-teal-600 z-50"
+        >
+          <div className="max-w-7xl mx-auto p-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              {productCategories.map((category, index) => (
+                <motion.div
+                  key={category.name}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Link
+                    href={category.href}
+                    className="group block text-center p-4 rounded-xl hover:bg-gradient-to-br hover:from-teal-50 hover:to-cyan-50 transition-all duration-300 border border-transparent hover:border-teal-200 hover:shadow-lg"
+                    onClick={() => setIsMegaMenuOpen(false)}
+                  >
+                    <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                      {category.icon}
+                    </div>
+                    <h3 className="font-bold text-gray-900 group-hover:text-teal-600 transition-colors duration-300 text-lg mb-2">
+                      {category.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors leading-relaxed">
+                      {category.description}
+                    </p>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
   const navLinks = [
     { name: 'Home', href: '/' },
-    { name: 'Products', href: '/products' },
-    { name: 'Apparel', href: '/tshirts' },
-    { name: 'Hats', href: '/products?category=hats' },
-    { name: 'Gear', href: '/products?category=gear' },
+    { name: 'Products', href: '/products', hasMegaMenu: true },
     { name: 'Blog', href: '/blog' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
+  ];
+
+  const productCategories = [
+    { name: 'All Products', href: '/products', icon: '🎣', description: 'Browse our complete collection' },
+    { name: 'T-Shirts', href: '/tshirts', icon: '👕', description: 'Performance fishing shirts' },
+    { name: 'Performance', href: '/products?category=performance-shirts', icon: '🏃', description: 'High-performance apparel' },
+    { name: 'Hats', href: '/products?category=hats', icon: '🧢', description: 'Sun protection and style' },
+    { name: 'Hoodies', href: '/products?category=hoodies', icon: '🧥', description: 'Comfortable fishing hoodies' },
   ];
 
   return (
@@ -93,23 +146,49 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-5 lg:space-x-7 xl:space-x-10">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={cn(
-                  "relative py-2 text-gray-700 hover:text-teal-600 transition-colors font-semibold tracking-wide group",
-                  pathname === link.href && "text-teal-600"
+              <div key={link.name} className="relative">
+                <Link
+                  href={link.hasMegaMenu ? '#' : link.href}
+                  className={cn(
+                    "relative py-2 text-gray-700 hover:text-teal-600 transition-colors font-semibold tracking-wide group cursor-pointer",
+                    pathname === link.href && "text-teal-600"
+                  )}
+                  onMouseEnter={() => link.hasMegaMenu && setIsMegaMenuOpen(true)}
+                  onMouseLeave={() => {
+                    // Delay closing to allow mouse movement to mega menu
+                    setTimeout(() => setIsMegaMenuOpen(false), 150);
+                  }}
+                  onClick={(e) => {
+                    if (link.hasMegaMenu) {
+                      e.preventDefault();
+                      setIsMegaMenuOpen(!isMegaMenuOpen);
+                    }
+                  }}
+                >
+                  {link.name}
+                  {pathname === link.href && (
+                    <motion.div
+                      layoutId="nav-underline"
+                      className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600"
+                    />
+                  )}
+                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                  {link.hasMegaMenu && (
+                    <span className="ml-1 text-xs opacity-70 group-hover:opacity-100 transition-opacity">
+                      ▼
+                    </span>
+                  )}
+                </Link>
+                {link.hasMegaMenu && (
+                  <div
+                    onMouseEnter={() => setIsMegaMenuOpen(true)}
+                    onMouseLeave={() => setIsMegaMenuOpen(false)}
+                    className="absolute top-full left-1/2 transform -translate-x-1/2"
+                  >
+                    <MegaMenu isOpen={isMegaMenuOpen} />
+                  </div>
                 )}
-              >
-                {link.name}
-                {pathname === link.href && (
-                  <motion.div
-                    layoutId="nav-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600"
-                  />
-                )}
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
-              </Link>
+              </div>
             ))}
           </nav>
 
@@ -218,17 +297,68 @@ export default function Header() {
             >
               <nav className="py-4 space-y-1">
                 {navLinks.map((link) => (
-                  <Link
-                    key={link.name}
-                    href={link.href}
-                    className={cn(
-                      "block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded",
-                      pathname === link.href && "text-teal-600 bg-teal-50"
+                  <div key={link.name}>
+                    {link.hasMegaMenu ? (
+                      <div>
+                        <button
+                          onClick={() => setMobileProductsOpen(!mobileProductsOpen)}
+                          className="w-full flex items-center justify-between px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
+                        >
+                          <span>{link.name}</span>
+                          <motion.span
+                            animate={{ rotate: mobileProductsOpen ? 180 : 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="text-lg"
+                          >
+                            ▼
+                          </motion.span>
+                        </button>
+                        <AnimatePresence>
+                          {mobileProductsOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="ml-4 mt-2 space-y-2"
+                            >
+                              {productCategories.map((category, index) => (
+                                <motion.div
+                                  key={category.name}
+                                  initial={{ opacity: 0, x: -20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: index * 0.1, duration: 0.2 }}
+                                >
+                                  <Link
+                                    href={category.href}
+                                    className="flex items-center gap-3 px-4 py-3 text-gray-600 hover:bg-teal-50 hover:text-teal-600 transition-colors rounded-lg border-l-2 border-transparent hover:border-teal-300"
+                                    onClick={closeMobileMenu}
+                                  >
+                                    <span className="text-xl">{category.icon}</span>
+                                    <div>
+                                      <div className="font-medium">{category.name}</div>
+                                      <div className="text-xs text-gray-500">{category.description}</div>
+                                    </div>
+                                  </Link>
+                                </motion.div>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className={cn(
+                          "block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded",
+                          pathname === link.href && "text-teal-600 bg-teal-50"
+                        )}
+                        onClick={closeMobileMenu}
+                      >
+                        {link.name}
+                      </Link>
                     )}
-                    onClick={closeMobileMenu}
-                  >
-                    {link.name}
-                  </Link>
+                  </div>
                 ))}
                 <Link
                   href="/cart"
