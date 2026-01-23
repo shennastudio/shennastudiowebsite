@@ -127,7 +127,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection animation="fadeInDown" className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-white">
-              {category ? category.name : 'Ocean Treasures'}
+               {category ? category.name : 'Fishing Essentials'}
             </h1>
             <p className="text-xl text-cyan-100 max-w-2xl mx-auto mb-8">
               {category 
@@ -306,22 +306,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                       </span>
                     </div>
 
-                    {/* Conservation Info */}
-                    {productDisplay.product.conservationPercentage > 0 && (
-                      <div className="mb-4 p-3 bg-teal-900/20 border border-teal-800/50 rounded-lg">
-                        <div className="flex items-center gap-2 text-sm text-teal-300">
-                          <span>🪼</span>
-                          <span className="font-semibold">
-                            {productDisplay.product.conservationPercentage}% supports conservation
-                          </span>
-                        </div>
-                        {productDisplay.product.conservationFocus && (
-                          <p className="text-xs text-teal-400/80 mt-1 pl-6">
-                            {productDisplay.product.conservationFocus}
-                          </p>
-                        )}
-                      </div>
-                    )}
+
 
                     {/* View Details Button */}
                     <Link
@@ -345,38 +330,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         text="Built for the Catch" 
       />
 
-      {/* Conservation Info Section */}
-      <section className="bg-slate-900 border-t border-slate-800 py-12 relative overflow-hidden">
-        {/* Floating particles */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-16 h-16 rounded-full bg-teal-500 animate-ping" style={{ animationDuration: '4s' }} />
-          <div className="absolute top-1/2 right-20 w-12 h-12 rounded-full bg-cyan-500 animate-ping" style={{ animationDuration: '5s', animationDelay: '1s' }} />
-          <div className="absolute bottom-20 left-1/3 w-8 h-8 rounded-full bg-blue-500 animate-ping" style={{ animationDuration: '6s', animationDelay: '2s' }} />
-        </div>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <AnimatedSection animation="fadeInUp">
-            <div className="flex justify-center items-center gap-3 mb-4">
-              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.1s' }}>🐚</span>
-              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.2s' }}>🪼</span>
-              <h2 className="text-3xl font-bold text-teal-300">
-                Every Purchase Protects Ocean Life
-              </h2>
-              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.3s' }}>🐙</span>
-              <span className="text-3xl animate-bounce" style={{ animationDelay: '0.4s' }}>🐡</span>
-            </div>
-            <p className="text-lg text-slate-300 mb-6">
-              10% of every purchase supports local fishing conservation, marine habitat restoration,
-              and youth angling programs in South Padre Island and Rio Grande Valley.
-            </p>
-            <Link
-              href="/conservation"
-              className="inline-block border-2 border-teal-400 text-teal-400 px-8 py-3 rounded-full font-semibold hover:bg-teal-400 hover:text-slate-900 transition-all transform hover:scale-105"
-            >
-              Learn About Our Conservation Mission
-            </Link>
-          </AnimatedSection>
-        </div>
-      </section>
+
     </div>
   );
 }

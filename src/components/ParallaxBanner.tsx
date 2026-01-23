@@ -34,12 +34,12 @@ function ParallaxBanner({ src, alt, text }: { src: string; alt: string, text?: s
       {/* 2. Fixed Text Layer (Bottom Right) */}
       {text && (
         <div className="absolute bottom-0 right-0 p-6 md:p-12 z-10 pointer-events-none text-right max-w-2xl">
-          <h2 className="text-3xl md:text-5xl font-extrabold uppercase tracking-widest leading-tight
-                         bg-gradient-to-r from-cyan-300 via-blue-500 to-purple-600 
-                         bg-clip-text text-transparent
-                         drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
-            {text}
-          </h2>
+           <h2 className="text-3xl md:text-5xl font-extrabold uppercase tracking-widest leading-tight font-heading
+                          bg-gradient-to-r from-slate-900 via-blue-900 to-orange-600
+                          bg-clip-text text-transparent
+                          drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
+             {text}
+           </h2>
         </div>
       )}
     </div>

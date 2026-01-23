@@ -892,3 +892,46 @@ body:has(.admin-section) {
 .dark .shadow-2xl {
   --tw-shadow-color: rgb(0 0 0 / 0.5);
 }
+
+/* Wave animations for TideWidget */
+@keyframes wave-slow {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes wave-medium {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes wave-fast {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-wave-slow   { animation: wave-slow   40s linear infinite; }
+.animate-wave-medium { animation: wave-medium 28s linear infinite reverse; }
+.animate-wave-fast   { animation: wave-fast   18s linear infinite; }
+
+/* Fish swimming animations */
+@keyframes swim-slow {
+  0%   { transform: translateX(0) translateY(0); }
+  50%  { transform: translateX(120vw) translateY(-20px); }
+  100% { transform: translateX(120vw) translateY(0); }
+}
+
+@keyframes swim-medium {
+  0%   { transform: translateX(0) translateY(0); }
+  50%  { transform: translateX(130vw) translateY(15px); }
+  100% { transform: translateX(130vw) translateY(0); }
+}
+
+@keyframes swim-slow-reverse {
+  0%   { transform: translateX(0) translateY(0) scaleX(-1); }
+  50%  { transform: translateX(-120vw) translateY(-10px) scaleX(-1); }
+  100% { transform: translateX(-120vw) translateY(0) scaleX(-1); }
+}
+
+.animate-swim-slow        { animation: swim-slow        60s linear infinite; }
+.animate-swim-medium      { animation: swim-medium      45s linear infinite; }
+.animate-swim-slow-reverse{ animation: swim-slow-reverse 55s linear infinite; }

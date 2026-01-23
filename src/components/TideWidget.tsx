@@ -1,1560 +1,325 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+// import { useTranslations } from 'next-intl'; // Not available, using direct strings
+import axios from 'axios';
+// import SunCalc from 'suncalc'; // Not available, using simplified calculations
 import {
-  Sun,
-  Moon,
-  ArrowUp,
-  ArrowDown,
-  Waves,
-  Wind,
-  Thermometer,
-  Droplets,
-  Eye,
-  Activity,
-  Camera,
-  MapPin,
-  Clock,
-  Compass,
-  Navigation,
-  CloudSun,
-  Gauge,
-  Fish
+  Waves, Wind, Thermometer, Moon, RefreshCw, Anchor, MapPin, Calendar, BookOpen
 } from 'lucide-react';
 
-const LOCATIONS = {
-  southPadre: {
-    lat: 26.07310,
-    lng: -97.16750,
-    name: 'South Padre Island',
-    stationId: '8779748' // NOAA tide station ID
-  },
-  portMansfield: {
-    lat: 26.5594,
-    lng: -97.4258,
-    name: 'Port Mansfield',
-    stationId: '8778490' // NOAA tide station ID
-  }
-};
-
-// Free webcam feeds for South Padre Island
-const WEBCAMS = [
-  {
-    id: 'spi-causeway',
-    name: 'Queen Isabella Causeway',
-    location: 'Causeway Bridge',
-    url: 'https://visitsouthpadreisland.com/live-webcams/queen-isabella-causeway/',
-    embedUrl: 'https://visitsouthpadreisland.com/live-webcams/queen-isabella-causeway/',
-    thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80'
-  },
-  {
-    id: 'spi-beach',
-    name: 'South Padre Beach',
-    location: 'Beach View',
-    url: 'https://visitsouthpadreisland.com/live-webcams/',
-    embedUrl: 'https://visitsouthpadreisland.com/live-webcams/',
-    thumbnail: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80'
-  },
-  {
-    id: 'spi-dolphin',
-    name: 'Dolphin Cam',
-    location: 'Marina View',
-    url: 'https://visitsouthpadreisland.com/live-webcams/',
-    embedUrl: 'https://visitsouthpadreisland.com/live-webcams/',
-    thumbnail: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&q=80'
-  }
-];
-
-interface TideData {
-  time: string;
-  height: number;
-  type: 'high' | 'low';
+interface TideData { time: string; height: number; type: 'high' | 'low'; }
+interface SolunarPeriod { type: 'Major' | 'Minor'; start: string; end: string; }
+interface WidgetData {
+  todayTides: TideData[];
+  tomorrowTides: TideData[];
+  dailyTides: Record<string, TideData[]>;
+  currentTide: number;
+  weather: { temp: number; windSpeed: number; windDir: number; precip: number; };
+  marine: { waveHeight: number; currentSpeed: number; waterTemp: number; };
+  astro: { sunrise: string; sunset: string; moonPhase: string; };
+  solunar: SolunarPeriod[];
 }
 
-interface WeatherData {
-  waterTemperature?: number;
-  windSpeed?: number;
-  windDirection?: number;
-  waveHeight?: number;
-  wavePeriod?: number;
-  airTemperature?: number;
-  humidity?: number;
-  visibility?: number;
-  pressure?: number;
-  precipitation?: number;
-  cloudCover?: number;
-  uvIndex?: number;
-  dewPoint?: number;
-  feelsLike?: number;
-  waveDirection?: number;
-}
+const CACHE_KEY = 'tideWidgetData';
+const CACHE_EXPIRY = 5 * 60 * 1000;
 
-interface FishingConditions {
-  overallRating: 'excellent' | 'good' | 'fair' | 'poor';
-  bestTimes: string[];
-  species: string[];
-  techniques: string[];
-  warnings: string[];
-  moonPhase: string;
-  solunarPeriods: Array<{
-    start: string;
-    end: string;
-    type: 'major' | 'minor';
-  }>;
-}
+export default function TideWidget() {
+  // const t = useTranslations('tideWidget'); // Not available
+  const [data, setData] = useState<WidgetData | null>(null);
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('now');
 
-interface BioData {
-  chlorophyll?: number;
-  oxygen?: number;
-  ph?: number;
-  phytoplankton?: number;
-  salinity?: number;
-}
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => setLocation({ lat: 25.9017, lng: -97.4975 })
+    );
+  }, []);
 
-interface AstronomyData {
-  sunrise?: string;
-  sunset?: string;
-  moonrise?: string;
-  moonset?: string;
-  moonPhase?: {
-    current: { text: string; value: number };
-    closest: { text: string; time: string; value: number };
-  };
-  moonFraction?: number;
-}
+  const fetchData = async (force = false) => {
+    if (!location) return;
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached && !force) {
+      const { data: cachedData, timestamp } = JSON.parse(cached);
+      if (Date.now() - timestamp < CACHE_EXPIRY) {
+        setData(cachedData);
+        setLoading(false);
+        return;
+      }
+    }
 
-interface SolarData {
-  uvIndex?: number;
-  solarRadiation?: number;
-  cloudCover?: number;
-}
+    setLoading(true);
+    try {
+      const today = new Date();
+      const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
+      const endDate = new Date(today); endDate.setDate(today.getDate() + 10);
+      const start = today.toISOString().split('T')[0];
+      const end = endDate.toISOString().split('T')[0];
 
-interface ElevationData {
-  elevation?: number;
-}
-
-// FREE API FUNCTIONS - No API keys required!
-
-// Calculate fishing conditions based on weather and tide data
-function calculateFishingConditions(
-  weather: WeatherData,
-  tides: TideData[],
-  astronomy: AstronomyData
-): FishingConditions {
-  const now = new Date();
-  const currentHour = now.getHours();
-
-  // Determine overall rating based on multiple factors
-  let rating: 'excellent' | 'good' | 'fair' | 'poor' = 'fair';
-  let score = 0;
-
-  // Weather factors
-  if (weather.windSpeed && weather.windSpeed < 10) score += 25; // Calm winds
-  if (weather.precipitation === 0) score += 20; // No rain
-  if (weather.visibility && weather.visibility > 5) score += 15; // Good visibility
-  if (weather.uvIndex && weather.uvIndex < 8) score += 10; // Safe UV
-  if (weather.cloudCover && weather.cloudCover < 70) score += 10; // Partly cloudy
-  if (weather.waveHeight && weather.waveHeight < 2) score += 10; // Calm seas
-
-  // Tide factors
-  const upcomingTides = tides.filter(tide =>
-    new Date(tide.time) > now && new Date(tide.time) < new Date(now.getTime() + 24 * 60 * 60 * 1000)
-  );
-  if (upcomingTides.length > 0) score += 10; // Tide data available
-
-  if (score >= 80) rating = 'excellent';
-  else if (score >= 60) rating = 'good';
-  else if (score >= 40) rating = 'fair';
-  else rating = 'poor';
-
-  // Best fishing times (dawn, dusk, tide changes)
-  const bestTimes = [];
-  if (astronomy.sunrise) {
-    const sunrise = new Date(astronomy.sunrise);
-    bestTimes.push(`${sunrise.getHours() - 1}:00 - ${sunrise.getHours() + 1}:00 (Dawn)`);
-  }
-  if (astronomy.sunset) {
-    const sunset = new Date(astronomy.sunset);
-    bestTimes.push(`${sunset.getHours() - 1}:00 - ${sunset.getHours() + 1}:00 (Dusk)`);
-  }
-
-  // Tide change times
-  upcomingTides.slice(0, 2).forEach(tide => {
-    const tideTime = new Date(tide.time);
-    bestTimes.push(`${tideTime.getHours()}:00 (${tide.type} tide)`);
-  });
-
-  // Recommended species and techniques
-  const species = ['Redfish', 'Speckled Trout', 'Flounder', 'Black Drum', 'Snook'];
-  const techniques = ['Live bait fishing', 'Topwater lures', 'Bottom fishing', 'Fly fishing', 'Casting from shore'];
-
-  // Generate warnings
-  const warnings = [];
-  if (weather.windSpeed && weather.windSpeed > 20) {
-    warnings.push('High winds - difficult fishing conditions');
-  }
-  if (weather.precipitation && weather.precipitation > 0) {
-    warnings.push('Rain expected - may affect fishing');
-  }
-  if (weather.uvIndex && weather.uvIndex > 8) {
-    warnings.push('High UV index - wear sun protection');
-  }
-
-  // Moon phase
-  const moonPhase = astronomy.moonPhase?.current?.text || 'Unknown';
-
-  // Solunar periods (simplified - major feeding times)
-  const solunarPeriods = [
-    { start: '06:00', end: '08:00', type: 'major' as const },
-    { start: '18:00', end: '20:00', type: 'major' as const },
-    { start: '00:00', end: '02:00', type: 'minor' as const },
-    { start: '12:00', end: '14:00', type: 'minor' as const },
-  ];
-
-  return {
-    overallRating: rating,
-    bestTimes,
-    species,
-    techniques,
-    warnings,
-    moonPhase,
-    solunarPeriods,
-  };
-}
-
-async function fetchTideData(lat: number, lng: number, stationId?: string): Promise<TideData[]> {
-  try {
-    // If we have a specific station ID, use it directly (more reliable)
-    if (stationId) {
-      const now = new Date();
-      const startDate = now.toISOString().split('T')[0].replace(/-/g, '');
-      const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      const endDate = tomorrow.toISOString().split('T')[0].replace(/-/g, '');
-
-      const tideResponse = await fetch(
-        `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=${startDate}&end_date=${endDate}&station=${stationId}&product=predictions&datum=MLLW&time_zone=lst&units=english&format=json`
+      // Tide extremes for 10 days
+      const extremesRes = await axios.get(
+        `https://api.stormglass.io/v2/tide/extremes/point?lat=${location.lat}&lng=${location.lng}&start=${start}&end=${end}`,
+        { headers: { Authorization: process.env.STORMGLASS_API_KEY! } }
       );
+      const allExtremes = extremesRes.data.extremes || [];
+      const dailyTides: Record<string, TideData[]> = {};
+      allExtremes.forEach((e: any) => {
+        const dateKey = new Date(e.time).toISOString().split('T')[0];
+        if (!dailyTides[dateKey]) dailyTides[dateKey] = [];
+        dailyTides[dateKey].push({ time: e.time, height: e.height, type: e.type });
+        dailyTides[dateKey].sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+      });
+      const todayTides = dailyTides[start] || [];
+      const tomorrowTides = dailyTides[tomorrow.toISOString().split('T')[0]] || [];
 
-      if (!tideResponse.ok) {
-        throw new Error('Failed to fetch tide predictions');
-      }
-
-      const tideData = await tideResponse.json();
-      const predictions = tideData.predictions || [];
-      const tideExtremes: TideData[] = [];
-      let lastType: 'high' | 'low' | null = null;
-
-      for (let i = 1; i < predictions.length - 1; i++) {
-        const prev = predictions[i - 1];
-        const current = predictions[i];
-        const next = predictions[i + 1];
-        const prevHeight = parseFloat(prev.v);
-        const currentHeight = parseFloat(current.v);
-        const nextHeight = parseFloat(next.v);
-
-        if ((currentHeight > prevHeight && currentHeight > nextHeight) ||
-            (currentHeight < prevHeight && currentHeight < nextHeight)) {
-          const type = currentHeight > prevHeight ? 'high' : 'low';
-
-          if (type !== lastType) {
-            tideExtremes.push({
-              time: current.t,
-              height: currentHeight,
-              type
-            });
-          }
-          lastType = type;
-        }
-      }
-
-      return tideExtremes.slice(0, 4);
-    }
-
-    // Fallback: Find closest station if no specific station ID provided
-    const stationResponse = await fetch(
-      `https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json?type=tidepredictions&units=english`
-    );
-
-    if (!stationResponse.ok) {
-      throw new Error('Failed to fetch tide stations');
-    }
-
-    const stationsData = await stationResponse.json();
-    const stations = stationsData.stations || [];
-    let closestStation = null;
-    let minDistance = Infinity;
-
-    for (const station of stations) {
-      const distance = Math.sqrt(
-        Math.pow(station.lat - lat, 2) + Math.pow(station.lng - lng, 2)
+      // Weather + marine
+      const stormParams = [
+        'airTemperature', 'windSpeed', 'windDirection', 'precipitation', 'waveHeight', 'wavePeriod', 'waveDirection',
+        'seaLevel', 'sunrise', 'sunset', 'swellHeight', 'swellPeriod', 'swellDirection', 'windWaveHeight', 'windWavePeriod', 'windWaveDirection'
+      ].join(',');
+      const stormRes = await axios.get(
+        `https://api.stormglass.io/v2/weather/point?lat=${location.lat}&lng=${location.lng}&params=${stormParams}`,
+        { headers: { Authorization: process.env.STORMGLASS_API_KEY! } }
       );
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestStation = station;
-      }
-    }
+      const stormHourly = stormRes.data.hours[0] || {};
 
-    if (!closestStation) {
-      throw new Error('No tide station found');
-    }
+      // Moon phase
+      const moonRes = await fetch(`https://aa.usno.navy.mil/api/moon/phases/date?date=${start}&nump=1`);
+      const moonData = await moonRes.json();
+      const moonPhase = moonData.phasedata[0]?.phasename || 'Unknown';
 
-    const now = new Date();
-    const startDate = now.toISOString().split('T')[0].replace(/-/g, '');
-    const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
-    const endDate = tomorrow.toISOString().split('T')[0].replace(/-/g, '');
+      // Solunar - simplified without SunCalc
+      const solunar: SolunarPeriod[] = [
+        { type: 'Major' as const, start: '06:00', end: '08:00' },
+        { type: 'Major' as const, start: '18:00', end: '20:00' },
+        { type: 'Minor' as const, start: '00:00', end: '02:00' },
+        { type: 'Minor' as const, start: '12:00', end: '14:00' },
+      ];
 
-    const tideResponse = await fetch(
-      `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=${startDate}&end_date=${endDate}&station=${closestStation.id}&product=predictions&datum=MLLW&time_zone=lst&units=english&format=json`
-    );
-
-    if (!tideResponse.ok) {
-      throw new Error('Failed to fetch tide predictions');
-    }
-
-    const tideData = await tideResponse.json();
-    const predictions = tideData.predictions || [];
-    const tideExtremes: TideData[] = [];
-    let lastType: 'high' | 'low' | null = null;
-
-    for (let i = 1; i < predictions.length - 1; i++) {
-      const current = predictions[i];
-      const prev = predictions[i - 1];
-      const next = predictions[i + 1];
-
-      const currentHeight = parseFloat(current.v);
-      const prevHeight = parseFloat(prev.v);
-      const nextHeight = parseFloat(next.v);
-
-      if ((currentHeight > prevHeight && currentHeight > nextHeight) ||
-          (currentHeight < prevHeight && currentHeight < nextHeight)) {
-        const type = currentHeight > prevHeight ? 'high' : 'low';
-
-        if (type !== lastType) {
-          tideExtremes.push({
-            time: current.t,
-            height: currentHeight,
-            type: type
-          });
-          lastType = type;
-        }
-      }
-    }
-
-    return tideExtremes.slice(0, 4);
-  } catch (error) {
-    console.error('Error fetching tide data:', error);
-    return [
-      { time: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), height: 1.2, type: 'high' as const },
-      { time: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString(), height: 0.3, type: 'low' as const },
-      { time: new Date(Date.now() + 14 * 60 * 60 * 1000).toISOString(), height: 1.4, type: 'high' as const },
-      { time: new Date(Date.now() + 20 * 60 * 60 * 1000).toISOString(), height: 0.2, type: 'low' as const },
-    ];
-  }
-}
-
-async function fetchMarineData(lat: number, lng: number): Promise<{ weather: WeatherData; bio: BioData; solar: SolarData }> {
-  try {
-    const response = await fetch(
-      `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&hourly=wave_height,wave_direction,wave_period&daily=sunrise,sunset&timezone=America%2FChicago&length_unit=imperial`
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch marine data');
-    }
-
-    const data = await response.json();
-
-    const weatherResponse = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,uv_index&current_weather=true&timezone=America%2FChicago&temperature_unit=fahrenheit&wind_speed_unit=mph`
-    );
-
-    let currentWeather: any = {};
-    if (weatherResponse.ok) {
-      const weatherData = await weatherResponse.json();
-      currentWeather = weatherData.current_weather || {};
-    }
-
-      const weather: WeatherData = {
-        waterTemperature: currentWeather.temperature || 75,
-        windSpeed: currentWeather.windspeed || 8,
-        windDirection: currentWeather.winddirection || 180,
-        waveHeight: data.hourly?.wave_height?.[0] || 1.2,
-        wavePeriod: data.hourly?.wave_period?.[0] || 6,
-        waveDirection: data.hourly?.wave_direction?.[0] || 180,
-        airTemperature: currentWeather.temperature_2m || 78,
-        humidity: currentWeather.relative_humidity_2m || 65,
-        visibility: 10, // Default good visibility
-        pressure: 1013, // Default standard pressure
-        precipitation: currentWeather.precipitation || 0,
-        cloudCover: currentWeather.cloud_cover || 20,
-        uvIndex: currentWeather.uv_index || 6,
-        dewPoint: 70, // Approximate
-        feelsLike: currentWeather.temperature_2m || 78,
+      const newData: WidgetData = {
+        todayTides,
+        tomorrowTides,
+        dailyTides,
+        currentTide: stormHourly.seaLevel?.sg || 0,
+        weather: { temp: stormHourly.airTemperature?.sg || 0, windSpeed: stormHourly.windSpeed?.sg || 0, windDir: stormHourly.windDirection?.sg || 0, precip: stormHourly.precipitation?.sg || 0 },
+        marine: { waveHeight: stormHourly.waveHeight?.sg || 0, currentSpeed: stormHourly.currentSpeed?.sg || 0, waterTemp: stormHourly.waterTemperature?.sg || 0 },
+        astro: { sunrise: new Date(stormHourly.sunrise * 1000).toLocaleTimeString(), sunset: new Date(stormHourly.sunset * 1000).toLocaleTimeString(), moonPhase },
+        solunar,
       };
 
-    const bio: BioData = {
-      chlorophyll: Math.random() * 2 + 0.5,
-      oxygen: Math.random() * 3 + 7,
-      ph: Math.random() * 0.5 + 7.8,
-      salinity: Math.random() * 5 + 30,
-    };
-
-    const solar: SolarData = {
-      uvIndex: Math.floor(Math.random() * 11),
-      solarRadiation: Math.random() * 800 + 200,
-      cloudCover: Math.floor(Math.random() * 100),
-    };
-
-    return { weather, bio, solar };
-  } catch (error) {
-    console.error('Error fetching marine data:', error);
-    return {
-      weather: {
-        waterTemperature: 74,
-        windSpeed: 8,
-        windDirection: 180,
-        waveHeight: 1.2,
-        waveDirection: 90,
-        wavePeriod: 6,
-      },
-      bio: {
-        chlorophyll: 1.2,
-        oxygen: 8.5,
-        ph: 8.1,
-        salinity: 32,
-      },
-      solar: {
-        uvIndex: 7,
-        solarRadiation: 650,
-        cloudCover: 25,
-      }
-    };
-  }
-}
-
-async function fetchAstronomyData(lat: number, lng: number): Promise<AstronomyData> {
-  try {
-    const response = await fetch(
-      `https://api.sunrise-sunset.org/json?lat=${lat}&lng=${lng}&date=today&formatted=0`
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch astronomy data');
+      setData(newData);
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ data: newData, timestamp: Date.now() }));
+    } catch (err) {
+      setError('Error fetching data');
+    } finally {
+      setLoading(false);
     }
-
-    const data = await response.json();
-
-    const now = new Date();
-    const moonPhases = [
-      'New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous',
-      'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'
-    ];
-    const dayOfMonth = now.getDate();
-    const moonPhase = moonPhases[dayOfMonth % 8];
-
-    return {
-      sunrise: data.results?.sunrise,
-      sunset: data.results?.sunset,
-      moonPhase: {
-        current: { text: moonPhase, value: (dayOfMonth % 8) / 8 },
-        closest: { text: moonPhase, time: now.toISOString(), value: (dayOfMonth % 8) / 8 }
-      },
-      moonFraction: (dayOfMonth % 8) / 8,
-    };
-  } catch (error) {
-    console.error('Error fetching astronomy data:', error);
-    return {
-      sunrise: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-      sunset: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
-      moonPhase: {
-        current: { text: 'Waxing Gibbous', value: 0.75 },
-        closest: { text: 'Full Moon', time: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), value: 0.5 }
-      },
-      moonFraction: 0.75,
-    };
-  }
-}
-
-async function fetchElevationData(lat: number, lng: number): Promise<number> {
-  try {
-    const response = await fetch(
-      `https://api.open-elevation.com/api/v1/lookup?locations=${lat},${lng}`
-    );
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch elevation data');
-    }
-
-    const data = await response.json();
-    return data.results?.[0]?.elevation || 0;
-  } catch (error) {
-    console.error('Error fetching elevation data:', error);
-    return Math.random() * 20 + 5;
-  }
-}
-
-// 3D Animated Sun Component
-function AnimatedSun({ size = 120 }: { size?: number }) {
-  return (
-    <div className="relative" style={{ width: size, height: size }}>
-      {/* Outer glow rings */}
-      <motion.div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(255,200,50,0.3) 0%, transparent 70%)',
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.5, 0.8, 0.5],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-
-      {/* Corona rays */}
-      {[...Array(12)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute"
-          style={{
-            width: 4,
-            height: size * 0.3,
-            background: 'linear-gradient(to top, rgba(255,180,50,0.8), transparent)',
-            left: '50%',
-            top: '50%',
-            transformOrigin: 'center bottom',
-            transform: `translate(-50%, -100%) rotate(${i * 30}deg)`,
-          }}
-          animate={{
-            height: [size * 0.25, size * 0.35, size * 0.25],
-            opacity: [0.6, 1, 0.6],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: i * 0.1,
-          }}
-        />
-      ))}
-
-      {/* Main sun body */}
-      <motion.div
-        className="absolute rounded-full"
-        style={{
-          width: size * 0.5,
-          height: size * 0.5,
-          left: '25%',
-          top: '25%',
-          background: 'radial-gradient(circle at 30% 30%, #FFF5CC, #FFD700 40%, #FFA500 70%, #FF8C00)',
-          boxShadow: `
-            0 0 ${size * 0.2}px rgba(255,200,50,0.8),
-            0 0 ${size * 0.4}px rgba(255,150,50,0.5),
-            0 0 ${size * 0.6}px rgba(255,100,50,0.3),
-            inset -${size * 0.05}px -${size * 0.05}px ${size * 0.1}px rgba(255,100,0,0.5)
-          `,
-        }}
-        animate={{
-          scale: [1, 1.05, 1],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-
-      {/* Sun surface details */}
-      <motion.div
-        className="absolute rounded-full overflow-hidden"
-        style={{
-          width: size * 0.5,
-          height: size * 0.5,
-          left: '25%',
-          top: '25%',
-        }}
-      >
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: size * 0.08,
-              height: size * 0.08,
-              background: 'rgba(255,200,100,0.6)',
-              left: `${20 + Math.random() * 60}%`,
-              top: `${20 + Math.random() * 60}%`,
-              filter: 'blur(2px)',
-            }}
-            animate={{
-              opacity: [0.3, 0.7, 0.3],
-              scale: [1, 1.3, 1],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </motion.div>
-    </div>
-  );
-}
-
-// 3D Animated Moon Component
-function AnimatedMoon({ phase = 0.5, size = 120 }: { phase?: number; size?: number }) {
-  return (
-    <div className="relative" style={{ width: size, height: size }}>
-      {/* Outer glow */}
-      <motion.div
-        className="absolute inset-0 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(200,220,255,0.2) 0%, transparent 70%)',
-        }}
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.3, 0.5, 0.3],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-
-      {/* Main moon body */}
-      <motion.div
-        className="absolute rounded-full overflow-hidden"
-        style={{
-          width: size * 0.7,
-          height: size * 0.7,
-          left: '15%',
-          top: '15%',
-          background: 'linear-gradient(135deg, #E8E8E8 0%, #C0C0C0 50%, #A0A0A0 100%)',
-          boxShadow: `
-            0 0 ${size * 0.15}px rgba(200,220,255,0.5),
-            0 0 ${size * 0.3}px rgba(150,180,220,0.3),
-            inset -${size * 0.08}px -${size * 0.05}px ${size * 0.15}px rgba(0,0,0,0.3)
-          `,
-        }}
-        animate={{
-          rotateY: [0, 5, 0, -5, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        {/* Moon craters */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: size * 0.15,
-            height: size * 0.15,
-            background: 'radial-gradient(circle, rgba(150,150,150,0.8), rgba(100,100,100,0.5))',
-            left: '20%',
-            top: '25%',
-            boxShadow: 'inset 2px 2px 4px rgba(0,0,0,0.3)',
-          }}
-        />
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: size * 0.1,
-            height: size * 0.1,
-            background: 'radial-gradient(circle, rgba(140,140,140,0.8), rgba(90,90,90,0.5))',
-            left: '55%',
-            top: '40%',
-            boxShadow: 'inset 1px 1px 3px rgba(0,0,0,0.3)',
-          }}
-        />
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: size * 0.12,
-            height: size * 0.12,
-            background: 'radial-gradient(circle, rgba(145,145,145,0.8), rgba(95,95,95,0.5))',
-            left: '35%',
-            top: '60%',
-            boxShadow: 'inset 1px 1px 3px rgba(0,0,0,0.3)',
-          }}
-        />
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: size * 0.08,
-            height: size * 0.08,
-            background: 'radial-gradient(circle, rgba(135,135,135,0.8), rgba(85,85,85,0.5))',
-            left: '65%',
-            top: '20%',
-            boxShadow: 'inset 1px 1px 2px rgba(0,0,0,0.3)',
-          }}
-        />
-
-        {/* Phase shadow overlay */}
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(${90 + phase * 180}deg, transparent ${phase * 100}%, rgba(10,15,30,0.95) ${phase * 100}%)`,
-          }}
-        />
-      </motion.div>
-
-      {/* Subtle stars around moon */}
-      {[...Array(8)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full bg-white"
-          style={{
-            width: 2,
-            height: 2,
-            left: `${10 + Math.random() * 80}%`,
-            top: `${10 + Math.random() * 80}%`,
-          }}
-          animate={{
-            opacity: [0, 1, 0],
-            scale: [0.5, 1, 0.5],
-          }}
-          transition={{
-            duration: 2 + Math.random() * 2,
-            repeat: Infinity,
-            delay: Math.random() * 2,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
-
-// Circular Gauge Component (Car Dashboard Style)
-function CircularGauge({
-  value,
-  max,
-  label,
-  unit,
-  color = '#00D4FF',
-  icon: Icon,
-  size = 140
-}: {
-  value: number;
-  max: number;
-  label: string;
-  unit: string;
-  color?: string;
-  icon?: any;
-  size?: number;
-}) {
-  const percentage = Math.min((value / max) * 100, 100);
-  const strokeWidth = size * 0.08;
-  const radius = (size - strokeWidth) / 2 - 10;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference * 0.75;
-
-  return (
-    <div className="relative flex flex-col items-center" style={{ width: size, height: size + 30 }}>
-      <svg width={size} height={size} className="transform -rotate-[135deg]">
-        {/* Background track */}
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke="rgba(255,255,255,0.1)"
-          strokeWidth={strokeWidth}
-          strokeDasharray={`${circumference * 0.75} ${circumference}`}
-          strokeLinecap="round"
-        />
-        {/* Animated value arc */}
-        <motion.circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          fill="none"
-          stroke={color}
-          strokeWidth={strokeWidth}
-          strokeDasharray={`${circumference * 0.75} ${circumference}`}
-          strokeLinecap="round"
-          initial={{ strokeDashoffset: circumference }}
-          animate={{ strokeDashoffset }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          style={{
-            filter: `drop-shadow(0 0 8px ${color})`,
-          }}
-        />
-        {/* Tick marks */}
-        {[...Array(9)].map((_, i) => {
-          const angle = -135 + i * (270 / 8);
-          const rad = (angle * Math.PI) / 180;
-          const innerR = radius - strokeWidth;
-          const outerR = radius + 5;
-          return (
-            <line
-              key={i}
-              x1={size / 2 + innerR * Math.cos(rad)}
-              y1={size / 2 + innerR * Math.sin(rad)}
-              x2={size / 2 + outerR * Math.cos(rad)}
-              y2={size / 2 + outerR * Math.sin(rad)}
-              stroke="rgba(255,255,255,0.3)"
-              strokeWidth={2}
-            />
-          );
-        })}
-      </svg>
-
-      {/* Center content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        {Icon && <Icon className="w-5 h-5 mb-1" style={{ color }} />}
-        <motion.span
-          className="text-2xl font-black text-white"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          {value.toFixed(1)}
-        </motion.span>
-        <span className="text-xs text-slate-400 uppercase tracking-wider">{unit}</span>
-      </div>
-
-      <span className="text-xs text-slate-300 font-medium mt-1 text-center">{label}</span>
-    </div>
-  );
-}
-
-// Live Camera Card Component
-function CameraCard({ camera, isActive, onClick }: { camera: typeof WEBCAMS[0]; isActive: boolean; onClick: () => void }) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={onClick}
-      className={`relative cursor-pointer rounded-xl overflow-hidden border-2 transition-all ${
-        isActive
-          ? 'border-cyan-400 shadow-lg shadow-cyan-400/30'
-          : 'border-white/10 hover:border-white/30'
-      }`}
-    >
-      <div className="aspect-video relative">
-        <img
-          src={camera.thumbnail}
-          alt={camera.name}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-
-        {/* Live indicator */}
-        <div className="absolute top-2 right-2 flex items-center gap-1 bg-red-500/90 px-2 py-0.5 rounded-full">
-          <motion.div
-            className="w-2 h-2 rounded-full bg-white"
-            animate={{ opacity: [1, 0.5, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
-          />
-          <span className="text-[10px] font-bold text-white">LIVE</span>
-        </div>
-
-        {/* Camera info */}
-        <div className="absolute bottom-2 left-2 right-2">
-          <div className="flex items-center gap-1 text-white">
-            <Camera className="w-3 h-3" />
-            <span className="text-xs font-bold">{camera.name}</span>
-          </div>
-          <div className="flex items-center gap-1 text-white/70">
-            <MapPin className="w-2 h-2" />
-            <span className="text-[10px]">{camera.location}</span>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-// Modern Dashboard Frame
-function DashboardFrame({ children, title }: { children: React.ReactNode; title: string }) {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  };
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+    if (location) fetchData();
+    const interval = setInterval(() => fetchData(true), 30000);
+    return () => clearInterval(interval);
+  }, [location]);
+
+  if (loading || error) return <div className="p-8 text-center text-gray-400">{loading ? 'Loading...' : error}</div>;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="relative rounded-3xl overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, #0a0f1a 0%, #111827 50%, #0a1628 100%)',
-        boxShadow: `
-          0 25px 50px -12px rgba(0, 0, 0, 0.8),
-          0 0 0 1px rgba(255,255,255,0.05),
-          inset 0 1px 0 rgba(255,255,255,0.1)
-        `,
-      }}
-    >
-      {/* Ambient glow effects */}
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative mx-auto max-w-4xl w-full px-4 sm:px-6 lg:px-8 my-12">
+      <div className="
+        relative bg-gradient-to-br from-slate-900 to-blue-950 
+        rounded-[3rem] shadow-2xl border-[12px] border-slate-800 border-b-slate-950 
+        overflow-hidden transform perspective-[1400px] rotate-y-[5deg] rotate-x-[4deg] 
+        scale-[0.96] transition-all duration-500 hover:rotate-y-[2deg] hover:rotate-x-[2deg] hover:scale-100
+      ">
+        {/* Waves */}
+        <div className="absolute inset-0 z-0 overflow-hidden opacity-35 pointer-events-none">
+          <div className="wave wave1 absolute bottom-0 left-0 w-[200%] h-[200px] bg-gradient-to-t from-teal-600/60 to-transparent animate-wave-slow"></div>
+          <div className="wave wave2 absolute bottom-0 left-0 w-[200%] h-[180px] bg-gradient-to-t from-cyan-500/50 to-transparent animate-wave-medium"></div>
+          <div className="wave wave3 absolute bottom-0 left-0 w-[200%] h-[160px] bg-gradient-to-t from-blue-400/40 to-transparent animate-wave-fast"></div>
+        </div>
 
-      {/* Header */}
-      <div className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-white/10">
-        <div className="flex items-center gap-4">
-            {/* Logo */}
-            <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center overflow-hidden">
-              <img
-                src="/images/lapescerialogo.png"
-                alt="La Pesqueria Outfitters"
-                className="w-8 h-8 object-contain"
-                onError={(e) => {
-                  // Fallback to text if logo fails to load
-                  const target = e.target as HTMLImageElement;
-                  target.style.display = 'none';
-                  const parent = target.parentElement;
-                  if (parent) {
-                    parent.innerHTML = '<span class="text-white font-bold text-xs">LPO</span>';
-                  }
-                }}
-              />
-            </div>
-
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            className="p-2 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30"
+        {/* Animated Swimming Fish */}
+        <div className="absolute inset-0 z-5 pointer-events-none overflow-hidden">
+          {/* Fish 1 - Slow, mid-depth */}
+          <svg 
+            className="fish absolute w-16 h-10 animate-swim-slow"
+            style={{ top: '30%', left: '-10%' }}
+            viewBox="0 0 100 60"
           >
-            <Waves className="w-6 h-6 text-cyan-400" />
-          </motion.div>
-          <div>
-            <h3 className="text-white font-bold text-lg tracking-wide">{title}</h3>
-            <p className="text-slate-400 text-xs">Real-time marine intelligence</p>
-          </div>
+            <path 
+              d="M 10 30 Q 30 10 50 30 Q 70 50 90 30 L 85 35 Q 70 55 50 35 Q 30 15 10 30 Z"
+              fill="#FFD700" stroke="#DAA520" strokeWidth="2"
+            />
+            <circle cx="20" cy="25" r="4" fill="black" />
+            <polygon points="90,30 100,25 100,35" fill="#DAA520" />
+          </svg>
+
+          {/* Fish 2 - Faster, higher */}
+          <svg 
+            className="fish absolute w-20 h-12 animate-swim-medium"
+            style={{ top: '20%', left: '-15%' }}
+            viewBox="0 0 120 70"
+          >
+            <path 
+              d="M 15 35 Q 40 15 65 35 Q 90 55 115 35 L 110 40 Q 90 60 65 40 Q 40 20 15 35 Z"
+              fill="#FF6347" stroke="#CD5C5C" strokeWidth="3"
+            />
+            <circle cx="25" cy="30" r="5" fill="black" />
+            <polygon points="115,35 125,30 125,40" fill="#CD5C5C" />
+          </svg>
+
+          {/* Fish 3 - Slow, lower, reverse direction */}
+          <svg 
+            className="fish absolute w-14 h-9 animate-swim-slow-reverse"
+            style={{ top: '60%', left: '110%' }}
+            viewBox="0 0 90 50"
+          >
+            <path 
+              d="M 80 25 Q 60 5 40 25 Q 20 45 0 25 L 5 30 Q 20 50 40 30 Q 60 10 80 25 Z"
+              fill="#87CEEB" stroke="#4682B4" strokeWidth="2"
+            />
+            <circle cx="70" cy="20" r="4" fill="black" />
+            <polygon points="0,25  -10,20 -10,30" fill="#4682B4" />
+          </svg>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 text-slate-300">
-            <Clock className="w-4 h-4" />
-            <span className="font-mono text-sm">
-              {currentTime.toLocaleTimeString('en-US', {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true
-              })}
-            </span>
-          </div>
-          <div className="flex gap-1">
-            <div className="w-3 h-3 rounded-full bg-red-500 shadow-lg shadow-red-500/50" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500 shadow-lg shadow-yellow-500/50" />
-            <div className="w-3 h-3 rounded-full bg-green-500 shadow-lg shadow-green-500/50" />
-          </div>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 p-6">
-        {children}
-      </div>
-    </motion.div>
-  );
-}
-
-// Modern Tide Card with Wave Animation
-function TidePredictionCard({ title, predictions }: { title: string; predictions: TideData[] }) {
-  const now = new Date();
-  const upcoming = predictions.filter(p => new Date(p.time) >= now).slice(0, 4);
-
-  return (
-    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-xl">
-      {/* Animated wave background */}
-      <div className="absolute inset-0 overflow-hidden opacity-20">
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-20"
-          style={{
-            background: 'linear-gradient(to top, rgba(0,200,255,0.3), transparent)',
-          }}
-          animate={{
-            y: [0, -10, 0],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      </div>
-
-      <div className="relative z-10 p-5">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-500/30">
-            <Waves className="w-5 h-5 text-cyan-400" />
-          </div>
-          <div>
-            <h4 className="text-white font-bold text-sm">{title}</h4>
-            <p className="text-slate-400 text-xs">Tide Predictions</p>
-          </div>
+        {/* Status Bar */}
+        <div className="absolute top-3 inset-x-0 flex justify-between items-center px-8 text-xs text-gray-400 z-20">
+          <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          <span className="flex items-center gap-3">100% • 5G</span>
         </div>
 
-        <div className="space-y-3">
-          {upcoming.length > 0 ? (
-            upcoming.map((prediction, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className={`flex items-center justify-between p-3 rounded-xl ${
-                  prediction.type === 'high'
-                    ? 'bg-emerald-500/10 border border-emerald-500/20'
-                    : 'bg-blue-500/10 border border-blue-500/20'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-1.5 rounded-lg ${
-                    prediction.type === 'high' ? 'bg-emerald-500/20' : 'bg-blue-500/20'
-                  }`}>
-                    {prediction.type === 'high' ? (
-                      <ArrowUp className="w-4 h-4 text-emerald-400" />
-                    ) : (
-                      <ArrowDown className="w-4 h-4 text-blue-400" />
-                    )}
-                  </div>
-                  <div>
-                    <span className="text-white text-sm font-medium">
-                      {prediction.type === 'high' ? 'High Tide' : 'Low Tide'}
-                    </span>
-                    <p className="text-slate-400 text-xs">
-                      {new Date(prediction.time).toLocaleTimeString('en-US', {
-                        hour: 'numeric',
-                        minute: '2-digit',
-                        hour12: true
-                      })}
-                    </p>
+        {/* Logo */}
+        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20">
+          <img src="/logo.png" alt="Fishing Hub" className="w-36 sm:w-44 md:w-52 h-auto drop-shadow-2xl rounded-full bg-gradient-to-br from-blue-600/80 to-teal-600/80 p-3 border-4 border-teal-400/60 hover:scale-105 transition-transform" />
+        </div>
+
+        {/* Refresh */}
+        <button onClick={() => fetchData(true)} className="absolute top-14 right-6 z-20 p-3 bg-teal-600/80 backdrop-blur-md text-white rounded-full hover:bg-teal-500 transition shadow-lg" title="Refresh Now">
+          <RefreshCw className="w-6 h-6" />
+        </button>
+
+        {/* Content */}
+        <div className="pt-32 pb-24 px-6 overflow-y-auto h-[620px] scrollbar-hide">
+          {activeTab === 'now' && (
+            <div className="space-y-6">
+              <div className="text-center"><h2 className="text-3xl font-bold text-white mb-2">Current Conditions</h2><p className="text-teal-300">Brownsville Area • Updated {new Date().toLocaleTimeString()}</p></div>
+              <div className="bg-slate-800/60 backdrop-blur-md rounded-2xl p-6 border border-teal-500/30 shadow-lg flex items-center justify-between">
+                <div><p className="text-lg text-gray-300">Current Tide Level</p><p className="text-4xl font-bold text-white">{data?.currentTide.toFixed(2)} m</p></div>
+                <div className="text-6xl text-green-400">↑</div> {/* Tide direction */}
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <StatCard icon={<Thermometer />} label="Water Temp" value={`${data?.marine.waterTemp}°C`} />
+                <StatCard icon={<Waves />} label="Wave Height" value={`${data?.marine.waveHeight.toFixed(1)} m`} />
+                <StatCard icon={<Wind />} label="Wind" value={`${data?.weather.windSpeed || 0} km/h`} />
+                <StatCard icon={<Moon />} label="Moon Phase" value={data?.astro.moonPhase || 'Unknown'} />
+              </div>
+              <TideList title="Today's Tides" tides={data?.todayTides || []} />
+            </div>
+          )}
+          {activeTab === 'forecast' && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-white text-center">10-Day Forecast</h2>
+              {Object.entries(data?.dailyTides || {}).map(([date, tides]: [string, TideData[]]) => (
+                <div key={date} className="bg-slate-800/60 rounded-2xl p-5 border border-teal-500/20">
+                  <h3 className="text-lg font-semibold text-teal-300 mb-3">{new Date(date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</h3>
+                  <div className="space-y-2">
+                    {tides.map((t, i) => (
+                      <div key={i} className="flex justify-between text-gray-200">
+                        <span className={t.type === 'high' ? 'text-green-400' : 'text-orange-400'}>{t.type.toUpperCase()}</span>
+                        <span>{t.height.toFixed(2)} m • {new Date(t.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <span className={`text-lg font-black ${
-                  prediction.type === 'high' ? 'text-emerald-400' : 'text-blue-400'
-                }`}>
-                  {prediction.height.toFixed(1)} ft
-                </span>
-              </motion.div>
-            ))
-          ) : (
-            <p className="text-slate-400 text-sm text-center py-4">Loading predictions...</p>
+              ))}
+            </div>
           )}
+          {activeTab === 'solunar' && <SolunarTable solunar={data?.solunar || []} />}
+          {activeTab === 'regs' && <RegsSection />}
+          {activeTab === 'spots' && <div className="text-center text-gray-400">Map & Spots Coming Soon</div>}
         </div>
-      </div>
-    </div>
-  );
-}
 
-// Weather Dashboard Card
-function WeatherDashboard({ weather, title }: { weather: WeatherData; title: string }) {
-  return (
-    <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-xl p-5">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg bg-green-500/20 border border-green-500/30">
-          <Wind className="w-5 h-5 text-green-400" />
-        </div>
-        <div>
-          <h4 className="text-white font-bold text-sm">{title}</h4>
-          <p className="text-slate-400 text-xs">Current Conditions</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <CircularGauge
-          value={weather.waterTemperature || 0}
-          max={100}
-          label="Water Temp"
-          unit="°F"
-          color="#00D4FF"
-          icon={Thermometer}
-          size={120}
-        />
-        <CircularGauge
-          value={weather.windSpeed || 0}
-          max={50}
-          label="Wind Speed"
-          unit="mph"
-          color="#10B981"
-          icon={Wind}
-          size={120}
-        />
-        <CircularGauge
-          value={weather.waveHeight || 0}
-          max={10}
-          label="Wave Height"
-          unit="ft"
-          color="#8B5CF6"
-          icon={Waves}
-          size={120}
-        />
-        <CircularGauge
-          value={weather.wavePeriod || 0}
-          max={20}
-          label="Wave Period"
-          unit="sec"
-          color="#F59E0B"
-          icon={Activity}
-          size={120}
-        />
-      </div>
-    </div>
-  );
-}
-
-// Astronomy Panel with 3D Celestial Bodies
-function AstronomyPanel({ astronomy, title = "Celestial Data" }: { astronomy: AstronomyData; title?: string }) {
-  const isNight = new Date().getHours() >= 19 || new Date().getHours() < 6;
-
-  return (
-    <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-xl p-5">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg bg-amber-500/20 border border-amber-500/30">
-          {isNight ? <Moon className="w-5 h-5 text-slate-300" /> : <Sun className="w-5 h-5 text-amber-400" />}
-        </div>
-        <div>
-          <h4 className="text-white font-bold text-sm">{title}</h4>
-          <p className="text-slate-400 text-xs">Sun & Moon Information</p>
-        </div>
-      </div>
-
-      <div className="flex justify-center gap-8 mb-6">
-        <div className="flex flex-col items-center">
-          <AnimatedSun size={100} />
-          <span className="text-xs text-slate-400 mt-2">Sun</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <AnimatedMoon phase={astronomy.moonFraction || 0.5} size={100} />
-          <span className="text-xs text-slate-400 mt-2">{astronomy.moonPhase?.current.text || 'Moon'}</span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <div className="flex items-center gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-          <Sun className="w-4 h-4 text-amber-400" />
-          <div>
-            <p className="text-[10px] text-slate-400 uppercase">Sunrise</p>
-            <p className="text-sm font-bold text-white">
-              {astronomy.sunrise ? new Date(astronomy.sunrise).toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true
-              }) : '--:--'}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 p-3 rounded-xl bg-orange-500/10 border border-orange-500/20">
-          <CloudSun className="w-4 h-4 text-orange-400" />
-          <div>
-            <p className="text-[10px] text-slate-400 uppercase">Sunset</p>
-            <p className="text-sm font-bold text-white">
-              {astronomy.sunset ? new Date(astronomy.sunset).toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true
-              }) : '--:--'}
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 p-3 rounded-xl bg-slate-500/10 border border-slate-500/20 col-span-2">
-          <Moon className="w-4 h-4 text-slate-300" />
-          <div className="flex-1">
-            <p className="text-[10px] text-slate-400 uppercase">Moon Illumination</p>
-            <div className="flex items-center gap-2">
-              <div className="flex-1 h-2 bg-slate-700 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-slate-400 to-white rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${(astronomy.moonFraction || 0) * 100}%` }}
-                  transition={{ duration: 1 }}
-                />
-              </div>
-              <span className="text-sm font-bold text-white">
-                {((astronomy.moonFraction || 0) * 100).toFixed(0)}%
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Fishing Conditions Card Component
-function FishingConditionsCard({
-  conditions,
-  weather,
-  tides,
-  title
-}: {
-  conditions: FishingConditions | null;
-  weather: WeatherData;
-  tides: TideData[];
-  title: string;
-}) {
-  if (!conditions) {
-    return (
-      <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-xl p-5">
-        <h4 className="text-white font-bold text-sm mb-4">{title}</h4>
-        <p className="text-slate-400 text-sm">Loading fishing conditions...</p>
-      </div>
-    );
-  }
-
-  const getRatingColor = (rating: string) => {
-    switch (rating) {
-      case 'excellent': return 'text-emerald-400';
-      case 'good': return 'text-blue-400';
-      case 'fair': return 'text-yellow-400';
-      case 'poor': return 'text-red-400';
-      default: return 'text-slate-400';
-    }
-  };
-
-  const getRatingBg = (rating: string) => {
-    switch (rating) {
-      case 'excellent': return 'bg-emerald-500/20 border-emerald-500/30';
-      case 'good': return 'bg-blue-500/20 border-blue-500/30';
-      case 'fair': return 'bg-yellow-500/20 border-yellow-500/30';
-      case 'poor': return 'bg-red-500/20 border-red-500/30';
-      default: return 'bg-slate-500/20 border-slate-500/30';
-    }
-  };
-
-  return (
-    <div className="rounded-2xl bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-white/10 backdrop-blur-xl p-5">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg bg-cyan-500/20 border border-cyan-500/30">
-          <Fish className="w-5 h-5 text-cyan-400" />
-        </div>
-        <div>
-          <h4 className="text-white font-bold text-sm">{title}</h4>
-          <p className="text-slate-400 text-xs">Fishing Conditions</p>
-        </div>
-      </div>
-
-      {/* Overall Rating */}
-      <div className={`p-4 rounded-xl ${getRatingBg(conditions.overallRating)} border mb-4`}>
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-white text-sm font-medium">Overall Rating</span>
-          <span className={`text-sm font-bold capitalize ${getRatingColor(conditions.overallRating)}`}>
-            {conditions.overallRating}
-          </span>
-        </div>
-        <div className="w-full bg-slate-700 rounded-full h-2">
-          <div
-            className={`h-2 rounded-full transition-all duration-500 ${
-              conditions.overallRating === 'excellent' ? 'bg-emerald-500 w-full' :
-              conditions.overallRating === 'good' ? 'bg-blue-500 w-3/4' :
-              conditions.overallRating === 'fair' ? 'bg-yellow-500 w-1/2' :
-              'bg-red-500 w-1/4'
-            }`}
-          />
-        </div>
-      </div>
-
-      {/* Best Fishing Times */}
-      <div className="mb-4">
-        <h5 className="text-white text-sm font-medium mb-2 flex items-center gap-2">
-          <Clock className="w-4 h-4 text-cyan-400" />
-          Best Fishing Times
-        </h5>
-        <div className="space-y-1">
-          {conditions.bestTimes.slice(0, 3).map((time, index) => (
-            <div key={index} className="text-xs text-slate-300 bg-slate-700/50 px-2 py-1 rounded">
-              {time}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Recommended Species */}
-      <div className="mb-4">
-        <h5 className="text-white text-sm font-medium mb-2 flex items-center gap-2">
-          <Fish className="w-4 h-4 text-cyan-400" />
-          Target Species
-        </h5>
-        <div className="flex flex-wrap gap-1">
-          {conditions.species.slice(0, 4).map((species, index) => (
-            <span key={index} className="text-xs bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded">
-              {species}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Current Conditions */}
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div className="bg-slate-700/50 p-3 rounded-lg">
-          <div className="text-xs text-slate-400">Water Temp</div>
-          <div className="text-sm font-bold text-white">{weather.waterTemperature?.toFixed(1)}°F</div>
-        </div>
-        <div className="bg-slate-700/50 p-3 rounded-lg">
-          <div className="text-xs text-slate-400">Wind Speed</div>
-          <div className="text-sm font-bold text-white">{weather.windSpeed?.toFixed(1)} mph</div>
-        </div>
-        <div className="bg-slate-700/50 p-3 rounded-lg">
-          <div className="text-xs text-slate-400">Wave Height</div>
-          <div className="text-sm font-bold text-white">{weather.waveHeight?.toFixed(1)} ft</div>
-        </div>
-        <div className="bg-slate-700/50 p-3 rounded-lg">
-          <div className="text-xs text-slate-400">Moon Phase</div>
-          <div className="text-sm font-bold text-white">{conditions.moonPhase}</div>
-        </div>
-      </div>
-
-      {/* Warnings */}
-      {conditions.warnings.length > 0 && (
-        <div className="bg-yellow-500/10 border border-yellow-500/20 p-3 rounded-lg">
-          <h5 className="text-yellow-400 text-sm font-medium mb-2">⚠️ Warnings</h5>
-          <ul className="text-xs text-yellow-200 space-y-1">
-            {conditions.warnings.map((warning, index) => (
-              <li key={index}>• {warning}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Main TideWidget Component
-export function TideWidget() {
-  const [southPadreTides, setSouthPadreTides] = useState<TideData[]>([]);
-  const [portMansfieldTides, setPortMansfieldTides] = useState<TideData[]>([]);
-  const [southPadreWeather, setSouthPadreWeather] = useState<WeatherData>({});
-  const [portMansfieldWeather, setPortMansfieldWeather] = useState<WeatherData>({});
-  const [southPadreAstronomy, setSouthPadreAstronomy] = useState<AstronomyData>({});
-  const [portMansfieldAstronomy, setPortMansfieldAstronomy] = useState<AstronomyData>({});
-  const [southPadreConditions, setSouthPadreConditions] = useState<FishingConditions | null>(null);
-  const [portMansfieldConditions, setPortMansfieldConditions] = useState<FishingConditions | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<'overview' | 'tides' | 'weather' | 'conditions' | 'astronomy' | 'cameras'>('overview');
-  const [activeCamera, setActiveCamera] = useState(0);
-
-  useEffect(() => {
-    async function fetchAllData() {
-      try {
-        const [
-          southPadreTidesData,
-          portMansfieldTidesData,
-          southPadreMarineData,
-          portMansfieldMarineData,
-          southPadreAstronomyData,
-          portMansfieldAstronomyData,
-        ] = await Promise.all([
-          fetchTideData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng, LOCATIONS.southPadre.stationId),
-          fetchTideData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng, LOCATIONS.portMansfield.stationId),
-          fetchMarineData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng),
-          fetchMarineData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng),
-          fetchAstronomyData(LOCATIONS.southPadre.lat, LOCATIONS.southPadre.lng),
-          fetchAstronomyData(LOCATIONS.portMansfield.lat, LOCATIONS.portMansfield.lng),
-        ]);
-
-        setSouthPadreTides(southPadreTidesData);
-        setPortMansfieldTides(portMansfieldTidesData);
-        setSouthPadreWeather(southPadreMarineData.weather);
-        setPortMansfieldWeather(portMansfieldMarineData.weather);
-        setSouthPadreAstronomy(southPadreAstronomyData);
-        setPortMansfieldAstronomy(portMansfieldAstronomyData);
-
-        // Calculate fishing conditions
-        const southPadreConditions = calculateFishingConditions(
-          southPadreMarineData.weather,
-          southPadreTidesData,
-          southPadreAstronomyData
-        );
-        const portMansfieldConditions = calculateFishingConditions(
-          portMansfieldMarineData.weather,
-          portMansfieldTidesData,
-          portMansfieldAstronomyData
-        );
-
-        setSouthPadreConditions(southPadreConditions);
-        setPortMansfieldConditions(portMansfieldConditions);
-      } catch (error) {
-        console.error('Error fetching marine data:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchAllData();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-16 h-16 rounded-full border-4 border-cyan-500/30 border-t-cyan-500"
-        />
-      </div>
-    );
-  }
-
-  const tabs = [
-    { key: 'overview', label: 'Overview', icon: Gauge },
-    { key: 'tides', label: 'Tides', icon: Waves },
-    { key: 'weather', label: 'Weather', icon: Wind },
-    { key: 'conditions', label: 'Fishing', icon: Fish },
-    { key: 'astronomy', label: 'Astronomy', icon: Sun },
-    { key: 'cameras', label: 'Live Cams', icon: Camera },
-  ];
-
-  return (
-    <div className="my-8">
-      <DashboardFrame title="Gulf Coast Marine Dashboard">
-        {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-6 p-1 bg-slate-800/50 rounded-xl border border-white/5 overflow-x-auto">
-          {tabs.map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              onClick={() => setActiveTab(key as any)}
-              className={`flex-1 min-w-0 flex items-center justify-center gap-2 py-3 px-4 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
-                activeTab === key
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg shadow-cyan-500/25'
-                  : 'text-slate-400 hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{label}</span>
+        {/* Tab Bar */}
+        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-950 to-transparent flex items-center justify-around border-t border-teal-900/50 z-20">
+          {[
+            { id: 'now', icon: <Anchor className="w-6 h-6" />, label: 'Now' },
+            { id: 'forecast', icon: <Calendar className="w-6 h-6" />, label: 'Forecast' },
+            { id: 'spots', icon: <MapPin className="w-6 h-6" />, label: 'Spots' },
+            { id: 'solunar', icon: <Moon className="w-6 h-6" />, label: 'Solunar' },
+            { id: 'regs', icon: <BookOpen className="w-6 h-6" />, label: 'Regs' },
+          ].map(tab => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex flex-col items-center gap-1 p-2 transition ${activeTab === tab.id ? 'text-teal-400' : 'text-gray-400 hover:text-teal-300'}`}>
+              {tab.icon}
+              <span className="text-xs font-medium">{tab.label}</span>
             </button>
           ))}
         </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* Tab Content */}
-        <AnimatePresence mode="wait">
-          {activeTab === 'overview' && (
-            <motion.div
-              key="overview"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            >
-              <TidePredictionCard title="South Padre Island" predictions={southPadreTides} />
-              <WeatherDashboard weather={southPadreWeather} title="Current Conditions" />
-            </motion.div>
-          )}
+// Helpers
+function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+  return (
+    <div className="bg-slate-800/70 rounded-xl p-4 border border-teal-500/20 text-center shadow-md">
+      <div className="text-teal-400 mb-1">{icon}</div>
+      <p className="text-sm text-gray-300">{label}</p>
+      <p className="text-xl font-bold text-white">{value}</p>
+    </div>
+  );
+}
 
-          {activeTab === 'tides' && (
-            <motion.div
-              key="tides"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              <TidePredictionCard title="South Padre Island" predictions={southPadreTides} />
-              <TidePredictionCard title="Port Mansfield" predictions={portMansfieldTides} />
-            </motion.div>
-          )}
+function TideList({ title, tides }: { title: string; tides: TideData[] }) {
+  return (
+    <div className="bg-slate-800/60 rounded-2xl p-5 border border-teal-500/20">
+      <h3 className="text-lg font-semibold text-teal-300 mb-3">{title}</h3>
+      <div className="space-y-2">
+        {tides.map((t, i) => (
+          <div key={i} className="flex justify-between text-gray-200">
+            <span className={t.type === 'high' ? 'text-green-400' : 'text-orange-400'}>{t.type.toUpperCase()}</span>
+            <span>{t.height.toFixed(2)} m • {new Date(t.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-          {activeTab === 'weather' && (
-            <motion.div
-              key="weather"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
-              <WeatherDashboard weather={southPadreWeather} title="South Padre Island" />
-              <WeatherDashboard weather={portMansfieldWeather} title="Port Mansfield" />
-            </motion.div>
-          )}
+// Simple placeholder components
+function SolunarTable({ solunar }: { solunar: SolunarPeriod[] }) {
+  return (
+    <div className="bg-slate-800/60 rounded-2xl p-5 border border-teal-500/20">
+      <h3 className="text-lg font-semibold text-teal-300 mb-3">Solunar Periods</h3>
+      <div className="space-y-2">
+        {solunar.map((period, i) => (
+          <div key={i} className="flex justify-between text-gray-200">
+            <span className={period.type === 'Major' ? 'text-green-400' : 'text-blue-400'}>
+              {period.type}
+            </span>
+            <span>{period.start} - {period.end}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-          {activeTab === 'conditions' && (
-            <motion.div
-              key="conditions"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="space-y-6"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <FishingConditionsCard
-                  conditions={southPadreConditions}
-                  weather={southPadreWeather}
-                  tides={southPadreTides}
-                  title="South Padre Island"
-                />
-                <FishingConditionsCard
-                  conditions={portMansfieldConditions}
-                  weather={portMansfieldWeather}
-                  tides={portMansfieldTides}
-                  title="Port Mansfield"
-                />
-              </div>
-            </motion.div>
-          )}
-
-          {activeTab === 'astronomy' && (
-            <motion.div
-              key="astronomy"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-6"
-            >
-              <AstronomyPanel astronomy={southPadreAstronomy} title="South Padre Island" />
-              <AstronomyPanel astronomy={portMansfieldAstronomy} title="Port Mansfield" />
-            </motion.div>
-          )}
-
-          {activeTab === 'cameras' && (
-            <motion.div
-              key="cameras"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="space-y-6"
-            >
-              {/* Main camera view */}
-              <div className="relative rounded-2xl overflow-hidden bg-black aspect-video border border-white/10">
-                <iframe
-                  src={WEBCAMS[activeCamera].embedUrl}
-                  className="w-full h-full"
-                  allow="autoplay"
-                  allowFullScreen
-                />
-                <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                  <motion.div
-                    className="w-2 h-2 rounded-full bg-red-500"
-                    animate={{ opacity: [1, 0.5, 1] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                  />
-                  <span className="text-xs font-bold text-white">LIVE</span>
-                  <span className="text-xs text-white/70">{WEBCAMS[activeCamera].name}</span>
-                </div>
-              </div>
-
-              {/* Camera thumbnails */}
-              <div className="grid grid-cols-3 gap-4">
-                {WEBCAMS.map((camera, index) => (
-                  <CameraCard
-                    key={camera.id}
-                    camera={camera}
-                    isActive={activeCamera === index}
-                    onClick={() => setActiveCamera(index)}
-                  />
-                ))}
-              </div>
-
-              <p className="text-xs text-slate-400 text-center">
-                Live webcam feeds from South Padre Island. Click to switch views.
-              </p>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </DashboardFrame>
+function RegsSection() {
+  return (
+    <div className="bg-slate-800/60 rounded-2xl p-5 border border-teal-500/20">
+      <h3 className="text-lg font-semibold text-teal-300 mb-3">Texas Fishing Regulations</h3>
+      <div className="space-y-2 text-gray-200">
+        <p>• Red Drum: 5 per person, 20-28 inch slot</p>
+        <p>• Speckled Trout: 5 per person, 15 inch minimum</p>
+        <p>• Flounder: 5 per person, 12 inch minimum</p>
+        <p>• Check local seasons and limits</p>
+      </div>
     </div>
   );
 }
