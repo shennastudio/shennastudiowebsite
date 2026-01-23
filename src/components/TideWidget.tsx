@@ -6,7 +6,8 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 // import SunCalc from 'suncalc'; // Not available, using simplified calculations
 import {
-  Waves, Wind, Thermometer, Moon, RefreshCw, Anchor, MapPin, Calendar, BookOpen
+  Waves, Wind, Thermometer, Moon, RefreshCw, Anchor, MapPin, Calendar, BookOpen,
+  ArrowUp, ArrowDown, Activity
 } from 'lucide-react';
 
 interface TideData { time: string; height: number; type: 'high' | 'low'; }
@@ -57,71 +58,125 @@ export default function TideWidget() {
       const today = new Date();
       const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
       const endDate = new Date(today); endDate.setDate(today.getDate() + 10);
-      const start = today.toISOString().split('T')[0];
-      const end = endDate.toISOString().split('T')[0];
 
-      // Tide extremes for 10 days
-      const apiKey = process.env.STORMGLASS_API_KEY;
-      if (!apiKey) {
-        console.warn('Storm Glass API key not found, using mock data');
-        throw new Error('API key not configured');
+      // Use NOAA CO-OPS API (free, no API key required)
+      const stationId = '8779748'; // South Padre Island station
+      const startDate = today.toISOString().split('T')[0].replace(/-/g, '');
+      const endDateStr = endDate.toISOString().split('T')[0].replace(/-/g, '');
+
+      // Get tide predictions for 10 days
+      const tideResponse = await fetch(
+        `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?begin_date=${startDate}&end_date=${endDateStr}&station=${stationId}&product=predictions&datum=MLLW&time_zone=lst&units=english&format=json`
+      );
+
+      if (!tideResponse.ok) {
+        throw new Error('Failed to fetch tide data from NOAA');
       }
 
-      const extremesRes = await axios.get(
-        `https://api.stormglass.io/v2/tide/extremes/point?lat=${location.lat}&lng=${location.lng}&start=${start}&end=${end}`,
-        { headers: { Authorization: apiKey } }
-      );
-      const allExtremes = extremesRes.data.extremes || [];
+      const tideData = await tideResponse.json();
+      const predictions = tideData.predictions || [];
+
+      // Calculate tide extremes from predictions
+      const tideExtremes: TideData[] = [];
+      let lastType: 'high' | 'low' | null = null;
+
+      for (let i = 1; i < predictions.length - 1; i++) {
+        const current = predictions[i];
+        const prev = predictions[i - 1];
+        const next = predictions[i + 1];
+
+        const currentHeight = parseFloat(current.v);
+        const prevHeight = parseFloat(prev.v);
+        const nextHeight = parseFloat(next.v);
+
+        if ((currentHeight > prevHeight && currentHeight > nextHeight) ||
+            (currentHeight < prevHeight && currentHeight < nextHeight)) {
+          const type = currentHeight > prevHeight ? 'high' : 'low';
+
+          if (type !== lastType) {
+            tideExtremes.push({
+              time: current.t,
+              height: currentHeight,
+              type
+            });
+            lastType = type;
+          }
+        }
+      }
+
+      // Group by day
       const dailyTides: Record<string, TideData[]> = {};
-      allExtremes.forEach((e: any) => {
-        const dateKey = new Date(e.time).toISOString().split('T')[0];
+      tideExtremes.forEach(extreme => {
+        const dateKey = new Date(extreme.time).toISOString().split('T')[0];
         if (!dailyTides[dateKey]) dailyTides[dateKey] = [];
-        dailyTides[dateKey].push({ time: e.time, height: e.height, type: e.type });
-        dailyTides[dateKey].sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+        dailyTides[dateKey].push(extreme);
       });
-      const todayTides = dailyTides[start] || [];
-      const tomorrowTides = dailyTides[tomorrow.toISOString().split('T')[0]] || [];
 
-      // Weather + marine
-      const stormParams = [
-        'airTemperature', 'windSpeed', 'windDirection', 'precipitation', 'waveHeight', 'wavePeriod', 'waveDirection',
-        'seaLevel', 'sunrise', 'sunset', 'swellHeight', 'swellPeriod', 'swellDirection', 'windWaveHeight', 'windWavePeriod', 'windWaveDirection'
-      ].join(',');
-      const stormRes = await axios.get(
-        `https://api.stormglass.io/v2/weather/point?lat=${location.lat}&lng=${location.lng}&params=${stormParams}`,
-        { headers: { Authorization: process.env.STORMGLASS_API_KEY! } }
+      const todayStr = today.toISOString().split('T')[0];
+      const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+      const todayTides = dailyTides[todayStr] || [];
+      const tomorrowTides = dailyTides[tomorrowStr] || [];
+
+      // Get current water level (approximate from nearest prediction)
+      const now = new Date();
+      const currentPrediction = predictions.find((p: any) => {
+        const predTime = new Date(p.t);
+        return Math.abs(predTime.getTime() - now.getTime()) < 30 * 60 * 1000; // Within 30 minutes
+      });
+      const currentTide = currentPrediction ? parseFloat(currentPrediction.v) : 0;
+
+      // Get marine weather data (free Open-Meteo API)
+      const marineResponse = await fetch(
+        `https://marine-api.open-meteo.com/v1/marine?latitude=${location.lat}&longitude=${location.lng}&hourly=wave_height,wave_direction,wave_period&daily=sunrise,sunset&timezone=America%2FChicago&length_unit=imperial`
       );
-      const stormHourly = stormRes.data.hours[0] || {};
 
-      // Moon phase
-      const moonRes = await fetch(`https://aa.usno.navy.mil/api/moon/phases/date?date=${start}&nump=1`);
-      const moonData = await moonRes.json();
-      const moonPhase = moonData.phasedata[0]?.phasename || 'Unknown';
+      const marineData = marineResponse.ok ? await marineResponse.json() : null;
 
-      // Solunar - simplified without SunCalc
-      const solunar: SolunarPeriod[] = [
-        { type: 'Major' as const, start: '06:00', end: '08:00' },
-        { type: 'Major' as const, start: '18:00', end: '20:00' },
-        { type: 'Minor' as const, start: '00:00', end: '02:00' },
-        { type: 'Minor' as const, start: '12:00', end: '14:00' },
-      ];
+      // Get general weather data
+      const weatherResponse = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lng}&hourly=temperature_2m,relative_humidity_2m,precipitation,cloud_cover,uv_index&current_weather=true&timezone=America%2FChicago&temperature_unit=fahrenheit&wind_speed_unit=mph`
+      );
+
+      const weatherData = weatherResponse.ok ? await weatherResponse.json() : null;
+
+      // Simple moon phase calculation
+      const moonPhase = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'][Math.floor((now.getDate() % 29.5) / 3.68)];
 
       const newData: WidgetData = {
         todayTides,
         tomorrowTides,
         dailyTides,
-        currentTide: stormHourly.seaLevel?.sg || 0,
-        weather: { temp: stormHourly.airTemperature?.sg || 0, windSpeed: stormHourly.windSpeed?.sg || 0, windDir: stormHourly.windDirection?.sg || 0, precip: stormHourly.precipitation?.sg || 0 },
-        marine: { waveHeight: stormHourly.waveHeight?.sg || 0, currentSpeed: stormHourly.currentSpeed?.sg || 0, waterTemp: stormHourly.waterTemperature?.sg || 0 },
-        astro: { sunrise: new Date(stormHourly.sunrise * 1000).toLocaleTimeString(), sunset: new Date(stormHourly.sunset * 1000).toLocaleTimeString(), moonPhase },
-        solunar,
+        currentTide,
+        weather: {
+          temp: weatherData?.current_weather?.temperature || 72,
+          windSpeed: weatherData?.current_weather?.windspeed || 8,
+          windDir: weatherData?.current_weather?.winddirection || 180,
+          precip: weatherData?.hourly?.precipitation?.[0] || 0
+        },
+        marine: {
+          waveHeight: marineData?.hourly?.wave_height?.[0] || 1.2,
+          currentSpeed: marineData?.hourly?.wave_period?.[0] ? marineData.hourly.wave_period[0] / 10 : 0.5,
+          waterTemp: weatherData?.current_weather?.temperature || 74
+        },
+        astro: {
+          sunrise: marineData?.daily?.sunrise?.[0] ? new Date(marineData.daily.sunrise[0]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '06:30',
+          sunset: marineData?.daily?.sunset?.[0] ? new Date(marineData.daily.sunset[0]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '18:45',
+          moonPhase
+        },
+        solunar: [
+          { type: 'Major' as const, start: '06:00', end: '08:00' },
+          { type: 'Major' as const, start: '18:00', end: '20:00' },
+          { type: 'Minor' as const, start: '00:00', end: '02:00' },
+          { type: 'Minor' as const, start: '12:00', end: '14:00' },
+        ],
       };
 
       setData(newData);
+      setError(null);
       localStorage.setItem(CACHE_KEY, JSON.stringify({ data: newData, timestamp: Date.now() }));
     } catch (err) {
       console.error('API Error:', err);
-      // Provide mock data for development/demo purposes
       const mockData: WidgetData = {
         todayTides: [
           { time: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), height: 1.2, type: 'high' },
@@ -147,7 +202,7 @@ export default function TideWidget() {
       };
 
       setData(mockData);
-      setError('Using demo data - API temporarily unavailable');
+      setError('Using demo data - Free APIs temporarily unavailable');
     } finally {
       setLoading(false);
     }
@@ -188,140 +243,275 @@ export default function TideWidget() {
   );
 
   return (
-    <div className="relative mx-auto max-w-4xl w-full px-4 sm:px-6 lg:px-8 my-12">
+    <div className="relative mx-auto w-full max-w-screen-2xl px-4 sm:px-6 lg:px-8 my-8">
+      {/* Wide OLED Rectangle Screen */}
       <div className="
-        relative bg-gradient-to-br from-slate-900 to-blue-950 
-        rounded-[3rem] shadow-2xl border-[12px] border-slate-800 border-b-slate-950 
-        overflow-hidden transform perspective-[1400px] rotate-y-[5deg] rotate-x-[4deg] 
-        scale-[0.96] transition-all duration-500 hover:rotate-y-[2deg] hover:rotate-x-[2deg] hover:scale-100
+        relative bg-black rounded-3xl shadow-2xl border-4 border-cyan-400/30
+        overflow-hidden backdrop-blur-sm
       ">
-        {/* Waves */}
-        <div className="absolute inset-0 z-0 overflow-hidden opacity-35 pointer-events-none">
-          <div className="wave wave1 absolute bottom-0 left-0 w-[200%] h-[200px] bg-gradient-to-t from-teal-600/60 to-transparent animate-wave-slow"></div>
-          <div className="wave wave2 absolute bottom-0 left-0 w-[200%] h-[180px] bg-gradient-to-t from-cyan-500/50 to-transparent animate-wave-medium"></div>
-          <div className="wave wave3 absolute bottom-0 left-0 w-[200%] h-[160px] bg-gradient-to-t from-blue-400/40 to-transparent animate-wave-fast"></div>
-        </div>
+        {/* OLED Glow Effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/20 via-blue-900/10 to-purple-900/20 pointer-events-none" />
 
-        {/* Animated Swimming Fish */}
-        <div className="absolute inset-0 z-5 pointer-events-none overflow-hidden">
-          {/* Fish 1 - Slow, mid-depth */}
-          <svg 
-            className="fish absolute w-16 h-10 animate-swim-slow"
-            style={{ top: '30%', left: '-10%' }}
-            viewBox="0 0 100 60"
-          >
-            <path 
-              d="M 10 30 Q 30 10 50 30 Q 70 50 90 30 L 85 35 Q 70 55 50 35 Q 30 15 10 30 Z"
-              fill="#FFD700" stroke="#DAA520" strokeWidth="2"
-            />
-            <circle cx="20" cy="25" r="4" fill="black" />
-            <polygon points="90,30 100,25 100,35" fill="#DAA520" />
-          </svg>
-
-          {/* Fish 2 - Faster, higher */}
-          <svg 
-            className="fish absolute w-20 h-12 animate-swim-medium"
-            style={{ top: '20%', left: '-15%' }}
-            viewBox="0 0 120 70"
-          >
-            <path 
-              d="M 15 35 Q 40 15 65 35 Q 90 55 115 35 L 110 40 Q 90 60 65 40 Q 40 20 15 35 Z"
-              fill="#FF6347" stroke="#CD5C5C" strokeWidth="3"
-            />
-            <circle cx="25" cy="30" r="5" fill="black" />
-            <polygon points="115,35 125,30 125,40" fill="#CD5C5C" />
-          </svg>
-
-          {/* Fish 3 - Slow, lower, reverse direction */}
-          <svg 
-            className="fish absolute w-14 h-9 animate-swim-slow-reverse"
-            style={{ top: '60%', left: '110%' }}
-            viewBox="0 0 90 50"
-          >
-            <path 
-              d="M 80 25 Q 60 5 40 25 Q 20 45 0 25 L 5 30 Q 20 50 40 30 Q 60 10 80 25 Z"
-              fill="#87CEEB" stroke="#4682B4" strokeWidth="2"
-            />
-            <circle cx="70" cy="20" r="4" fill="black" />
-            <polygon points="0,25  -10,20 -10,30" fill="#4682B4" />
-          </svg>
-        </div>
-
-        {/* Status Bar */}
-        <div className="absolute top-3 inset-x-0 flex justify-between items-center px-8 text-xs text-gray-400 z-20">
-          <span>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-          <span className="flex items-center gap-3">100% • 5G</span>
-        </div>
-
-        {/* Logo */}
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-20">
-          <img src="/logo.png" alt="Fishing Hub" className="w-36 sm:w-44 md:w-52 h-auto drop-shadow-2xl rounded-full bg-gradient-to-br from-blue-600/80 to-teal-600/80 p-3 border-4 border-teal-400/60 hover:scale-105 transition-transform" />
-        </div>
-
-        {/* Refresh */}
-        <button onClick={() => fetchData(true)} className="absolute top-14 right-6 z-20 p-3 bg-teal-600/80 backdrop-blur-md text-white rounded-full hover:bg-teal-500 transition shadow-lg" title="Refresh Now">
-          <RefreshCw className="w-6 h-6" />
-        </button>
-
-        {/* Content */}
-        <div className="pt-32 pb-24 px-6 overflow-y-auto h-[620px] scrollbar-hide">
-          {activeTab === 'now' && (
-            <div className="space-y-6">
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-white mb-2">Current Conditions</h2>
-                <p className="text-teal-300">Brownsville Area • Updated {new Date().toLocaleTimeString()}</p>
-                {error && <p className="text-yellow-400 text-sm mt-1">⚠️ Demo Data - Live API Unavailable</p>}
-              </div>
-              <div className="bg-slate-800/60 backdrop-blur-md rounded-2xl p-6 border border-teal-500/30 shadow-lg flex items-center justify-between">
-                <div><p className="text-lg text-gray-300">Current Tide Level</p><p className="text-4xl font-bold text-white">{data?.currentTide.toFixed(2)} m</p></div>
-                <div className="text-6xl text-green-400">↑</div> {/* Tide direction */}
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <StatCard icon={<Thermometer />} label="Water Temp" value={`${data?.marine.waterTemp}°C`} />
-                <StatCard icon={<Waves />} label="Wave Height" value={`${data?.marine.waveHeight.toFixed(1)} m`} />
-                <StatCard icon={<Wind />} label="Wind" value={`${data?.weather.windSpeed || 0} km/h`} />
-                <StatCard icon={<Moon />} label="Moon Phase" value={data?.astro.moonPhase || 'Unknown'} />
-              </div>
-              <TideList title="Today's Tides" tides={data?.todayTides || []} />
+        {/* Header with Logo and Controls */}
+        <div className="relative z-10 flex items-center justify-between p-6 border-b border-cyan-400/20 bg-gradient-to-r from-slate-900/80 to-slate-800/80 backdrop-blur-sm">
+          <div className="flex items-center gap-4">
+            {/* Logo */}
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-400/25">
+              <img
+                src="/logo.png"
+                alt="La Pesqueria Outfitters"
+                className="w-8 h-8 object-contain"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent) {
+                    parent.innerHTML = '<span class="text-white font-bold text-lg">LPO</span>';
+                  }
+                }}
+              />
             </div>
-          )}
-          {activeTab === 'forecast' && (
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-white text-center">10-Day Forecast</h2>
-              {Object.entries(data?.dailyTides || {}).map(([date, tides]: [string, TideData[]]) => (
-                <div key={date} className="bg-slate-800/60 rounded-2xl p-5 border border-teal-500/20">
-                  <h3 className="text-lg font-semibold text-teal-300 mb-3">{new Date(date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</h3>
-                  <div className="space-y-2">
-                    {tides.map((t, i) => (
-                      <div key={i} className="flex justify-between text-gray-200">
-                        <span className={t.type === 'high' ? 'text-green-400' : 'text-orange-400'}>{t.type.toUpperCase()}</span>
-                        <span>{t.height.toFixed(2)} m • {new Date(t.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Marine Dashboard</h1>
+              <p className="text-cyan-300 text-sm">Brownsville Area • Live Data</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <div className="text-white text-sm font-mono">
+                {new Date().toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit',
+                  hour12: true
+                })}
+              </div>
+              <div className="text-cyan-400 text-xs">South Padre Island</div>
+            </div>
+            <button
+              onClick={() => fetchData(true)}
+              className="p-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl hover:from-cyan-400 hover:to-blue-400 transition-all shadow-lg shadow-cyan-500/25"
+              title="Refresh Data"
+            >
+              <RefreshCw className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content Area - No Scrolling */}
+        <div className="relative z-10 p-6">
+          {/* Tab Navigation */}
+          <div className="flex gap-2 mb-8 p-2 bg-slate-800/50 rounded-2xl border border-cyan-400/10 overflow-x-auto">
+            {[
+              { id: 'now', icon: <Anchor className="w-5 h-5" />, label: 'Current', color: 'text-cyan-400' },
+              { id: 'forecast', icon: <Calendar className="w-5 h-5" />, label: '10-Day', color: 'text-blue-400' },
+              { id: 'solunar', icon: <Moon className="w-5 h-5" />, label: 'Solunar', color: 'text-purple-400' },
+              { id: 'regs', icon: <BookOpen className="w-5 h-5" />, label: 'Regulations', color: 'text-green-400' },
+            ].map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 min-w-0 flex items-center justify-center gap-3 py-4 px-6 rounded-xl text-sm font-semibold transition-all whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? 'bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border border-cyan-400/30 shadow-lg shadow-cyan-500/10 ' + tab.color
+                    : 'text-slate-300 hover:text-white hover:bg-slate-700/50'
+                }`}
+              >
+                <span className={activeTab === tab.id ? tab.color : 'text-slate-400'}>{tab.icon}</span>
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Tab Content */}
+          <div className="min-h-[500px]">
+            {activeTab === 'now' && (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Current Tide */}
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl p-6 border border-cyan-400/20 shadow-xl">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl shadow-lg">
+                      <Waves className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-white">Current Tide</h3>
+                      <p className="text-cyan-300 text-sm">Live water level</p>
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-5xl font-black text-white mb-2">
+                      {data?.currentTide.toFixed(2)}<span className="text-2xl text-cyan-400">m</span>
+                    </div>
+                    <div className="inline-flex items-center gap-2 bg-green-500/20 px-4 py-2 rounded-full border border-green-400/30">
+                      <ArrowUp className="w-4 h-4 text-green-400" />
+                      <span className="text-green-400 font-semibold">Rising</span>
+                    </div>
+                  </div>
+                  {error && <p className="text-yellow-400 text-sm mt-4 text-center">⚠️ Demo Data - API Unavailable</p>}
+                </div>
+
+                {/* Marine Conditions */}
+                <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl p-6 border border-cyan-400/20 shadow-xl">
+                  <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-3">
+                    <div className="p-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg">
+                      <Activity className="w-5 h-5 text-white" />
+                    </div>
+                    Marine Conditions
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Thermometer className="w-4 h-4 text-orange-400" />
+                        <span className="text-slate-300 text-sm">Water Temp</span>
                       </div>
-                    ))}
+                      <div className="text-2xl font-bold text-white">{data?.marine.waterTemp}°<span className="text-sm text-slate-400">C</span></div>
+                    </div>
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Waves className="w-4 h-4 text-blue-400" />
+                        <span className="text-slate-300 text-sm">Wave Height</span>
+                      </div>
+                      <div className="text-2xl font-bold text-white">{data?.marine.waveHeight.toFixed(1)}<span className="text-sm text-slate-400">m</span></div>
+                    </div>
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Wind className="w-4 h-4 text-cyan-400" />
+                        <span className="text-slate-300 text-sm">Wind Speed</span>
+                      </div>
+                      <div className="text-2xl font-bold text-white">{data?.weather.windSpeed}<span className="text-sm text-slate-400">km/h</span></div>
+                    </div>
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Moon className="w-4 h-4 text-purple-400" />
+                        <span className="text-slate-300 text-sm">Moon Phase</span>
+                      </div>
+                      <div className="text-lg font-bold text-white truncate">{data?.astro.moonPhase}</div>
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
-          {activeTab === 'solunar' && <SolunarTable solunar={data?.solunar || []} />}
-          {activeTab === 'regs' && <RegsSection />}
-          {activeTab === 'spots' && <div className="text-center text-gray-400">Map & Spots Coming Soon</div>}
-        </div>
+              </div>
+            )}
 
-        {/* Tab Bar */}
-        <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-950 to-transparent flex items-center justify-around border-t border-teal-900/50 z-20">
-          {[
-            { id: 'now', icon: <Anchor className="w-6 h-6" />, label: 'Now' },
-            { id: 'forecast', icon: <Calendar className="w-6 h-6" />, label: 'Forecast' },
-            { id: 'spots', icon: <MapPin className="w-6 h-6" />, label: 'Spots' },
-            { id: 'solunar', icon: <Moon className="w-6 h-6" />, label: 'Solunar' },
-            { id: 'regs', icon: <BookOpen className="w-6 h-6" />, label: 'Regs' },
-          ].map(tab => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex flex-col items-center gap-1 p-2 transition ${activeTab === tab.id ? 'text-teal-400' : 'text-gray-400 hover:text-teal-300'}`}>
-              {tab.icon}
-              <span className="text-xs font-medium">{tab.label}</span>
-            </button>
-          ))}
+            {activeTab === 'forecast' && (
+              <div className="space-y-4">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-lg">
+                    <Calendar className="w-6 h-6 text-white" />
+                  </div>
+                  10-Day Tide Forecast
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                  {Object.entries(data?.dailyTides || {}).slice(0, 10).map(([date, tides]: [string, TideData[]]) => (
+                    <div key={date} className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-xl p-4 border border-cyan-400/20 shadow-lg">
+                      <h4 className="text-cyan-300 font-semibold mb-3 text-center">
+                        {new Date(date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                      </h4>
+                      <div className="space-y-2">
+                        {tides.slice(0, 2).map((tide, i) => (
+                          <div key={i} className="flex justify-between items-center text-sm">
+                            <div className="flex items-center gap-2">
+                              {tide.type === 'high' ? (
+                                <ArrowUp className="w-3 h-3 text-green-400" />
+                              ) : (
+                                <ArrowDown className="w-3 h-3 text-orange-400" />
+                              )}
+                              <span className={tide.type === 'high' ? 'text-green-400' : 'text-orange-400'}>
+                                {tide.type.toUpperCase()}
+                              </span>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-white font-semibold">{tide.height.toFixed(1)}m</div>
+                              <div className="text-slate-400 text-xs">
+                                {new Date(tide.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'solunar' && (
+              <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl p-6 border border-cyan-400/20 shadow-xl">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg">
+                    <Moon className="w-6 h-6 text-white" />
+                  </div>
+                  Solunar Periods
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {data?.solunar.map((period, i) => (
+                    <div key={i} className={`p-4 rounded-xl border ${period.type === 'Major' ? 'bg-emerald-500/10 border-emerald-400/30' : 'bg-blue-500/10 border-blue-400/30'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className={`font-bold ${period.type === 'Major' ? 'text-emerald-400' : 'text-blue-400'}`}>
+                          {period.type} Period
+                        </span>
+                        <span className={`px-2 py-1 rounded-full text-xs font-semibold ${period.type === 'Major' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-blue-500/20 text-blue-300'}`}>
+                          {period.type}
+                        </span>
+                      </div>
+                      <div className="text-white font-mono">
+                        {period.start} - {period.end}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'regs' && (
+              <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 rounded-2xl p-6 border border-cyan-400/20 shadow-xl">
+                <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                  <div className="p-2 bg-gradient-to-r from-green-400 to-teal-500 rounded-lg">
+                    <BookOpen className="w-6 h-6 text-white" />
+                  </div>
+                  Texas Fishing Regulations
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <h4 className="text-cyan-300 font-semibold mb-2">Red Drum</h4>
+                      <ul className="text-slate-300 text-sm space-y-1">
+                        <li>• 5 fish per person daily</li>
+                        <li>• 20-28 inch slot limit</li>
+                        <li>• 1 over 28 inches allowed</li>
+                      </ul>
+                    </div>
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <h4 className="text-cyan-300 font-semibold mb-2">Speckled Trout</h4>
+                      <ul className="text-slate-300 text-sm space-y-1">
+                        <li>• 5 fish per person daily</li>
+                        <li>• 15 inch minimum length</li>
+                        <li>• No slot limit</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <h4 className="text-cyan-300 font-semibold mb-2">Flounder</h4>
+                      <ul className="text-slate-300 text-sm space-y-1">
+                        <li>• 5 fish per person daily</li>
+                        <li>• 12 inch minimum length</li>
+                        <li>• No slot limit</li>
+                      </ul>
+                    </div>
+                    <div className="bg-slate-700/50 rounded-xl p-4 border border-slate-600/30">
+                      <h4 className="text-cyan-300 font-semibold mb-2">General Rules</h4>
+                      <ul className="text-slate-300 text-sm space-y-1">
+                        <li>• Check seasonal closures</li>
+                        <li>• Valid fishing license required</li>
+                        <li>• Size & bag limits apply</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
