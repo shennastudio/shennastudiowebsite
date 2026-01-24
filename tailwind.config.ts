@@ -61,6 +61,17 @@ const config: Config = {
           "4": "var(--chart-4)",
           "5": "var(--chart-5)",
         },
+        // Luxury Gold Theme - Premium Marine Dashboard
+        gold: {
+          DEFAULT: "#D4AF37",
+          light: "#F5E6CC",
+          dark: "#8B7355",
+        },
+        platinum: "#E5E4E2",
+        "deep-sea": "#000814",
+        "ocean-blue": "#001233",
+        "ocean-cyan": "#00D4FF",
+        "ocean-teal": "#20B2AA",
       },
       borderRadius: {
         lg: "var(--radius)",

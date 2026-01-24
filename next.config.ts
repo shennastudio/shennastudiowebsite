@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 import withMDX from '@next/mdx';
+import withSerwistInit from '@serwist/next';
 // Temporarily disabled: import { withPayload } from "@payloadcms/next/withPayload";
+
+// Serwist PWA configuration
+const withSerwist = withSerwistInit({
+  swSrc: 'src/sw.ts',
+  swDest: 'public/sw.js',
+  cacheOnNavigation: true,
+  reloadOnOnline: true,
+  disable: process.env.NODE_ENV === 'development',
+});
 
 const nextConfig: NextConfig = {
   images: {
@@ -96,4 +106,5 @@ const withMDXConfig = withMDX({
 });
 
 // Temporarily disabled for testing shadcn/ui: export default withPayload(withMDXConfig(nextConfig));
-export default withMDXConfig(nextConfig);
+// Chain: Serwist -> MDX -> Config
+export default withSerwist(withMDXConfig(nextConfig));

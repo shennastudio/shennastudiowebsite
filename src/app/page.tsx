@@ -1,8 +1,24 @@
 'use client'
 
 import { TestimonialSection } from '@/components/TestimonialSection'
-import TideWidget from '@/components/TideWidget'
+import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
+
+// Dynamic import for 3D Dashboard (SSR disabled for Three.js)
+const FishingDashboard3D = dynamic(
+  () => import('@/components/fishing-dashboard/FishingDashboard3D'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-[600px] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full border-4 border-gold/30 border-t-gold animate-spin" style={{ borderTopColor: '#D4AF37' }} />
+          <p className="text-cyan-400 font-semibold">Loading Elite Dashboard</p>
+        </div>
+      </div>
+    ),
+  }
+)
 import { useEffect, useState } from 'react'
 import { Fish, Anchor, ShieldCheck, ArrowRight, Sun, Droplets, Shirt } from 'lucide-react'
 import Image from 'next/image'
@@ -287,11 +303,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Tide Information Widget for Fishermen */}
+      {/* Premium 3D Fishing Dashboard */}
       <section className="py-12 bg-gradient-to-b from-[#001F3F] to-[#0a2a4a]">
-        <div className="max-w-6xl mx-auto px-4">
-          <TideWidget />
-        </div>
+        <FishingDashboard3D />
       </section>
 
       {/* Testimonials */}

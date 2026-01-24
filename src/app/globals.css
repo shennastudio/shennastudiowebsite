@@ -98,6 +98,16 @@
   --border: #E2E8F0;
   --input: #E2E8F0;
   --ring: #FF4500; /* Buoy Orange */
+
+  /* Luxury Gold Theme - Premium Marine Dashboard */
+  --gold: #D4AF37;
+  --gold-light: #F5E6CC;
+  --gold-dark: #8B7355;
+  --platinum: #E5E4E2;
+  --deep-sea: #000814;
+  --ocean-blue: #001233;
+  --ocean-cyan: #00D4FF;
+  --ocean-teal: #20B2AA;
   
   /* Charts */
   --chart-1: oklch(0.49 0.24 265);
