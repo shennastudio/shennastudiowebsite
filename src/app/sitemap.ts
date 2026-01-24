@@ -5,20 +5,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://lapesqueria.com'
 
   // Get all products
-  const products = await prisma.product.findMany({
-    select: { slug: true, updatedAt: true }
-  })
+  let products = []
+  try {
+    products = await prisma.product.findMany({
+      select: { slug: true, updatedAt: true }
+    })
+  } catch (e) {
+    console.warn('Could not fetch products for sitemap (likely during build/migration):', e)
+  }
 
   // Get all blog posts
-  const blogPosts = await prisma.blogPost.findMany({
-    select: { slug: true, updatedAt: true },
-    where: { published: true }
-  })
+  let blogPosts = []
+  try {
+    blogPosts = await prisma.blogPost.findMany({
+      select: { slug: true, updatedAt: true },
+      where: { published: true }
+    })
+  } catch (e) {
+    console.warn('Could not fetch blog posts for sitemap:', e)
+  }
 
   // Get all categories
-  const categories = await prisma.category.findMany({
-    select: { slug: true, updatedAt: true }
-  })
+  let categories = []
+  try {
+    categories = await prisma.category.findMany({
+      select: { slug: true, updatedAt: true }
+    })
+  } catch (e) {
+    console.warn('Could not fetch categories for sitemap:', e)
+  }
 
   const staticPages = [
     {
