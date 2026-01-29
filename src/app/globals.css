@@ -865,3 +865,27 @@ body:has(.admin-section) {
 .dark .shadow-2xl {
   --tw-shadow-color: rgb(0 0 0 / 0.5);
 }
+
+/* ========================================
+   ANIMATION FALLBACKS - Ensure content is visible
+   even before JavaScript hydrates
+   ======================================== */
+
+/* Ensure stagger-child elements are visible by default */
+.stagger-child {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Override for framer-motion to ensure SSR safety */
+[data-framer-motion-initial] {
+  opacity: 1 !important;
+}
+
+/* Mobile-specific: ensure products are visible immediately */
+@media (max-width: 768px) {
+  .stagger-child {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}

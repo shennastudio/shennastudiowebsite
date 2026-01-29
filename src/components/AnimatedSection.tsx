@@ -83,13 +83,15 @@ export default function AnimatedSection({
       whileInView="visible"
       viewport={{ once, amount: threshold }}
       variants={animationVariants[animation]}
-      transition={{ 
-        duration: durationInSeconds, 
+      transition={{
+        duration: durationInSeconds,
         delay: delayInSeconds,
-        ease: "easeOut" 
+        ease: "easeOut"
       }}
       className={className}
-      style={style}
+      // Use style to ensure content is visible by default (SSR safety)
+      // Framer-motion will override this once hydrated
+      style={{ ...style, opacity: 1 }}
     >
       {children}
     </motion.div>
@@ -168,11 +170,20 @@ export function StaggeredChildren({
         This changes the DOM structure slightly (adds a div wrapper), but usually safe.
       */}
       {Array.isArray(children) ? children.map((child, i) => (
-        <motion.div key={i} variants={itemVariants} className={childClassName}>
+        <motion.div
+          key={i}
+          variants={itemVariants}
+          className={childClassName}
+          initial={{ opacity: 1, y: 0 }}
+        >
           {child}
         </motion.div>
       )) : (
-        <motion.div variants={itemVariants} className={childClassName}>
+        <motion.div
+          variants={itemVariants}
+          className={childClassName}
+          initial={{ opacity: 1, y: 0 }}
+        >
           {children}
         </motion.div>
       )}

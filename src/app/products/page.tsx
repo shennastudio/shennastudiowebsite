@@ -6,6 +6,11 @@ import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection
 import { prisma } from '@/lib/prisma';
 import { Tag, Clock, Percent } from 'lucide-react';
 
+// Force dynamic rendering to ensure fresh data on every request
+// This prevents stale/static data issues that require multiple refreshes
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface DiscountCode {
   code: string;
   type: string;
@@ -259,7 +264,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                         src={productDisplay.displayImages[0]}
                         alt={productDisplay.product.name}
                         fill
-                        priority
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                         quality={80}
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
