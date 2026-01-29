@@ -756,13 +756,13 @@ body:has(.admin-section) {
 }
 
 /* Hover states */
-.dark .hover\:bg-gray-50:hover:not(.dark\:hover\:bg-*),
-.dark .hover\:bg-slate-50:hover:not(.dark\:hover\:bg-*) {
+.dark .hover\:bg-gray-50:hover,
+.dark .hover\:bg-slate-50:hover {
   background-color: rgb(51 65 85) !important; /* slate-700 */
 }
 
-.dark .hover\:bg-gray-100:hover:not(.dark\:hover\:bg-*),
-.dark .hover\:bg-slate-100:hover:not(.dark\:hover\:bg-*) {
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-slate-100:hover {
   background-color: rgb(71 85 105) !important; /* slate-600 */
 }
 
