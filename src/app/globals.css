@@ -53,61 +53,60 @@
 
 :root {
   /* ========================================
-     PUBLIC SITE LIGHT MODE THEME
-     WCAG 2.1 AA Compliant
+     GLOBAL DARK MODE THEME
      ======================================== */
-  
+
   /* Radius */
-  --radius: 0.625rem;
-  
-  /* Light Mode Color Palette - Exact Values */
-  --background: #F9FBFC;
-  --foreground: #0F172A;
-  
+  --radius: 0.75rem;
+
+  /* Dark Mode Color Palette */
+  --background: #0B0F14;
+  --foreground: #E6F0F8;
+
   /* Surface / Card */
-  --card: #FFFFFF;
-  --card-foreground: #0F172A;
-  
+  --card: #111827;
+  --card-foreground: #E6F0F8;
+
   /* Popover */
-  --popover: #FFFFFF;
-  --popover-foreground: #0F172A;
-  
+  --popover: #0F172A;
+  --popover-foreground: #E6F0F8;
+
   /* Primary Brand Colors */
-  --primary: #0EA5E9;
-  --primary-foreground: #FFFFFF;
-  --primary-hover: #0284C7;
-  
+  --primary: #22D3EE;
+  --primary-foreground: #0B0F14;
+  --primary-hover: #06B6D4;
+
   /* Secondary Accent */
-  --secondary: #14B8A6;
-  --secondary-foreground: #FFFFFF;
-  
+  --secondary: #8B5CF6;
+  --secondary-foreground: #0B0F14;
+
   /* Text Colors */
-  --muted: #F1F5F9;
-  --muted-foreground: #64748B;
-  --text-secondary: #334155;
-  
+  --muted: #0F172A;
+  --muted-foreground: #94A3B8;
+  --text-secondary: #A3B4C7;
+
   /* Accent */
-  --accent: #F1F5F9;
-  --accent-foreground: #0F172A;
-  
+  --accent: #0B1220;
+  --accent-foreground: #E6F0F8;
+
   /* Destructive / Error / Success */
-  --destructive: #DC2626;
-  --destructive-foreground: #FFFFFF;
-  --success: #16A34A;
-  --success-foreground: #FFFFFF;
-  
+  --destructive: #F43F5E;
+  --destructive-foreground: #0B0F14;
+  --success: #22C55E;
+  --success-foreground: #0B0F14;
+
   /* Border */
-  --border: #E2E8F0;
-  --input: #E2E8F0;
-  --ring: #0EA5E9;
-  
+  --border: rgba(148, 163, 184, 0.2);
+  --input: rgba(148, 163, 184, 0.25);
+  --ring: #22D3EE;
+
   /* Charts */
-  --chart-1: oklch(0.49 0.24 265);
-  --chart-2: oklch(0.7 0.17 162);
-  --chart-3: oklch(0.77 0.19 70);
-  --chart-4: oklch(0.63 0.27 304);
-  --chart-5: oklch(0.65 0.25 16);
-  
+  --chart-1: oklch(0.68 0.18 260);
+  --chart-2: oklch(0.75 0.16 170);
+  --chart-3: oklch(0.78 0.16 90);
+  --chart-4: oklch(0.7 0.2 310);
+  --chart-5: oklch(0.7 0.18 20);
+
   /* Sidebar (for admin) */
   --sidebar: oklch(0.08 0.012 250);
   --sidebar-foreground: oklch(0.98 0.003 250);
@@ -133,83 +132,16 @@
   --error-color: #ef4444;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 20px rgba(14, 165, 233, 0.2);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --shadow-md: 0 6px 14px -1px rgb(0 0 0 / 0.4), 0 4px 6px -2px rgb(0 0 0 / 0.35);
+  --shadow-lg: 0 14px 24px -6px rgb(0 0 0 / 0.55), 0 8px 16px -6px rgb(0 0 0 / 0.45);
+  --shadow-glow: 0 0 26px rgba(34, 211, 238, 0.3);
 
   /* Safe Area Spacing Variables */
   --spacing-safe-top: env(safe-area-inset-top);
   --spacing-safe-bottom: env(safe-area-inset-bottom);
   --spacing-safe-left: env(safe-area-inset-left);
   --spacing-safe-right: env(safe-area-inset-right);
-}
-
-/* ========================================
-   DARK MODE - Admin Panel Only
-   Applied via .dark class on admin routes
-   ==================================== */
-.dark {
-  --background: oklch(0.08 0.012 250);
-  --foreground: oklch(0.98 0.003 250);
-  
-  --card: oklch(0.12 0.015 250);
-  --card-foreground: oklch(0.98 0.003 250);
-  
-  --popover: oklch(0.12 0.015 250);
-  --popover-foreground: oklch(0.98 0.003 250);
-  
-  --primary: oklch(0.53 0.16 190);
-  --primary-foreground: oklch(0.99 0 0);
-  --primary-hover: oklch(0.6 0.15 190);
-  
-  --secondary: oklch(0.18 0.025 250);
-  --secondary-foreground: oklch(0.9 0.02 250);
-  
-  --muted: oklch(0.18 0.025 250);
-  --muted-foreground: oklch(0.65 0.03 250);
-  --text-secondary: oklch(0.75 0.03 250);
-  
-  --accent: oklch(0.18 0.04 190);
-  --accent-foreground: oklch(0.9 0.03 190);
-  
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.48 0.22 145);
-  --success-foreground: oklch(0.99 0 0);
-  
-  --border: oklch(0.25 0.025 250);
-  --input: oklch(0.25 0.025 250);
-  --ring: oklch(0.55 0.14 190);
-  
-  --chart-1: oklch(0.49 0.24 265);
-  --chart-2: oklch(0.7 0.17 162);
-  --chart-3: oklch(0.77 0.19 70);
-  --chart-4: oklch(0.63 0.27 304);
-  --chart-5: oklch(0.65 0.25 16);
-  
-  --sidebar: oklch(0.08 0.012 250);
-  --sidebar-foreground: oklch(0.98 0.003 250);
-  --sidebar-primary: oklch(0.53 0.16 190);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.18 0.035 190);
-  --sidebar-accent-foreground: oklch(0.9 0.03 190);
-  --sidebar-border: oklch(0.25 0.025 250);
-  --sidebar-ring: oklch(0.55 0.14 190);
-
-  /* Admin dark mode overrides for all elements */
-  --background-primary: #0f1419;
-  --background-secondary: #1a1f2e;
-  --background-tertiary: #242b3d;
-  --background-elevated: #2a3245;
-  --text-primary: #f0f4f8;
-  --text-secondary: #a0aec0;
-  --text-muted: #718096;
-  
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.3);
 }
 
 @theme inline {
@@ -298,6 +230,100 @@
   }
 }
 
+@layer components {
+  .ocean-bg {
+    background:
+      radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 45%),
+      radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.12), transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.12), transparent 35%),
+      linear-gradient(180deg, #0b0f14 0%, #0c1220 60%, #090d13 100%);
+  }
+
+  .bento-card {
+    position: relative;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.9) 0%, rgba(12, 18, 32, 0.95) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 24px;
+    box-shadow: 0 30px 80px rgba(3, 7, 18, 0.7);
+    overflow: hidden;
+  }
+
+  .bento-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top, rgba(34, 211, 238, 0.12), transparent 60%);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .bento-glow {
+    position: absolute;
+    inset: -2px;
+    border-radius: 26px;
+    background: linear-gradient(130deg, rgba(34, 211, 238, 0.35), rgba(139, 92, 246, 0.35), rgba(16, 185, 129, 0.35));
+    filter: blur(16px);
+    opacity: 0.4;
+    z-index: 0;
+  }
+
+  .glass-panel {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    box-shadow: 0 12px 40px rgba(2, 6, 23, 0.6);
+    backdrop-filter: blur(18px);
+  }
+
+  .animate-float {
+    animation: float 7s ease-in-out infinite;
+  }
+
+  .neon-border {
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 22px rgba(56, 189, 248, 0.2), inset 0 0 0 1px rgba(148, 163, 184, 0.15);
+  }
+
+  .neon-text {
+    background: linear-gradient(90deg, #22D3EE 0%, #A78BFA 50%, #34D399 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .hover-glow {
+    transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  }
+
+  .hover-glow:hover {
+    transform: translateY(-6px);
+    border-color: rgba(56, 189, 248, 0.6);
+    box-shadow: 0 22px 60px rgba(8, 145, 178, 0.35), 0 0 30px rgba(56, 189, 248, 0.2);
+  }
+
+  .grid-dots {
+    background-image: radial-gradient(circle, rgba(148, 163, 184, 0.15) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .grid-lines {
+    background-image: linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+    background-size: 36px 36px;
+  }
+
+  .glow-ring {
+    box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.12), 0 0 30px rgba(34, 211, 238, 0.35);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 @utility h-dvh {
   height: 100dvh;
 }
@@ -319,10 +345,63 @@
 }
 
 
-/* Remove separate .dark block since it's now default in :root */
-
-
 @layer base {
+  /* Force global dark palette for common utility colors */
+  .dark .bg-white,
+  .dark .bg-gray-50,
+  .dark .bg-gray-100,
+  .dark .bg-gray-200 {
+    background-color: #0f172a !important;
+  }
+
+  .dark .bg-slate-50,
+  .dark .bg-slate-100 {
+    background-color: #0b0f14 !important;
+  }
+
+  .dark .text-gray-900,
+  .dark .text-gray-800,
+  .dark .text-gray-700,
+  .dark .text-gray-600 {
+    color: #e2e8f0 !important;
+  }
+
+  .dark .text-gray-500,
+  .dark .text-gray-400 {
+    color: #94a3b8 !important;
+  }
+
+  .dark .text-slate-900,
+  .dark .text-slate-800,
+  .dark .text-slate-700,
+  .dark .text-slate-600 {
+    color: #e2e8f0 !important;
+  }
+
+  .dark .text-slate-500,
+  .dark .text-slate-400 {
+    color: #94a3b8 !important;
+  }
+
+  .dark .border-gray-100,
+  .dark .border-gray-200,
+  .dark .border-gray-300 {
+    border-color: rgba(148, 163, 184, 0.2) !important;
+  }
+
+  .dark .border-slate-100,
+  .dark .border-slate-200,
+  .dark .border-slate-300 {
+    border-color: rgba(148, 163, 184, 0.2) !important;
+  }
+
+  .dark .shadow-xl,
+  .dark .shadow-lg,
+  .dark .shadow-md,
+  .dark .shadow-sm {
+    box-shadow: 0 12px 40px rgba(3, 7, 18, 0.55) !important;
+  }
+
   /* Force dark mode for admin section */
   .admin-dark {
     --background: oklch(0.06 0 0);

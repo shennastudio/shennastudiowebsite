@@ -52,7 +52,7 @@ export function SocialMediaButtons() {
     <div className="relative">
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className="flex items-center gap-2 bg-gradient-to-r from-cyan-600 to-teal-600 text-white px-3 py-2 rounded-lg font-semibold hover:from-cyan-700 hover:to-teal-700 transition-all shadow-md text-sm"
+        className="flex items-center gap-2 bg-slate-900/80 text-slate-100 px-3 py-2 rounded-lg font-semibold hover:bg-slate-800 transition-all shadow-[0_10px_30px_rgba(3,7,18,0.6)] text-sm border border-white/10"
       >
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -66,9 +66,9 @@ export function SocialMediaButtons() {
             className="fixed inset-0 z-40" 
             onClick={() => setShowDropdown(false)}
           />
-          <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-200 z-50 overflow-hidden">
+          <div className="absolute right-0 mt-2 w-56 bg-slate-950/95 rounded-xl shadow-[0_18px_40px_rgba(3,7,18,0.6)] border border-white/10 z-50 overflow-hidden backdrop-blur-xl">
             <div className="p-3">
-              <p className="text-sm font-semibold text-gray-700 mb-2 px-2">Follow Us</p>
+              <p className="text-sm font-semibold text-slate-200 mb-2 px-2">Follow Us</p>
               <div className="space-y-1">
                 {socialLinks.map((social) => (
                   <a
@@ -84,7 +84,7 @@ export function SocialMediaButtons() {
                 ))}
               </div>
             </div>
-            <div className="bg-gray-50 px-3 py-2 border-t border-gray-100">
+            <div className="bg-slate-900/70 px-3 py-2 border-t border-white/10">
               <button
                 onClick={() => {
                   if (navigator.share) {
@@ -98,7 +98,7 @@ export function SocialMediaButtons() {
                     alert('Link copied to clipboard!');
                   }
                 }}
-                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-medium text-sm transition-colors"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 rounded-lg font-medium text-sm transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
