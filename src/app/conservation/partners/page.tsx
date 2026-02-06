@@ -59,7 +59,7 @@ const partners = [
 
 export default function PartnersPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 via-teal-600 to-cyan-600 py-20 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

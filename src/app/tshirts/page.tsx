@@ -64,7 +64,7 @@ export default async function TShirtsPage() {
   const products = await getTShirtProducts();
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-slate-950 text-slate-100 dark:bg-slate-900">
       {/* Header Section */}
       <section className="bg-gradient-to-br from-purple-400 via-pink-500 to-rose-500 py-16 relative overflow-hidden">
         {/* Animated background */}

@@ -53,7 +53,7 @@ export default async function RewardsPage() {
   const pointsToNext = progress.next ? progress.max - (rewards?.points || 0) : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Header */}
       <div className="bg-gradient-to-r from-teal-600 to-blue-600 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

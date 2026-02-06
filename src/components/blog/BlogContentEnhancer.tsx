@@ -24,7 +24,7 @@ export function BlogContentEnhancer({
   }, [])
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Hero Section */}
       <div className="relative h-[60vh] min-h-[500px] overflow-hidden">
         {/* Background Image/Gradient */}
@@ -78,9 +78,9 @@ export function BlogContentEnhancer({
           
           {/* Article Content */}
           <div className="lg:col-span-8">
-            <article className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-12 border border-white/40">
+            <article className="bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-12 border border-white/10">
               <div 
-                className={`prose prose-lg prose-slate max-w-none prose-headings:text-slate-900 prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl transition-all duration-1000 delay-300 ${
+                className={`prose prose-lg prose-invert max-w-none prose-headings:text-white prose-a:text-cyan-300 prose-a:no-underline hover:prose-a:underline prose-img:rounded-xl transition-all duration-1000 delay-300 ${
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                 }`}
               >
@@ -94,18 +94,18 @@ export function BlogContentEnhancer({
             <div className="sticky top-24 space-y-6">
               
               {/* Navigation Card */}
-              <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-white/40">
-                <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl shadow-xl p-6 border border-white/10">
+                <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                   <span className="text-xl">🧭</span> Explore
                 </h3>
                 <nav className="space-y-1">
-                  <Link href="#conservation" className="block px-3 py-2 rounded-lg text-slate-600 hover:text-teal-700 hover:bg-teal-50 transition-all font-medium">
+                  <Link href="#conservation" className="block px-3 py-2 rounded-lg text-slate-300 hover:text-cyan-300 hover:bg-white/10 transition-all font-medium">
                     Conservation Focus
                   </Link>
-                  <Link href="#research" className="block px-3 py-2 rounded-lg text-slate-600 hover:text-teal-700 hover:bg-teal-50 transition-all font-medium">
+                  <Link href="#research" className="block px-3 py-2 rounded-lg text-slate-300 hover:text-cyan-300 hover:bg-white/10 transition-all font-medium">
                     Research & Science
                   </Link>
-                  <Link href="#impact" className="block px-3 py-2 rounded-lg text-slate-600 hover:text-teal-700 hover:bg-teal-50 transition-all font-medium">
+                  <Link href="#impact" className="block px-3 py-2 rounded-lg text-slate-300 hover:text-cyan-300 hover:bg-white/10 transition-all font-medium">
                     Impact Stories
                   </Link>
                 </nav>
@@ -140,7 +140,7 @@ export function BlogContentEnhancer({
 
                   <Link 
                     href="/products" 
-                    className="block w-full text-center bg-white text-teal-700 py-3 rounded-xl font-bold hover:bg-teal-50 transition-colors shadow-lg"
+                    className="block w-full text-center bg-cyan-500 text-slate-900 py-3 rounded-xl font-bold hover:bg-cyan-400 transition-colors shadow-lg"
                   >
                     Shop to Support
                   </Link>

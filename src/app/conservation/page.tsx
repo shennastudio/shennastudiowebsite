@@ -4,7 +4,7 @@ import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection
 
 export default function ConservationPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 via-cyan-600 to-teal-700 py-20 relative overflow-hidden">
         {/* Animated wave background */}

@@ -68,7 +68,7 @@ const challenges = [
 
 export default function SPIPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-cyan-600 via-blue-600 to-teal-700 py-20 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
