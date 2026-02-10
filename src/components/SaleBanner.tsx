@@ -51,10 +51,11 @@ export function SaleBanner() {
   if (!show) return null;
 
   return (
-    <div className="relative bg-gradient-to-r from-cyan-600 via-teal-600 to-blue-600 text-white overflow-hidden">
+    <div className="relative bg-slate-950 text-white overflow-hidden border-b border-white/10">
       {/* Animated background */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-[url('/ocean-pattern.svg')] animate-pulse-slow"></div>
+      <div className="absolute inset-0 opacity-70">
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-violet-500/15 to-emerald-400/20" />
+        <div className="absolute inset-0 bg-[url('/ocean-pattern.svg')] opacity-20" />
       </div>
 
       {/* Content */}
@@ -68,7 +69,7 @@ export function SaleBanner() {
             <span className="font-bold text-base sm:text-lg">
               🌊 Ocean Treasures Sale!
             </span>
-            <span className="text-sm sm:text-base font-medium bg-white/20 px-3 py-1 rounded-full">
+            <span className="text-sm sm:text-base font-medium bg-white/10 px-3 py-1 rounded-full border border-white/10">
               Save 25% with code OCEANSALE25
             </span>
             {timeLeft && (
@@ -81,7 +82,7 @@ export function SaleBanner() {
           {/* CTA Button */}
           <Link
             href="/products"
-            className="bg-white text-cyan-700 hover:bg-cyan-50 px-4 py-2 rounded-full font-semibold text-sm sm:text-base transition-all hover:scale-105 shadow-lg"
+            className="bg-cyan-500 text-slate-900 hover:bg-cyan-400 px-4 py-2 rounded-full font-semibold text-sm sm:text-base transition-all hover:scale-105 shadow-[0_12px_30px_rgba(34,211,238,0.35)]"
           >
             Shop Now →
           </Link>

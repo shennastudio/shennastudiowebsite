@@ -1,225 +1,341 @@
 'use client'
 
-import { TestimonialSection } from '@/components/TestimonialSection'
-import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { Waves, Anchor, ShieldCheck, ArrowRight } from 'lucide-react'
-import ShimmerButton from '@/components/magicui/ShimmerButton'
-import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { ArrowRight, Waves, ShieldCheck, Sparkles, Anchor, Zap } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
+import { TestimonialSection } from '@/components/TestimonialSection'
 import ParallaxBanner from '@/components/ParallaxBanner'
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner'
 import { SaleBanner } from '@/components/SaleBanner'
 import { fetchFeaturedProducts } from './actions'
+import MotionSection from '@/components/animations/MotionSection'
+import { fadeUp, heroHeadline, heroSubhead, staggerContainer, staggerItem } from '@/components/animations/motion'
+import HeroScene from '@/components/landing/HeroScene'
+import HeroOrb from '@/components/landing/HeroOrb'
+
+const bentoFeatures = [
+  {
+    title: 'Ocean Impact Ledger',
+    description: 'Track how every purchase funds sea turtle rescue, reef restoration, and research partners across Texas Gulf Coast.',
+    icon: ShieldCheck,
+    className: 'md:col-span-4 md:row-span-2',
+    accent: 'from-cyan-500/20 via-transparent to-transparent',
+  },
+  {
+    title: 'Handcrafted in Brownsville',
+    description: 'Every bracelet is made-to-order with ocean-safe materials and artisan-level detail.',
+    icon: Sparkles,
+    className: 'md:col-span-2',
+    accent: 'from-violet-500/20 via-transparent to-transparent',
+  },
+  {
+    title: 'Adaptive Sizing',
+    description: 'Comfort-fit designs with adjustable sizing to match your everyday look.',
+    icon: Anchor,
+    className: 'md:col-span-2',
+    accent: 'from-emerald-400/20 via-transparent to-transparent',
+  },
+  {
+    title: 'Fast Shipping',
+    description: 'Priority-ready fulfillment with premium packaging and conservation notes inside.',
+    icon: Zap,
+    className: 'md:col-span-3',
+    accent: 'from-cyan-400/20 via-transparent to-transparent',
+  },
+  {
+    title: 'Ocean Stories',
+    description: 'Exclusive content, rescue updates, and local conservation spotlights.',
+    icon: Waves,
+    className: 'md:col-span-3',
+    accent: 'from-blue-500/20 via-transparent to-transparent',
+  },
+]
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<{
     product: {
-      id: string;
-      name: string;
-      description: string | null;
-      slug: string;
-      basePrice: number;
-      featured: boolean;
-    };
-    displayPrice: number;
-    displayStock: number;
-    displayImages: string[];
-  }[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+      id: string
+      name: string
+      description: string | null
+      slug: string
+      basePrice: number
+      featured: boolean
+    }
+    displayPrice: number
+    displayStock: number
+    displayImages: string[]
+  }[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    let isMounted = true;
-    
-    fetchFeaturedProducts(6).then((products) => {
-      if (isMounted) {
-        setFeaturedProducts(products);
-        setIsLoading(false);
-      }
-    }).catch(() => {
-      if (isMounted) {
-        setIsLoading(false);
-      }
-    });
+    let isMounted = true
+
+    fetchFeaturedProducts(6)
+      .then((products) => {
+        if (isMounted) {
+          setFeaturedProducts(products)
+          setIsLoading(false)
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setIsLoading(false)
+        }
+      })
 
     return () => {
-      isMounted = false;
-    };
-  }, []);
+      isMounted = false
+    }
+  }, [])
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      {/* Sale Banner */}
+    <div className="min-h-screen text-white ocean-bg">
       <SaleBanner />
-      
-      {/* Hero Section with Image */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/50 to-slate-900 z-10" />
-          <Image
-            src="/images/aboutpageparallax.jpg"
-            alt="Ocean background - Wear the Ocean, Protect the Ocean"
-            fill
-            priority
-            placeholder="blur"
-            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAn/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBEQCEAwEPwAB//9k="
-            sizes="100vw"
-            quality={85}
-            className="object-cover opacity-60"
-            style={{ objectPosition: 'center center' }}
-          />
-        </div>
 
-        <div className="max-w-5xl mx-auto px-6 relative z-20 text-center w-full">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            {/* Headline with Festive Font */}
-            <h1 className="font-festive text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-8 tracking-wide">
-              Wear the Ocean. <span className="block text-cyan-300">Protect the Ocean.</span>
-            </h1>
-            
-            {/* Sub-headline */}
-            <p className="text-xl md:text-2xl text-cyan-100 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-              Hand-crafted bracelets that fund real ocean conservation.
-              <span className="block mt-3 text-cyan-400 font-medium">At least 10% of every purchase supports ocean nonprofits in South Padre Island & beyond.</span>
-            </p>
-            
-            {/* CTA Button */}
-            <Link href="/products">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-block bg-gradient-to-r from-cyan-600 to-teal-600 text-white px-12 py-5 rounded-full font-bold text-lg tracking-wide hover:from-cyan-500 hover:to-teal-500 transition-all shadow-2xl shadow-cyan-500/25"
+      <section className="relative overflow-hidden pt-24 pb-20">
+        <HeroScene />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/40 to-slate-950" />
+        <div className="absolute inset-0 grid-lines opacity-20" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div
+              variants={staggerContainer(0.18, 0.1)}
+              initial="hidden"
+              animate="visible"
+              className="space-y-8"
+            >
+              <motion.span
+                variants={staggerItem}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-4 py-2 text-sm font-semibold text-cyan-300 shadow-[0_10px_30px_rgba(3,7,18,0.4)]"
               >
-                Shop Bracelets That Give Back
-              </motion.button>
-            </Link>
-          </motion.div>
-        </div>
+                <Sparkles className="h-4 w-4" />
+                Ocean-inspired limited drops
+              </motion.span>
+              <motion.h1
+                variants={heroHeadline}
+                className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight"
+              >
+                Wear the Ocean.
+                <span className="block neon-text">Protect the Ocean.</span>
+              </motion.h1>
+              <motion.p variants={heroSubhead} className="text-lg md:text-xl text-slate-300 max-w-xl">
+                Handcrafted bracelets that fund real conservation work. Every piece is made with intention and ships
+                with an impact story from South Padre Island and the Rio Grande Valley.
+              </motion.p>
+              <motion.div variants={staggerItem} className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/products"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-cyan-500 px-6 py-3 font-semibold text-slate-900 shadow-[0_16px_40px_rgba(34,211,238,0.35)] transition-all hover:bg-cyan-400"
+                >
+                  Shop Bracelets
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/conservation"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 px-6 py-3 font-semibold text-white transition-all hover:bg-white/10"
+                >
+                  Our Mission
+                </Link>
+              </motion.div>
+              <motion.div
+                variants={staggerItem}
+                className="grid grid-cols-2 gap-4 sm:max-w-md"
+              >
+                {[
+                  { label: 'Donated to Conservation', value: '10%' },
+                  { label: 'Local Impact', value: 'RGV' },
+                  { label: 'Handcrafted', value: '100%' },
+                  { label: 'Eco Packaging', value: 'Plastic-Free' },
+                ].map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="glass-panel rounded-2xl p-4 text-center"
+                  >
+                    <div className="text-xl font-bold text-white">{stat.value}</div>
+                    <div className="text-xs uppercase tracking-widest text-slate-400">{stat.label}</div>
+                  </div>
+                ))}
+              </motion.div>
+            </motion.div>
 
-        {/* Scroll indicator */}
-        <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 text-white/50 flex flex-col items-center gap-2"
-        >
-          <span className="text-xs uppercase tracking-widest font-medium">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent" />
-        </motion.div>
+            <div className="relative flex items-center justify-center">
+              <div className="absolute -top-10 right-0 h-28 w-28 rounded-full bg-cyan-400/20 blur-3xl" />
+              <div className="absolute -bottom-10 left-0 h-32 w-32 rounded-full bg-violet-500/20 blur-3xl" />
+              <HeroOrb />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="absolute -bottom-8 right-2 md:right-12 w-48 rounded-2xl border border-white/10 bg-slate-900/80 p-4 shadow-[0_20px_50px_rgba(3,7,18,0.6)] backdrop-blur-xl"
+              >
+                <div className="relative h-24 w-full overflow-hidden rounded-xl mb-3">
+                  <Image
+                    src="/images/shennawhale.jpg"
+                    alt="Ocean bracelet inspiration"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <p className="text-xs uppercase tracking-[0.3em] text-cyan-300">Studio Drop</p>
+                <p className="text-sm font-semibold text-white">Whale Song Collection</p>
+              </motion.div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-24 bg-slate-900 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="relative z-10 text-4xl md:text-5xl font-black text-white mb-4 tracking-tight"
-            >
-              Ocean Treasures
-            </motion.h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-              Handpicked bracelets inspired by sea turtles, whales, and marine life
+      <section className="relative py-20">
+        <div className="absolute inset-0 grid-dots opacity-20" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <MotionSection className="mb-12 text-center" variants={fadeUp}>
+            <p className="text-sm uppercase tracking-[0.4em] text-cyan-300/80 mb-4">Why Shenna&apos;s Studio</p>
+            <h2 className="text-3xl md:text-5xl font-bold">A modern ocean-first experience</h2>
+            <p className="text-lg text-slate-300 max-w-2xl mx-auto mt-4">
+              Asymmetric bento layouts meet glassmorphism UI to spotlight craftsmanship and conservation impact.
             </p>
-          </div>
+          </MotionSection>
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-6 gap-6"
+            variants={staggerContainer(0.12, 0.15)}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {bentoFeatures.map((feature) => (
+              <motion.div
+                key={feature.title}
+                variants={staggerItem}
+                className={cn('relative bento-card hover-glow p-8', feature.className)}
+              >
+                <div className="bento-glow" />
+                <div className={cn('absolute inset-0 bg-gradient-to-br', feature.accent)} />
+                <div className="relative z-10 flex h-full flex-col">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="h-11 w-11 rounded-2xl border border-white/10 bg-slate-900/70 flex items-center justify-center text-cyan-300">
+                      <feature.icon className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                  </div>
+                  <p className="text-slate-300 leading-relaxed">{feature.description}</p>
+                  <div className="mt-auto pt-6 text-sm text-cyan-300/80">Explore →</div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <MotionSection className="text-center mb-12" variants={fadeUp}>
+            <p className="text-sm uppercase tracking-[0.4em] text-cyan-300/80 mb-4">Featured Treasures</p>
+            <h2 className="text-3xl md:text-5xl font-bold">Ocean-ready favorites</h2>
+            <p className="text-lg text-slate-300 max-w-2xl mx-auto mt-4">
+              Handpicked ocean-inspired bracelets with real conservation impact.
+            </p>
+          </MotionSection>
 
           {isLoading && featuredProducts.length === 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-slate-800 rounded-3xl shadow-sm border border-slate-700 overflow-hidden animate-pulse">
-                  <div className="h-80 bg-slate-700" />
-                  <div className="p-8 space-y-4">
-                    <div className="h-6 bg-slate-700 rounded w-3/4" />
-                    <div className="h-4 bg-slate-600 rounded w-full" />
-                    <div className="h-4 bg-slate-600 rounded w-2/3" />
-                    <div className="flex justify-between items-center">
-                      <div className="h-8 bg-slate-700 rounded w-20" />
-                      <div className="h-6 bg-slate-600 rounded w-16" />
-                    </div>
-                    <div className="h-12 bg-slate-700 rounded-2xl" />
+                <div key={i} className="bento-card p-6 animate-pulse">
+                  <div className="h-64 bg-slate-800 rounded-2xl" />
+                  <div className="mt-6 space-y-3">
+                    <div className="h-6 bg-slate-800 rounded" />
+                    <div className="h-4 bg-slate-800 rounded w-3/4" />
+                    <div className="h-10 bg-slate-800 rounded-2xl" />
                   </div>
                 </div>
               ))}
             </div>
           ) : featuredProducts.length === 0 ? (
             <div className="col-span-full text-center py-12">
-              <div className="text-6xl mb-4">🌊</div>
+              <div className="text-5xl mb-4">🌊</div>
               <p className="text-slate-400 text-lg">No featured products yet</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {featuredProducts.map((productDisplay, index) => (
-              <motion.div
-                key={productDisplay.product?.id || index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -10 }}
-                className="bg-slate-800 rounded-3xl shadow-sm border border-slate-700 overflow-hidden group transition-all hover:shadow-2xl hover:shadow-teal-500/10"
-              >
-                <div className="relative h-80 overflow-hidden">
-                  {productDisplay.displayImages?.[0] ? (
-                    <Image
-                      src={productDisplay.displayImages[0]}
-                      alt={productDisplay.product?.name || 'Product'}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-slate-700">
-                      <div className="w-20 h-20 bg-teal-900/50 rounded-full flex items-center justify-center">
-                        <Waves className="w-10 h-10 text-teal-400" />
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              variants={staggerContainer(0.12, 0.1)}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+            >
+              {featuredProducts.map((productDisplay, index) => (
+                <motion.div
+                  key={productDisplay.product?.id || index}
+                  variants={staggerItem}
+                  whileHover={{ y: -8 }}
+                  className="group relative bento-card hover-glow overflow-hidden"
+                >
+                  <div className="bento-glow" />
+                  <div className="relative z-10">
+                    <div className="relative h-64 overflow-hidden">
+                      {productDisplay.displayImages?.[0] ? (
+                        <Image
+                          src={productDisplay.displayImages[0]}
+                          alt={productDisplay.product?.name || 'Product'}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-slate-900">
+                          <div className="w-20 h-20 bg-teal-900/50 rounded-full flex items-center justify-center">
+                            <Waves className="w-10 h-10 text-teal-400" />
+                          </div>
+                        </div>
+                      )}
+                      {productDisplay.product?.featured && (
+                        <div className="absolute top-6 right-6 bg-cyan-500 text-slate-900 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
+                          Featured
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-white mb-3">
+                        {productDisplay.product?.name || 'Product'}
+                      </h3>
+                      <p className="text-slate-400 mb-6 line-clamp-2 leading-relaxed">
+                        {productDisplay.product?.description || 'Ocean-inspired bracelet'}
+                      </p>
+                      <div className="flex items-center justify-between mb-6">
+                        <span className="text-2xl font-black text-white">
+                          ${productDisplay.displayPrice}
+                        </span>
+                        <span
+                          className={cn(
+                            'text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider',
+                            productDisplay.displayStock > 0
+                              ? 'bg-emerald-400/10 text-emerald-300 border border-emerald-400/20'
+                              : 'bg-rose-500/10 text-rose-300 border border-rose-500/20'
+                          )}
+                        >
+                          {productDisplay.displayStock > 0 ? 'In Stock' : 'Sold Out'}
+                        </span>
                       </div>
+                      <Link
+                        href={`/products/${productDisplay.product?.slug || 'ocean-wave-bracelet'}`}
+                        className="block w-full text-center bg-cyan-500 text-slate-900 py-3 rounded-2xl font-semibold transition-all hover:bg-cyan-400"
+                      >
+                        View Details
+                      </Link>
                     </div>
-                  )}
-                  {productDisplay.product?.featured && (
-                    <div className="absolute top-6 right-6 bg-teal-500 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
-                      Featured
-                    </div>
-                  )}
-                </div>
-                <div className="p-8">
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-teal-400 transition-colors">
-                    {productDisplay.product?.name || 'Product'}
-                  </h3>
-                  <p className="text-slate-400 mb-6 line-clamp-2 leading-relaxed">
-                    {productDisplay.product?.description || 'Ocean-inspired bracelet'}
-                  </p>
-                  <div className="flex items-center justify-between mb-8">
-                    <span className="text-3xl font-black text-white">
-                      ${productDisplay.displayPrice}
-                    </span>
-                    <span className={cn(
-                      "text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider",
-                      productDisplay.displayStock > 0 ? "bg-emerald-900/50 text-emerald-400" : "bg-rose-900/50 text-red-400"
-                    )}>
-                      {productDisplay.displayStock > 0 ? 'In Stock' : 'Sold Out'}
-                    </span>
                   </div>
-                  <Link
-                    href={`/products/${productDisplay.product?.slug || 'ocean-wave-bracelet'}`}
-                    className="block w-full text-center bg-teal-600 text-white py-4 rounded-2xl font-bold transition-all hover:bg-teal-500 hover:shadow-xl hover:shadow-teal-500/20 active:scale-95"
-                  >
-                    View Details
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </motion.div>
           )}
 
-          <div className="text-center mt-20">
+          <div className="text-center mt-12">
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 text-teal-400 font-bold text-lg hover:gap-4 transition-all"
+              className="inline-flex items-center gap-2 text-cyan-300 font-semibold text-lg hover:gap-4 transition-all"
             >
               View All Products <ArrowRight className="w-5 h-5" />
             </Link>
@@ -227,131 +343,43 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Subscription Banner */}
       <SubscriptionBanner />
 
-      {/* Mission Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/plug.jpg" 
-        alt="Support Our Mission" 
-        text="Support Our Mission" 
-      />
+      <ParallaxBanner src="/images/plug.jpg" alt="Support Our Mission" text="Support Our Mission" />
 
-      {/* Ocean Features Section */}
-      <section className="bg-slate-950 py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
-              Why Choose Shenna&apos;s Studio?
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Sea Turtle Conservation",
-                desc: "Each purchase directly supports sea turtle protection programs in South Padre Island nesting grounds.",
-                icon: ShieldCheck,
-                color: "text-emerald-400",
-                bg: "bg-emerald-900/30"
-              },
-              {
-                title: "Ocean-Quality Materials",
-                desc: "Premium, sustainably sourced materials that honor marine life and coastal ecosystems.",
-                icon: Anchor,
-                color: "text-blue-400",
-                bg: "bg-blue-900/30"
-              },
-              {
-                title: "Shark Research Support",
-                desc: "10% of every sale funds important shark research and ocean conservation efforts.",
-                icon: Waves,
-                color: "text-cyan-400",
-                bg: "bg-cyan-900/30"
-              }
-            ].map((feature, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -10, scale: 1.02 }}
-                className="text-center bg-slate-900 p-10 rounded-3xl shadow-sm border border-slate-800 hover:shadow-2xl transition-all"
-              >
-                <div className={cn("w-20 h-20 mx-auto rounded-2xl flex items-center justify-center mb-8", feature.bg)}>
-                  <feature.icon className={cn("w-10 h-10", feature.color)} />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-4">{feature.title}</h3>
-                <p className="text-slate-400 leading-relaxed">{feature.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
       <TestimonialSection />
 
-      {/* Ocean Conservation CTA Section */}
-      <section className="bg-slate-900 py-24 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-8 tracking-tight">
+      <section className="relative py-24">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+        <div className="absolute inset-0 opacity-30 grid-dots" />
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <MotionSection variants={fadeUp}>
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
               Protect Ocean Life with Every Bracelet
             </h2>
-            <p className="text-xl text-cyan-100 mb-12 max-w-3xl mx-auto font-light leading-relaxed">
-              Each purchase directly supports sea turtle conservation, whale protection, and marine ecosystem restoration in Rio Grande Valley and South Padre Island.
+            <p className="text-lg text-slate-300 mb-10 max-w-3xl mx-auto">
+              Shop handcrafted pieces that directly support sea turtle conservation, whale protection, and marine
+              ecosystem restoration in the Rio Grande Valley.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/products"
-                  className="inline-block bg-teal-500 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-teal-400 transition-all shadow-lg shadow-teal-500/20"
-                >
-                  Shop Ocean Collection
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link
-                  href="/conservation"
-                  className="inline-block border-2 border-white/30 backdrop-blur-sm text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-slate-900 transition-all"
-                >
-                 Learn Our Mission
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
-          
-          {/* Conservation Stats */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { label: "Donated to Conservation", val: "10%", color: "text-teal-400" },
-              { label: "Rio Grande Valley Focus", val: "RGV", color: "text-blue-400" },
-              { label: "South Padre Island", val: "SPI", color: "text-cyan-400" }
-            ].map((stat, i) => (
-              <motion.div 
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10"
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center bg-cyan-500 text-slate-900 px-8 py-3 rounded-full font-semibold hover:bg-cyan-400 transition-all"
               >
-                <div className={cn("text-4xl font-black mb-2", stat.color)}>{stat.val}</div>
-                <div className="text-white font-medium tracking-wide">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
+                Shop Ocean Collection
+              </Link>
+              <Link
+                href="/conservation"
+                className="inline-flex items-center justify-center border border-white/20 text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-all"
+              >
+                Learn Our Mission
+              </Link>
+            </div>
+          </MotionSection>
         </div>
       </section>
 
-      {/* Turtle Parallax Banner */}
-      <ParallaxBanner 
-        src="/images/turtleparallax.jpg" 
-        alt="Sea Turtle Swimming" 
-        text="Protect Our Turtles" 
-      />
+      <ParallaxBanner src="/images/turtleparallax.jpg" alt="Sea Turtle Swimming" text="Protect Our Turtles" />
     </div>
-  );
+  )
 }

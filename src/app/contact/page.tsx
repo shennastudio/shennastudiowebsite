@@ -26,7 +26,7 @@ export default function ContactPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center px-4">
         <AnimatedSection animation="scaleIn" className="max-w-md w-full">
           <div className="bg-white rounded-2xl shadow-xl p-10 text-center">
             <div className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-bounce">
@@ -52,7 +52,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <section className="bg-gradient-to-br from-teal-600 to-blue-600 py-16 text-white text-center relative overflow-hidden">
         {/* Animated wave background */}
         <div className="absolute inset-0 opacity-20">

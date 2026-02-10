@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Tag, Users, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Tag, Users, CheckCircle, XCircle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -41,8 +41,6 @@ export default function CustomerSegmentsPage() {
   const [loading, setLoading] = useState(true);
   const [tagDialogOpen, setTagDialogOpen] = useState(false);
   const [segmentDialogOpen, setSegmentDialogOpen] = useState(false);
-  const [editingTag, setEditingTag] = useState<CustomerTag | null>(null);
-  const [editingSegment, setEditingSegment] = useState<CustomerSegment | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -124,6 +122,7 @@ export default function CustomerSegmentsPage() {
       toast.success(`Tag ${tag.isActive ? 'disabled' : 'enabled'}`);
       fetchData();
     } catch (error) {
+      console.error('Failed to update tag', error);
       toast.error('Failed to update tag');
     }
   };

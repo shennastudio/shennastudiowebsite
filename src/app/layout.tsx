@@ -45,6 +45,7 @@ const festive = Festive({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://shennastudio.com'),
   title: "Shenna's Studio | Custom Made Bracelets Brownsville TX - Handcrafted Ocean Jewelry",
   description: 'Custom made bracelets & handcrafted ocean-inspired jewelry in Brownsville, TX. Shop unique beaded bracelets, sea turtle jewelry, whale bracelets & sustainable accessories. 10% of every purchase supports marine conservation in South Padre Island & Rio Grande Valley.',
   keywords: [
@@ -147,7 +148,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: 'cover',
-  themeColor: '#F9FBFC',
+  themeColor: '#0B0F14',
 };
 
 export default function RootLayout({
@@ -156,7 +157,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <head>
         <SEOSchemas />
         <script
@@ -214,9 +215,9 @@ export default function RootLayout({
         <AnalyticsProvider />
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="dark"
           enableSystem={false}
-          forcedTheme="light"
+          forcedTheme="dark"
           storageKey="theme"
           disableTransitionOnChange
         >

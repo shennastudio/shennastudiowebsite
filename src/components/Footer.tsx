@@ -4,8 +4,35 @@ import { VCardQRCode } from '@/components/VCardQRCode'
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-blue-900 via-teal-900 to-cyan-900 text-white">
+    <footer className="bg-slate-950 text-white border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mb-16 rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/70 via-slate-950/80 to-slate-900/70 p-8 md:p-12 shadow-[0_30px_80px_rgba(3,7,18,0.6)] backdrop-blur-xl">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+            <div>
+              <p className="text-sm uppercase tracking-[0.4em] text-cyan-300/80 mb-4">Join the mission</p>
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                Wear the Ocean. Protect the Ocean.
+              </h2>
+              <p className="text-slate-300 max-w-2xl">
+                Every purchase funds marine conservation across South Padre Island and the Rio Grande Valley.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-6 py-3 rounded-full font-semibold shadow-[0_12px_30px_rgba(34,211,238,0.35)] transition-all"
+              >
+                Shop the Collection
+              </Link>
+              <Link
+                href="/conservation"
+                className="inline-flex items-center justify-center border border-white/20 text-white px-6 py-3 rounded-full font-semibold hover:bg-white/10 transition-all"
+              >
+                Learn the Impact
+              </Link>
+            </div>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand & Address */}
           <div className="space-y-4">
@@ -15,13 +42,13 @@ export default function Footer() {
                 alt="Shenna's Studio"
                 width={150}
                 height={150}
-                className="object-contain h-20 w-auto brightness-110"
+                className="object-contain h-20 w-auto brightness-110 drop-shadow-[0_12px_24px_rgba(34,211,238,0.25)]"
               />
             </div>
-            <p className="text-cyan-200 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed">
               Handcrafted custom bracelets in Brownsville, TX. Each piece supports marine life conservation in South Padre Island and Rio Grande Valley.
             </p>
-            <div className="text-cyan-200 text-sm mt-4">
+            <div className="text-slate-300 text-sm mt-4">
               <p className="font-semibold text-white">Shenna&apos;s Studio</p>
               <p>2436 Pablo Kisel Blvd</p>
               <p>Brownsville, TX 78520</p>
@@ -32,34 +59,34 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-cyan-300">Custom Bracelets</h3>
-            <ul className="space-y-2 text-cyan-200">
+            <ul className="space-y-2 text-slate-300">
               <li>
-                <Link href="/products" className="hover:text-white transition-colors">
+                <Link href="/products" className="hover:text-cyan-300 transition-colors">
                   All Bracelets
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=glass" className="hover:text-white transition-colors">
+                <Link href="/products?category=glass" className="hover:text-cyan-300 transition-colors">
                   Glass Beads
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=stone" className="hover:text-white transition-colors">
+                <Link href="/products?category=stone" className="hover:text-cyan-300 transition-colors">
                   Stone Beads
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=wooden" className="hover:text-white transition-colors">
+                <Link href="/products?category=wooden" className="hover:text-cyan-300 transition-colors">
                   Wooden Beads
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=crystal" className="hover:text-white transition-colors">
+                <Link href="/products?category=crystal" className="hover:text-cyan-300 transition-colors">
                   Crystal Beads
                 </Link>
               </li>
               <li>
-                <Link href="/tshirts" className="hover:text-white transition-colors">
+                <Link href="/tshirts" className="hover:text-cyan-300 transition-colors">
                   Custom T-Shirts
                 </Link>
               </li>
@@ -69,24 +96,24 @@ export default function Footer() {
           {/* Conservation */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-cyan-300">Ocean Conservation</h3>
-            <ul className="space-y-2 text-cyan-200">
+            <ul className="space-y-2 text-slate-300">
               <li>
-                <Link href="/conservation" className="hover:text-white transition-colors">
+                <Link href="/conservation" className="hover:text-cyan-300 transition-colors">
                   Our Mission
                 </Link>
               </li>
               <li>
-                <Link href="/conservation/partners" className="hover:text-white transition-colors">
+                <Link href="/conservation/partners" className="hover:text-cyan-300 transition-colors">
                   Conservation Partners
                 </Link>
               </li>
               <li>
-                <Link href="/conservation/impact" className="hover:text-white transition-colors">
+                <Link href="/conservation/impact" className="hover:text-cyan-300 transition-colors">
                   Our Impact
                 </Link>
               </li>
               <li>
-                <Link href="/conservation/spi" className="hover:text-white transition-colors">
+                <Link href="/conservation/spi" className="hover:text-cyan-300 transition-colors">
                   South Padre Island
                 </Link>
               </li>
@@ -96,29 +123,29 @@ export default function Footer() {
           {/* Support */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-cyan-300">Support</h3>
-            <ul className="space-y-2 text-cyan-200">
+            <ul className="space-y-2 text-slate-300">
               <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
+                <Link href="/contact" className="hover:text-cyan-300 transition-colors">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/wholesale" className="hover:text-white transition-colors">
+                <Link href="/wholesale" className="hover:text-cyan-300 transition-colors">
                   Wholesale
                 </Link>
               </li>
               <li>
-                <Link href="/shipping" className="hover:text-white transition-colors">
+                <Link href="/shipping" className="hover:text-cyan-300 transition-colors">
                   Shipping Info
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="hover:text-white transition-colors">
+                <Link href="/returns" className="hover:text-cyan-300 transition-colors">
                   Returns & Exchanges
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="hover:text-white transition-colors">
+                <Link href="/faq" className="hover:text-cyan-300 transition-colors">
                   FAQ
                 </Link>
               </li>
@@ -128,29 +155,29 @@ export default function Footer() {
           {/* Legal */}
           <div>
             <h3 className="text-lg font-semibold mb-4 text-cyan-300">Legal</h3>
-            <ul className="space-y-2 text-cyan-200">
+            <ul className="space-y-2 text-slate-300">
               <li>
-                <Link href="/privacy" className="hover:text-white transition-colors">
+                <Link href="/privacy" className="hover:text-cyan-300 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-white transition-colors">
+                <Link href="/terms" className="hover:text-cyan-300 transition-colors">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/terms-and-conditions" className="hover:text-white transition-colors">
+                <Link href="/terms-and-conditions" className="hover:text-cyan-300 transition-colors">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="hover:text-white transition-colors">
+                <Link href="/cookies" className="hover:text-cyan-300 transition-colors">
                   Cookie Policy
                 </Link>
               </li>
               <li>
-                <Link href="/accessibility" className="hover:text-white transition-colors">
+                <Link href="/accessibility" className="hover:text-cyan-300 transition-colors">
                   Accessibility
                 </Link>
               </li>
@@ -159,7 +186,7 @@ export default function Footer() {
         </div>
 
         {/* Social Media & Conservation Message */}
-        <div className="mt-12 pt-8 border-t border-cyan-700">
+        <div className="mt-12 pt-8 border-t border-white/10">
           <div className="text-center">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-cyan-300 mb-4">Follow Our Ocean Journey</h3>
@@ -180,7 +207,7 @@ export default function Footer() {
             <div className="mb-4">
               <span className="text-xl font-bold text-cyan-300">10% Donated to Marine Conservation</span>
             </div>
-            <p className="text-cyan-200 mb-4">
+            <p className="text-slate-300 mb-4">
               Every purchase supports marine life conservation in Brownsville, South Padre Island & Rio Grande Valley
             </p>
             <div className="flex justify-center items-center gap-8 text-sm text-cyan-300">
@@ -194,8 +221,8 @@ export default function Footer() {
         </div>
 
         {/* Web Development Partner */}
-        <div className="mt-8 pt-8 border-t border-cyan-700">
-          <div className="bg-gradient-to-r from-cyan-800/40 to-blue-800/40 rounded-xl p-6 backdrop-blur-sm">
+        <div className="mt-8 pt-8 border-t border-white/10">
+          <div className="bg-slate-900/70 rounded-xl p-6 backdrop-blur-sm border border-white/10">
             <div className="text-center">
               <h3 className="text-lg font-semibold text-cyan-300 mb-2">Website Developed By</h3>
               <a
@@ -206,7 +233,7 @@ export default function Footer() {
               >
                 SoftwarePros.org →
               </a>
-              <p className="text-cyan-200 leading-relaxed max-w-3xl mx-auto">
+              <p className="text-slate-300 leading-relaxed max-w-3xl mx-auto">
                 Fantastic team specializing in modern websites with beautiful admin panels and mobile applications
                 development for various business types. Visit them and use their wonderful services for all your
                 web and mobile development needs!
@@ -216,9 +243,9 @@ export default function Footer() {
         </div>
 
         {/* SEO-Optimized Copyright & Mission Statement */}
-        <div className="mt-8 pt-8 border-t border-cyan-700">
+        <div className="mt-8 pt-8 border-t border-white/10">
           <div className="max-w-4xl mx-auto text-center mb-6">
-            <p className="text-cyan-200 text-sm leading-relaxed">
+            <p className="text-slate-300 text-sm leading-relaxed">
               <strong className="text-white">Shenna&apos;s Studio</strong> - Your trusted source for 
               <span className="text-white font-semibold"> custom bracelets in Brownsville, TX</span>. 
               Handcrafted ocean-inspired bracelets, jewelry, and apparel that make a difference. 

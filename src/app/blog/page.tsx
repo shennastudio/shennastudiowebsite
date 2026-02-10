@@ -33,7 +33,7 @@ export default async function BlogPage() {
   const recentPosts = posts.filter(post => !post.featured)
 
   return (
-    <div className="min-h-screen bg-slate-50 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-hidden">
       {/* Background Decor */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-teal-500/10 to-transparent" />
@@ -45,13 +45,13 @@ export default async function BlogPage() {
       <section className="relative z-10 pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <AnimatedSection animation="fadeInDown" className="text-center max-w-4xl mx-auto">
-            <span className="inline-block py-1 px-3 rounded-full bg-teal-100/80 text-teal-700 text-sm font-semibold mb-6 backdrop-blur-sm border border-teal-200">
+            <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-cyan-200 text-sm font-semibold mb-6 backdrop-blur-sm border border-white/10">
               Shenna&apos;s Studio Journal
             </span>
             <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-teal-800 via-blue-700 to-cyan-700 tracking-tight">
               Stories from the Ocean
             </h1>
-            <p className="text-xl md:text-2xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-xl md:text-2xl text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto">
               Exploring sea turtle rescue, marine conservation, and the handcrafted artistry behind every piece.
             </p>
           </AnimatedSection>
@@ -64,9 +64,9 @@ export default async function BlogPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <AnimatedSection animation="fadeInUp" className="mb-12">
               <div className="flex items-center gap-4 mb-2">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
-                <h2 className="text-2xl font-bold text-slate-800 uppercase tracking-wider">Featured Stories</h2>
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal-200 to-transparent" />
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal-500/40 to-transparent" />
+                <h2 className="text-2xl font-bold text-slate-100 uppercase tracking-wider">Featured Stories</h2>
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-teal-500/40 to-transparent" />
               </div>
             </AnimatedSection>
 
@@ -95,7 +95,7 @@ export default async function BlogPage() {
                   <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end text-white">
                     <div className="transform transition-transform duration-300 translate-y-4 group-hover:translate-y-0">
                       {post.category && (
-                        <span className="inline-block px-4 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-sm font-medium border border-white/30 mb-4">
+                        <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-sm font-medium border border-white/20 mb-4">
                           {post.category}
                         </span>
                       )}
@@ -136,10 +136,10 @@ export default async function BlogPage() {
       <section className="relative z-10 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatedSection animation="fadeInUp" className="mb-12">
-             <h2 className="text-3xl font-bold text-slate-900 mb-2">
+             <h2 className="text-3xl font-bold text-white mb-2">
                {featuredPosts.length > 0 ? 'Recent Updates' : 'All Stories'}
              </h2>
-             <div className="h-1 w-20 bg-teal-500 rounded-full" />
+             <div className="h-1 w-20 bg-teal-400 rounded-full" />
           </AnimatedSection>
 
           {recentPosts.length > 0 ? (
@@ -147,7 +147,7 @@ export default async function BlogPage() {
               {recentPosts.map((post) => (
                 <article
                   key={post.id}
-                  className="group bg-white/60 backdrop-blur-md rounded-2xl overflow-hidden border border-white/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                  className="group bg-slate-900/60 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                 >
                   <div className="relative h-64 overflow-hidden">
                     {post.featuredImage ? (
@@ -164,7 +164,7 @@ export default async function BlogPage() {
                     )}
                     {post.category && (
                       <div className="absolute top-4 left-4">
-                        <span className="px-3 py-1 rounded-full bg-white/90 backdrop-blur text-xs font-bold text-teal-700 shadow-sm">
+                        <span className="px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur text-xs font-bold text-cyan-200 shadow-sm border border-white/10">
                           {post.category}
                         </span>
                       </div>
@@ -172,7 +172,7 @@ export default async function BlogPage() {
                   </div>
 
                   <div className="p-6">
-                    <div className="text-sm text-slate-500 mb-3 flex items-center gap-2">
+                    <div className="text-sm text-slate-400 mb-3 flex items-center gap-2">
                       <time>
                         {new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', {
                           month: 'short',
@@ -182,19 +182,19 @@ export default async function BlogPage() {
                       </time>
                     </div>
 
-                    <h3 className="text-xl font-bold text-slate-900 mb-3 line-clamp-2 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text group-hover:text-teal-600 transition-colors">
+                    <h3 className="text-xl font-bold text-white mb-3 line-clamp-2 bg-gradient-to-r from-white to-slate-300 bg-clip-text group-hover:text-cyan-300 transition-colors">
                       <Link href={`/blog/${post.slug}`}>
                         {post.title}
                       </Link>
                     </h3>
 
-                    <p className="text-slate-600 mb-4 line-clamp-3 text-sm leading-relaxed">
+                    <p className="text-slate-300 mb-4 line-clamp-3 text-sm leading-relaxed">
                       {post.excerpt}
                     </p>
 
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="inline-flex items-center text-teal-600 font-semibold text-sm hover:text-teal-800 transition-colors group/link"
+                      className="inline-flex items-center text-cyan-300 font-semibold text-sm hover:text-cyan-200 transition-colors group/link"
                     >
                       Read more 
                       <svg className="w-4 h-4 ml-1 transform transition-transform group-hover/link:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -206,10 +206,10 @@ export default async function BlogPage() {
               ))}
             </StaggeredChildren>
           ) : (
-             <div className="col-span-full text-center py-20 bg-white/50 backdrop-blur-sm rounded-3xl border border-dashed border-slate-300">
+             <div className="col-span-full text-center py-20 bg-slate-900/60 backdrop-blur-sm rounded-3xl border border-dashed border-white/10">
                <span className="text-4xl mb-4 block">📝</span>
-               <h3 className="text-lg font-medium text-slate-900">No recent stories yet</h3>
-               <p className="text-slate-500">Check back soon for new updates from the studio.</p>
+               <h3 className="text-lg font-medium text-white">No recent stories yet</h3>
+               <p className="text-slate-400">Check back soon for new updates from the studio.</p>
              </div>
           )}
         </div>
@@ -249,4 +249,3 @@ export default async function BlogPage() {
     </div>
   )
 }
-

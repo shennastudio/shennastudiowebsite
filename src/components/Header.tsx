@@ -65,19 +65,19 @@ export default function Header() {
   ];
 
   return (
-    <header className="bg-gradient-to-r from-cyan-50/95 via-white/95 to-teal-50/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-teal-100/50">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl shadow-[0_12px_35px_rgba(3,7,18,0.65)]">
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-12 xl:px-16">
-        <div className="flex justify-between items-center h-28">
+        <div className="flex justify-between items-center h-24">
           {/* Logo */}
           <div className="flex items-center flex-shrink-0">
-            <Link href="/" className="text-2xl font-bold text-teal-600 flex items-center gap-2 hover:text-teal-700 transition-colors">
+            <Link href="/" className="text-2xl font-bold text-cyan-200 flex items-center gap-3 hover:text-cyan-300 transition-colors">
               {settings.logo ? (
                 <Image
                   src={settings.logo}
                   alt={settings.siteName}
                   width={400}
                   height={400}
-                  className="object-contain h-24 w-auto"
+                  className="object-contain h-16 w-auto drop-shadow-[0_8px_20px_rgba(34,211,238,0.2)]"
                   priority
                 />
               ) : (
@@ -96,18 +96,18 @@ export default function Header() {
                 key={link.name}
                 href={link.href}
                 className={cn(
-                  "relative py-2 text-gray-700 hover:text-teal-600 transition-colors font-semibold tracking-wide group",
-                  pathname === link.href && "text-teal-600"
+                  "relative py-2 text-slate-200 hover:text-cyan-300 transition-colors font-semibold tracking-wide group",
+                  pathname === link.href && "text-cyan-300"
                 )}
               >
                 {link.name}
                 {pathname === link.href && (
                   <motion.div
                     layoutId="nav-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 via-teal-400 to-violet-400"
                   />
                 )}
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-cyan-400 via-teal-400 to-violet-400 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
               </Link>
             ))}
           </nav>
@@ -126,10 +126,10 @@ export default function Header() {
               onMouseEnter={() => setShowMiniCart(true)}
               onMouseLeave={() => setShowMiniCart(false)}
             >
-              <Link href="/cart" className="text-gray-700 hover:text-teal-600 transition-colors relative block p-2">
+              <Link href="/cart" className="text-slate-200 hover:text-cyan-300 transition-colors relative block p-2">
                 <ShoppingCart className="w-6 h-6" />
                 {cart.items.length > 0 && (
-                  <span className="absolute top-0 right-0 bg-teal-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute top-0 right-0 bg-cyan-500 text-slate-900 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                     {cart.items.length}
                   </span>
                 )}
@@ -142,7 +142,7 @@ export default function Header() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/account"
-                  className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm block"
+                  className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-4 py-2 rounded-lg transition-colors font-semibold text-sm block shadow-[0_8px_24px_rgba(34,211,238,0.35)]"
                 >
                   My Account
                 </Link>
@@ -151,7 +151,7 @@ export default function Header() {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link
                   href="/admin"
-                  className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm block"
+                  className="bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm block shadow-[0_8px_24px_rgba(139,92,246,0.35)]"
                 >
                   Admin
                 </Link>
@@ -160,14 +160,14 @@ export default function Header() {
               <div className="flex items-center gap-3">
                 <Link
                   href="/login"
-                  className="text-teal-600 hover:text-teal-700 font-semibold text-sm"
+                  className="text-slate-200 hover:text-cyan-300 font-semibold text-sm"
                 >
                   Sign In
                 </Link>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Link
                     href="/register"
-                    className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg transition-colors font-semibold text-sm block"
+                    className="bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-4 py-2 rounded-lg transition-colors font-semibold text-sm block shadow-[0_8px_24px_rgba(34,211,238,0.35)]"
                   >
                     Register
                   </Link>
@@ -182,10 +182,10 @@ export default function Header() {
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center gap-3">
             {/* Mobile Cart Icon */}
-            <Link href="/cart" className="text-gray-700 hover:text-teal-600 transition-colors relative">
+            <Link href="/cart" className="text-slate-200 hover:text-cyan-300 transition-colors relative">
               <ShoppingCart className="w-6 h-6" />
               {cart.items.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-teal-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-cyan-500 text-slate-900 text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {cart.items.length}
                 </span>
               )}
@@ -194,7 +194,7 @@ export default function Header() {
             {/* Hamburger Menu */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-teal-600 focus:outline-none p-2"
+              className="text-slate-200 hover:text-cyan-300 focus:outline-none p-2"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? (
@@ -213,7 +213,7 @@ export default function Header() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-teal-100/50 overflow-hidden bg-gradient-to-b from-white/95 to-cyan-50/95"
+              className="md:hidden border-t border-white/10 overflow-hidden bg-slate-950/95"
             >
               <nav className="py-4 space-y-1">
                 {navLinks.map((link) => (
@@ -221,8 +221,8 @@ export default function Header() {
                     key={link.name}
                     href={link.href}
                     className={cn(
-                      "block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded",
-                      pathname === link.href && "text-teal-600 bg-teal-50"
+                      "block px-4 py-2 text-slate-200 hover:bg-white/5 hover:text-cyan-300 transition-colors font-medium rounded",
+                      pathname === link.href && "text-cyan-300 bg-white/5"
                     )}
                     onClick={closeMobileMenu}
                   >
@@ -231,7 +231,7 @@ export default function Header() {
                 ))}
                 <Link
                   href="/cart"
-                  className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600 transition-colors font-medium rounded"
+                  className="block px-4 py-2 text-slate-200 hover:bg-white/5 hover:text-cyan-300 transition-colors font-medium rounded"
                   onClick={closeMobileMenu}
                 >
                   Cart {cart.items.length > 0 && `(${cart.items.length})`}
@@ -243,11 +243,11 @@ export default function Header() {
                 </div>
 
                 {/* Mobile User Actions */}
-                <div className="pt-4 px-4 space-y-2 border-t border-teal-100/50 mt-4">
+                <div className="pt-4 px-4 space-y-2 border-t border-white/10 mt-4">
                   {session && session.user.role === 'CUSTOMER' ? (
                     <Link
                       href="/account"
-                      className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
+                      className="block w-full text-center bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-4 py-3 rounded-lg transition-colors font-semibold"
                       onClick={closeMobileMenu}
                     >
                       My Account
@@ -255,7 +255,7 @@ export default function Header() {
                   ) : session && session.user.role === 'ADMIN' ? (
                     <Link
                       href="/admin"
-                      className="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
+                      className="block w-full text-center bg-violet-600 hover:bg-violet-500 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
                       onClick={closeMobileMenu}
                     >
                       Admin Panel
@@ -264,14 +264,14 @@ export default function Header() {
                     <>
                       <Link
                         href="/login"
-                        className="block w-full text-center border-2 border-teal-600 text-teal-600 hover:bg-teal-50 px-4 py-3 rounded-lg transition-colors font-semibold"
+                        className="block w-full text-center border-2 border-cyan-400 text-cyan-300 hover:bg-white/5 px-4 py-3 rounded-lg transition-colors font-semibold"
                         onClick={closeMobileMenu}
                       >
                         Sign In
                       </Link>
                       <Link
                         href="/register"
-                        className="block w-full text-center bg-teal-600 hover:bg-teal-700 text-white px-4 py-3 rounded-lg transition-colors font-semibold"
+                        className="block w-full text-center bg-cyan-500 hover:bg-cyan-400 text-slate-900 px-4 py-3 rounded-lg transition-colors font-semibold"
                         onClick={closeMobileMenu}
                       >
                         Register

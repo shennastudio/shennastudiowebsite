@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { ReviewCard } from '@/components/ReviewCard';
 import { motion } from 'framer-motion';
+import MotionSection from '@/components/animations/MotionSection';
+import { fadeUp, staggerContainer, staggerItem } from '@/components/animations/motion';
 
 interface Review {
   id: string;
@@ -48,33 +50,42 @@ export function TestimonialSection() {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-blue-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-bold text-teal-800 mb-4"
+    <section className="py-20 bg-slate-950 relative overflow-hidden">
+      <div className="absolute inset-0 grid-dots opacity-30" />
+      <div className="absolute -top-32 right-0 h-72 w-72 rounded-full bg-cyan-500/20 blur-[120px]" />
+      <div className="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-violet-500/20 blur-[120px]" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <MotionSection className="text-center mb-12" variants={fadeUp}>
+          <motion.h2
+            className="text-3xl md:text-4xl font-bold text-white mb-4"
           >
             Love from Across Texas
           </motion.h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Join Us
+          <p className="text-lg text-slate-300 max-w-2xl mx-auto">
+            Join a community that wears the ocean with pride.
           </p>
-        </div>
+        </MotionSection>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={staggerContainer(0.15, 0.1)}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           {displayReviews.map((review, i) => (
-            <ReviewCard
-              key={review.id || i}
-              author={review.customerName}
-              text={review.body}
-              rating={review.rating}
-              location={review.title?.replace('Love from ', '')} // Extract location from title if formatted that way
-              date={new Date(review.createdAt).toLocaleDateString()}
-            />
+            <motion.div key={review.id || i} variants={staggerItem}>
+              <ReviewCard
+                author={review.customerName}
+                text={review.body}
+                rating={review.rating}
+                location={review.title?.replace('Love from ', '')}
+                date={new Date(review.createdAt).toLocaleDateString()}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

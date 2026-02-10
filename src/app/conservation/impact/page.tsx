@@ -70,7 +70,7 @@ const projects = [
 
 export default function ImpactPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-teal-600 via-blue-600 to-cyan-700 py-20 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
