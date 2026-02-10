@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Play, Pause, Mail, Eye, MessageSquare, BarChart3 } from 'lucide-react';
+import { Plus, Trash2, Play, Pause, Mail, Eye, MessageSquare, BarChart3 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -119,6 +119,7 @@ export default function ReviewAutomationPage() {
       toast.success(`Workflow ${workflow.isActive ? 'disabled' : 'enabled'}`);
       fetchData();
     } catch (error) {
+      console.error('Failed to update workflow', error);
       toast.error('Failed to update workflow');
     }
   };
@@ -131,6 +132,7 @@ export default function ReviewAutomationPage() {
       toast.success('Workflow deleted');
       fetchData();
     } catch (error) {
+      console.error('Failed to delete workflow', error);
       toast.error('Failed to delete workflow');
     }
   };
@@ -384,27 +386,57 @@ export default function ReviewAutomationPage() {
       </Card>
 
       {/* Recent Logs */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span className="flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-blue-500" />
-              Recent Activity
-            </span>
-            <Button variant="outline" size="sm" onClick={() => setLogsDialogOpen(true)}>
-              View All
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Dialog open={logsDialogOpen} onOpenChange={setLogsDialogOpen}>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-blue-500" />
+                Recent Activity
+              </span>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  View All
+                </Button>
+              </DialogTrigger>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {logs.length === 0 ? (
+              <div className="text-center py-8 text-gray-500">No activity yet</div>
+            ) : (
+              <div className="space-y-2">
+                {logs.slice(0, 5).map((log) => (
+                  <div
+                    key={log.id}
+                    className="flex items-center justify-between p-2 rounded hover:bg-gray-50 dark:hover:bg-slate-800"
+                  >
+                    <div>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{log.customerEmail}</p>
+                      <p className="text-xs text-gray-500">{log.workflow.name}</p>
+                    </div>
+                    <Badge className={getStatusColor(log.status)}>
+                      {log.status}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle>All Activity Logs</DialogTitle>
+          </DialogHeader>
           {logs.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">No activity yet</div>
+            <div className="text-center py-6 text-gray-500">No activity yet</div>
           ) : (
-            <div className="space-y-2">
-              {logs.slice(0, 5).map((log) => (
+            <div className="max-h-[70vh] overflow-y-auto space-y-2">
+              {logs.map((log) => (
                 <div
                   key={log.id}
-                  className="flex items-center justify-between p-2 rounded hover:bg-gray-50 dark:hover:bg-slate-800"
+                  className="flex items-center justify-between p-2 rounded border border-gray-100 dark:border-slate-700"
                 >
                   <div>
                     <p className="text-sm font-medium text-gray-900 dark:text-white">{log.customerEmail}</p>
@@ -417,8 +449,8 @@ export default function ReviewAutomationPage() {
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
