@@ -3,8 +3,6 @@
 @import "tw-animate-css";
 @import "../styles/blog.css";
 
-/* Force dark mode class strategy */
-@custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -145,72 +143,6 @@
   --spacing-safe-right: env(safe-area-inset-right);
 }
 
-/* ========================================
-   DARK MODE - Admin Panel Only
-   Applied via .dark class on admin routes
-   ==================================== */
-.dark {
-  --background: oklch(0.08 0.012 250);
-  --foreground: oklch(0.98 0.003 250);
-  
-  --card: oklch(0.12 0.015 250);
-  --card-foreground: oklch(0.98 0.003 250);
-  
-  --popover: oklch(0.12 0.015 250);
-  --popover-foreground: oklch(0.98 0.003 250);
-  
-  --primary: oklch(0.53 0.16 190);
-  --primary-foreground: oklch(0.99 0 0);
-  --primary-hover: oklch(0.6 0.15 190);
-  
-  --secondary: oklch(0.18 0.025 250);
-  --secondary-foreground: oklch(0.9 0.02 250);
-  
-  --muted: oklch(0.18 0.025 250);
-  --muted-foreground: oklch(0.65 0.03 250);
-  --text-secondary: oklch(0.75 0.03 250);
-  
-  --accent: oklch(0.18 0.04 190);
-  --accent-foreground: oklch(0.9 0.03 190);
-  
-  --destructive: oklch(0.55 0.22 25);
-  --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.48 0.22 145);
-  --success-foreground: oklch(0.99 0 0);
-  
-  --border: oklch(0.25 0.025 250);
-  --input: oklch(0.25 0.025 250);
-  --ring: oklch(0.55 0.14 190);
-  
-  --chart-1: oklch(0.49 0.24 265);
-  --chart-2: oklch(0.7 0.17 162);
-  --chart-3: oklch(0.77 0.19 70);
-  --chart-4: oklch(0.63 0.27 304);
-  --chart-5: oklch(0.65 0.25 16);
-  
-  --sidebar: oklch(0.08 0.012 250);
-  --sidebar-foreground: oklch(0.98 0.003 250);
-  --sidebar-primary: oklch(0.53 0.16 190);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.18 0.035 190);
-  --sidebar-accent-foreground: oklch(0.9 0.03 190);
-  --sidebar-border: oklch(0.25 0.025 250);
-  --sidebar-ring: oklch(0.55 0.14 190);
-
-  /* Admin dark mode overrides for all elements */
-  --background-primary: #0f1419;
-  --background-secondary: #1a1f2e;
-  --background-tertiary: #242b3d;
-  --background-elevated: #2a3245;
-  --text-primary: #f0f4f8;
-  --text-secondary: #a0aec0;
-  --text-muted: #718096;
-  
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-  --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.3);
-}
 
 @theme inline {
   --spacing-safe-top: var(--spacing-safe-top);
@@ -319,126 +251,6 @@
 }
 
 
-/* Remove separate .dark block since it's now default in :root */
-
-
-@layer base {
-  /* Force dark mode for admin section */
-  .admin-dark {
-    --background: oklch(0.06 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.12 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.12 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.488 0.243 264.376);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.2 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.2 0 0);
-    --muted-foreground: oklch(0.7 0 0);
-    --accent: oklch(0.2 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.6 0.2 25);
-    --border: oklch(0.2 0 0);
-    --input: oklch(0.2 0 0);
-    --ring: oklch(0.8 0 0);
-  }
-
-  /* Admin dark mode overrides for all elements */
-  .admin-dark,
-  .admin-dark body,
-  .admin-dark .bg-white,
-  .admin-dark .bg-gray-50,
-  .admin-dark .bg-gray-100,
-  .admin-dark .bg-gray-200 {
-    background-color: oklch(0.06 0 0) !important;
-  }
-
-  .admin-dark .text-gray-900,
-  .admin-dark .text-gray-800,
-  .admin-dark .text-gray-700,
-  .admin-dark .text-gray-600 {
-    color: oklch(0.985 0 0) !important;
-  }
-
-  .admin-dark .text-gray-500,
-  .admin-dark .text-gray-400 {
-    color: oklch(0.7 0 0) !important;
-  }
-
-  .admin-dark .border,
-  .admin-dark .border-gray-200,
-  .admin-dark .border-gray-300 {
-    border-color: oklch(0.2 0 0) !important;
-  }
-
-  /* Table fixes for admin dark mode */
-  .admin-dark table,
-  .admin-dark thead,
-  .admin-dark tbody,
-  .admin-dark tr,
-  .admin-dark td,
-  .admin-dark th {
-    background-color: oklch(0.12 0 0) !important;
-    color: oklch(0.985 0 0) !important;
-    border-color: oklch(0.2 0 0) !important;
-  }
-
-  .admin-dark thead,
-  .admin-dark thead tr,
-  .admin-dark thead th {
-    background-color: oklch(0.15 0 0) !important;
-  }
-
-  /* Input and select fixes */
-  .admin-dark input,
-  .admin-dark select,
-  .admin-dark textarea {
-    background-color: oklch(0.15 0 0) !important;
-    color: oklch(0.985 0 0) !important;
-    border-color: oklch(0.3 0 0) !important;
-  }
-
-  .admin-dark input::placeholder,
-  .admin-dark textarea::placeholder {
-    color: oklch(0.5 0 0) !important;
-  }
-
-  /* Dropdown/Select content fixes */
-  .admin-dark [role="listbox"],
-  .admin-dark .select-content,
-  .admin-dark [role="option"] {
-    background-color: oklch(0.15 0 0) !important;
-    color: oklch(0.985 0 0) !important;
-  }
-
-  .admin-dark [role="option"]:hover,
-  .admin-dark [role="option"]:focus {
-    background-color: oklch(0.2 0 0) !important;
-  }
-
-  /* Dialog/Modal fixes */
-  .admin-dark [role="dialog"],
-  .admin-dark .dialog-content,
-  .admin-dark .modal-content {
-    background-color: oklch(0.12 0 0) !important;
-    color: oklch(0.985 0 0) !important;
-  }
-
-  /* Badge fixes */
-  .admin-dark .badge,
-  .admin-dark [class*="bg-"][class*="text-"] {
-    border-color: oklch(0.2 0 0) !important;
-  }
-}
-
-/* Force dark mode on all admin pages */
-body:has(#admin-wrapper),
-body:has(.admin-section) {
-  --background: oklch(0.06 0 0);
-  --foreground: oklch(0.985 0 0);
-}
 
 /* Modern Colorful Scrollbar */
 ::-webkit-scrollbar {
@@ -482,24 +294,10 @@ body:has(.admin-section) {
   background-clip: padding-box;
 }
 
-/* Dark mode scrollbar */
-.dark ::-webkit-scrollbar-track {
-  background: linear-gradient(
-    180deg,
-    rgba(99, 102, 241, 0.15) 0%,
-    rgba(139, 92, 246, 0.15) 50%,
-    rgba(20, 184, 166, 0.15) 100%
-  );
-}
-
 /* Firefox scrollbar support */
 * {
   scrollbar-width: thin;
   scrollbar-color: #8b5cf6 rgba(139, 92, 246, 0.1);
-}
-
-.dark * {
-  scrollbar-color: #a855f7 rgba(139, 92, 246, 0.15);
 }
 
 /* TipTap Editor Styles */
@@ -515,10 +313,6 @@ body:has(.admin-section) {
   pointer-events: none;
 }
 
-.dark .ProseMirror p.is-editor-empty:first-child::before {
-  color: #6b7280;
-}
-
 .ProseMirror h2 {
   font-size: 1.5em;
   font-weight: 700;
@@ -526,10 +320,6 @@ body:has(.admin-section) {
   margin-bottom: 0.5em;
   line-height: 1.3;
   color: #1e293b;
-}
-
-.dark .ProseMirror h2 {
-  color: #f1f5f9;
 }
 
 .ProseMirror h3 {
@@ -541,18 +331,10 @@ body:has(.admin-section) {
   color: #334155;
 }
 
-.dark .ProseMirror h3 {
-  color: #e2e8f0;
-}
-
 .ProseMirror p {
   margin-bottom: 1em;
   line-height: 1.75;
   color: #475569;
-}
-
-.dark .ProseMirror p {
-  color: #cbd5e1;
 }
 
 .ProseMirror ul,
@@ -567,18 +349,10 @@ body:has(.admin-section) {
   color: #475569;
 }
 
-.dark .ProseMirror ul li {
-  color: #cbd5e1;
-}
-
 .ProseMirror ol li {
   list-style-type: decimal;
   margin-bottom: 0.5em;
   color: #475569;
-}
-
-.dark .ProseMirror ol li {
-  color: #cbd5e1;
 }
 
 .ProseMirror blockquote {
@@ -590,11 +364,6 @@ body:has(.admin-section) {
   color: #64748b;
 }
 
-.dark .ProseMirror blockquote {
-  border-left-color: #14b8a6;
-  color: #94a3b8;
-}
-
 .ProseMirror code {
   background-color: #f1f5f9;
   padding: 0.2em 0.4em;
@@ -604,11 +373,6 @@ body:has(.admin-section) {
   color: #0891b2;
 }
 
-.dark .ProseMirror code {
-  background-color: #334155;
-  color: #2dd4bf;
-}
-
 .ProseMirror pre {
   background-color: #1e293b;
   color: #e2e8f0;
@@ -616,10 +380,6 @@ body:has(.admin-section) {
   border-radius: 0.5em;
   overflow-x: auto;
   margin-bottom: 1em;
-}
-
-.dark .ProseMirror pre {
-  background-color: #0f172a;
 }
 
 .ProseMirror pre code {
@@ -672,198 +432,6 @@ body:has(.admin-section) {
 
 .animate-pulse-ring {
   animation: pulse-ring 2s ease-in-out infinite;
-}
-
-/* ========================================
-   ADMIN PANEL DARK MODE UTILITIES
-   ======================================== */
-
-/* These utilities automatically apply dark mode to common admin patterns */
-
-/* Admin page backgrounds */
-.dark .admin-page,
-.dark [data-admin-page] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(15 23 42 / var(--tw-bg-opacity)); /* slate-900 */
-}
-
-/* Common light backgrounds that need dark variants */
-.dark .bg-white:not(.dark\:bg-*) {
-  background-color: rgb(30 41 59) !important; /* slate-800 */
-}
-
-.dark .bg-gray-50:not(.dark\:bg-*),
-.dark .bg-slate-50:not(.dark\:bg-*) {
-  background-color: rgb(51 65 85) !important; /* slate-700 */
-}
-
-.dark .bg-gray-100:not(.dark\:bg-*),
-.dark .bg-slate-100:not(.dark\:bg-*) {
-  background-color: rgb(71 85 105) !important; /* slate-600 */
-}
-
-/* Common text colors */
-.dark .text-gray-900:not(.dark\:text-*),
-.dark .text-slate-900:not(.dark\:text-*) {
-  color: rgb(248 250 252) !important; /* slate-50 */
-}
-
-.dark .text-gray-800:not(.dark\:text-*),
-.dark .text-slate-800:not(.dark\:text-*) {
-  color: rgb(241 245 249) !important; /* slate-100 */
-}
-
-.dark .text-gray-700:not(.dark\:text-*),
-.dark .text-slate-700:not(.dark\:text-*) {
-  color: rgb(226 232 240) !important; /* slate-200 */
-}
-
-.dark .text-gray-600:not(.dark\:text-*),
-.dark .text-slate-600:not(.dark\:text-*) {
-  color: rgb(203 213 225) !important; /* slate-300 */
-}
-
-.dark .text-gray-500:not(.dark\:text-*),
-.dark .text-slate-500:not(.dark\:text-*) {
-  color: rgb(148 163 184) !important; /* slate-400 */
-}
-
-/* Common border colors */
-.dark .border-gray-200:not(.dark\:border-*),
-.dark .border-slate-200:not(.dark\:border-*),
-.dark .border-gray-300:not(.dark\:border-*),
-.dark .border-slate-300:not(.dark\:border-*) {
-  border-color: rgb(71 85 105) !important; /* slate-600 */
-}
-
-.dark .border-gray-100:not(.dark\:border-*),
-.dark .border-slate-100:not(.dark\:border-*) {
-  border-color: rgb(51 65 85) !important; /* slate-700 */
-}
-
-/* Form inputs in dark mode */
-.dark input:not([type="checkbox"]):not([type="radio"]):not(.dark\:bg-*),
-.dark select:not(.dark\:bg-*),
-.dark textarea:not(.dark\:bg-*) {
-  background-color: rgb(30 41 59) !important; /* slate-800 */
-  border-color: rgb(71 85 105) !important; /* slate-600 */
-  color: rgb(248 250 252) !important; /* slate-50 */
-}
-
-.dark input::placeholder,
-.dark textarea::placeholder {
-  color: rgb(148 163 184) !important; /* slate-400 */
-}
-
-/* Hover states */
-.dark .hover\:bg-gray-50:hover,
-.dark .hover\:bg-slate-50:hover {
-  background-color: rgb(51 65 85) !important; /* slate-700 */
-}
-
-.dark .hover\:bg-gray-100:hover,
-.dark .hover\:bg-slate-100:hover {
-  background-color: rgb(71 85 105) !important; /* slate-600 */
-}
-
-/* Priority and status badges */
-.dark .bg-slate-100.text-slate-700,
-.dark .bg-gray-100.text-gray-700,
-.dark .bg-gray-100.text-gray-800 {
-  background-color: rgb(51 65 85) !important;
-  color: rgb(226 232 240) !important;
-}
-
-.dark .bg-yellow-100.text-yellow-700,
-.dark .bg-yellow-100.text-yellow-800 {
-  background-color: rgb(113 63 18) !important;
-  color: rgb(254 240 138) !important;
-}
-
-.dark .bg-orange-100.text-orange-700,
-.dark .bg-orange-100.text-orange-800 {
-  background-color: rgb(124 45 18) !important;
-  color: rgb(254 215 170) !important;
-}
-
-.dark .bg-red-100.text-red-700,
-.dark .bg-red-100.text-red-800 {
-  background-color: rgb(127 29 29) !important;
-  color: rgb(254 202 202) !important;
-}
-
-.dark .bg-green-100.text-green-700,
-.dark .bg-green-100.text-green-800 {
-  background-color: rgb(20 83 45) !important;
-  color: rgb(187 247 208) !important;
-}
-
-.dark .bg-blue-100.text-blue-700,
-.dark .bg-blue-100.text-blue-800 {
-  background-color: rgb(30 58 138) !important;
-  color: rgb(191 219 254) !important;
-}
-
-.dark .bg-purple-100.text-purple-700,
-.dark .bg-purple-100.text-purple-800 {
-  background-color: rgb(88 28 135) !important;
-  color: rgb(233 213 255) !important;
-}
-
-.dark .bg-cyan-100.text-cyan-700,
-.dark .bg-cyan-100.text-cyan-800 {
-  background-color: rgb(22 78 99) !important;
-  color: rgb(165 243 252) !important;
-}
-
-.dark .bg-emerald-100.text-emerald-700,
-.dark .bg-emerald-100.text-emerald-800 {
-  background-color: rgb(6 78 59) !important;
-  color: rgb(167 243 208) !important;
-}
-
-/* Gradient text - ensure visibility in dark mode */
-.dark .bg-gradient-to-r.from-slate-900.via-cyan-900.to-teal-900.bg-clip-text {
-  background-image: linear-gradient(to right, rgb(248 250 252), rgb(34 211 238), rgb(45 212 191)) !important;
-}
-
-/* Calendar day cells */
-.dark .bg-white.hover\:bg-slate-50 {
-  background-color: rgb(30 41 59) !important;
-}
-
-.dark .bg-white.hover\:bg-slate-50:hover {
-  background-color: rgb(51 65 85) !important;
-}
-
-/* Modal/Dialog backgrounds */
-.dark .bg-slate-900\/50 {
-  background-color: rgb(15 23 42 / 0.8) !important;
-}
-
-/* Card header gradients */
-.dark .bg-gradient-to-r.from-slate-50.to-white {
-  background-image: linear-gradient(to right, rgb(51 65 85), rgb(30 41 59)) !important;
-}
-
-/* Icon backgrounds */
-.dark .bg-blue-100 { background-color: rgb(30 58 138) !important; }
-.dark .bg-green-100 { background-color: rgb(20 83 45) !important; }
-.dark .bg-purple-100 { background-color: rgb(88 28 135) !important; }
-.dark .bg-emerald-100 { background-color: rgb(6 78 59) !important; }
-.dark .bg-cyan-50 { background-color: rgb(22 78 99) !important; }
-
-/* Checklist items */
-.dark .bg-slate-50.rounded-lg,
-.dark .p-2.bg-slate-50 {
-  background-color: rgb(51 65 85) !important;
-}
-
-/* Shadow adjustments for dark mode */
-.dark .shadow-lg,
-.dark .shadow-xl,
-.dark .shadow-2xl {
-  --tw-shadow-color: rgb(0 0 0 / 0.5);
 }
 
 /* ========================================

@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
-import { ModeToggle } from '@/components/ModeToggle';
+
 import { Store, Zap } from 'lucide-react';
 import { headers } from 'next/headers';
 
@@ -30,7 +30,7 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 relative overflow-hidden transition-colors duration-300 dark">
+    <div className="min-h-screen bg-slate-950 text-slate-50 relative overflow-hidden transition-colors duration-300">
       <Toaster
         position="top-right"
         toastOptions={{
@@ -53,7 +53,6 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
             </div>
 
             <div className="flex items-center gap-2 sm:gap-3">
-              <ModeToggle />
               <Link href="/">
                 <Button
                   variant="outline"

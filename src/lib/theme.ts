@@ -1,13 +1,3 @@
-/**
- * Theme utilities - re-exports from next-themes for consistency
- *
- * This file provides a single source of truth for theme management.
- * Use `useTheme` from this file or directly from 'next-themes'.
- */
-
-// Re-export everything from next-themes
-export { useTheme } from 'next-themes';
-
 // CSS Variables for use in styled components or inline styles
 // These map to the CSS custom properties defined in globals.css
 export const themeVars = {

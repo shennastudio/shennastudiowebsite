@@ -37,29 +37,6 @@ const NEON_COLORS = {
   },
 };
 
-export const joyTheme = extendTheme({
-  colorSchemes: {
-    dark: {
-      palette: {
-        mode: 'dark',
-        primary: { 500: '#8B5CF6' },
-        neutral: { 500: '#06B6D4' },
-        danger: { 500: '#EF4444' },
-        success: { 500: '#22C55E' },
-        warning: { 500: '#EAB308' },
-        background: {
-          body: NEON_COLORS.background.primary,
-          level1: NEON_COLORS.background.secondary,
-          level2: NEON_COLORS.background.tertiary,
-        },
-        text: {
-          primary: NEON_COLORS.text.primary,
-          secondary: NEON_COLORS.text.secondary,
-          tertiary: NEON_COLORS.text.tertiary,
-        },
-      },
-    },
-  },
-});
+export const joyTheme = extendTheme({});
 
 export { NEON_COLORS };

@@ -5,7 +5,7 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 import { CartProvider } from "@/context/CartContext";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 import SEOSchemas from "@/components/SEOSchemas";
-import { ThemeProvider } from "@/components/theme-provider";
+
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 import ScrollProgress from "@/components/ScrollProgress";
 import GoogleAdSense from "@/components/providers/GoogleAdSense";
@@ -155,7 +155,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <SEOSchemas />
         <link rel="manifest" href="/manifest.json" />
@@ -214,22 +214,13 @@ export default function RootLayout({
         <div id="google_translate_element" className="hidden" />
         <ScrollProgress />
         <AnalyticsProvider />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          forcedTheme="light"
-          storageKey="theme"
-          disableTransitionOnChange
-        >
-          <SessionProvider>
-            <CartProvider>
-              <LayoutWrapper>
-                {children}
-              </LayoutWrapper>
-            </CartProvider>
-          </SessionProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <CartProvider>
+            <LayoutWrapper>
+              {children}
+            </LayoutWrapper>
+          </CartProvider>
+        </SessionProvider>
       </body>
     </html>
   );

@@ -130,11 +130,6 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.dark .glass-card {
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(71, 85, 105, 0.3);
-}
-
 /* Glowing borders */
 .glow-border {
   position: relative;
