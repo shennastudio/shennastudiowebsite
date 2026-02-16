@@ -268,16 +268,17 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
                   className="stagger-child bg-slate-900 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-800 hover:border-teal-700/50 group hover:-translate-y-2"
                 >
                   {/* Product Image */}
-                  <div className="relative h-64 bg-gradient-to-br from-cyan-950/30 to-blue-950/30 overflow-hidden">
+                  <div className="relative w-full aspect-square bg-gradient-to-br from-cyan-950/30 to-blue-950/30 overflow-hidden">
                     {productDisplay.displayImages?.[0] ? (
                       <Image
                         src={productDisplay.displayImages[0]}
                         alt={productDisplay.product.name}
-                        fill
+                        width={400}
+                        height={400}
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                         quality={80}
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        loading="eager"
+                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        priority
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">

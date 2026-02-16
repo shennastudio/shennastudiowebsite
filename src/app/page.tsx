@@ -163,14 +163,16 @@ export default function Home() {
                 whileHover={{ y: -10 }}
                 className="bg-slate-800 rounded-3xl shadow-sm border border-slate-700 overflow-hidden group transition-all hover:shadow-2xl hover:shadow-teal-500/10"
               >
-                <div className="relative h-80 overflow-hidden">
+                <div className="relative w-full aspect-[4/5] overflow-hidden">
                   {productDisplay.displayImages?.[0] ? (
                     <Image
                       src={productDisplay.displayImages[0]}
                       alt={productDisplay.product?.name || 'Product'}
-                      fill
+                      width={400}
+                      height={500}
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-700"
+                      priority
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center bg-slate-700">
