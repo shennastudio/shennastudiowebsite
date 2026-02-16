@@ -7,6 +7,8 @@ import rehypeSlug from 'rehype-slug'
 import rehypeHighlight from 'rehype-highlight'
 import remarkBreaks from 'remark-breaks'
 import remarkGfm from 'remark-gfm'
+import BreadcrumbSchema from '@/components/BreadcrumbSchema'
+import SocialShare from '@/components/SocialShare'
 
 export const revalidate = 3600
 
@@ -68,8 +70,43 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound()
   }
 
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.featuredImage || undefined,
+    datePublished: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+    dateModified: post.updatedAt.toISOString(),
+    author: {
+      '@type': 'Organization',
+      name: "Shenna's Studio",
+      url: 'https://shennastudio.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: "Shenna's Studio",
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://shennastudio.com/images/shenna-studio-logo.png',
+      },
+    },
+    mainEntityOfPage: `https://shennastudio.com/blog/${slug}`,
+  };
+
   return (
     <div className="min-h-screen bg-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: 'https://shennastudio.com' },
+          { name: 'Blog', url: 'https://shennastudio.com/blog' },
+          { name: post.title, url: `https://shennastudio.com/blog/${slug}` },
+        ]}
+      />
       <BlogContentEnhancer 
         title={post.title}
         featuredImage={post.featuredImage || undefined}
@@ -93,6 +130,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </BlogContentEnhancer>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-16">
+        <div className="mb-8 p-4 bg-gray-50 rounded-xl">
+          <SocialShare
+            url={`/blog/${slug}`}
+            title={post.title}
+            description={post.excerpt || undefined}
+            image={post.featuredImage || undefined}
+          />
+        </div>
         <Link
           href="/blog"
           className="inline-flex items-center text-teal-600 hover:text-teal-700 font-semibold transition-colors"

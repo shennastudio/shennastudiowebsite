@@ -150,28 +150,30 @@ export async function POST(request: NextRequest) {
       console.log('   Customer Email:', order.customerEmail);
       console.log('   Total:', order.total);
 
-      // Send order confirmation email
-      try {
-        const customerEmail = session.customer_email || session.customer_details?.email || '';
-        const customerName = shippingAddress.name;
-        const conservationAmount = subtotal * 0.10;
-        const rewardsPoints = 4; // 4 points per purchase
+      // Send order confirmation email to customer
+      const customerEmail = session.customer_email || session.customer_details?.email || '';
+      const customerName = shippingAddress.name;
+      const conservationAmount = subtotal * 0.10;
+      const rewardsPoints = 4; // 4 points per purchase
+      const orderNumber = `#${order.id.slice(0, 8).toUpperCase()}`;
+      const orderItems = items.map(item => ({
+        name: item.name,
+        variantName: item.variantName,
+        quantity: item.quantity,
+        price: item.price,
+      }));
 
+      try {
         if (customerEmail) {
           await sendEmail({
             to: customerEmail,
-            subject: `Order Confirmation - Shenna's Studio #${order.id.slice(0, 8).toUpperCase()}`,
+            subject: `Order Confirmation - Shenna's Studio ${orderNumber}`,
             react: OrderConfirmationEmail({
               orderId: order.id,
-              orderNumber: `#${order.id.slice(0, 8).toUpperCase()}`,
+              orderNumber,
               customerName,
               customerEmail,
-              items: items.map(item => ({
-                name: item.name,
-                variantName: item.variantName,
-                quantity: item.quantity,
-                price: item.price,
-              })),
+              items: orderItems,
               subtotal,
               shipping,
               tax,
@@ -186,6 +188,32 @@ export async function POST(request: NextRequest) {
       } catch (emailError: unknown) {
         // Log email error but don't fail the webhook
         console.error('⚠️  Failed to send order confirmation email:', emailError);
+      }
+
+      // Send new order notification to store owner
+      try {
+        const ownerEmails = ['shenna@shennastudio.com', 'shenna.rangel@yahoo.com'];
+        const NewOrderNotification = (await import('@/emails/NewOrderNotification')).default;
+
+        await sendEmail({
+          to: ownerEmails,
+          subject: `New Order! ${orderNumber} - $${total.toFixed(2)} from ${customerName || 'Customer'}`,
+          react: NewOrderNotification({
+            orderNumber,
+            customerName: customerName || 'Guest',
+            customerEmail,
+            items: orderItems,
+            subtotal,
+            shipping,
+            tax,
+            total,
+            conservationAmount,
+            shippingAddress,
+          }),
+        });
+        console.log('✅ Owner notification email sent to:', ownerEmails.join(', '));
+      } catch (ownerEmailError: unknown) {
+        console.error('⚠️  Failed to send owner notification email:', ownerEmailError);
       }
 
       return NextResponse.json({ received: true, orderId: order.id });

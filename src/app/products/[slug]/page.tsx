@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { fetchProductBySlug } from '@/app/actions';
 import { notFound } from 'next/navigation';
@@ -6,6 +7,46 @@ import ProductVariantSelector from '@/components/ProductVariantSelector';
 import ProductImageGallery from '@/components/ProductImageGallery';
 import ProductViewTracker from '@/components/analytics/ProductViewTracker';
 import ProductInventoryAdjuster from '@/components/admin/ProductInventoryAdjuster';
+import BreadcrumbSchema from '@/components/BreadcrumbSchema';
+import SocialShare from '@/components/SocialShare';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const productData = await fetchProductBySlug(slug);
+
+  if (!productData) {
+    return { title: "Product Not Found | Shenna's Studio" };
+  }
+
+  const { product, displayPrice, displayImages, displayStock } = productData;
+  const imageUrl = displayImages[0] || '/images/shenna-studio-logo.png';
+
+  return {
+    title: `${product.name} | Shenna's Studio - Handcrafted Ocean Jewelry`,
+    description: product.description || `Shop ${product.name} - handcrafted ocean-inspired jewelry from Shenna's Studio in Brownsville, TX. 10% supports marine conservation.`,
+    openGraph: {
+      title: product.name,
+      description: product.description || `Handcrafted ${product.name} from Shenna's Studio`,
+      type: 'website',
+      images: [{ url: imageUrl, width: 800, height: 800, alt: product.name }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description: product.description || `Handcrafted ocean jewelry - ${product.name}`,
+      images: [imageUrl],
+    },
+    other: {
+      'product:price:amount': displayPrice.toFixed(2),
+      'product:price:currency': 'USD',
+      'product:availability': displayStock > 0 ? 'in stock' : 'out of stock',
+    },
+  };
+}
 
 export default async function ProductDetailPage({
   params,
@@ -19,10 +60,39 @@ export default async function ProductDetailPage({
     notFound();
   }
 
-  const { product, variant, displayImages } = productData;
+  const { product, variant, displayImages, displayPrice, displayStock } = productData;
+
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description,
+    image: displayImages,
+    brand: { '@type': 'Brand', name: "Shenna's Studio" },
+    sku: variant?.sku || product.slug,
+    offers: {
+      '@type': 'Offer',
+      url: `https://shennastudio.com/products/${product.slug}`,
+      priceCurrency: 'USD',
+      price: displayPrice.toFixed(2),
+      availability: displayStock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Organization', name: "Shenna's Studio" },
+    },
+  };
 
   return (
     <div className="min-h-screen bg-slate-950">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: 'https://shennastudio.com' },
+          { name: 'Products', url: 'https://shennastudio.com/products' },
+          { name: product.name, url: `https://shennastudio.com/products/${product.slug}` },
+        ]}
+      />
       {/* Analytics Tracking */}
       <ProductViewTracker product={product} variant={variant} />
 
@@ -98,6 +168,16 @@ export default async function ProductDetailPage({
                 productName={product.name}
                 variants={productData.variants}
               />
+
+              {/* Social Sharing */}
+              <div className="pt-4 border-t border-slate-800">
+                <SocialShare
+                  url={`/products/${product.slug}`}
+                  title={product.name}
+                  description={product.description || undefined}
+                  image={displayImages[0]}
+                />
+              </div>
 
               <div className="space-y-4 pt-4">
                 <Link

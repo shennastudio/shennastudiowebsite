@@ -1,6 +1,16 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
 import DonationMapWrapper from '@/components/conservation/DonationMapWrapper'
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection'
+
+export const metadata: Metadata = {
+  title: "Ocean Conservation Mission | Shenna's Studio - Marine Life Protection",
+  description: "Discover how Shenna's Studio supports marine conservation in South Padre Island and Rio Grande Valley. 10% of every bracelet purchase protects sea turtles, whales, and ocean ecosystems.",
+  openGraph: {
+    title: "Our Ocean Conservation Mission - Shenna's Studio",
+    description: 'Every bracelet purchase helps protect marine life in South Padre Island and the Rio Grande Valley.',
+  },
+}
 
 export default function ConservationPage() {
   return (

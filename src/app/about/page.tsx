@@ -1,6 +1,16 @@
+import { Metadata } from 'next'
 import Link from 'next/link'
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection'
 import ParallaxBanner from '@/components/ParallaxBanner'
+
+export const metadata: Metadata = {
+  title: "About Shenna's Studio | Handcrafted Ocean Jewelry Brownsville TX",
+  description: "Learn about Shenna's Studio, a Brownsville TX small business creating handcrafted ocean-inspired bracelets. Founded in 2025, 10% of every purchase supports marine conservation in South Padre Island and Rio Grande Valley.",
+  openGraph: {
+    title: "About Shenna's Studio - Our Ocean Conservation Story",
+    description: 'From a small studio in Brownsville, TX to a mission-driven jewelry brand supporting marine life conservation.',
+  },
+}
 
 export default function AboutPage() {
   return (

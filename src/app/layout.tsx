@@ -8,6 +8,7 @@ import SEOSchemas from "@/components/SEOSchemas";
 import { ThemeProvider } from "@/components/theme-provider";
 import AnalyticsProvider from "@/components/providers/AnalyticsProvider";
 import ScrollProgress from "@/components/ScrollProgress";
+import GoogleAdSense from "@/components/providers/GoogleAdSense";
 
 // Primary heading font - elegant and feminine
 const playfairDisplay = Playfair_Display({
@@ -144,8 +145,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: 'cover',
   themeColor: '#F9FBFC',
 };
@@ -159,6 +158,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <SEOSchemas />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="alternate" type="application/rss+xml" title="Shenna's Studio Blog" href="/blog/feed.xml" />
+        <GoogleAdSense />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -189,7 +191,7 @@ export default function RootLayout({
               window.pintrk.queue.push(Array.prototype.slice.call(arguments))};var
               n=window.pintrk;n.queue=[],n.version="3.0";n.baseURL="https://s.pinimg.com/";n.loaded=!1;
               e.attachEvent?e.attachEvent("onload",n.loaded):e.addEventListener("load",n.loaded,false)}(document,window,"script");
-              pintrk('load', 'YOUR_PINTEREST_TAG_ID_HERE');
+              pintrk('load', '${process.env.NEXT_PUBLIC_PINTEREST_TAG_ID || ''}');
               pintrk('pageview');
             `,
           }}
@@ -200,7 +202,7 @@ export default function RootLayout({
             height="1"
             width="1"
             style={{ display: 'none' }}
-            src="https://ct.pinterest.com/v1/?tid=YOUR_PINTEREST_TAG_ID_HERE&noscript=1"
+            src={`https://ct.pinterest.com/v1/?tid=${process.env.NEXT_PUBLIC_PINTEREST_TAG_ID || ''}&noscript=1`}
             alt=""
           />
         </noscript>

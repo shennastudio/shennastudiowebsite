@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { fetchProducts } from '@/app/actions';
@@ -5,6 +6,15 @@ import ParallaxBanner from '@/components/ParallaxBanner';
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection';
 import { prisma } from '@/lib/prisma';
 import { Tag, Clock, Percent } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: "Shop Custom Bracelets & Ocean Jewelry | Shenna's Studio",
+  description: 'Browse our collection of handcrafted ocean-inspired bracelets, sea turtle jewelry, whale bracelets, and sustainable accessories. Free shipping over $50. 10% supports marine conservation.',
+  openGraph: {
+    title: "Shop Handcrafted Ocean Jewelry - Shenna's Studio",
+    description: 'Custom bracelets, sea turtle jewelry, and sustainable accessories. Every purchase supports marine conservation.',
+  },
+};
 
 // Force dynamic rendering to ensure fresh data on every request
 // This prevents stale/static data issues that require multiple refreshes

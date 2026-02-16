@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Play, Pause, Mail, Eye, MessageSquare, BarChart3 } from 'lucide-react';
+import { Plus, Trash2, Play, Pause, Mail, Eye, MessageSquare, BarChart3 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,7 +47,7 @@ export default function ReviewAutomationPage() {
   const [logs, setLogs] = useState<ReviewLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [logsDialogOpen, setLogsDialogOpen] = useState(false);
+  const [, setLogsDialogOpen] = useState(false);
 
   const fetchData = async () => {
     setLoading(true);
@@ -118,7 +118,7 @@ export default function ReviewAutomationPage() {
       });
       toast.success(`Workflow ${workflow.isActive ? 'disabled' : 'enabled'}`);
       fetchData();
-    } catch (error) {
+    } catch {
       toast.error('Failed to update workflow');
     }
   };
@@ -130,7 +130,7 @@ export default function ReviewAutomationPage() {
       await fetch(`/api/admin/review-workflows/${id}`, { method: 'DELETE' });
       toast.success('Workflow deleted');
       fetchData();
-    } catch (error) {
+    } catch {
       toast.error('Failed to delete workflow');
     }
   };

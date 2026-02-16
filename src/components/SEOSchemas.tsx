@@ -26,7 +26,9 @@ export default function SEOSchemas() {
     },
     "sameAs": [
       "https://facebook.com/shennastudio",
-      "https://instagram.com/shennastudio"
+      "https://instagram.com/shennastudio",
+      "https://tiktok.com/@shennastudio",
+      "https://pinterest.com/shennastudio"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
@@ -56,7 +58,7 @@ export default function SEOSchemas() {
       "longitude": "-97.4975"
     },
     "url": "https://shennastudio.com",
-    "telephone": "+1-956-XXX-XXXX",
+    "email": "info@shennastudio.com",
     "priceRange": "$$",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",

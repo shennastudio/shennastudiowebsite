@@ -1,7 +1,17 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { prisma } from '@/lib/prisma';
 import AnimatedSection, { StaggeredChildren } from '@/components/AnimatedSection';
+
+export const metadata: Metadata = {
+  title: "Ocean Conservation T-Shirts | Shenna's Studio",
+  description: 'Shop sustainable ocean-themed t-shirts supporting marine conservation. Eco-friendly apparel featuring sea turtles, whales, and coastal designs from Brownsville, TX.',
+  openGraph: {
+    title: "Sustainable Ocean T-Shirts - Shenna's Studio",
+    description: 'Eco-friendly ocean-themed apparel. 10% supports marine conservation in South Padre Island.',
+  },
+};
 
 interface TShirtProduct {
   id: string;
