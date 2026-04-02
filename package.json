@@ -92,7 +92,7 @@
     "marked": "^17.0.1",
     "marked-highlight": "^2.2.3",
     "motion": "^12.23.26",
-    "next": "^15.5.9",
+    "next": "^16.1.5",
     "next-auth": "^4.24.13",
     "next-mdx-remote": "^5.0.0",
     "next-seo": "^7.0.1",
